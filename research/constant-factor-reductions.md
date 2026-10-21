@@ -3,9 +3,10 @@
 ## Status
 
 The arguments here are mathematical proof attempts for two reductions. They do
-NOT prove the existence of a constant-factor tree-only algorithm. Neither full
-reduction has yet been formalized. Audit the quantifiers and constructions before
-promoting them to a theorem in the README.
+NOT prove the existence of a constant-factor tree-only algorithm. The additive-normalization reduction is now Lean checked, with bound
+`(2+6C)n` from a simpler anchor-based threshold. The periodic-probe reduction
+remains unformalized; audit its quantifiers and construction before promoting
+it to a checked theorem.
 
 ## 1. An online probe for eventually periodic inputs
 
@@ -134,3 +135,13 @@ If all three constructions hold, the following existence statements are equivale
 The easy directions are (3)->(2)->(1). For (1)->(3), use the periodic probe and
 positive-cycle argument, then the reset-potential normalization above. This is
 a reduction, not a proof of any of these existence statements.
+
+## Verified anchor-based variant
+
+`AdditiveNormalization.normalize_additive` (in namespace RotationBST) is now
+kernel checked. Rather than minimizing V(s,t) over t, it uses the fixed anchor
+t* from a zero-credit pair and tests V(s,t*) <= R+2CR. In the low case,
+V(s,t) <= R+3CR. In the high case, reverse variation gives V(s,t)>R+CR,
+which pays for the reset potential R+V(s*,t). Thus the verified bound is
+(2+6C)n. The potential handles n=0 directly. The stronger (2+4C)n constant
+above remains a prose variant, unnecessary for the O(n) conclusion.

@@ -226,3 +226,20 @@ to keep definitions manageable, then instantiate from CompetitiveCredit.
 
 The earlier minimum-based argument gives (2+4C)n; the simpler anchor threshold
 loses only a harmless constant. Formalize the easier (2+6C)n first.
+
+## Checkpoint 2026-10-21 ~22:25 UTC: normalization fully verified
+
+AdditiveNormalization.lean now proves normalize_additive: given tree-only B
+with coefficient C against ALL offline executions and any additive f(n),
+construct tree-only B' with the SAME C and additive (2+6C)*n. Threshold uses
+only current shape; reset occurs before serving current access. Transformation
+is noncomputable, as allowed by present existence model. No state elimination
+for arbitrary comparator follows yet. Axiom guard standard only, no sorry.
+
+Updated README and reduction note to distinguish this checked theorem from the
+unformalized periodic-probe argument. Next focus: rigorously formalize/audit
+periodic probe -> offline competitiveness. A finite weighted-graph cycle lemma
+is a useful first step. Beware returning an algorithm on tree/state product
+rather than tree alone. Universal probe needs online consistency learning and
+phase alignment but has unrestricted private state. A reduction to tree-only
+dynamic optimality would explain difficulty, not solve the main conjecture.

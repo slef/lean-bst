@@ -115,6 +115,25 @@ at the start of the next access, preserving the required root at its end.
 This verifies the geometric ingredient of the proposed block-reset argument;
 it does not remove the private memory used within or between blocks.
 
+## Normalizing the additive term (conditional theorem)
+
+[AdditiveNormalization.lean](AdditiveNormalization.lean) proves that if a
+**tree-only** algorithm B already satisfies
+`cost_B ≤ C * offline_cost + f(n)` against every legal execution, then another
+tree-only algorithm satisfies the same bound with additive `(2 + 6*C)*n`.
+The coefficient C is unchanged. The construction resets to a selected tree
+when an amortized credit exceeds a threshold determined by the current shape.
+It introduces no private state, but is noncomputable in this existence model.
+
+[CompetitiveCredit.lean](CompetitiveCredit.lean) proves the credit's existence,
+attainment, variation bound and one-step inequality.
+[CostComposition.lean](CostComposition.lean) supplies execution composition and
+changes of initial tree. [SimulationPotential.lean](SimulationPotential.lean)
+provides a general potential criterion for simulation.
+
+This theorem assumes offline competitiveness to start with; it does not prove
+state elimination for an arbitrary online comparator.
+
 ## Purely additive simulation is impossible
 
 [ThreeKeySeparation.lean](ThreeKeySeparation.lean) proves a separation on three
