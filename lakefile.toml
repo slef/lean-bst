@@ -1,6 +1,6 @@
 name = "lean-bst"
 version = "0.1.0"
-defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation", "TreeReset", "SimulationPotential", "CostComposition", "CompetitiveCredit", "AdditiveNormalization", "PeriodicComparison", "PeriodicLearning", "FiniteWeightedPaths", "FiniteTrees", "ProbeReduction", "FiniteBranching", "OptimalPrefixes"]
+defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation", "TreeReset", "SimulationPotential", "CostComposition", "CompetitiveCredit", "AdditiveNormalization", "PeriodicComparison", "PeriodicLearning", "FiniteWeightedPaths", "FiniteTrees", "ProbeReduction", "FiniteBranching", "OptimalPrefixes", "InfinitePlan"]
 
 [[lean_lib]]
 name = "RotationBST"
@@ -52,3 +52,6 @@ name = "FiniteBranching"
 
 [[lean_lib]]
 name = "OptimalPrefixes"
+
+[[lean_lib]]
+name = "InfinitePlan"

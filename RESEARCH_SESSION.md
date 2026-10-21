@@ -370,3 +370,38 @@ Could define a bounded-plan inductive relation (list of endpoints/costs) and
 prove optimal Execution admits such a trace using optimal_access_bound.
 After infinite-plan existence, concrete enumeration of eventuallyperiodic words
 and learner implementation remain. Main original conjecture still open.
+
+## Checkpoint 2026-10-21 ~23:42 UTC: infinite clairvoyant plan COMPLETE
+
+InfinitePlan.lean now defines InfinitePlanning.segment and constructs
+known_future_plan word initial valid : Plan word initial. It has tree(i),
+rotations(i), cost(i), legal accesses, cumulative-cost equation, initial tree,
+action bound 2n, and simultaneous prefix_bound: cost(i)<=j+4n against ANY
+Execution from an equal-size initial tree on segment word 0 i. This is a
+clairvoyant plan depending on the ENTIRE word, explicitly not online.
+
+Construction avoided building an explicit prefix tree. FutureOptimal asserts
+that the already executed prefix extends to finite optimal plans at arbitrarily
+distant horizons (not necessarily every horizon). A finite_cover argument on
+(treeCover n × counts0..2n) selects one next action retaining this property.
+Partial stores prefix Execution and FutureOptimal. Recursively extend via
+choice. Prefix bound follows from optimal_prefix_other_start applied to any
+future optimal completion. Axiom guard standard only; compiled successfully.
+The generic infinite_branch lemma is not needed by this tighter construction,
+but finite_cover from FiniteBranching is used.
+
+NEXT: concrete periodic candidate learner and its online BST wrapper. No need
+for min-mean cycles anymore. Each candidate infinite word gets a fixed plan
+from canonical tree, indexed by absolute time. On candidate changes reset to
+that plan's current tree then serve; after stabilization continue with no reset.
+Need candidate enumeration and stabilization. Std seems to lack Nat.pair/unpair
+and Encodable. Avoid spending time coding integers if possible: use a family
+of finite covers of candidate (prefix,period) pairs, each cover listing all
+words of length<=bound over range n. Choose least bound admitting a consistent
+candidate, then least index in that finite cover. Least bound stabilizes by
+bounded_monotone_stabilizes; thereafter the least index stabilizes in a fixed
+finite list. All finite input prefixes have an eventually-constant extension.
+Empty periods can interpret as constant0 when n>0; n=0 has no valid nonempty
+requests and can use the fallback. Alternatively implement explicit countable
+enumeration if simpler. The plan theorem is complete; PeriodicProbe existence
+still is not. Original state-elimination conjecture remains unresolved.

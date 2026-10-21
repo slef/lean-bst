@@ -191,3 +191,14 @@ The plan's uniform prefix guarantee then proves the desired PeriodicProbe bound.
 `FiniteBranching.lean` checks the general infinite-branch lemma, and
 `OptimalPrefixes.lean` checks the finite-optimal-plan estimates. Instantiating
 the finite-branching tree and implementing the concrete learner remain work.
+
+## Clairvoyant plan construction now checked
+
+`InfinitePlan.lean` constructs a plan for every fixed valid infinite request
+word. Its actions cost at most 2n rotations and every prefix costs at most the
+cost of any offline execution from an equal-size initial tree plus 4n rotations.
+It selects, among finitely many possible next actions, one that can still be
+completed optimally at arbitrarily distant horizons. The whole word is an input
+to this construction. It is therefore a clairvoyant plan, not an online algorithm.
+The remaining probe work is the concrete periodic learner and its online wrapper,
+including the eventual cost comparison after the learner stops changing plans.
