@@ -202,3 +202,13 @@ completed optimally at arbitrarily distant horizons. The whole word is an input
 to this construction. It is therefore a clairvoyant plan, not an online algorithm.
 The remaining probe work is the concrete periodic learner and its online wrapper,
 including the eventual cost comparison after the learner stops changing plans.
+
+## Concrete history-only learner now checked
+
+`FiniteCoverLearning.lean` proves stabilization for least selection across
+finite candidate lists. `PeriodicCandidates.lean` supplies the finite lists of
+prefix/period words, validity and coverage, and a selection depending only on
+observed history. `selected_eventually_correct` proves that on an input matching
+a valid periodic candidate, selection eventually stays with a candidate whose
+forecast matches the entire input. The actual BST wrapper and its cumulative
+cost proof are still needed to finish PeriodicProbe existence.

@@ -405,3 +405,46 @@ Empty periods can interpret as constant0 when n>0; n=0 has no valid nonempty
 requests and can use the fallback. Alternatively implement explicit countable
 enumeration if simpler. The plan theorem is complete; PeriodicProbe existence
 still is not. Original state-elimination conjecture remains unresolved.
+
+## Checkpoint 2026-10-21 ~23:58 UTC: concrete learner COMPLETE
+
+FiniteCoverLearning.lean defines Pick from a countable family of finite lists:
+least feasible bucket then least compatible index. pick_exists/pick construct
+it by classical least-natural choice. stabilizes proves eventual constant
+candidate along shrinking compatibility predicates whenever a permanently
+correct candidate belongs to some bucket. First bucket stabilizes, then index.
+
+PeriodicCandidates.lean concretizes this for Candidate=List Nat × List Nat.
+forecast p i reads prefix then period by modulo; empty period means constant0.
+words n b covers all words of length<=b over range n; covers pairs those words.
+Covers valid/complete checked. Compatible history p means agreement at every
+index of observed history; every valid history has extension (history,[]).
+selected is a history-only Pick with valid candidate. segment_length/atRank/
+compatible_segment and segment_values connect to InfinitePlanning.segment.
+selected_eventually_correct proves: on any infinite valid word equal to a valid
+candidate forecast, eventually selection is one fixed valid p whose forecast
+matches the WHOLE infinite word. No oracle used in selection; it only inspects
+finite history. forecast_valid needs n>0 because of empty-period default0.
+All 41 build jobs pass, guards standard axioms only.
+
+NEXT: actual online BST wrapper and cost bound. Suggested state = history only;
+selection on history++[x] includes current request. Each candidate p gets fixed
+known_future_plan (forecast p) (spine n nil), using covers_valid/forecast_valid.
+At step time=history.length, if currenttree equals plan.tree time, use its
+certified action; otherwise reset currenttree to plan.tree time then act.
+No need to store last candidate: equality test handles synchronization directly.
+After selection stabilizes, endpoint of each action is plan.tree(time+1), so
+subsequent accesses require no reset. Empty/invalid-history cases can fallback
+to moveToRoot; legal runs initialized with [] have valid histories by induction.
+Require hn:0<currenttree.size (follows from legal x) and historyvalid to select;
+fallback on arbitrary unreachable states maintains StatefulAlgorithm.correct.
+
+Plan action roots match forecast p time, which equals current x via selected
+consistency on history++[x]. Need list append indexing lemma. For repeated
+input proof, connect history runs to segment word 0 time; after cutoff+1,
+rotations equal plan rotations. Telescoping cost<=finite actual prefix+plan
+prefixcost+length; plan.prefix_bound against repeated offline execution yields
+PeriodicProbe. Also still need forecast(pre,period) prefix equals
+pre++repeatWord period m for nonempty period; emptyperiod repeatedword is
+constant pre and can handle separately. n=0 all legal inputs empty.
+Main conjecture unresolved; these complete the learner but not its BST wrapper.
