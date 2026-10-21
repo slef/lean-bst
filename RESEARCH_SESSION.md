@@ -243,3 +243,28 @@ is a useful first step. Beware returning an algorithm on tree/state product
 rather than tree alone. Universal probe needs online consistency learning and
 phase alignment but has unrestricted private state. A reduction to tree-only
 dynamic optimality would explain difficulty, not solve the main conjecture.
+
+## Checkpoint 2026-10-21 ~22:40 UTC: periodic reduction ingredients
+
+Added PeriodicComparison.lean: repeatWord, repeated execution/cost/endpoint
+lemmas, a precise PeriodicProbe property, and probe_forbids_positive_loop.
+This last theorem says any tree-only B dominating such a probe at coefficient C
+has no positive B-versus-offline product loop reachable from a common initial
+tree. The two endpoint trees need not coincide. Domination holds on valid
+inputs only; validity is derived from the repeated offline execution. No
+finite-state assumption about A is required. Existence of a PeriodicProbe is
+NOT proved or assumed as an axiom; it is an explicit hypothesis.
+
+Added PeriodicLearning.lean: bounded monotone natural-valued sequences stabilize;
+least consistent hypothesis indices stabilize when one permanently correct
+candidate exists; a stabilized consistent hypothesis matches every prefix.
+These establish the learning argument abstractly, not the BST scheduling cost.
+
+NEXT: finite weighted path cycle-erasure bound (no positive reachable loops =>
+bounded excess), and construct a single stateful periodic probe with the exact
+PeriodicProbe property. The prose construction still looks sound: enumerate
+ultimately periodic words, select least consistent one, and on stabilization
+use a minimum-mean phase/tree cycle. Need formally justify finite tree set,
+minimum mean cycle, and bounded startup/remainder cost. The property allows K
+to depend on the offline periodic schedule and prefix but never repetitions.
+Do not mistake these ingredients for a completed equivalence or state elimination.

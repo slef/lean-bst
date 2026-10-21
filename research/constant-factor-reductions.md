@@ -145,3 +145,13 @@ V(s,t) <= R+3CR. In the high case, reverse variation gives V(s,t)>R+CR,
 which pays for the reset potential R+V(s*,t). Thus the verified bound is
 (2+6C)n. The potential handles n=0 directly. The stronger (2+4C)n constant
 above remains a prose variant, unnecessary for the O(n) conclusion.
+
+## Checked ingredients for the periodic reduction
+
+`PeriodicLearning.lean` verifies stabilization of the least consistent index
+under a permanently correct candidate, and that the stable candidate matches
+all finite observed prefixes. `PeriodicComparison.lean` defines the precise
+`PeriodicProbe` cost property and proves that domination of such a probe rules
+out every reachable positive product loop. It also proves repetition formulas
+for legal executions and tree-only runs. Neither construction of the probe nor
+the finite-graph cycle-erasure implication has yet been formalized.
