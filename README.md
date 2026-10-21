@@ -21,7 +21,8 @@ lake build --wfail
 ```
 
 The project pins Lean **4.33.1** and uses only `Std`; it has no Mathlib dependency.
-Both the library and its checked examples are default build targets.
+The core, the state-elimination development, and their checked examples are
+default build targets.
 
 ## Explanation and figures
 
@@ -56,15 +57,57 @@ needs a costed simulation, including treatment of rotations away from the access
 path. See the document's opening discussion and [Derryberry's thesis,
 Sections 2.2 and 3.4](https://www.cs.cmu.edu/~jonderry/thesis.pdf).
 
-The Lean file currently proves size preservation and that successful accesses
-are in range. The representation correspondence, access existence, and model
-simulation remain to be formalized. Dynamic optimality and the working-set bound
+The core Lean file proves size preservation and that successful accesses
+are in range. The additional state-elimination file proves access existence.
+The representation correspondence and pointer-model simulation remain to be
+formalized. Dynamic optimality and the working-set bound
 are **definitions**, not proved guarantees for a supplied algorithm. In particular,
 `DynamicallyOptimal` currently compares rotation counts; a conventional total-cost
 competitive theorem must account explicitly for the additive `m` term.
 
 The online interface returns an endpoint and a certified count, rather than an
 explicit rotation program. Planning computation is uncharged.
+
+## State elimination: proof attempt
+
+[StateElimination.lean](StateElimination.lean) formalizes the question whether
+auxiliary private state can be removed at constant-factor cost. **The general
+statement is not proved or assumed.** It is recorded as the proposition
+`StateElimination`, with constants uniform in tree size and input length.
+
+`StatefulAlgorithm σ` has explicit initialization from the initial tree and
+an online step receiving only private state, the current tree and the current
+request. `TreeAlgorithm` is its `σ := Unit` special case. This file uses total
+cost **requests + rotations**. The original history-based interface embeds
+into it, with a proved equality of executions.
+
+The following partial results are checked:
+
+- `moveToRoot_correct` and `access_exists`: every existing rank can be brought
+  to the root in fewer than `n` rotations, constructively.
+- `StatefulAlgorithm.execution`: every valid run produces a legal execution.
+- `size_factor_simulation`: a particular tree-only algorithm has cost at most
+  `n` times that of any stateful algorithm. This factor depends on `n` and
+  does **not** establish the conjecture.
+- `StatefulAlgorithm.erase_totalCost`: exact state elimination is possible
+  when the private state is recoverable from the current tree, initialization
+  satisfies that invariant, and every valid step preserves it.
+- `stateElimination_of_universal`: a universally competitive tree-only
+  algorithm would imply the conjecture. No such algorithm is supplied here.
+
+[StateEliminationTests.lean](StateEliminationTests.lean) checks concrete
+executions, a recoverable size cache, and a private bit that toggles while
+the tree stays fixed. The latter shows that exact state recovery is not
+automatic. It is **not a counterexample to constant-factor state elimination**:
+that bit does not influence the rotation choices. Named axiom guards cover
+the main partial results.
+
+The unresolved step is a cost-controlled way to replace genuinely
+history-dependent choices by a tree-only rule. Equality of the legal move
+sets at a tree does not establish this: two histories can leave the same
+tree with different private states, and the requested theorem must compare
+entire executions with a factor independent of `n`. Both a proof and a
+counterexample to the general statement remain absent from this attempt.
 
 ## Development
 
