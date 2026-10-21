@@ -172,3 +172,22 @@ state this hypothesis explicitly. Consequently the only missing ingredient in
 this proposed equivalence is construction of a stateful periodic probe with
 its full cost guarantee. This is still a reduction between existence questions,
 not a proof of a dynamically optimal algorithm or of state elimination.
+
+## Alternative probe construction under development
+
+Minimum-mean cycle machinery can be replaced by compactness. An optimal plan
+for any finite horizon has every prefix within 2n rotations of its independent
+offline optimum: replacing the prefix and resetting before the suffix proves
+this. Every action also costs at most 2n. A finitely branching tree of such
+good finite plans therefore has an infinite branch for a known infinite input.
+The branch is clairvoyant, which is permitted only as a plan for a predicted
+word, not as the online algorithm itself.
+
+Preselect a plan for each periodic hypothesis. When the least-consistent learner
+changes hypothesis, reset to the selected plan's tree at the current absolute
+time and perform its current action. Once the prediction stabilizes correctly,
+the actual tree follows the plan forever. Finite earlier cost is absorbed in K.
+The plan's uniform prefix guarantee then proves the desired PeriodicProbe bound.
+`FiniteBranching.lean` checks the general infinite-branch lemma, and
+`OptimalPrefixes.lean` checks the finite-optimal-plan estimates. Instantiating
+the finite-branching tree and implementing the concrete learner remain work.

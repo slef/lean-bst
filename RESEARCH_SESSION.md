@@ -329,3 +329,44 @@ CURRENT PeriodicProbe property demands a bounded additive K, not o(m).
 Can weaken property to epsilon-asymptotic if it meaningfully simplifies proof;
 then adapt probe_forbids_positive_loop using slope gap. Avoid silently changing
 existing stronger property or conflating unproved existence with an axiom.
+
+## Checkpoint 2026-10-21 ~23:27 UTC: simpler probe route via compactness
+
+New plan avoids minimum-mean-cycle machinery altogether. For ANY known infinite
+valid request word, choose a clairvoyant infinite serving plan whose every
+prefix is within 2n of optimal from its own initial tree (4n from any equal-size
+initial tree). Finite-horizon optimal plans have this prefix property: replace
+prefix by a better plan, reset into old suffix, contradict optimality. Every
+individual action in an optimal finite plan costs <=2n as well (replace it
+while preserving endpoint). Hence there is a finitely branching tree of good
+finite plans, with arbitrarily large depth. König supplies an infinite plan.
+
+Checked new modules:
+- FiniteBranching.lean: finite_cover downward-closed pigeonhole, Extension,
+  unbounded_child, and infinite_branch (choice-based König lemma).
+- OptimalPrefixes.lean: existence of optimal finite execution; optimal_prefix_bound
+  (+2n against same start), optimal_prefix_other_start (+4n), and
+  optimal_access_bound (every action of finite optimum costs <=2n).
+No extra axioms. These do not yet construct the infinite BST plan.
+
+Probe implementation can be simpler than maintaining a new plan at each switch:
+for each enumerated infinite periodic candidate q, preselect a good clairvoyant
+plan from canonical tree, indexed by ABSOLUTE time. Learner stores last q/time.
+When q changes, reset to that plan's tree at current time, then perform its action;
+if q stays the same, current tree already equals the next plan tree. After
+hypothesis stabilizes, no more resets. Following a suffix of the plan costs at
+most its entire prefix cost (costs nonnegative), plus finite earlier actual cost.
+Its prefix guarantee compares to the given repeated offline witness with +4n.
+Thus K absorbs finite mistakes, offline prefix cost, resets and 4n; strong
+PeriodicProbe property follows, with no asymptotic approximation needed.
+
+NEXT IMPLEMENTATION: finite good-plan prefix tree. Enumerate children by
+(treeCover n × List.range(2*n+1)); filter certified Access and good-prefix
+inequalities. Nodes carry a finite trajectory, not just current shape, so good
+prefix bookkeeping is available. Optimal finite executions give arbitrary
+depth. Infinite_branch then yields the infinite actions. Need trace splitting
+at arbitrary prefix to apply optimal_prefix_bound to every intermediate node.
+Could define a bounded-plan inductive relation (list of endpoints/costs) and
+prove optimal Execution admits such a trace using optimal_access_bound.
+After infinite-plan existence, concrete enumeration of eventuallyperiodic words
+and learner implementation remain. Main original conjecture still open.
