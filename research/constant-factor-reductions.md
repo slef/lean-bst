@@ -161,3 +161,14 @@ nonpositive loops can be erased and all path weights are bounded by the finite
 vertex count times a nonnegative upper bound on edge weight. `FiniteTrees.lean`
 provides finite covers and one-step cost bounds for BSTs. The bridge instantiating
 this graph with reachable BST/offline pairs remains to be formalized.
+
+## Conditional reduction now fully checked
+
+`ProbeReduction.lean` instantiates the graph argument with reachable pairs of
+BST endpoints, proving the exact cost-difference identity in both directions.
+`probe_domination_offline` and `probe_domination_linear` finish the reduction
+assuming an explicit `PeriodicProbe` algorithm. The two equivalence theorems
+state this hypothesis explicitly. Consequently the only missing ingredient in
+this proposed equivalence is construction of a stateful periodic probe with
+its full cost guarantee. This is still a reduction between existence questions,
+not a proof of a dynamically optimal algorithm or of state elimination.

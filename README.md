@@ -134,6 +134,20 @@ provides a general potential criterion for simulation.
 This theorem assumes offline competitiveness to start with; it does not prove
 state elimination for an arbitrary online comparator.
 
+## Conditional periodic-input reduction
+
+[ProbeReduction.lean](ProbeReduction.lean) proves that a tree-only simulator
+for one online algorithm satisfying `PeriodicProbe` would already yield a
+universally offline-competitive tree-only algorithm with additive O(n).
+Thus, **assuming such a probe exists**, arbitrary-additive state elimination,
+linear-additive state elimination, and tree-only dynamic optimality are
+equivalent existence statements.
+
+The graph reduction is checked, including cycle erasure and the BST product
+graph. **Construction of the periodic probe is not yet formalized.** Its
+learning ingredient is checked separately; the full serving-cost guarantee
+remains an obligation. See [the research note](research/constant-factor-reductions.md).
+
 ## Purely additive simulation is impossible
 
 [ThreeKeySeparation.lean](ThreeKeySeparation.lean) proves a separation on three

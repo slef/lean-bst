@@ -295,3 +295,37 @@ have weight0. Edge targets have size n via reachability/correctness; use
 roughly treeCover.length^2*stepBound. Combine normalize_additive afterward.
 This would complete the reduction conditional on an existing PeriodicProbe.
 Actual construction of that probe remains unformalized.
+
+## Checkpoint 2026-10-21 ~23:12 UTC: conditional reduction COMPLETE
+
+ProbeReduction.lean now connects all graph ingredients. Reachable product
+vertices pair B's endpoint with an offline endpoint from common initial T.
+Edge weights are total B step cost minus C times offline step cost. Both
+trace/execution directions are checked with exact integer weight identities.
+Periodic probe domination excludes positive loops, finite_path_bound gives
+additive graphAllowance(n), then normalize_additive makes it (2+6C)n.
+
+Main checked theorems:
+- probe_domination_offline: if B dominates a PeriodicProbe at C+f(n), B itself
+  is offline-competitive at C+graphAllowance(n).
+- probe_domination_linear: some B' is offline-competitive at C+(2+6C)n.
+- elimination_iff_universal_given_probe: assuming existence of a PeriodicProbe,
+  StateEliminationWithAdditive iff ∃tree-only universally competitive B.
+- arbitrary_iff_linear_given_probe: under same assumption, arbitrary additive
+  state elimination iff linear additive state elimination.
+Axiom guards standard only. These are CONDITIONAL theorems. Missing obligation
+is exactly ∃σ a, PeriodicProbe a. No claim the original conjecture is settled.
+
+Next: construct the probe. Existing PeriodicLearning lemmas supply stabilization
+but need concrete enumeration of ultimately periodic inputs, then a legal
+online policy after hypothesis stabilization with asymptotically optimal mean
+cost. A route that may simplify minimum-mean theory: for each predicted word
+choose a least-cost-per-period cycle among finite simple cycles in phase/tree
+graph; cycle-erasure implies this mean <= every periodic serving witness.
+Finite graphs already available, but minimum-ratio/simple-cycle construction
+not formalized. Alternatively choose increasing finite horizons and resets:
+sublinear overhead might suffice for positive-loop contradiction, but the
+CURRENT PeriodicProbe property demands a bounded additive K, not o(m).
+Can weaken property to epsilon-asymptotic if it meaningfully simplifies proof;
+then adapt probe_forbids_positive_loop using slope gap. Avoid silently changing
+existing stronger property or conflating unproved existence with an axiom.
