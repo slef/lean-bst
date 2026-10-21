@@ -180,3 +180,49 @@ of every (tree,state) into same-size trees is impossible by cardinality, but thi
 does not rule out cost simulation. Mapping to nearby shapes loses the original
 virtual tree and arbitrary A can react discontinuously to that loss. Any coding
 argument must explain this rather than merely reserve a few nodes for bits.
+
+## Checkpoint 2026-10-21 ~22:10 UTC: potentially important reductions
+
+Read research/constant-factor-reductions.md NEXT. New mathematical argument:
+state elimination with arbitrary additive f may actually be equivalent to
+existence of a single tree-only dynamically optimal algorithm. Build one online
+probe U that learns every ultimately periodic input, then eventually serves its
+period via a minimum-mean cycle. If memoryless B dominates U at factor C,
+any positive B-vs-offline product cycle gives an ultimately periodic input
+contradicting domination. Therefore B is offline-competitive with some additive
+g(n). This is a written reduction argument, NOT Lean checked yet. Must audit U's
+online construction, alignment after hypothesis changes, and all quantifiers.
+
+A second positive reduction seems provable: any TREE-ONLY B already offline
+C-competitive with arbitrary additive g(n) can be changed to another tree-only
+B' with the SAME C and additive O(n). Define least credit V(s,t) for cost_B(s,X)
+vs C*offline(t,X). V is finite, nonnegative, and Lipschitz in t with range at
+most C*R, R=2n. A maximal-excess finite path ends at a pair (s*,t*) with V=0.
+Use a tree-only threshold on V to reset to s*. Truncate the potential for high
+states; every reset is paid by the dropped credit. Full prose proof is in the
+new note. This DOES NOT supply B or settle dynamic optimality.
+
+New CHECKED modules:
+- CostComposition.lean: execution append, size/validity, prepend rotations to
+  nonempty execution, tree-only cost append/cons, competitive_change_start.
+- CompetitiveCredit.lean: least Nat credit, attainment, zero_credit_pair,
+  Lipschitz continuity, and the one-step credit inequality. All compile, axiom
+  guard standard only. No sorry/extra axioms. Nat.find is unavailable in Std;
+  proved private least_nat via strongRecOn. by_contra tactic unavailable;
+  use Classical.byContradiction. Product projections need explicit destructuring
+  in treeOnly_cost_cons to avoid omega treating equivalent expressions separately.
+
+NEXT IMPLEMENTATION: finish reset-potential normalization to a full theorem.
+Avoid the minimum v(s)=min_t V(s,t) if convenient: choose the zero pair's anchor
+u_n and threshold H=R+2*C*R on V(s,u_n). For high states reset s to seed s*_n,
+then perform original B's action for the current request. Define
+P(s,t)=V(s,t) in low states and R+V(s*_n,t) in high states.
+Reverse Lipschitz + threshold gives P<=V. Forward Lipschitz bounds P everywhere
+by R+3*C*R=(2+6C)n. The old one-step credit inequality then proves B' has same
+C and this linear additive bound. Use reset_linear with Classical.choose for
+reset count; B' has Unit state. Select zero pair for each n using canonical
+spine n nil (prove its size=n). Can package V/seed/anchor/specs in a structure
+to keep definitions manageable, then instantiate from CompetitiveCredit.
+
+The earlier minimum-based argument gives (2+4C)n; the simpler anchor threshold
+loses only a harmless constant. Formalize the easier (2+6C)n first.

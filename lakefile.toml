@@ -1,6 +1,6 @@
 name = "lean-bst"
 version = "0.1.0"
-defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation", "TreeReset", "SimulationPotential"]
+defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation", "TreeReset", "SimulationPotential", "CostComposition", "CompetitiveCredit"]
 
 [[lean_lib]]
 name = "RotationBST"
@@ -22,3 +22,9 @@ name = "TreeReset"
 
 [[lean_lib]]
 name = "SimulationPotential"
+
+[[lean_lib]]
+name = "CostComposition"
+
+[[lean_lib]]
+name = "CompetitiveCredit"
