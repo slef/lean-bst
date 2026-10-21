@@ -155,3 +155,9 @@ all finite observed prefixes. `PeriodicComparison.lean` defines the precise
 out every reachable positive product loop. It also proves repetition formulas
 for legal executions and tree-only runs. Neither construction of the probe nor
 the finite-graph cycle-erasure implication has yet been formalized.
+
+The generic finite-graph implication is now checked in `FiniteWeightedPaths.lean`:
+nonpositive loops can be erased and all path weights are bounded by the finite
+vertex count times a nonnegative upper bound on edge weight. `FiniteTrees.lean`
+provides finite covers and one-step cost bounds for BSTs. The bridge instantiating
+this graph with reachable BST/offline pairs remains to be formalized.

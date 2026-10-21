@@ -268,3 +268,30 @@ use a minimum-mean phase/tree cycle. Need formally justify finite tree set,
 minimum mean cycle, and bounded startup/remainder cost. The property allows K
 to depend on the offline periodic schedule and prefix but never repetitions.
 Do not mistake these ingredients for a completed equivalence or state elimination.
+
+## Checkpoint 2026-10-21 ~22:55 UTC: finite path bound verified
+
+FiniteWeightedPaths.lean proves generic integer-weighted cycle erasure:
+Trace edge s t xs can be replaced by a trace with distinct vertices and weight
+at least as large, provided every closed trace has nonpositive weight.
+finite_path_bound bounds weight by states.length*M when start is in a finite
+list, every edge target is in it, and each edge weight <= natural M. It does
+NOT require the entire vertex type to be finite. This permits using Tree×Tree
+and restricting graph edges to reachable pairs. All proven with Std only.
+
+FiniteTrees.lean gives treeCover n, a redundant finite list covering every tree
+of size <=n, plus stepBound b n bounding every legal one-step total cost of b
+on size n. The enumeration is deliberately huge; only existence is needed.
+
+NEXT concrete bridge: define reachable pair (s,t) from common T by existence
+of offline Execution T pre t j and b's endpoint on pre equal s. Define edges
+on Tree×Tree with this reachable-source condition, an offline Access t u x k,
+and B's step endpoint, weighted by (1+Bstepcost)-C*(1+k) in Int.
+Prove trace => shared request word and offline execution, cost difference equal
+weight; then noPositive for nonempty loops follows from
+probe_forbids_positive_loop applied to reachable-source witness. Empty loops
+have weight0. Edge targets have size n via reachability/correctness; use
+(treeCover n)×(treeCover n) as states list. The finite_path_bound gives g(n)
+roughly treeCover.length^2*stepBound. Combine normalize_additive afterward.
+This would complete the reduction conditional on an existing PeriodicProbe.
+Actual construction of that probe remains unformalized.
