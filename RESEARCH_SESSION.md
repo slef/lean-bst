@@ -131,3 +131,52 @@ absence of positive cycles in the reachable product graph for weights
 cost_B-C*cost_A yields a finite additive bound (simple path length * max edge
 weight). Its converse follows by repeating a reachable positive cycle. This
 could support synthesis experiments, but existential B remains the hard part.
+
+## Checkpoint 2026-10-21 21:49 UTC: potentials and automata route
+
+Added SimulationPotential.lean (compiled): defines the relaxed conjecture with
+arbitrary f(n), proves linear additive implies relaxed, and proves a sufficient
+one-step potential criterion telescopes to cost_B <= C*cost_A + f(n).
+Potential may inspect A's private state and both trees, but B's implementation
+still sees only its tree/request. Initial potential bound determines f. No
+potential for arbitrary A supplied: this is a proof tool, not the conjecture.
+
+New reproducible research/competitive_policies.py enumerates all 1024 policies
+for n=3 using exact rational positive-cycle tests against ALL offline executions.
+Experimental best ratio =8/7, with 3 attaining policies. Example endpoint rows
+(a,b,c,d,e), columns request (0,1,2):
+[(a,c,d),(b,c,d),(a,c,e),(b,c,d),(a,c,e)].
+For product states (A-tree,B-tree) having equal roots, in order
+(a,a),(a,b),(b,a),(b,b),(c,c),(d,d),(d,e),(e,d),(e,e), longest-prefix excess
+7*cost_B-8*cost_A from a common initial tree has bounds
+[0,-8,-3,0,2,2,-8,-3,0]. Hence experimental uniform additive numerator bound2.
+This is not yet Lean checked; finite certificate could be easy to check, but
+avoid over-investing in n=3 at expense of uniform n question. C=1 obstruction
+needs only small multiplicative slack for this finite universe.
+
+Literature route: Boker & Lehtinen FSTTCS 2021, Theorem21 establishes that Sum
+and Avg history-deterministic finite-word automata can be determinized by
+pruning. Read primary author PDF:
+https://faculty.runi.ac.il/udiboker/files/hdvsgfg.pdf (pp13-14).
+Its hypothesis requires online resolution matching the automaton's OPTIMAL
+value for EVERY word. Our arbitrary comparator A does not satisfy that, so it
+cannot be applied directly. Putting A's state into a product automaton would
+produce a positional strategy on the product, not a tree-only algorithm.
+Aminof/Kupferman/Lampert 2010 connects online cost/memory questions to weighted
+automata; verified abstract at
+https://cris.huji.ac.il/en/publications/reasoning-about-online-algorithms-with-weighted-automata-13/
+Full paper fetch at CiteSeer failed403. No general state-elimination theorem found.
+
+Potential future directions: finite-state comparator synthesis via product
+positive cycles; try block-reset/minimal-state selections with amortized credits;
+try shape encodings with a constant number of extra logical bits, but preserve
+same n and requested root. A naive shape-capacity count alone cannot prove
+impossibility of COST domination (only exact-state simulation). The pure additive
+counterexample is complete and should not distract from constant C target.
+
+Further thought (not a theorem): bounded private state K may be an approachable
+intermediate question, allowing a factor depending on K but not n. Exact encoding
+of every (tree,state) into same-size trees is impossible by cardinality, but this
+does not rule out cost simulation. Mapping to nearby shapes loses the original
+virtual tree and arbitrary A can react discontinuously to that loss. Any coding
+argument must explain this rather than merely reserve a few nodes for bits.
