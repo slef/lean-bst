@@ -109,6 +109,12 @@ tree with different private states, and the requested theorem must compare
 entire executions with a factor independent of `n`. Both a proof and a
 counterexample to the general statement remain absent from this attempt.
 
+[TreeReset.lean](TreeReset.lean) proves that any two equal-size trees can be
+reconfigured in at most `2n` rotations. `reset_then_access` charges this reset
+at the start of the next access, preserving the required root at its end.
+This verifies the geometric ingredient of the proposed block-reset argument;
+it does not remove the private memory used within or between blocks.
+
 ## Purely additive simulation is impossible
 
 [ThreeKeySeparation.lean](ThreeKeySeparation.lean) proves a separation on three

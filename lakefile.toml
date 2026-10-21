@@ -1,6 +1,6 @@
 name = "lean-bst"
 version = "0.1.0"
-defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation"]
+defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation", "TreeReset"]
 
 [[lean_lib]]
 name = "RotationBST"
@@ -16,3 +16,6 @@ name = "StateEliminationTests"
 
 [[lean_lib]]
 name = "ThreeKeySeparation"
+
+[[lean_lib]]
+name = "TreeReset"

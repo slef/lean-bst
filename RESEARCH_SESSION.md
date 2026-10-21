@@ -111,3 +111,23 @@ and a cycle/potential certificate for finite-state comparators. Do not conflate
 memorylessness on product states (B tree, A tree, A state) with tree-only B.
 Searches for memoryless BST simulation yielded no direct theorem; generic
 memoryless queries mostly irrelevant RFID results. No claim of literature novelty.
+
+## Additional checked reset ingredient (same checkpoint)
+
+TreeReset.lean proves `reset_linear`: equal-size trees are connected by at most
+2*n rotations, via a canonical right vine. `promote_left` drains a left subtree
+in exactly its size rotations, `to_spine` gives a linear conversion, and rotation
+traces reverse. `reset_then_access` prefixes a reset to a legal access. This
+placement matters: resetting after an access to a tree whose root is different
+would break the root-at-end requirement. Reset before the next access instead.
+
+Next research route worth examining: weighted-automaton terminology. Finite n
+makes tree shapes a finite weighted transition system with request-dependent
+endpoint sets. Stateful online algorithms resolve choices using history;
+tree-only algorithms select one transition per (shape, request). This resembles
+history determinism versus determinization by pruning / regret determinization.
+No transfer theorem established. For a fixed finite-state A and tree-only B,
+absence of positive cycles in the reachable product graph for weights
+cost_B-C*cost_A yields a finite additive bound (simple path length * max edge
+weight). Its converse follows by repeating a reachable positive cycle. This
+could support synthesis experiments, but existential B remains the hard part.
