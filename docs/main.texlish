@@ -1,0 +1,400 @@
+::version >= 0.2.0
+::styles
+  @ = \cref
+
+\documentclass[11pt]{article}
+\title: Binary Search Trees Without Labels
+\author{}
+\date{}
+\usepackage[T1]{fontenc}
+\usepackage{libertine}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[libertine]{newtxmath}
+\usepackage[scaled=0.96]{zi4}
+\usepackage{microtype,xcolor,tikz,listings,tcolorbox,hyperref}
+\usepackage[capitalise,nameinlink,noabbrev]{cleveref}
+\DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
+\DeclareUnicodeCharacter{2208}{\ensuremath{\in}}
+\DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\DeclareUnicodeCharacter{00B7}{\ensuremath{\cdot}}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\definecolor{figblue}{RGB}{41,110,166}
+\definecolor{figgreen}{RGB}{38,128,89}
+\definecolor{figorange}{RGB}{217,107,38}
+\hypersetup{colorlinks=true,urlcolor=figblue,linkcolor=figblue,pdftitle={Binary Search Trees Without Labels}}
+\lstdefinelanguage{lean}{
+  morekeywords={import,inductive,where,deriving,def,structure,theorem,match,with,if,then,else,let},
+  morekeywords=[2]{Prop,Type,List,Nat,Tree,Rotate,Rotations,Access,Execution,Algorithm},
+  sensitive=true,morecomment=[l]{--},morestring=[b]"}
+\lstdefinestyle{lean}{language=lean,basicstyle=\ttfamily\small,columns=fullflexible,
+  keepspaces=true,showstringspaces=false,extendedchars=false,
+  keywordstyle=\bfseries\color{figblue},keywordstyle=[2]\color{figgreen},
+  literate={→}{{$\to$}}1 {∀}{{$\forall$}}1 {∃}{{$\exists$}}1
+    {∈}{{$\in$}}1 {∧}{{$\wedge$}}1 {≤}{{$\le$}}1 {·}{{$\cdot$}}1 {⟨}{{$\langle$}}1 {⟩}{{$\rangle$}}1}
+\newtcolorbox{leanbox}{colback=black!3,colframe=black!40,boxrule=0.5pt,arc=2pt,
+  left=6pt,right=6pt,top=3pt,bottom=3pt}
+\newcommand{\leansnippet}[1]{\begin{leanbox}\lstinputlisting[style=lean]{lean-snippets/#1.lean}\end{leanbox}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\N}{\mathbb N}
+\newcommand{\sz}[1]{\lvert #1\rvert}
+\newcommand{\cost}{\operatorname{cost}}
+\tikzset{key/.style={circle,draw=figblue,fill=figblue!7,minimum size=6mm,inner sep=1pt,font=\small},
+  target/.style={key,draw=figorange,fill=figorange!15,thick},
+  subtree/.style={regular polygon,regular polygon sides=3,draw=black!60,fill=black!4,minimum size=12mm,inner sep=0pt},
+  edge/.style={draw=black!65,semithick}, >=Latex}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\maketitle}{\begin{center}{\LARGE\bfseries Binary Search Trees Without Labels}\par\smallskip
+  {\large A small rotation-based model in Lean}\end{center}\medskip}
+
+\begin{document}
+\maketitle
+
+# Why this is a BST model
+
+A BST on a fixed ordered universe $k_0<\cdots<k_{n-1}$ has no freedom in
+its labels once its shape is known: inorder must read precisely
+$k_0,\ldots,k_{n-1}$. Conversely, assigning these keys to the nodes of any
+$n$-node shape in inorder gives a valid BST. Forgetting the labels and
+restoring them are inverse operations. We therefore use ranks $0,\ldots,n-1$
+as keys, and store only shapes. This removes an invariant, not any possible
+BST shape or access sequence.
+
+A rotation preserves inorder order. Thus erasing labels before a rotation
+and restoring them afterward gives exactly the usual labelled rotation.
+If the final tree is \code{node l r}, its root's key is $\sz{l}$.
+Requiring $\sz{l}=x$ therefore says exactly that key $x$ has been brought
+to the root. This representation correspondence is the first result to
+formalize in Lean.
+
+\textbf{Why require the requested key at the root?}
+A pointer search reaching depth $d$ can expose its key at the root by $d$
+rotations. Reversing those rotations restores the searched tree, if needed.
+The restoration can begin the next access phase, so our phase boundary can
+always be placed at the instant the request is at the root. This explains
+why root exposure need not force the algorithm to retain a particular
+restructuring strategy.
+
+\textbf{Which cost is equivalent?}
+Derryberry's \href{https://www.cs.cmu.edu/~jonderry/thesis.pdf}{\emph{Adaptive Binary Search Trees}}
+(Sections~2.2 and~3.4, printed pages~12--13 and~25) describes a Wilber-style
+root-access rotation model with cost $m+R$: $m$ requests and $R$ rotations.
+Its comparison with the connected node-touch model uses lazy handling of
+rotations outside the active connected region. The geometric BST model is
+also discussed in \href{https://people.csail.mit.edu/mip/papers/arboral/paper.pdf}{Demaine et al.,
+\emph{The Geometry of Binary Search Trees}}, Section~2.1.
+These give the literature setting for the intended constant-factor simulation;
+they are not Lean proofs about the definitions below.
+
+Our file deliberately records just $R$. For standard total-cost comparisons,
+use
+\[
+  \cost_{\mathrm{total}}(t,X)=\sz{X}+\cost_{\mathrm{rot}}(t,X).
+\]
+The extra request charge is essential: repeatedly requesting the current
+root costs zero rotations, but positive standard search cost.
+In particular, the current \code{DynamicallyOptimal} predicate concerns
+rotation cost; its converse connection to conventional dynamic optimality
+cannot be obtained by simply dropping the $m$ term.
+
+\textbf{What remains to formalize.}
+Besides the label/shape correspondence, we need costed simulations between
+root-access rotations and a chosen pointer model. Rotations deep in a subtree
+cannot simply be declared to have constant pointer cost: locating them must
+be justified by a global simulation. For online algorithms, the translation
+must also preserve the lack of future information. Exact final-tree agreement
+may require delayed work; the interface and initial-tree allowance must be
+stated explicitly in the simulation theorem.
+
+\newpage
+The rest of the document explains every definition in \code{RotationBST.lean}.
+Each explanation is followed by the corresponding Lean code, extracted from
+that file. The source remains authoritative. It imports only \code{Std};
+all declarations live in the namespace \code{RotationBST}.
+
+# Trees and implicit keys
+
+A ***tree*** is either empty, written \code{nil}, or consists of a node with
+a left and a right subtree, written \code{node l r}. Only nonempty nodes
+represent keys. Empty subtrees have no key.
+
+\leansnippet{Tree}
+
+The declaration \code{inductive} gives exactly these two ways to construct a
+finite tree. The \code{deriving} clause supplies decidable equality and printable
+representations; it adds no mathematical condition.
+The ***size*** $\sz{t}$ counts the keys in $t$:
+
+\leansnippet{Tree.size}
+
+Inorder visits the left subtree, the root, then the right subtree.
+Thus the root's implicit key is $\sz{l}$. More generally, a subtree whose keys
+start at $b$ has root key $b+\sz{l}$. The offset matters: a node's key is its
+rank in the *whole* tree, not just in its own subtree.
+
+: figure[ht]
+  \centering
+  \begin{tikzpicture}[scale=0.87]
+    \node[key] (r) at (0,0) {3};
+    \node[key] (a) at (-2,-0.85) {1}; \node[key] (b) at (2,-0.85) {5};
+    \node[key] (a0) at (-3,-1.7) {0}; \node[key] (a2) at (-1,-1.7) {2};
+    \node[key] (b4) at (1,-1.7) {4}; \node[key] (b6) at (3,-1.7) {6};
+    \foreach \u/\v in {r/a,r/b,a/a0,a/a2,b/b4,b/b6} \draw[edge] (\u)--(\v);
+    \node[font=\small,anchor=west,text=black!65] at (3.7,-0.8)
+      {\shortstack[l]{Inorder: $0,1,2,3,4,5,6$\\Root key: $\sz{l}=3$}};
+  \end{tikzpicture}
+  \caption: Labels are shown only to explain the shape; the Lean value stores none
+    of them. Missing children denote \code{nil}.
+  @=fig:labels
+
+\newpage
+# One rotation
+
+A ***rotation*** changes the shape locally while preserving inorder order.
+The first two constructors are the familiar right and left rotations.
+
+\leansnippet{Rotate}
+
+The type \code{Tree → Tree → Prop} means that \code{Rotate s t} is a
+proposition relating a source tree $s$ to a destination tree $t$.
+Each constructor is a rule for proving such a proposition.
+The variables $a,b,c$ stand for arbitrary subtrees, including empty ones.
+
+: figure[ht]
+  \centering
+  \begin{tikzpicture}
+    \node[key] (x) at (0,0) {$x$}; \node[target] (y) at (-0.9,-0.85) {$y$};
+    \node[subtree] (a) at (-1.55,-1.9) {$A$};
+    \node[subtree] (b) at (-0.25,-1.9) {$B$};
+    \node[subtree] (c) at (1,-1.1) {$C$};
+    \foreach \u/\v in {x/y,y/a,y/b,x/c} \draw[edge] (\u)--(\v);
+    \node[target] (Y) at (6,0) {$y$}; \node[key] (X) at (6.9,-0.85) {$x$};
+    \node[subtree] (A) at (5,-1.1) {$A$};
+    \node[subtree] (B) at (6.25,-1.9) {$B$};
+    \node[subtree] (C) at (7.55,-1.9) {$C$};
+    \foreach \u/\v in {Y/A,Y/X,X/B,X/C} \draw[edge] (\u)--(\v);
+    \draw[->,thick,figblue] (1.7,-0.6)--node[above,font=\small]{right rotation}(4.2,-0.6);
+    \draw[<-,thick,figblue] (1.7,-1.05)--node[below,font=\small]{left rotation}(4.2,-1.05);
+    \node[font=\small] at (3,-2.75) {Same inorder: $A,\ y,\ B,\ x,\ C$};
+  \end{tikzpicture}
+  \caption: The highlighted node is promoted by a right rotation. Its implicit
+    key remains $\sz{A}$; the other displayed node keeps key $\sz{A}+1+\sz{B}$.
+  @=fig:rotation
+
+The constructors \code{inLeft} and \code{inRight} allow the same rotation
+inside either child. Repeated applications locate a rotation at any depth.
+They do not add rotations to the count: each proof of \code{Rotate s t}
+represents one local rotation, wherever it occurs.
+
+# A sequence of rotations
+
+We write \code{Rotations s t k} when exactly $k$ rotations transform $s$ into $t$.
+
+\leansnippet{Rotations}
+
+The rule \code{refl} is the empty sequence. The rule \code{step} performs one
+rotation from $s$ to $t$, followed by $k$ rotations from $t$ to $u$, giving $k+1$
+rotations in total. The intermediate tree connects consecutive operations.
+Implicit variables such as $s,t,u,k$ are inferred from the rule's use.
+
+\newpage
+# An access
+
+An ***access to key $x$*** starts at $s$, performs $k$ rotations, and finishes
+at a nonempty tree $t$ whose root has key $x$.
+Because keys are inorder ranks, this last condition says that the left
+subtree of $t$ has size $x$.
+
+\leansnippet{Access}
+
+The conjunction \code{∧} requires both a legal rotation sequence and the
+right final root. The \code{nil} case is false because an empty tree cannot
+serve any access. We do not separately require $x<\sz{s}$: that follows
+from the definition and size preservation.
+
+: figure[ht]
+  \centering
+  \begin{tikzpicture}[scale=0.95]
+    \node[key] (a0) at (0,0) {0}; \node[key] (a1) at (0.65,-0.7) {1};
+    \node[target] (a2) at (1.3,-1.4) {2};
+    \draw[edge] (a0)--(a1)--(a2);
+    \node[key] (b1) at (4,0) {1}; \node[key] (b0) at (3.3,-0.8) {0};
+    \node[target] (b2) at (4.7,-0.8) {2};
+    \draw[edge] (b1)--(b0); \draw[edge] (b1)--(b2);
+    \node[target] (c2) at (8,0) {2}; \node[key] (c1) at (7.35,-0.7) {1};
+    \node[key] (c0) at (6.7,-1.4) {0};
+    \draw[edge] (c2)--(c1)--(c0);
+    \draw[->,thick,figblue] (1.65,-0.4)--node[above,font=\small]{1 rotation}(2.8,-0.4);
+    \draw[->,thick,figblue] (5.1,-0.4)--node[above,font=\small]{1 rotation}(6.5,-0.4);
+    \node[font=\small] at (4,-2) {$\code{Access}\ s\ t\ 2\ 2$: the final left subtree has two nodes.};
+  \end{tikzpicture}
+  \caption: Accessing key $2$ by two left rotations. The labels stay attached
+    to their inorder positions throughout.
+  @=fig:access
+
+# A request sequence
+
+An ***execution*** serves a finite list of requests in order. Its parameters
+record the starting tree, request list, final tree, and total rotation count.
+
+\leansnippet{Execution}
+
+The empty list costs zero and leaves the tree unchanged. For \code{x :: xs},
+first serve $x$, then serve the remaining requests from the resulting tree;
+the costs add. No online restriction is imposed on how these witnesses are
+chosen, so executions also describe the offline comparator.
+
+The file proves three basic facts (only their statements are shown here):
+
+\leansnippet{Invariants}
+
+Rotations preserve size, hence preserve the key universe. Every successful
+access requests an existing key. The first two facts follow by induction on
+the corresponding constructors; the third follows from the final root condition.
+
+\newpage
+# An online algorithm
+
+An ***algorithm*** chooses a new tree and a rotation count for each request.
+It receives the past requests, the current tree, and the current request.
+It must certify a legal access whenever the requested key exists.
+
+\leansnippet{Algorithm}
+
+The field \code{step} returns a pair $(u,k)$. Lean's projections \code{.1}
+and \code{.2} select its tree and count. The field \code{correct} proves that
+these choices satisfy \code{Access} for every valid request.
+Invalid requests have no correctness requirement.
+
+The interface gives the rule no future requests. Its persistent information
+is represented by the current tree and the supplied request history; there
+is no additional private-state field. The rotation sequence itself is
+certified to exist by \code{Access}, rather than returned as a list of commands.
+
+# Running the algorithm
+
+The function \code{runFrom} applies the rule to successive requests,
+carrying the history and current tree forward and adding the costs.
+
+\leansnippet{Algorithm.runFrom}
+
+The expression \code{past ++ [x]} appends $x$ to the history.
+Although \code{runFrom} receives the remaining list \code{xs},
+\code{step} receives only \code{past}, \code{t}, and \code{x}.
+The recursion terminates because each call processes a shorter request list.
+
+The ***cost*** starts with an empty history and selects the total count:
+
+\leansnippet{Algorithm.cost}
+
+For valid request sequences, successive applications of \code{correct}
+give an \code{Execution} with precisely this final tree and total cost.
+The online choices can therefore be compared directly with offline executions.
+
+This is a mathematical cost model: computation used to choose rotations,
+inspect shapes, or update the Lean lists is uncharged. There is no claim
+here about the running time of the Lean evaluator or a machine implementation.
+
+\newpage
+# Dynamic optimality
+
+An online algorithm is ***dynamically optimal in this model*** if a constant
+factor times any offline execution's cost, plus a linear initial-tree allowance,
+bounds its cost on the same input.
+Writing $n=\sz{t}$, the inequality is
+\[
+  \cost_a(t,X)\le Ck+Dn.
+\]
+
+\leansnippet{DynamicallyOptimal}
+
+The constants $C,D\in\N$ are chosen before the tree and requests, so they are
+uniform in both $n$ and the input sequence. The comparator begins at the same
+tree $t$ and may finish at any $u$.
+Quantifying over every legal \code{Execution} is equivalent to comparing with
+the minimum cost whenever a legal execution exists: a nonempty set of natural
+costs has a least element. This avoids introducing a separate OPT function.
+
+# The working-set measure
+
+The ***working-set number*** of $x$ is $n$ on its first access; otherwise it
+is one plus the number of distinct keys requested since its last access.
+The argument \code{past} lists previous requests in chronological order.
+
+\leansnippet{workingSetNumber}
+
+Reversing \code{past} puts the most recent request first.
+The function \code{takeWhile (· != x)} stops just before the previous $x$;
+\code{eraseDups} removes repetitions, and \code{length} counts the distinct
+intervening keys. For example, with $n=5$:
+\[
+ w([],2)=5,\qquad w([2],2)=1,\qquad w([2,0,1,0],2)=3.
+\]
+In the last example, only keys $0$ and $1$ have intervened.
+
+The sum charges each request $1+\lfloor\log_2 w\rfloor$, using \code{Nat.log2}:
+
+\leansnippet{workingSetSum}
+
+The history is updated after each request, exactly as for the online algorithm.
+The additive one keeps this charge positive even for immediate repetitions.
+
+\newpage
+# The working-set bound
+
+An algorithm satisfies the ***working-set bound*** when its total rotation
+cost is at most a constant times the working-set sum, plus an initial-tree allowance:
+\[
+ \cost_a(t,X)
+ \le C\sum_{i=1}^{m}\bigl(1+\lfloor\log_2 w_i\rfloor\bigr)
+       +Dn\bigl(1+\lfloor\log_2 n\rfloor\bigr).
+\]
+
+\leansnippet{HasWorkingSetBound}
+
+The premise \code{∀ x ∈ xs, x < t.size} restricts attention to existing keys.
+Size preservation ensures that the same universe remains available at every
+later access. Again, $C$ and $D$ are uniform constants.
+This is a sequence bound: it permits one expensive access to be compensated
+by cheaper accesses elsewhere. It asserts no worst-case per-access bound.
+
+For a nonempty tree, the allowance is $O(n\log(n+1))$.
+The empty tree admits only an empty valid request sequence, so its total cost
+is zero. Lean defines \code{Nat.log2 0} as zero, making the formula total.
+
+# What has been defined, and what remains to prove
+
+The code defines the model and two desired properties of algorithms.
+It proves size preservation and the range condition for accesses.
+It does not yet define a particular algorithm, prove that every valid access
+can be served, or prove dynamic optimality or a working-set theorem for any
+algorithm. Those are subsequent mathematical developments.
+
+Two conventions deserve to stay visible when using these definitions.
+First, every access must finish with the requested key at the root, and
+accessing the current root may cost zero. Second, every local rotation costs
+one, even deep inside a subtree; there is no cost for locating it.
+Thus all bounds here refer to this rotation-only, root-access model.
+The opening discussion explains the standard total-cost normalization and
+the simulation results that remain to be formalized.
+
+The representation needs no \code{Valid} predicate: every finite binary-tree
+shape already determines a unique BST on its inorder ranks.
+The remaining obligations concern transformations, access endpoints, and costs.
+
+\vfill
+\begin{small}
+\textbf{Source and presentation.}
+The repository's \code{RotationBST.lean} is the exact 98-line source explained
+here, checked with Lean 4.33.1. Displayed definitions are extracted from it;
+only the three invariant theorem proofs are omitted.
+The prose-and-snippet presentation follows the Lean section of
+\href{https://github.com/edemaine/translation-tiling-paper/blob/5309313e662377d2efb353acba454859469606bd/paper.texlish}{Demaine and Langerman's translation-tiling paper}.
+This document is written in \href{https://texlish.org/}{Texlish}; all tree
+figures are vector TikZ drawings.
+\end{small}
+
+\end{document}

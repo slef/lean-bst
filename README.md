@@ -1,0 +1,79 @@
+# lean-bst
+
+A small Lean model of binary search trees with implicit inorder labels.
+
+A tree stores only its shape. An access to rank `x` is a sequence of local
+rotations that finishes with `x` at the root, meaning that the final left
+subtree has exactly `x` nodes.
+
+## Lean code
+
+- [RotationBST.lean](RotationBST.lean): tree shapes, rotations, accesses,
+  executions, online rules, dynamic optimality and the working-set bound.
+- [RotationBSTTests.lean](RotationBSTTests.lean): concrete executions,
+  boundary cases, working-set examples and a proof that valid online runs
+  produce legal executions.
+
+Install [elan](https://github.com/leanprover/elan), then run:
+
+```sh
+lake build --wfail
+```
+
+The project pins Lean **4.33.1** and uses only `Std`; it has no Mathlib dependency.
+Both the library and its checked examples are default build targets.
+
+## Explanation and figures
+
+[docs/main.texlish](docs/main.texlish) explains every definition, with tree
+figures and an introduction to its relationship with standard BST models.
+It follows the prose-and-Lean-snippet presentation of the Lean section in
+[Demaine and Langerman's translation-tiling paper](https://github.com/edemaine/translation-tiling-paper).
+The documentation workflow builds a PDF available as a GitHub Actions artifact.
+
+To build it locally, install [Texlish](https://texlish.org/) (`npm install -g texlish@0.2.0`), Python 3, and a TeX distribution with `latexmk`, TikZ,
+`listings`, `tcolorbox`, Libertine, `newtxmath` and Inconsolata:
+
+```sh
+make -C docs
+```
+
+The PDF is `docs/build/main.pdf`. Displayed code is extracted from the Lean
+source by `docs/extract_snippets.py`; edit `docs/main.texlish` for prose.
+The CI workflow also checks that the committed snippets match the source.
+
+## Model and current scope
+
+The current cost is **rotations only**; an access to the current root can cost
+zero. The standard normalization adds one per request: `m + rotations` for a
+sequence of length `m`. These costs are not multiplicatively equivalent on
+all inputs (consider repeated requests to a root).
+
+The shape representation is in bijection with labelled BSTs on a fixed ordered
+key set, and local rotations preserve those inorder identities. The connection
+from root-access rotation executions to pointer-based BST executions additionally
+needs a costed simulation, including treatment of rotations away from the access
+path. See the document's opening discussion and [Derryberry's thesis,
+Sections 2.2 and 3.4](https://www.cs.cmu.edu/~jonderry/thesis.pdf).
+
+The Lean file currently proves size preservation and that successful accesses
+are in range. The representation correspondence, access existence, and model
+simulation remain to be formalized. Dynamic optimality and the working-set bound
+are **definitions**, not proved guarantees for a supplied algorithm. In particular,
+`DynamicallyOptimal` currently compares rotation counts; a conventional total-cost
+competitive theorem must account explicitly for the additive `m` term.
+
+The online interface returns an endpoint and a certified count, rather than an
+explicit rotation program. Planning computation is uncharged.
+
+## Development
+
+```sh
+lake build --wfail
+python3 docs/extract_snippets.py
+make -C docs
+```
+
+Contributions should keep the small core readable, use checked examples, and
+state clearly which model and cost convention a result concerns. The initial
+formalization, tests and explanatory document were prepared with OpenAI Codex.

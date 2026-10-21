@@ -1,0 +1,9 @@
+name = "lean-bst"
+version = "0.1.0"
+defaultTargets = ["RotationBST", "RotationBSTTests"]
+
+[[lean_lib]]
+name = "RotationBST"
+
+[[lean_lib]]
+name = "RotationBSTTests"

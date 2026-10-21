@@ -1,0 +1,29 @@
+name: Documentation
+on:
+  push:
+    paths: ['RotationBST.lean', 'docs/**', '.github/workflows/docs.yml']
+  pull_request:
+    paths: ['RotationBST.lean', 'docs/**', '.github/workflows/docs.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Texlish and LaTeX
+        run: |
+          npm install -g texlish@0.2.0
+          sudo apt-get update
+          sudo apt-get install -y latexmk texlive-latex-extra texlive-fonts-extra
+      - name: Build document
+        run: make -C docs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lean-bst-description
+          path: docs/build/main.pdf
+          if-no-files-found: error
