@@ -109,6 +109,21 @@ tree with different private states, and the requested theorem must compare
 entire executions with a factor independent of `n`. Both a proof and a
 counterexample to the general statement remain absent from this attempt.
 
+## Purely additive simulation is impossible
+
+[ThreeKeySeparation.lean](ThreeKeySeparation.lean) proves a separation on three
+keys. One fixed online algorithm with a clock modulo eight serves
+`(0,2,1,0,2,0,2,1)^m` from the balanced tree at total cost **19m**. Every
+tree-only algorithm costs at least **20m** on the same inputs.
+
+Consequently no bound `cost_B ≤ cost_A + f(n)` can hold for this A, for any
+function f of tree size alone. The complete quantified theorem is
+`ThreeKey.no_purely_additive_simulation`, including execution and legality proofs.
+See the [short mathematical explanation](research/pure-additive-obstruction.md).
+
+This rules out multiplicative coefficient **one**. The original question with
+an arbitrary constant coefficient and additive O(n) remains unresolved.
+
 ## Development
 
 ```sh

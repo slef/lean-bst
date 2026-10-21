@@ -70,12 +70,13 @@ of at least 20/19 for this particular A.
 
 ## Verification status
 
-The mathematical argument above is complete subject to routine auditing of the
-listed finite transitions. The finite-policy inequality, tree classification,
-and rotation-distance lower bound are checked in Lean without sorry or extra
-axioms. The definition of the modulo-eight StatefulAlgorithm, the execution
-cost induction, and the final quantified negation have NOT YET been formalized.
-Do not describe the full counterexample as Lean verified until those are added.
+The complete theorem is now checked in Lean without sorry or extra axioms:
+`ThreeKey.no_purely_additive_simulation`. This includes the modulo-eight online
+algorithm and fallback correctness, every concrete rotation trace, classification
+of all size-three trees, lower bounds for arbitrary rotation traces and arbitrary
+tree-only algorithms, repeated-word execution induction, and the quantified
+counterexample for every function f : Nat → Nat. An axiom guard lists only
+Lean's standard propext, Classical.choice, and Quot.sound.
 
 This example also shows why a repeated-tree argument cannot give exact additive
 simulation: at c, A retains which of two phases it is in; B cannot. A constant

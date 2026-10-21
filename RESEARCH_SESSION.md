@@ -93,3 +93,21 @@ Repeated (tree, request) pairs must make consistent endpoint decisions.
 No sorry, extra axioms, or unsupported claims. No subagents requested. Save useful
 proofs and failures, run lake build --wfail for Lean changes. Preserve main and
 work on current branch. Update this file every checkpoint for continuation.
+
+## Checkpoint 2026-10-21 21:38 UTC (full C=1 theorem)
+
+Finished the FULL Lean proof in ThreeKeySeparation.lean:
+`no_purely_additive_simulation (b : TreeAlgorithm) (f : Nat → Nat)` supplies
+valid t,xs with clockAlgorithm.totalCost t xs + f t.size < b.totalCost t xs.
+The clockAlgorithm has state Fin 8 and a correct move-to-root fallback.
+`tree_only_lower` proves 20*m <= cost B; `clock_cost` proves cost A =19*m.
+No extra axioms or sorry; guard lists only propext, Classical.choice, Quot.sound.
+Updated README and prose proof verification status. The earlier incomplete
+status above is superseded. Full file compiles quickly (~0.7s).
+
+Next: focus on constant C + arbitrary f(n). The C=1 counterexample does not
+settle this and should not consume more time. Consider proving reset diameter
+and a cycle/potential certificate for finite-state comparators. Do not conflate
+memorylessness on product states (B tree, A tree, A state) with tree-only B.
+Searches for memoryless BST simulation yielded no direct theorem; generic
+memoryless queries mostly irrelevant RFID results. No claim of literature novelty.

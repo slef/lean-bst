@@ -1,8 +1,12 @@
 import StateElimination
 
-/-! A finite certificate for the purely additive (factor-one) question.
-The bridge from these five-state calculations to arbitrary `TreeAlgorithm`
-is developed separately; do not read the certificate alone as that theorem. -/
+/-! Purely additive state elimination is impossible, already on three keys.
+
+One fixed online algorithm has total cost 19m on a repeated eight-request word;
+every tree-only algorithm costs at least 20m. The full execution theorem below
+rules out every additive function of tree size when the multiplicative factor
+is one. It does not refute constant-factor state elimination.
+-/
 namespace RotationBST.ThreeKey
 
 inductive Shape where
@@ -182,5 +186,194 @@ theorem policy_two_blocks (p : Shape → Nat → Shape)
   all_goals cases d0 <;> simp [root] at hd0 <;> try contradiction
   all_goals cases e0 <;> simp [root] at he0 <;> try contradiction
   all_goals simp [cost, hca', ha2', hb2', hd0', he0', one, distance]
+
+def finish (p : Shape → Nat → Shape) : Shape → List Nat → Shape
+  | t, [] => t
+  | t, x :: xs => finish p (p t x) xs
+
+theorem finite_run (b : TreeAlgorithm) (s : Shape) (xs : List Nat)
+    (hv : ∀ x ∈ xs, x < 3) :
+    (b.runFrom () s.tree xs).2.1 = (finish (induced b) s xs).tree ∧
+    cost (induced b) s xs ≤ (b.runFrom () s.tree xs).2.2 := by
+  induction xs generalizing s with
+  | nil => exact ⟨rfl, Nat.le_refl _⟩
+  | cons x xs ih =>
+      have hx := hv x (by simp)
+      obtain ⟨ht, _, hk⟩ := induced_step b s x hx
+      have hi := ih (induced b s x) (by intro y hy; exact hv y (by simp [hy]))
+      rcases he : b.step () s.tree x with ⟨q, u, k⟩
+      cases q
+      rw [he] at ht hk
+      dsimp only at ht hk
+      simp only [StatefulAlgorithm.runFrom, he, ht, finish, cost]
+      exact ⟨hi.1, Nat.add_le_add hk hi.2⟩
+
+def period : List Nat := [0, 2, 1, 0, 2, 0, 2, 1]
+
+def repetitions : Nat → List Nat
+  | 0 => []
+  | n + 1 => period ++ repetitions n
+
+theorem finish_append (p : Shape → Nat → Shape) (s : Shape) (xs ys : List Nat) :
+    finish p s (xs ++ ys) = finish p (finish p s xs) ys := by
+  induction xs generalizing s with
+  | nil => rfl
+  | cons x xs ih => exact ih (p s x)
+
+theorem cost_append (p : Shape → Nat → Shape) (s : Shape) (xs ys : List Nat) :
+    cost p s (xs ++ ys) = cost p s xs + cost p (finish p s xs) ys := by
+  induction xs generalizing s with
+  | nil => simp [cost, finish]
+  | cons x xs ih => simp [cost, finish, ih, Nat.add_assoc]
+
+theorem resets (p : Shape → Nat → Shape)
+    (valid : ∀ s x, x < 3 → root (p s x) = x) : ∀ s, p s 1 = .c := by
+  intro s
+  have h := valid s 1 (by decide)
+  cases he : p s 1 <;> simp_all [root]
+
+theorem period_lower (p : Shape → Nat → Shape)
+    (valid : ∀ s x, x < 3 → root (p s x) = x) :
+    12 ≤ cost p .c period ∧ finish p .c period = .c := by
+  have hr := resets p valid
+  have hc := policy_two_blocks p valid
+  constructor
+  · change 12 ≤ cost p .c ([0, 2, 1] ++ [0, 2, 0, 2, 1])
+    rw [cost_append]
+    simpa only [finish, hr] using hc
+  · simp [period, finish, hr]
+
+theorem repetitions_lower (p : Shape → Nat → Shape)
+    (valid : ∀ s x, x < 3 → root (p s x) = x) (m : Nat) :
+    12 * m ≤ cost p .c (repetitions m) := by
+  obtain ⟨hc, hf⟩ := period_lower p valid
+  induction m with
+  | zero => simp [repetitions, cost]
+  | succ m ih =>
+      rw [repetitions, cost_append, hf, Nat.mul_succ]
+      omega
+
+theorem repetitions_valid (m : Nat) : ∀ x ∈ repetitions m, x < 3 := by
+  induction m with
+  | zero => simp [repetitions]
+  | succ m ih =>
+      intro x hx
+      simp only [repetitions, List.mem_append] at hx
+      rcases hx with hx | hx
+      · simp only [period, List.mem_cons, List.not_mem_nil, or_false] at hx
+        omega
+      · exact ih x hx
+
+theorem repetitions_length (m : Nat) : (repetitions m).length = 8 * m := by
+  induction m with
+  | zero => rfl
+  | succ m ih => simp [repetitions, period, ih, Nat.mul_succ]
+
+theorem tree_only_lower (b : TreeAlgorithm) (m : Nat) :
+    20 * m ≤ b.totalCost Shape.c.tree (repetitions m) := by
+  have valid : ∀ s x, x < 3 → root (induced b s x) = x :=
+    fun s x hx => (induced_step b s x hx).2.1
+  have h1 := repetitions_lower (induced b) valid m
+  have h2 := (finite_run b .c (repetitions m) (repetitions_valid m)).2
+  unfold StatefulAlgorithm.totalCost
+  have hi : b.init Shape.c.tree = () := Subsingleton.elim _ _
+  rw [hi, repetitions_length]
+  omega
+
+structure Plan where
+  source : Shape
+  request : Nat
+  target : Shape
+  rotations : Nat
+
+def plan (q : Fin 8) : Plan := match q.val with
+  | 0 => ⟨.c, 0, .a, 1⟩
+  | 1 => ⟨.a, 2, .e, 2⟩
+  | 2 => ⟨.e, 1, .c, 1⟩
+  | 3 => ⟨.c, 0, .b, 2⟩
+  | 4 => ⟨.b, 2, .d, 1⟩
+  | 5 => ⟨.d, 0, .b, 1⟩
+  | 6 => ⟨.b, 2, .d, 1⟩
+  | _ => ⟨.d, 1, .c, 2⟩
+
+theorem plan_correct (q : Fin 8) :
+    Access (plan q).source.tree (plan q).target.tree (plan q).request (plan q).rotations := by
+  rcases q with ⟨q, hq⟩
+  have cases_q : q = 0 ∨ q = 1 ∨ q = 2 ∨ q = 3 ∨ q = 4 ∨ q = 5 ∨ q = 6 ∨ q = 7 := by omega
+  rcases cases_q with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
+  all_goals constructor
+  · exact .step .right .refl
+  · rfl
+  · exact .step .left (.step .left .refl)
+  · rfl
+  · exact .step .right .refl
+  · rfl
+  · exact .step .right (.step (.inRight .left) .refl)
+  · rfl
+  · exact .step .left .refl
+  · rfl
+  · exact .step .right .refl
+  · rfl
+  · exact .step .left .refl
+  · rfl
+  · exact .step (.inLeft .left) (.step .right .refl)
+  · rfl
+
+/-- One fixed online algorithm. A clock selects a preprogrammed legal action;
+on every unexpected tree or request, a correct fallback serves the request. -/
+def clockAlgorithm : StatefulAlgorithm (Fin 8) where
+  init _ := 0
+  step q t x :=
+    if t = (plan q).source.tree ∧ x = (plan q).request then
+      (⟨(q.val + 1) % 8, Nat.mod_lt _ (by decide)⟩, (plan q).target.tree, (plan q).rotations)
+    else (0, moveToRoot t x)
+  correct q t x hx := by
+    split
+    next h => obtain ⟨rfl, rfl⟩ := h; exact plan_correct q
+    next => exact (moveToRoot_correct t x hx).1
+
+theorem clock_period : clockAlgorithm.runFrom 0 Shape.c.tree period =
+    (0, Shape.c.tree, 11) := by decide
+
+theorem run_append (a : StatefulAlgorithm σ) (q : σ) (t : Tree) (xs ys : List Nat) :
+    a.runFrom q t (xs ++ ys) =
+      let r := a.runFrom q t xs
+      let z := a.runFrom r.1 r.2.1 ys
+      (z.1, z.2.1, r.2.2 + z.2.2) := by
+  induction xs generalizing q t with
+  | nil => simp [StatefulAlgorithm.runFrom]
+  | cons x xs ih => simp [StatefulAlgorithm.runFrom, ih, Nat.add_assoc]
+
+theorem clock_repetitions (m : Nat) :
+    clockAlgorithm.runFrom 0 Shape.c.tree (repetitions m) = (0, Shape.c.tree, 11 * m) := by
+  induction m with
+  | zero => rfl
+  | succ m ih => simp [repetitions, run_append, clock_period, ih, Nat.mul_succ, Nat.add_comm]
+
+theorem clock_cost (m : Nat) : clockAlgorithm.totalCost Shape.c.tree (repetitions m) = 19 * m := by
+  unfold StatefulAlgorithm.totalCost
+  change (repetitions m).length + (clockAlgorithm.runFrom 0 Shape.c.tree (repetitions m)).2.2 = _
+  rw [repetitions_length, clock_repetitions]
+  dsimp only
+  omega
+
+/-- No sequence-length-independent additive allowance suffices at factor one.
+The SAME online stateful algorithm and repeated word defeat EVERY tree-only rule. -/
+theorem no_purely_additive_simulation (b : TreeAlgorithm) (f : Nat → Nat) :
+    ∃ t xs, ValidInput t xs ∧
+      clockAlgorithm.totalCost t xs + f t.size < b.totalCost t xs := by
+  let m := f 3 + 1
+  refine ⟨Shape.c.tree, repetitions m, ?_, ?_⟩
+  · intro x hx
+    rw [shape_size]
+    exact repetitions_valid m x hx
+  · have hl := tree_only_lower b m
+    rw [clock_cost, shape_size]
+    dsimp [m] at *
+    omega
+
+/-- info: 'RotationBST.ThreeKey.no_purely_additive_simulation' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms no_purely_additive_simulation
 
 end RotationBST.ThreeKey
