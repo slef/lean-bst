@@ -641,3 +641,26 @@ valid; documentation build succeeds. Research still active until02:43:48UTC.
 Main remaining task: seek genuinely new proof leverage or limitations for
 constant-size private state; do not confuse finite-memory-per-n probe argument
 with fixed Fin K. Final deadline validation and automation pause still pending.
+
+
+## Checkpoint 2026-10-22 ~02:03 UTC: ONE BIT suffices, checked
+
+New OneBitSeparation.lean replaces the fixed Fin8 clock by Fin2. Parity and
+currenttree/request identify plannedtransition. c0 bit0 usesa; c0 bit1 usesb;
+odd-length blocks flip their initial parity. Unexpected requests/tree use
+moveToRoot and bit0. Correctness checked for allvalidinputs. Exact period
+returns(bit0,c,11rotations). Repetitions cost19m. Reused tree-only20m bound to
+prove no purely additive simulation and no rational coefficientbelow20/19.
+Successful lake build --wfail53jobs, standardaxiomguard. This is a genuine
+strengthening: one private bit independentn can matter additively. It does
+not refute any largerconstant simulation, even forfixedFin2.
+
+Updated4page TeXlish note and localPDF toonebit; bothchangedpages rendered
+and visuallychecked, nooverflow. Added exactrational exhaustiveexperiment
+research/one_bit_simulation.py and resultJSON: minimumfactor12/11 against
+this particular n3 comparator, certificate11B<=12A+6,1024policies. This is
+NOT Leanverified. Findingcompactcyclewitnesses for12/11 could strengthen
+checkedlowerbound; currentcheckedbound is20/19. No n-asymptotic inference.
+
+Prior research/docs push dad663b succeeded and PRbodyupdated. Thischeckpoint
+will also be pushed. Deadline02:43:48UTC, originalconstantfactorquestionopen.

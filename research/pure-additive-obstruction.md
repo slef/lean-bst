@@ -82,3 +82,41 @@ Lean's standard propext, Classical.choice, and Quot.sound.
 This example also shows why a repeated-tree argument cannot give exact additive
 simulation: at c, A retains which of two phases it is in; B cannot. A constant
 factor may still absorb this difference, so the main relaxed question remains.
+
+
+## One bit suffices (Lean checked)
+
+`OneBitSeparation.lean` replaces the eight-state clock by `Fin 2`. On the
+repeated word, the bit flips after every access. The planned transitions are:
+
+| Bit | Tree | Request | New tree | Rotations |
+| --- | --- | --- | --- | --- |
+| 0 | c | 0 | a | 1 |
+| 1 | a | 2 | e | 2 |
+| 0 | e | 1 | c | 1 |
+| 1 | c | 0 | b | 2 |
+| 0 | b | 2 | d | 1 |
+| 1 | d | 0 | b | 1 |
+| 1 | d | 1 | c | 2 |
+
+All other inputs use a correct move-to-root fallback and reset the bit.
+The tree/request pair distinguishes all required steps except the two visits
+to (c,0); those are distinguished by the bit. Both blocks have odd length,
+so their starting bits differ. The full eight-request period returns to
+(tree c, bit0) with11 rotations. Lean checks correctness on every valid input,
+exact repeated-period cost19m, failure of every purely additive simulation,
+and failure of every rational coefficient below20/19.
+
+This strengthens the negative result to a single bit independent of n. It
+still does not refute simulation at a larger constant factor, even for this
+particular algorithm. The earlier eight-state comparator remains available.
+
+
+An additional exhaustive experiment (`python3 research/one_bit_simulation.py`)
+finds the optimal tree-only simulation coefficient for this particular
+three-key one-bit comparator is12/11, with a certificate
+11*cost_B<=12*cost_A+6. All1024 shortest-endpoint policies are enumerated;
+reachable product-cycle checks use exact rational arithmetic. This is
+experimental, not a Lean lower-bound theorem. The checked uniform lower
+bound remains20/19; deriving a small human-readable witness for12/11 is a
+possible next step. It has no uniform-in-n consequence.

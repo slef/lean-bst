@@ -64,7 +64,7 @@ Can private memory be removed from a deterministic online BST algorithm
 at constant-factor cost? This remains unresolved. Two results are proved:
 
 \begin{leanbox}
-\textbf{Purely additive simulation is impossible.} A fixed eight-state
+\textbf{Purely additive simulation is impossible.} A fixed two-state
 algorithm on three keys defeats every tree-only algorithm by an unbounded
 additive amount.\\[5pt]
 \textbf{Constant-factor state elimination is equivalent to tree-only dynamic
@@ -148,7 +148,7 @@ Start at $c$ and repeat the eight-request word
 \[
  W=(0,2,1)\,(0,2,0,2,1).
 \]
-An eight-state clock algorithm distinguishes these two blocks. It uses the
+A one-bit algorithm distinguishes these two blocks. It uses the
 following endpoint paths; a jump across two pentagon edges costs two rotations:
 \[
  c\longrightarrow a\longrightarrow e\longrightarrow c
@@ -156,8 +156,9 @@ following endpoint paths; a jump across two pentagon edges costs two rotations:
  c\longrightarrow b\longrightarrow d\longrightarrow b\longrightarrow d\longrightarrow c.
 \]
 These paths cost $4+7=11$ rotations. Including eight requests, the cost is $19$.
-Unexpected requests use a legal fallback, so this is a genuine online algorithm
-on all inputs, not merely a serving schedule for one word.
+The bit flips after each planned access; shape and request identify the
+remaining phase. Unexpected requests use a legal fallback, so this is an
+online algorithm on all inputs, not merely a serving schedule for one word.
 
 A tree-only algorithm faces the same pair $(c,0)$ at the start of both blocks.
 It must make the same choice there. A finite case analysis proves that its two
@@ -169,7 +170,8 @@ Both blocks end at $c$, so the argument repeats indefinitely:
 For any fixed $f(3)$, choosing $m>f(3)$ refutes
 $\cost_B\le\cost_A+f(n)$. More generally, every rational coefficient below
 $20/19$ fails for this same $A$. This does not rule out a larger constant factor.
-The checked proof is in \code{ThreeKeySeparation.lean}.
+The lower bound is in \code{ThreeKeySeparation.lean}; the one-bit algorithm is
+in \code{OneBitSeparation.lean}.
 
 \newpage
 # Why arbitrary additive slack does not make the question easier

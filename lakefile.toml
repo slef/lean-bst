@@ -1,6 +1,6 @@
 name = "lean-bst"
 version = "0.1.0"
-defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation", "TreeReset", "SimulationPotential", "CostComposition", "CompetitiveCredit", "AdditiveNormalization", "PeriodicComparison", "PeriodicLearning", "FiniteWeightedPaths", "FiniteTrees", "ProbeReduction", "FiniteBranching", "OptimalPrefixes", "InfinitePlan", "FiniteCoverLearning", "PeriodicCandidates", "ForecastAlgorithm", "ForecastTracking", "PeriodicProbe", "BoundedCycles", "BoundedBSTWitness"]
+defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation", "TreeReset", "SimulationPotential", "CostComposition", "CompetitiveCredit", "AdditiveNormalization", "PeriodicComparison", "PeriodicLearning", "FiniteWeightedPaths", "FiniteTrees", "ProbeReduction", "FiniteBranching", "OptimalPrefixes", "InfinitePlan", "FiniteCoverLearning", "PeriodicCandidates", "ForecastAlgorithm", "ForecastTracking", "PeriodicProbe", "BoundedCycles", "BoundedBSTWitness", "OneBitSeparation"]
 
 [[lean_lib]]
 name = "RotationBST"
@@ -76,3 +76,6 @@ name = "BoundedCycles"
 
 [[lean_lib]]
 name = "BoundedBSTWitness"
+
+[[lean_lib]]
+name = "OneBitSeparation"

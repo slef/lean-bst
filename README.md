@@ -192,3 +192,9 @@ make -C docs
 Contributions should keep the small core readable, use checked examples, and
 state clearly which model and cost convention a result concerns. The initial
 formalization, tests and explanatory document were prepared with OpenAI Codex.
+
+
+The additive obstruction needs only **one bit** of private memory:
+[OneBitSeparation.lean](OneBitSeparation.lean) gives a `Fin 2` algorithm with
+cost 19m where every tree-only algorithm costs at least 20m. This strengthens
+the earlier eight-state example without changing the constant-factor question.
