@@ -12,3 +12,21 @@ for name in names:
 statements = [line.removesuffix(' := by') for line in lines
               if line.startswith('theorem ')]
 (root / 'lean-snippets' / 'Invariants.lean').write_text('\n'.join(statements) + '\n')
+
+# Explicit-state interface and research theorem statements.
+state = (root.parent / 'StateElimination.lean').read_text()
+start = state.index('structure StatefulAlgorithm')
+end = state.index('/-- The original history', start)
+(root / 'lean-snippets' / 'StatefulAlgorithm.lean').write_text(state[start:end].strip() + '\n')
+unit = next(line for line in state.splitlines() if line.startswith('abbrev TreeAlgorithm '))
+(root / 'lean-snippets' / 'TreeAlgorithm.lean').write_text(unit + '\n')
+probe = (root.parent / 'PeriodicProbe.lean').read_text()
+statements = []
+for name in ['state_elimination_iff_universal', 'arbitrary_iff_linear']:
+    start = probe.index('theorem ' + name)
+    end = probe.index(' :=', start)
+    statement = probe[start:end]
+    if name == 'arbitrary_iff_linear':
+        statement = statement.replace(' : ', ' :\n    ', 1)
+    statements.append(statement)
+(root / 'lean-snippets' / 'Equivalence.lean').write_text('\n\n'.join(statements) + '\n')

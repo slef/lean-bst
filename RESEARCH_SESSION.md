@@ -623,3 +623,21 @@ report for user, with the separation/equivalence/normalization and model caveats
 avoid spending remaining session exclusively strengthening reduction scaffolding.
 Unpushed prior commits0920885,abf3a1d,80cecb6 plus this checkpoint; push at next
 meaningful documentation milestone. Current main conjecture still unresolved.
+
+
+## Checkpoint 2026-10-22 ~01:46 UTC: four-page TeXlish research note
+
+Created docs/state-elimination.texlish in the existing prose-and-Lean style.
+Four pages cover explicit private state; the three-key pentagon and19vs20
+counterexample; full equivalence; reset normalization; bounded probes and gaps.
+Code snippets are automatically extracted from checked source by the existing
+extract_snippets.py. Documentation Makefile builds both PDFs; Actions uploads
+both and watches source dependencies. Rendered all4 pages and corrected page
+break and overlapping tree-node issues; no overfull boxes. Final local PDF:
+../outputs/lean-bst-state-elimination.pdf. Original core document unchanged.
+
+No mathematical result added in this checkpoint. Prior build51jobs remains
+valid; documentation build succeeds. Research still active until02:43:48UTC.
+Main remaining task: seek genuinely new proof leverage or limitations for
+constant-size private state; do not confuse finite-memory-per-n probe argument
+with fixed Fin K. Final deadline validation and automation pause still pending.

@@ -30,7 +30,11 @@ default build targets.
 figures and an introduction to its relationship with standard BST models.
 It follows the prose-and-Lean-snippet presentation of the Lean section in
 [Demaine and Langerman's translation-tiling paper](https://github.com/edemaine/translation-tiling-paper).
-The documentation workflow builds a PDF available as a GitHub Actions artifact.
+The documentation workflow builds PDFs available as GitHub Actions artifacts.
+
+[docs/state-elimination.texlish](docs/state-elimination.texlish) is a four-page
+research note explaining the additive counterexample, dynamic-optimality
+equivalence, and what the reset argument proves and still leaves open.
 
 To build it locally, install [Texlish](https://texlish.org/) (`npm install -g texlish@0.2.0`), Python 3, and a TeX distribution with `latexmk`, TikZ,
 `listings`, `tcolorbox`, Libertine, `newtxmath` and Inconsolata:
