@@ -85,3 +85,27 @@ assuming offline competitiveness. Our equivalence now shows that a general
 resolution of the constant-factor state-elimination question resolves tree-only
 dynamic optimality in this rotation model. Neither a positive construction nor
 an unbounded-in-n lower bound has been found.
+
+## A finite-memory-per-size probe may suffice (not Lean formalized)
+
+The existing probe learns every ultimately periodic word and stores unbounded
+history. To test a fixed size n, the product graph has at most S=Catalan(n)^2
+vertices. Any reachable positive cycle has a witness with a simple reaching
+path and a positive simple cycle; both lengths are bounded by S. Therefore it
+should suffice to learn the finite collection of candidate words with preperiod
+and period lengths at most S, rather than all ultimately periodic words.
+
+For each n, a learner can store the subset of still-consistent candidates and
+a finite phase counter: count up to the maximum preperiod, then use a common
+multiple of the finitely many period and serving-cycle lengths. Once a candidate
+is rejected it stays rejected. On a represented witness, one correct candidate
+survives forever and selection stabilizes. If all are rejected, use a legal
+fallback. The resulting state space is finite for each n, although enormous
+and not bounded by a constant independent of n.
+
+This suggests the hardness reduction survives a restriction to finite memory
+whose bound may be an arbitrary function of n. It does not settle simulation
+of algorithms with a fixed constant-size private state, nor give a small-memory
+probe. The bounded simple-cycle witness and this finite-state implementation
+have not been connected in Lean; the checked equivalence still uses the
+unbounded-history probe.

@@ -542,3 +542,30 @@ useful end product is a concise TeXlish research report with diagrams explaining
 the three-key obstruction, normalization and equivalence. User originally
 requested TeXlish; existing docs/main.texlish describes core only. Research
 session remains active until02:43:48 UTC; main existence question unresolved.
+
+## Checkpoint 2026-10-22 ~01:05 UTC: finite synthesis and bounded probe idea
+
+Installed z3-solver5.3.1.0 in /private/tmp/lean-bst-z3 (isolated temporary target).
+research/synthesize_policy.py encodes shortest-endpoint policy variables,
+reachable equal-root product pairs, and integer potentials for rational p/q.
+Diagonal pairs reachable; closure under all offline endpoints. Potential values
+not forced zero on diagonal. SAT policies independently checked with existing
+exact Python cycle algorithm. Unknown timeouts explicitly preserved.
+
+research/synthesize_optimal.py searches all possible simple-cycle ratios bounded
+by S*(diameter+1). n4 experimental EXACT optimum6/5, with independently checked
+5*B<=6*offline+2 certificate. n3 reproduces known8/7. n5 both5/4 and3/2 timed
+out; no conclusion. Files/results/repro details in finite-policy-synthesis.md.
+No new Lean theorem this checkpoint, no assertion of a uniform bound.
+
+New unformalized observation added to model-audit.md: only ultimatelyperiodic
+witnesses with preperiod/period <=S=Catalan(n)^2 are needed to expose positive
+cycles at fixedn. Thus a universal testing probe can likely use FINITE memory
+for eachn (huge function of n): finitecandidate elimination plus phasecounter
+modulo lcm of all candidate/servingcycle periods. This would strengthen reduction
+to locally finite-state comparators, but not uniformly bounded Fin K comparators.
+Existing formal probe still uses unboundedhistory. Next useful research: prove
+bounded cycle witnesses / make finite-memory observation precise, or prepare
+clear TeXlish report of fully proved results. Do not spend long on n5 solver
+without a new encoding or new bound; prior timeouts are not mathematical evidence.
+Remaining session until02:43:48 UTC, original constant-factor existence open.
