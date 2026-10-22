@@ -569,3 +569,29 @@ bounded cycle witnesses / make finite-memory observation precise, or prepare
 clear TeXlish report of fully proved results. Do not spend long on n5 solver
 without a new encoding or new bound; prior timeouts are not mathematical evidence.
 Remaining session until02:43:48 UTC, original constant-factor existence open.
+
+## Checkpoint 2026-10-22 ~01:18 UTC: bounded lasso theorem checked
+
+BoundedCycles.lean extends generic finite-graph infrastructure:
+- erase_with_simple_loops only assumes simple loops nonpositive;
+- positive_simple_cycle extracts a positive simple loop from any positiveclosed trace;
+- bounded_positive_cycle gives length<=states.length;
+- simple_reaching_path erases loops ignoring weights;
+- bounded_reaching_path gives length<states.length;
+- bounded_lasso combines both in a graph whose edge sources are reachable from
+  a fixed start. Prefix length<S, positiveperiod length<=S. Axiom guard standard.
+
+This proves the finite-graph foundation of the finite-memory-per-size observation.
+It does not yet implement the finite-memory probe or instantiate the bounded
+lasso theorem on the BST product graph. Existing full equivalence unchanged.
+To instantiate: Edge b C T already has Reach source witness; execution_trace
+turns that prefix into a graph trace, after endpoint equalities. sources bound
+follows reach_sizes+mem_pairCover. Then bounded_lasso yields producttrace lengths.
+trace_execution needs an additional length-equality lemma to turn these bounds
+into request-word length bounds (existing theorem only returns execution,
+endpoint, and costweight). Could extend via a new theorem without breaking old.
+
+No new resolution of uniform constantC; periodic witness bound can support a
+finite-memory probe but would still only establish the same hard equivalence.
+Consider prioritizing a concise TeXlish report for user's review, rather than
+spending all remaining time strengthening reductions. Deadline02:43:48UTC.

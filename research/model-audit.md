@@ -109,3 +109,9 @@ of algorithms with a fixed constant-size private state, nor give a small-memory
 probe. The bounded simple-cycle witness and this finite-state implementation
 have not been connected in Lean; the checked equivalence still uses the
 unbounded-history probe.
+
+The generic bounded-witness claim is now Lean checked in `BoundedCycles.lean`.
+`bounded_lasso` gives a prefix of length strictly less than the finite state
+cover and a positive period of length at most that cover. Instantiation with
+the BST product graph and the finite-memory learner remain separate work; the
+existing complete equivalence still uses the full periodic probe.
