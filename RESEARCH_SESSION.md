@@ -664,3 +664,29 @@ checkedlowerbound; currentcheckedbound is20/19. No n-asymptotic inference.
 
 Prior research/docs push dad663b succeeded and PRbodyupdated. Thischeckpoint
 will also be pushed. Deadline02:43:48UTC, originalconstantfactorquestionopen.
+
+
+## Checkpoint 2026-10-22 ~02:26 UTC: exact12/11 for one-bit comparator CHECKED
+
+OneBitRatio.lean: seven requestperiods [01,001,211,0211,2211,00201,202021]
+allreturn A to(bit0,c), and everyB toc. `ratio_certificate` kernel-decides
+all1024 ten-bit endpointpolicies; for eachsomeword has12A<=11B. The bridge
+to arbitrary tree-onlyB uses inducedendpointpolicy and distance lowerbound.
+Repeatingitswitness proves `no_ratio_below_12_11` for every rationalcoefficient
+below12/11 and arbitraryf(n). The comparator isfixed, wordmaydependonB.
+
+OneBitUpperBound.lean: exactmatching tree-onlysimulator. Proved all25 shortest
+shape-to-shape rotationsrealizable, legalendpointpolicy,11reachablepair-state
+potentialcertificate, telescopingrunbound. At n!=3 bothalgorithmsfallbackto
+moveToRoot so costsagree. `matching_upper_bound` globallyproves
+11*cost_B<=12*cost_A+6; `matching_linear_upper_bound` givesallowance2*n.
+Hence the optimalrational asymptotic simulationcoefficient for thisparticular
+one-bitA isexactly12/11, nowentirelyLeanchecked. This doesNOTsettle arbitrary
+Fin2 algorithms or uniformstateelimination. Standardaxiomguards; no sorry.
+
+Build now57jobs. Four-pageTeXlishreport updated withexactresult, rendered
+changedpage2 and inspected. PDFcopied to ../outputs/lean-bst-state-elimination.pdf.
+Priorpushf5520e0 succeeded. Currentexactratiochanges will becommitted/pushed.
+Researchdeadline02:43:48UTC; originalconstantfactorquestion unresolved.
+Nextcheckpoint at02:37 should prioritize finalvalidation, CIstatus, finalreport,
+and pauseheartbeat ATdeadline. Do not conflatecompletedexamplewithmainconjecture.

@@ -198,3 +198,9 @@ The additive obstruction needs only **one bit** of private memory:
 [OneBitSeparation.lean](OneBitSeparation.lean) gives a `Fin 2` algorithm with
 cost 19m where every tree-only algorithm costs at least 20m. This strengthens
 the earlier eight-state example without changing the constant-factor question.
+
+[OneBitRatio.lean](OneBitRatio.lean) and
+[OneBitUpperBound.lean](OneBitUpperBound.lean) sharpen this to an exact result
+for that comparator: no coefficient below **12/11** suffices, and an explicit
+tree-only simulator satisfies `11*cost_B <= 12*cost_A+6` on all valid inputs.
+Both directions are Lean checked; the general constant-factor question remains open.

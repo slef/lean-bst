@@ -120,3 +120,31 @@ reachable product-cycle checks use exact rational arithmetic. This is
 experimental, not a Lean lower-bound theorem. The checked uniform lower
 bound remains20/19; deriving a small human-readable witness for12/11 is a
 possible next step. It has no uniform-in-n consequence.
+
+
+## Exact coefficient12/11 (now Lean checked)
+
+The preceding experimental status is superseded by `OneBitRatio.lean` and
+`OneBitUpperBound.lean`. The lower bound uses seven possible periodic words:
+01,001,211,0211,2211,00201,202021. Each returns the one-bit algorithm to
+(bit0,c); each ends in1, so every tree-only policy returns toc as well.
+Kernel-checked enumeration of all ten binary endpoint decisions proves that
+at least one word has12*cost_A<=11*cost_B. Repeating it refutes every rational
+coefficient below12/11 and every sequence-independent additive allowance.
+The chosen word may depend on B; A is fixed.
+
+For the upper bound, the explicit tree-only simulator uses endpoint policy
+[a,c,e], [b,c,d], [a,c,e], [b,c,d], [b,c,e] on source shapesa,b,c,d,e and
+requests0,1,2. Rotations use shortest paths, whose existence is proved.
+Eleven reachable paired states have nonnegative integer potentials; Lean
+checks every transition satisfies11*Bstep+Phi(next)<=12*Astep+Phi(current),
+and every initial diagonal has potential<=6. Induction proves the finite
+sequence inequality. At every other size, A and B both use move-to-root,
+so their costs agree. The global result is:
+
+  11*cost_B(T,X) <= 12*cost_A(T,X)+6.
+
+This completely characterizes the optimal asymptotic simulation coefficient
+of this specific one-bit algorithm. It provides neither a general theorem
+for arbitrary one-bit algorithms nor an n-growing lower bound. All finite
+proof certificates use `decide`, not `native_decide` or external solver axioms.

@@ -168,10 +168,17 @@ Both blocks end at $c$, so the argument repeats indefinitely:
  \cost_A(c,W^m)=19m,\qquad \cost_B(c,W^m)\ge20m.
 \]
 For any fixed $f(3)$, choosing $m>f(3)$ refutes
-$\cost_B\le\cost_A+f(n)$. More generally, every rational coefficient below
-$20/19$ fails for this same $A$. This does not rule out a larger constant factor.
-The lower bound is in \code{ThreeKeySeparation.lean}; the one-bit algorithm is
-in \code{OneBitSeparation.lean}.
+$\cost_B\le\cost_A+f(n)$. Seven short periodic tests strengthen this:
+every rational coefficient below $12/11$ fails for the same one-bit $A$.
+A matching tree-only simulator satisfies, for every valid input,
+\[
+  11\cost_B(T,X)\le12\cost_A(T,X)+6.
+\]
+Thus this particular algorithm's optimal simulation factor is exactly $12/11$.
+Both directions are Lean checked in \code{OneBitRatio.lean} and
+\code{OneBitUpperBound.lean}; the basic $19m$ versus $20m$ separation is in
+\code{ThreeKeySeparation.lean} and \code{OneBitSeparation.lean}.
+This example does not rule out constant-factor simulation in general.
 
 \newpage
 # Why arbitrary additive slack does not make the question easier
