@@ -43,13 +43,14 @@ To build it locally, install [Texlish](https://texlish.org/) (`npm install -g te
 make -C docs
 ```
 
-The PDF is `docs/build/main.pdf`. Displayed code is extracted from the Lean
-source by `docs/extract_snippets.py`; edit `docs/main.texlish` for prose.
+The PDFs are `docs/build/main.pdf` and `docs/build/state-elimination.pdf`.
+Displayed code is extracted from the Lean source by `docs/extract_snippets.py`;
+edit the corresponding `.texlish` file for prose.
 The CI workflow also checks that the committed snippets match the source.
 
 ## Model and current scope
 
-The current cost is **rotations only**; an access to the current root can cost
+The core file records **rotations only**; an access to the current root can cost
 zero. The standard normalization adds one per request: `m + rotations` for a
 sequence of length `m`. These costs are not multiplicatively equivalent on
 all inputs (consider repeated requests to a root).
@@ -181,18 +182,6 @@ See the [short mathematical explanation](research/pure-additive-obstruction.md).
 This rules out multiplicative coefficient **one**. The original question with
 an arbitrary constant coefficient and additive O(n) remains unresolved.
 
-## Development
-
-```sh
-lake build --wfail
-python3 docs/extract_snippets.py
-make -C docs
-```
-
-Contributions should keep the small core readable, use checked examples, and
-state clearly which model and cost convention a result concerns. The initial
-formalization, tests and explanatory document were prepared with OpenAI Codex.
-
 
 The additive obstruction needs only **one bit** of private memory:
 [OneBitSeparation.lean](OneBitSeparation.lean) gives a `Fin 2` algorithm with
@@ -204,3 +193,16 @@ the earlier eight-state example without changing the constant-factor question.
 for that comparator: no coefficient below **12/11** suffices, and an explicit
 tree-only simulator satisfies `11*cost_B <= 12*cost_A+6` on all valid inputs.
 Both directions are Lean checked; the general constant-factor question remains open.
+
+
+## Development
+
+```sh
+lake build --wfail
+python3 docs/extract_snippets.py
+make -C docs
+```
+
+Contributions should keep the small core readable, use checked examples, and
+state clearly which model and cost convention a result concerns. The initial
+formalization, tests and explanatory document were prepared with OpenAI Codex.

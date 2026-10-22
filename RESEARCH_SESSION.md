@@ -690,3 +690,39 @@ Priorpushf5520e0 succeeded. Currentexactratiochanges will becommitted/pushed.
 Researchdeadline02:43:48UTC; originalconstantfactorquestion unresolved.
 Nextcheckpoint at02:37 should prioritize finalvalidation, CIstatus, finalreport,
 and pauseheartbeat ATdeadline. Do not conflatecompletedexamplewithmainconjecture.
+
+
+## Final audit, 2026-10-22 02:38 UTC
+
+Research code is complete for this session; the main constant-factor existence
+question remains unresolved. No new conjecture is promoted to a theorem.
+
+Verified final results:
+1. One fixed one-bit online comparator A has no tree-only simulation with
+   coefficient one and any additive f(n). A fixed eight-request word gives
+   19m versus at least20m.
+2. For that same A, seven periodic tests exclude every rational coefficient
+   below12/11. An explicit tree-only B attains11B<=12A+6, also11B<=12A+2n.
+   Thus this comparator has exactly coefficient12/11; this is not a universal
+   result for every one-bit algorithm.
+3. General state elimination with arbitrary f(n), general state elimination
+   with O(n), and existence of a universally offline-competitive tree-only
+   algorithm are equivalent in the defined model. None is established true.
+4. Conditional normalization preserves an existing offline coefficient C and
+   replaces f(n) by(2+6C)n. Tree reconfiguration costs at most2n.
+5. Positive-cycle witnesses have bounded request prefix/period lengths, and
+   bounded periodic probes suffice for the reduction. A finite-memory-per-size
+   probe construction is explained on paper but is not formalized.
+
+Validation at code head a63db3b: lake build --wfail passes57jobs; no sorry,
+admit, or custom axiom declarations in Lean sources; named axiom guards pass.
+GitHub Lean and PDF checks all pass. PR#1 remains OPEN/DRAFT onstate-elimination.
+Python exactcycle experiment independently reproduces12/11 for one-bitA;
+finite-n offline ratios8/7 and6/5 remain experiments rather than Lean proofs.
+Both PDFs build, research note4pages visually checked. Final local researchPDF:
+../outputs/lean-bst-state-elimination.pdf. All results charge requests+rotations;
+planning computation is uncharged, rotations may occur anywhere, and no formal
+transfer to pointer-cost BSTs or novelty claim is made.
+
+At02:43:48UTC finish the session and pause the heartbeat. Do not resume research
+from future accidental wakeups after this deadline without a new user request.
