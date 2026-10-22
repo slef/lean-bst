@@ -1,4 +1,4 @@
-# Constant-factor reductions: candidate proof, not yet Lean checked
+# Constant-factor reductions: verified equivalence and research history
 
 ## Current status: equivalence fully Lean checked
 

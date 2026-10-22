@@ -372,8 +372,38 @@ theorem no_purely_additive_simulation (b : TreeAlgorithm) (f : Nat → Nat) :
     dsimp [m] at *
     omega
 
+/-- The same clock example rules out every rational coefficient below 20/19,
+even with an arbitrary additive allowance. Scaling avoids a real-number library. -/
+theorem no_ratio_below_20_19 (b : TreeAlgorithm) (f : Nat → Nat)
+    (numerator denominator : Nat) (hgap : 19*numerator < 20*denominator) :
+    ∃ t xs, ValidInput t xs ∧
+      numerator * clockAlgorithm.totalCost t xs + f t.size <
+        denominator * b.totalCost t xs := by
+  let m := f 3 + 1
+  refine ⟨Shape.c.tree,repetitions m,?_,?_⟩
+  · intro x hx
+    rw [shape_size]
+    exact repetitions_valid m x hx
+  · have hl := Nat.mul_le_mul_left denominator (tree_only_lower b m)
+    have hg : 19*numerator+1 ≤ 20*denominator := by omega
+    have hm := Nat.mul_le_mul_right m hg
+    rw [Nat.add_mul,Nat.one_mul] at hm
+    rw [clock_cost,shape_size]
+    have he1 : denominator*(20*m) = (20*denominator)*m := by
+      rw [← Nat.mul_assoc,Nat.mul_comm denominator 20]
+    have he2 : numerator*(19*m) = (19*numerator)*m := by
+      rw [← Nat.mul_assoc,Nat.mul_comm numerator 19]
+    rw [he1] at hl
+    rw [he2]
+    dsimp [m] at *
+    omega
+
 /-- info: 'RotationBST.ThreeKey.no_purely_additive_simulation' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
 #print axioms no_purely_additive_simulation
+
+/-- info: 'RotationBST.ThreeKey.no_ratio_below_20_19' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms no_ratio_below_20_19
 
 end RotationBST.ThreeKey

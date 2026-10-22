@@ -513,3 +513,32 @@ mathematical reduction? Could document without formalizing if little time.
 Also assess bounded-state comparators, reset-based positive subcases, and whether
 user's repeated-tree idea gives anything beyond the checked additive normalization.
 Continue until 02:43:48 UTC; do not mark overall conjecture proved.
+
+## Checkpoint 2026-10-22 ~00:50 UTC: audit and computability route
+
+Audited equivalence quantifiers, reachable graph, costs and online dependence;
+no gap found. Added research/model-audit.md. Read primary PDFs Iacono 2013
+(arxiv1306.0207) and Combining BSTs (arxiv1304.7604). Epoch/reset combiner results
+retain extra state/annotations, so do not directly solve our tree-only request.
+No novelty or standard-pointer-model transfer claimed.
+
+A computable alternative periodic probe appears available via finite phase/tree
+minimum-average cycles. research/periodic_cycle.py implements exact rational
+cycle search with Bellman-Ford potentials and a tight cycle certificate.
+Saved four reproducible outputs in periodic_cycle_results.jsonl. For n3 UV,
+minimum mean=19/8 (matches clock); n4 periods 0312 and 0123 give3 and5/2.
+This is an experiment/mathematical route, not a Lean computability theorem.
+The credit-based normalization is still noncomputable in its current form.
+
+Strengthened checked three-key result: no_ratio_below_20_19 proves failure of
+EVERY rational coefficient strictly below20/19, with arbitrary additive f(n),
+using scaled natural inequalities. This sharpens the already-described lower
+bound but does not rule out larger constants. Full47-job build passes.
+
+NEXT: seek genuinely new constructive subcases or a uniform-n obstruction.
+Could synthesize small n4 memoryless policies via finite games/constraint solving,
+but avoid assuming a finite-n ratio is evidence for a uniform constant. Another
+useful end product is a concise TeXlish research report with diagrams explaining
+the three-key obstruction, normalization and equivalence. User originally
+requested TeXlish; existing docs/main.texlish describes core only. Research
+session remains active until02:43:48 UTC; main existence question unresolved.

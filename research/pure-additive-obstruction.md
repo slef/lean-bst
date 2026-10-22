@@ -66,7 +66,8 @@ Consequently, for every proposed finite f(3), choose m>f(3). Then
 cost_B(c,X_m)>cost_A(c,X_m)+f(3). The same A and the same family X_m work
 against every B. This rules out ANY sequence-length-independent additive
 allowance at coefficient one. It also gives a required multiplicative ratio
-of at least 20/19 for this particular A.
+of at least 20/19 for this particular A. The scaled rational statement is
+now also Lean checked as `no_ratio_below_20_19`.
 
 ## Verification status
 
