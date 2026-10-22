@@ -478,3 +478,38 @@ For short prefixes, either use monotonicity of actual cumulative costs up to
 N+1, or prove general one-step <=4n rotations and absorb (N+1)*4n. Do not
 claim PeriodicProbe until this cost bridge AND forecast/pre/repeatedword list
 identity are checked. Empty period / n=0 handle separately.
+
+## Checkpoint 2026-10-22 ~00:36 UTC: UNCONDITIONAL EQUIVALENCE COMPLETE
+
+ForecastTracking.lean completes actual-run history/size/successor identities,
+eventual endpoint alignment, zero-reset steps after cutoff, cost monotonicity,
+and bounded_transient telescoping. eventual_offline_bound: for a valid infinite
+word represented by any valid periodic candidate, our online algorithm has
+cost <= offline prefix cost+K for ALL prefixes and ALL offline executions,
+with K fixed for the infinite input and initial tree.
+
+PeriodicProbe.lean proves forecast segment = pre++repeatWord period m, handles
+empty periods, and concludes algorithm_is_probe : PeriodicProbe algorithm.
+Therefore state_elimination_iff_universal and arbitrary_iff_linear are now
+UNCONDITIONAL Lean theorems, not merely conditional on probe existence.
+
+Exact result: in THIS rotation model, state elimination with constant C_A and
+arbitrary f_A(n) iff linear-additive state elimination iff existence of a
+single tree-only offline-competitive algorithm. This proves equivalence, NOT
+truth of any existence statement. C=1 is already disproved. Planning is uncharged;
+algorithms may be noncomputable, as permitted by existing definitions. No claim
+of novelty or transfer to the standard pointer model; correspondence remains
+an independent unproved obligation. README and reduction note now make the
+completed status clear and retain earlier failed/alternative routes as history.
+
+NEXT research during remaining session: audit quantifiers and model assumptions
+of the equivalence; explore whether a weaker per-A claim restricted to computable
+algorithms changes the probe argument (do not change original definitions).
+Try productive constructive subcases or identify an actual obstruction for
+constant C, avoiding further scaffolding that merely restates dynamic optimality.
+One worthwhile question: the probe is classically selected; can a computable
+periodic oracle via finite phase/tree minimum-mean cycles recover the same
+mathematical reduction? Could document without formalizing if little time.
+Also assess bounded-state comparators, reset-based positive subcases, and whether
+user's repeated-tree idea gives anything beyond the checked additive normalization.
+Continue until 02:43:48 UTC; do not mark overall conjecture proved.

@@ -1,6 +1,6 @@
 name = "lean-bst"
 version = "0.1.0"
-defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation", "TreeReset", "SimulationPotential", "CostComposition", "CompetitiveCredit", "AdditiveNormalization", "PeriodicComparison", "PeriodicLearning", "FiniteWeightedPaths", "FiniteTrees", "ProbeReduction", "FiniteBranching", "OptimalPrefixes", "InfinitePlan", "FiniteCoverLearning", "PeriodicCandidates", "ForecastAlgorithm"]
+defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation", "TreeReset", "SimulationPotential", "CostComposition", "CompetitiveCredit", "AdditiveNormalization", "PeriodicComparison", "PeriodicLearning", "FiniteWeightedPaths", "FiniteTrees", "ProbeReduction", "FiniteBranching", "OptimalPrefixes", "InfinitePlan", "FiniteCoverLearning", "PeriodicCandidates", "ForecastAlgorithm", "ForecastTracking", "PeriodicProbe"]
 
 [[lean_lib]]
 name = "RotationBST"
@@ -64,3 +64,9 @@ name = "PeriodicCandidates"
 
 [[lean_lib]]
 name = "ForecastAlgorithm"
+
+[[lean_lib]]
+name = "ForecastTracking"
+
+[[lean_lib]]
+name = "PeriodicProbe"

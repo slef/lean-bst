@@ -1,12 +1,19 @@
 # Constant-factor reductions: candidate proof, not yet Lean checked
 
-## Status
+## Current status: equivalence fully Lean checked
 
-The arguments here are mathematical proof attempts for two reductions. They do
-NOT prove the existence of a constant-factor tree-only algorithm. The additive-normalization reduction is now Lean checked, with bound
-`(2+6C)n` from a simpler anchor-based threshold. The periodic-probe reduction
-remains unformalized; audit its quantifiers and construction before promoting
-it to a checked theorem.
+`PeriodicProbe.lean` completes the periodic online algorithm and proves
+`state_elimination_iff_universal` and `arbitrary_iff_linear` without a remaining
+probe hypothesis. The three existence statements in the combined implication
+below are now proved equivalent in the repository's model. None is proved true.
+The coefficient-one version is separately disproved in ThreeKeySeparation.
+
+The initial minimum-mean-cycle construction below is historical mathematical
+motivation. The checked proof uses the later compactness construction instead.
+Earlier checkpoint notes saying an ingredient remains unformalized are superseded
+by this status. The verified normalization constant is (2+6C)n, not the sharper
+prose variant (2+4C)n. Algorithms are mathematical, possibly noncomputable rules,
+with planning work uncharged. No pointer-model transfer or novelty claim is made.
 
 ## 1. An online probe for eventually periodic inputs
 
@@ -220,3 +227,13 @@ observed history. It resets to the selected forecast's plan only when its tree
 is not already synchronized. The first action aligns its endpoint with the
 plan; a synchronized action pays precisely the plan's rotation count. The
 cumulative-cost comparison and the final PeriodicProbe theorem remain unproved.
+
+## Final probe bridge checked
+
+`ForecastTracking.eventual_offline_bound` proves that on any valid represented
+ultimately periodic input, the explicit online algorithm is within a finite
+additive constant of EVERY offline execution on EVERY prefix. `PeriodicProbe.lean`
+proves the segment/repetition identity, applies that bound to a repeated legal
+schedule, and supplies `algorithm_is_probe`. The earlier conditional equivalence
+then becomes unconditional. Empty repeated words are handled directly. Every
+component is Lean checked with only the standard logical axioms.

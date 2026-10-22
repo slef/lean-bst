@@ -134,19 +134,33 @@ provides a general potential criterion for simulation.
 This theorem assumes offline competitiveness to start with; it does not prove
 state elimination for an arbitrary online comparator.
 
-## Conditional periodic-input reduction
+## State elimination is equivalent to tree-only dynamic optimality
 
-[ProbeReduction.lean](ProbeReduction.lean) proves that a tree-only simulator
-for one online algorithm satisfying `PeriodicProbe` would already yield a
-universally offline-competitive tree-only algorithm with additive O(n).
-Thus, **assuming such a probe exists**, arbitrary-additive state elimination,
-linear-additive state elimination, and tree-only dynamic optimality are
-equivalent existence statements.
+[PeriodicProbe.lean](PeriodicProbe.lean) proves the following equivalence in
+this model, with total cost requests + rotations:
 
-The graph reduction is checked, including cycle erasure and the BST product
-graph. **Construction of the periodic probe is not yet formalized.** Its
-learning ingredient is checked separately; the full serving-cost guarantee
-remains an obligation. See [the research note](research/constant-factor-reductions.md).
+1. Every stateful online algorithm has a tree-only simulator with constant
+   multiplicative coefficient and any sequence-independent additive f(n).
+2. The same holds with additive O(n).
+3. A single tree-only algorithm is competitive against every offline execution
+   with constant coefficient and additive O(n).
+
+These are **equivalent existence statements; their truth is not established**.
+The theorems `state_elimination_iff_universal` and `arbitrary_iff_linear` have
+no remaining probe-existence hypothesis.
+
+The proof constructs one online periodic-input learner with unbounded private
+history. After its prediction stabilizes, it follows a preselected serving plan.
+[InfinitePlan.lean](InfinitePlan.lean) constructs those clairvoyant plans with
+uniform prefix guarantees; the online learner selects them from observed history
+only. A tree-only simulator for this one algorithm cannot have a positive-cost
+cycle against an offline execution. Finite-graph cycle erasure then gives offline
+competitiveness, and the normalization theorem gives O(n) additive cost.
+
+The construction is noncomputable, and planning work is uncharged by this
+model. The equivalence concerns the rotation model defined here; transferring
+it to a pointer-cost BST model requires the separate model correspondence
+already noted above. See [the research development](research/constant-factor-reductions.md).
 
 ## Purely additive simulation is impossible
 
