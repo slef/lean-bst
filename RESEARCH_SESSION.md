@@ -448,3 +448,33 @@ PeriodicProbe. Also still need forecast(pre,period) prefix equals
 pre++repeatWord period m for nonempty period; emptyperiod repeatedword is
 constant pre and can handle separately. n=0 all legal inputs empty.
 Main conjecture unresolved; these complete the learner but not its BST wrapper.
+
+## Checkpoint 2026-10-22 ~00:12 UTC: legal online wrapper COMPLETE
+
+ForecastAlgorithm.lean defines algorithm : StatefulAlgorithm (List Nat).
+Persistent state is observed history. On each request it selects a candidate
+from history++[x], gets its fixed known_future_plan from spine n nil, repairs
+current tree to plan.tree(history.length) if needed, then serves current x.
+Ready checks positive size and validity of history++[x]; unreachable bad-history
+states use legal moveToRoot fallback. StatefulAlgorithm.correct fully checked.
+No future input queried by selection: noncomputable plan depends only on the
+selected periodic forecast, not actual unknown future.
+
+Checked repair_spec (<=2n; repair_same=0), plan_size, candidatePlan, selected_valid,
+selected_current, planned_correct, run_history, step_candidate_endpoint and
+synchronized_step. Last two prove synchronization after one action and zero
+repair cost if tree already matches selected plan at current time. Proofs use
+proof irrelevance to align candidatePlan validity witnesses.
+
+NEXT: ForecastTracking.lean. Let runAt i := algorithm.runFrom [] initial
+(segment word 0 i). Use segment_add word 0 i 1, runFrom_append and run_history
+to get successor tree/cost equations. Histories are segment word 0 i; sizes
+remain n by algorithm.execution. Validity gives Ready at each i. Selection on
+history++[word i] is selection on segment word 0(i+1); use
+selected_eventually_correct to get fixed p after N. Then all steps i>=N end
+at plan.tree(i+1); steps i>=N+1 pay exactly plan.rotations i. Summing/telescoping
+bounds all prefix costs by plan prefix cost plus a finite constant.
+For short prefixes, either use monotonicity of actual cumulative costs up to
+N+1, or prove general one-step <=4n rotations and absorb (N+1)*4n. Do not
+claim PeriodicProbe until this cost bridge AND forecast/pre/repeatedword list
+identity are checked. Empty period / n=0 handle separately.

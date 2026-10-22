@@ -212,3 +212,11 @@ observed history. `selected_eventually_correct` proves that on an input matching
 a valid periodic candidate, selection eventually stays with a candidate whose
 forecast matches the entire input. The actual BST wrapper and its cumulative
 cost proof are still needed to finish PeriodicProbe existence.
+
+## Online wrapper now checked
+
+`ForecastAlgorithm.lean` defines a legal stateful online BST algorithm using the
+observed history. It resets to the selected forecast's plan only when its tree
+is not already synchronized. The first action aligns its endpoint with the
+plan; a synchronized action pays precisely the plan's rotation count. The
+cumulative-cost comparison and the final PeriodicProbe theorem remain unproved.
