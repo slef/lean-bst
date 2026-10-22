@@ -595,3 +595,31 @@ No new resolution of uniform constantC; periodic witness bound can support a
 finite-memory probe but would still only establish the same hard equivalence.
 Consider prioritizing a concise TeXlish report for user's review, rather than
 spending all remaining time strengthening reductions. Deadline02:43:48UTC.
+
+
+## Checkpoint 2026-10-22 ~01:32 UTC: bounded BST witnesses checked
+
+Added BoundedBSTWitness.lean, default target, successful lake build --wfail
+(51 jobs). trace_execution_length makes one graph edge exactly one request.
+edge_reachable connects Edge's stored reachability witness to graph traces.
+bounded_request_witness instantiates bounded_lasso: a positive product loop
+has a prefix shorter than pairCover(n).length and a positive period no longer
+than that number, with actual offline executions and B endpoints.
+
+bounded_tests_suffice proves those bounded paired loops alone suffice for
+OfflineCompetitiveWith b C (graphAllowance b). BoundedPeriodicProbe restricts
+the probe requirement to the finite family of short prefix/period words;
+bounded_probe_domination proves domination of such a probe already implies
+offline competitiveness. No new axioms or sorry.
+
+research/model-audit.md now spells out a per-size finite-state learner using
+candidate elimination, capped/modular time, and minimum-mean serving cycles.
+The bounded-probe interface and reduction are checked; the finite-memory
+construction remains an on-paper argument, not a Lean theorem. It does not
+settle uniformly bounded Fin K private memory or original state elimination.
+
+Remaining time until02:43:48UTC. Useful next priority: concise TeXlish research
+report for user, with the separation/equivalence/normalization and model caveats;
+avoid spending remaining session exclusively strengthening reduction scaffolding.
+Unpushed prior commits0920885,abf3a1d,80cecb6 plus this checkpoint; push at next
+meaningful documentation milestone. Current main conjecture still unresolved.

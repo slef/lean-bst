@@ -106,12 +106,55 @@ and not bounded by a constant independent of n.
 This suggests the hardness reduction survives a restriction to finite memory
 whose bound may be an arbitrary function of n. It does not settle simulation
 of algorithms with a fixed constant-size private state, nor give a small-memory
-probe. The bounded simple-cycle witness and this finite-state implementation
-have not been connected in Lean; the checked equivalence still uses the
-unbounded-history probe.
+probe. The bounded simple-cycle witness is now connected to request words in Lean;
+the finite-state implementation is not yet formalized. The checked equivalence
+still uses the unbounded-history probe.
 
 The generic bounded-witness claim is now Lean checked in `BoundedCycles.lean`.
 `bounded_lasso` gives a prefix of length strictly less than the finite state
-cover and a positive period of length at most that cover. Instantiation with
-the BST product graph and the finite-memory learner remain separate work; the
-existing complete equivalence still uses the full periodic probe.
+cover and a positive period of length at most that cover. The BST instantiation is now checked in `BoundedBSTWitness.lean`: each edge
+corresponds to exactly one request. `bounded_tests_suffice` proves that these
+short paired loops suffice for offline competitiveness, and
+`bounded_probe_domination` reduces the probe requirement to this finite family
+of words. Constructing the finite-memory learner remains separate work.
+
+
+### Explicit finite-memory construction on paper (not Lean checked)
+
+Fix n and let S be the length of `pairCover n`. For n>0 enumerate all pairs
+(pre, period) over keys 0,...,n-1 with |pre|<S and 1<=|period|<=S. Keep a bitset
+of candidates not yet contradicted by an observed request. A finite clock
+(count exactly until S, then modulo the least common multiple of 1,...,S)
+suffices to predict every candidate's next request. Discard contradicted
+candidates and use the first remaining candidate; if none remain, use
+move-to-root forever. The empty-period case needs no learning: it places only
+a constant-size prefix requirement on the probe bound.
+
+For every candidate's periodic tail, precompute a minimum-mean serving cycle
+in the finite (phase, tree) graph described above. Store the active candidate
+and an index into that cycle. On changing candidates or entering a periodic
+tail, reset to the appropriate pre-access cycle tree, then serve the current
+request. The reset occurs before serving, so the access still ends with the
+requested root. Candidate selection includes the current request, so executing
+its predicted access is legal even when later predictions fail. During the
+finite preperiod, ordinary move-to-root suffices. A phase-compatible entry
+exists because a serving cycle advances phase by one on every edge and has
+length divisible by the request period.
+
+On a represented ultimately periodic input, a truthful candidate survives.
+Only finitely many candidates can be discarded; hence the selected candidate
+stabilizes and predicts the entire remaining tail correctly. Its serving cycle
+then repeats without resets. Compare it to any periodic offline schedule for
+the actual input: repeating a common multiple of the request and serving
+periods embeds the offline schedule in the selected candidate's phase graph.
+The minimum mean is no greater than this schedule's average. Initial accesses,
+candidate changes, and incomplete final cycle contribute a fixed additive K.
+Thus the construction has the bounded-probe property needed by the checked
+`bounded_probe_domination` theorem.
+
+This gives a detailed mathematical argument that per-size finite private
+memory should suffice for the hardness reduction. The unformalized ingredient
+is the finite minimum-mean-cycle construction and its connection to this finite
+learner, not a uniform-in-n simulation bound. The number of private states
+may grow enormously with n; nothing here addresses a fixed Fin K private
+state space independent of n. For n=0 only the empty valid input exists.
