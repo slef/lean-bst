@@ -1,9 +1,87 @@
 name = "lean-bst"
 version = "0.1.0"
-defaultTargets = ["RotationBST", "RotationBSTTests"]
+defaultTargets = ["RotationBST", "RotationBSTTests", "StateElimination", "StateEliminationTests", "ThreeKeySeparation", "TreeReset", "SimulationPotential", "CostComposition", "CompetitiveCredit", "AdditiveNormalization", "PeriodicComparison", "PeriodicLearning", "FiniteWeightedPaths", "FiniteTrees", "ProbeReduction", "FiniteBranching", "OptimalPrefixes", "InfinitePlan", "FiniteCoverLearning", "PeriodicCandidates", "ForecastAlgorithm", "ForecastTracking", "PeriodicProbe", "BoundedCycles", "BoundedBSTWitness", "OneBitSeparation", "OneBitRatio", "OneBitUpperBound"]
 
 [[lean_lib]]
 name = "RotationBST"
 
 [[lean_lib]]
 name = "RotationBSTTests"
+
+[[lean_lib]]
+name = "StateElimination"
+
+[[lean_lib]]
+name = "StateEliminationTests"
+
+[[lean_lib]]
+name = "ThreeKeySeparation"
+
+[[lean_lib]]
+name = "TreeReset"
+
+[[lean_lib]]
+name = "SimulationPotential"
+
+[[lean_lib]]
+name = "CostComposition"
+
+[[lean_lib]]
+name = "CompetitiveCredit"
+
+[[lean_lib]]
+name = "AdditiveNormalization"
+
+[[lean_lib]]
+name = "PeriodicComparison"
+
+[[lean_lib]]
+name = "PeriodicLearning"
+
+[[lean_lib]]
+name = "FiniteWeightedPaths"
+
+[[lean_lib]]
+name = "FiniteTrees"
+
+[[lean_lib]]
+name = "ProbeReduction"
+
+[[lean_lib]]
+name = "FiniteBranching"
+
+[[lean_lib]]
+name = "OptimalPrefixes"
+
+[[lean_lib]]
+name = "InfinitePlan"
+
+[[lean_lib]]
+name = "FiniteCoverLearning"
+
+[[lean_lib]]
+name = "PeriodicCandidates"
+
+[[lean_lib]]
+name = "ForecastAlgorithm"
+
+[[lean_lib]]
+name = "ForecastTracking"
+
+[[lean_lib]]
+name = "PeriodicProbe"
+
+[[lean_lib]]
+name = "BoundedCycles"
+
+[[lean_lib]]
+name = "BoundedBSTWitness"
+
+[[lean_lib]]
+name = "OneBitSeparation"
+
+[[lean_lib]]
+name = "OneBitRatio"
+
+[[lean_lib]]
+name = "OneBitUpperBound"

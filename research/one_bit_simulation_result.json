@@ -1,0 +1,1 @@
+{"policies": 1024, "best_ratio": "12/11", "policy": [[0, 2, 4], [1, 2, 3], [0, 2, 4], [1, 2, 3], [1, 2, 4]], "scaled_additive": 6, "status": "experimental, exhaustive policies and exact rational cycle checks"}

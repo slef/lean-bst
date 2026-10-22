@@ -21,7 +21,8 @@ lake build --wfail
 ```
 
 The project pins Lean **4.33.1** and uses only `Std`; it has no Mathlib dependency.
-Both the library and its checked examples are default build targets.
+The core, the state-elimination development, and their checked examples are
+default build targets.
 
 ## Explanation and figures
 
@@ -29,7 +30,11 @@ Both the library and its checked examples are default build targets.
 figures and an introduction to its relationship with standard BST models.
 It follows the prose-and-Lean-snippet presentation of the Lean section in
 [Demaine and Langerman's translation-tiling paper](https://github.com/edemaine/translation-tiling-paper).
-The documentation workflow builds a PDF available as a GitHub Actions artifact.
+The documentation workflow builds PDFs available as GitHub Actions artifacts.
+
+[docs/state-elimination.texlish](docs/state-elimination.texlish) is a four-page
+research note explaining the additive counterexample, dynamic-optimality
+equivalence, and what the reset argument proves and still leaves open.
 
 To build it locally, install [Texlish](https://texlish.org/) (`npm install -g texlish@0.2.0`), Python 3, and a TeX distribution with `latexmk`, TikZ,
 `listings`, `tcolorbox`, Libertine, `newtxmath` and Inconsolata:
@@ -38,13 +43,14 @@ To build it locally, install [Texlish](https://texlish.org/) (`npm install -g te
 make -C docs
 ```
 
-The PDF is `docs/build/main.pdf`. Displayed code is extracted from the Lean
-source by `docs/extract_snippets.py`; edit `docs/main.texlish` for prose.
+The PDFs are `docs/build/main.pdf` and `docs/build/state-elimination.pdf`.
+Displayed code is extracted from the Lean source by `docs/extract_snippets.py`;
+edit the corresponding `.texlish` file for prose.
 The CI workflow also checks that the committed snippets match the source.
 
 ## Model and current scope
 
-The current cost is **rotations only**; an access to the current root can cost
+The core file records **rotations only**; an access to the current root can cost
 zero. The standard normalization adds one per request: `m + rotations` for a
 sequence of length `m`. These costs are not multiplicatively equivalent on
 all inputs (consider repeated requests to a root).
@@ -56,15 +62,138 @@ needs a costed simulation, including treatment of rotations away from the access
 path. See the document's opening discussion and [Derryberry's thesis,
 Sections 2.2 and 3.4](https://www.cs.cmu.edu/~jonderry/thesis.pdf).
 
-The Lean file currently proves size preservation and that successful accesses
-are in range. The representation correspondence, access existence, and model
-simulation remain to be formalized. Dynamic optimality and the working-set bound
+The core Lean file proves size preservation and that successful accesses
+are in range. The additional state-elimination file proves access existence.
+The representation correspondence and pointer-model simulation remain to be
+formalized. Dynamic optimality and the working-set bound
 are **definitions**, not proved guarantees for a supplied algorithm. In particular,
 `DynamicallyOptimal` currently compares rotation counts; a conventional total-cost
 competitive theorem must account explicitly for the additive `m` term.
 
 The online interface returns an endpoint and a certified count, rather than an
 explicit rotation program. Planning computation is uncharged.
+
+## State elimination: proof attempt
+
+[StateElimination.lean](StateElimination.lean) formalizes the question whether
+auxiliary private state can be removed at constant-factor cost. **The general
+statement is not proved or assumed.** It is recorded as the proposition
+`StateElimination`, with constants uniform in tree size and input length.
+
+`StatefulAlgorithm σ` has explicit initialization from the initial tree and
+an online step receiving only private state, the current tree and the current
+request. `TreeAlgorithm` is its `σ := Unit` special case. This file uses total
+cost **requests + rotations**. The original history-based interface embeds
+into it, with a proved equality of executions.
+
+The following partial results are checked:
+
+- `moveToRoot_correct` and `access_exists`: every existing rank can be brought
+  to the root in fewer than `n` rotations, constructively.
+- `StatefulAlgorithm.execution`: every valid run produces a legal execution.
+- `size_factor_simulation`: a particular tree-only algorithm has cost at most
+  `n` times that of any stateful algorithm. This factor depends on `n` and
+  does **not** establish the conjecture.
+- `StatefulAlgorithm.erase_totalCost`: exact state elimination is possible
+  when the private state is recoverable from the current tree, initialization
+  satisfies that invariant, and every valid step preserves it.
+- `stateElimination_of_universal`: a universally competitive tree-only
+  algorithm would imply the conjecture. No such algorithm is supplied here.
+
+[StateEliminationTests.lean](StateEliminationTests.lean) checks concrete
+executions, a recoverable size cache, and a private bit that toggles while
+the tree stays fixed. The latter shows that exact state recovery is not
+automatic. It is **not a counterexample to constant-factor state elimination**:
+that bit does not influence the rotation choices. Named axiom guards cover
+the main partial results.
+
+The unresolved step is a cost-controlled way to replace genuinely
+history-dependent choices by a tree-only rule. Equality of the legal move
+sets at a tree does not establish this: two histories can leave the same
+tree with different private states, and the requested theorem must compare
+entire executions with a factor independent of `n`. Both a proof and a
+counterexample to the general statement remain absent from this attempt.
+
+[TreeReset.lean](TreeReset.lean) proves that any two equal-size trees can be
+reconfigured in at most `2n` rotations. `reset_then_access` charges this reset
+at the start of the next access, preserving the required root at its end.
+This verifies the geometric ingredient of the proposed block-reset argument;
+it does not remove the private memory used within or between blocks.
+
+## Normalizing the additive term (conditional theorem)
+
+[AdditiveNormalization.lean](AdditiveNormalization.lean) proves that if a
+**tree-only** algorithm B already satisfies
+`cost_B ≤ C * offline_cost + f(n)` against every legal execution, then another
+tree-only algorithm satisfies the same bound with additive `(2 + 6*C)*n`.
+The coefficient C is unchanged. The construction resets to a selected tree
+when an amortized credit exceeds a threshold determined by the current shape.
+It introduces no private state, but is noncomputable in this existence model.
+
+[CompetitiveCredit.lean](CompetitiveCredit.lean) proves the credit's existence,
+attainment, variation bound and one-step inequality.
+[CostComposition.lean](CostComposition.lean) supplies execution composition and
+changes of initial tree. [SimulationPotential.lean](SimulationPotential.lean)
+provides a general potential criterion for simulation.
+
+This theorem assumes offline competitiveness to start with; it does not prove
+state elimination for an arbitrary online comparator.
+
+## State elimination is equivalent to tree-only dynamic optimality
+
+[PeriodicProbe.lean](PeriodicProbe.lean) proves the following equivalence in
+this model, with total cost requests + rotations:
+
+1. Every stateful online algorithm has a tree-only simulator with constant
+   multiplicative coefficient and any sequence-independent additive f(n).
+2. The same holds with additive O(n).
+3. A single tree-only algorithm is competitive against every offline execution
+   with constant coefficient and additive O(n).
+
+These are **equivalent existence statements; their truth is not established**.
+The theorems `state_elimination_iff_universal` and `arbitrary_iff_linear` have
+no remaining probe-existence hypothesis.
+
+The proof constructs one online periodic-input learner with unbounded private
+history. After its prediction stabilizes, it follows a preselected serving plan.
+[InfinitePlan.lean](InfinitePlan.lean) constructs those clairvoyant plans with
+uniform prefix guarantees; the online learner selects them from observed history
+only. A tree-only simulator for this one algorithm cannot have a positive-cost
+cycle against an offline execution. Finite-graph cycle erasure then gives offline
+competitiveness, and the normalization theorem gives O(n) additive cost.
+
+The construction is noncomputable, and planning work is uncharged by this
+model. The equivalence concerns the rotation model defined here; transferring
+it to a pointer-cost BST model requires the separate model correspondence
+already noted above. See [the research development](research/constant-factor-reductions.md).
+
+## Purely additive simulation is impossible
+
+[ThreeKeySeparation.lean](ThreeKeySeparation.lean) proves a separation on three
+keys. One fixed online algorithm with a clock modulo eight serves
+`(0,2,1,0,2,0,2,1)^m` from the balanced tree at total cost **19m**. Every
+tree-only algorithm costs at least **20m** on the same inputs.
+
+Consequently no bound `cost_B ≤ cost_A + f(n)` can hold for this A, for any
+function f of tree size alone. The complete quantified theorem is
+`ThreeKey.no_purely_additive_simulation`, including execution and legality proofs.
+See the [short mathematical explanation](research/pure-additive-obstruction.md).
+
+This rules out multiplicative coefficient **one**. The original question with
+an arbitrary constant coefficient and additive O(n) remains unresolved.
+
+
+The additive obstruction needs only **one bit** of private memory:
+[OneBitSeparation.lean](OneBitSeparation.lean) gives a `Fin 2` algorithm with
+cost 19m where every tree-only algorithm costs at least 20m. This strengthens
+the earlier eight-state example without changing the constant-factor question.
+
+[OneBitRatio.lean](OneBitRatio.lean) and
+[OneBitUpperBound.lean](OneBitUpperBound.lean) sharpen this to an exact result
+for that comparator: no coefficient below **12/11** suffices, and an explicit
+tree-only simulator satisfies `11*cost_B <= 12*cost_A+6` on all valid inputs.
+Both directions are Lean checked; the general constant-factor question remains open.
+
 
 ## Development
 

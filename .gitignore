@@ -6,3 +6,4 @@
 __pycache__/
 docs/main.tex
 docs/build/
+docs/state-elimination.tex

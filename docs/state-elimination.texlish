@@ -1,0 +1,308 @@
+::version >= 0.2.0
+::styles
+  @ = \cref
+
+\documentclass[11pt]{article}
+\title: Can a BST Remember Only Its Shape?
+\author{}
+\date{}
+\usepackage[T1]{fontenc}
+\usepackage{libertine}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[libertine]{newtxmath}
+\usepackage[scaled=0.96]{zi4}
+\usepackage{microtype,xcolor,tikz,listings,tcolorbox,hyperref}
+\usepackage[capitalise,nameinlink,noabbrev]{cleveref}
+\DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
+\DeclareUnicodeCharacter{2208}{\ensuremath{\in}}
+\DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\DeclareUnicodeCharacter{00B7}{\ensuremath{\cdot}}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\definecolor{figblue}{RGB}{41,110,166}
+\definecolor{figgreen}{RGB}{38,128,89}
+\definecolor{figorange}{RGB}{217,107,38}
+\hypersetup{colorlinks=true,urlcolor=figblue,linkcolor=figblue,pdftitle={Can a BST Remember Only Its Shape?}}
+\lstdefinelanguage{lean}{
+  morekeywords={import,inductive,where,deriving,def,structure,theorem,match,with,if,then,else,let},
+  morekeywords=[2]{Prop,Type,List,Nat,Tree,Rotate,Rotations,Access,Execution,Algorithm},
+  sensitive=true,morecomment=[l]{--},morestring=[b]"}
+\lstdefinestyle{lean}{language=lean,basicstyle=\ttfamily\small,columns=fullflexible,
+  keepspaces=true,showstringspaces=false,extendedchars=false,
+  keywordstyle=\bfseries\color{figblue},keywordstyle=[2]\color{figgreen},
+  literate={σ}{{$\sigma$}}1 {×}{{$\times$}}1 {↔}{{$\leftrightarrow$}}1 {→}{{$\to$}}1 {∀}{{$\forall$}}1 {∃}{{$\exists$}}1
+    {∈}{{$\in$}}1 {∧}{{$\wedge$}}1 {≤}{{$\le$}}1 {·}{{$\cdot$}}1 {⟨}{{$\langle$}}1 {⟩}{{$\rangle$}}1}
+\newtcolorbox{leanbox}{colback=black!3,colframe=black!40,boxrule=0.5pt,arc=2pt,
+  left=6pt,right=6pt,top=3pt,bottom=3pt}
+\newcommand{\leansnippet}[1]{\begin{leanbox}\lstinputlisting[style=lean]{lean-snippets/#1.lean}\end{leanbox}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\N}{\mathbb N}
+\newcommand{\sz}[1]{\lvert #1\rvert}
+\newcommand{\cost}{\operatorname{cost}}
+\tikzset{key/.style={circle,draw=figblue,fill=figblue!7,minimum size=6mm,inner sep=1pt,font=\small},
+  target/.style={key,draw=figorange,fill=figorange!15,thick},
+  subtree/.style={regular polygon,regular polygon sides=3,draw=black!60,fill=black!4,minimum size=12mm,inner sep=0pt},
+  edge/.style={draw=black!65,semithick}, >=Latex}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\maketitle}{\begin{center}{\LARGE\bfseries Can a BST Remember Only Its Shape?}\par\smallskip
+  {\large State elimination: checked results and the remaining question}\end{center}\medskip}
+
+
+\newcommand{\costA}{\operatorname{cost}_A}
+\newcommand{\costB}{\operatorname{cost}_B}
+\newcommand{\OPT}{\operatorname{OPT}}
+
+\begin{document}
+\maketitle
+
+# The question and the answer so far
+
+Can private memory be removed from a deterministic online BST algorithm
+at constant-factor cost? This remains unresolved. Two results are proved:
+
+\begin{leanbox}
+\textbf{Purely additive simulation is impossible.} A fixed two-state
+algorithm on three keys defeats every tree-only algorithm by an unbounded
+additive amount.\\[5pt]
+\textbf{Constant-factor state elimination is equivalent to tree-only dynamic
+optimality in this model.} Allowing an arbitrary sequence-independent additive
+function instead of $O(n)$ does not change this existence question.
+\end{leanbox}
+
+Both results are checked in Lean, without \code{sorry} or extra axioms.
+The equivalence does not establish either existence statement.
+
+# What an algorithm can remember
+
+A tree shape determines a BST on the inorder ranks $0,\ldots,n-1$.
+An access to $x$ is a sequence of rotations ending with $x$ at the root.
+Equivalently, the final root has a left subtree of size $x$.
+The following definition adds explicit private state to the original model:
+
+\leansnippet{StatefulAlgorithm}
+
+A step receives state, tree, and request, and returns new state, tree, and
+rotation count. Correctness certifies the access. Initialization sees only
+the initial tree. All algorithms here are deterministic.
+
+\leansnippet{TreeAlgorithm}
+
+\code{Unit} has one value. A tree-only rule can inspect the entire current
+shape, but cannot retain a clock, access history, or other private information.
+It may still encode information by changing that shape.
+
+We charge one unit per request plus one per rotation:
+\[
+ \cost_A(T,X)=|X|+\text{rotations used by }A.
+\]
+Planning computation is uncharged. Rotations may occur anywhere in the tree;
+pointer travel is not charged. The results below concern this precise model.
+A cost-preserving connection to a standard pointer model remains to be proved.
+
+\newpage
+# A three-key obstruction to additive simulation
+
+There are five three-key shapes. Their single-rotation graph is a pentagon.
+In the figure, an edge represents one rotation in either direction.
+
+: figure[ht]
+  \centering
+  \begin{tikzpicture}[scale=0.94]
+    \foreach \name/\x/\y in {a/-2.8/0,b/-1.7/-2.1,d/1.7/-2.1,e/2.8/0,c/0/1.55}
+      \coordinate (\name) at (\x,\y);
+    \foreach \u/\v in {a/b,b/d,d/e,e/c,c/a}
+      \draw[edge,line width=1pt] (\u)--(\v);
+    \foreach \name in {a,b,c,d,e}
+      \node[fill=white,draw=figblue,rounded corners,minimum width=17mm,minimum height=17mm] at (\name) {};
+    \begin{scope}[shift={(a)},scale=0.48,key/.append style={minimum size=3.5mm,inner sep=0pt,font=\scriptsize}]
+      \node[key] (a0) at (-.5,.8) {0}; \node[key] (a1) at (0,0) {1}; \node[key] (a2) at (.5,-.8) {2};
+      \draw[edge] (a0)--(a1)--(a2);
+    \end{scope}
+    \begin{scope}[shift={(b)},scale=0.48,key/.append style={minimum size=3.5mm,inner sep=0pt,font=\scriptsize}]
+      \node[key] (b0) at (-.5,.8) {0}; \node[key] (b2) at (.5,0) {2}; \node[key] (b1) at (-.5,-.8) {1};
+      \draw[edge] (b0)--(b2)--(b1);
+    \end{scope}
+    \begin{scope}[shift={(d)},scale=0.48,key/.append style={minimum size=3.5mm,inner sep=0pt,font=\scriptsize}]
+      \node[key] (d2) at (.5,.8) {2}; \node[key] (d0) at (-.5,0) {0}; \node[key] (d1) at (.5,-.8) {1};
+      \draw[edge] (d2)--(d0)--(d1);
+    \end{scope}
+    \begin{scope}[shift={(e)},scale=0.48,key/.append style={minimum size=3.5mm,inner sep=0pt,font=\scriptsize}]
+      \node[key] (e2) at (.5,.8) {2}; \node[key] (e1) at (0,0) {1}; \node[key] (e0) at (-.5,-.8) {0};
+      \draw[edge] (e2)--(e1)--(e0);
+    \end{scope}
+    \begin{scope}[shift={(c)},scale=0.48,key/.append style={minimum size=3.5mm,inner sep=0pt,font=\scriptsize}]
+      \node[target] (c1) at (0,.6) {1}; \node[key] (c0) at (-.8,-.6) {0}; \node[key] (c2) at (.8,-.6) {2};
+      \draw[edge] (c1)--(c0); \draw[edge] (c1)--(c2);
+    \end{scope}
+    \node[above=9mm,font=\small] at (c) {$c$: the only shape rooted at $1$};
+    \node[left=9mm] at (a) {$a$}; \node[right=9mm] at (e) {$e$};
+    \node[below=9mm] at (b) {$b$}; \node[below=9mm] at (d) {$d$};
+  \end{tikzpicture}
+  \caption: Every access to $1$ forces the shape back to $c$, erasing all
+    information that a tree-only algorithm might have encoded in its shape.
+
+Start at $c$ and repeat the eight-request word
+\[
+ W=(0,2,1)\,(0,2,0,2,1).
+\]
+A one-bit algorithm distinguishes these two blocks. It uses the
+following endpoint paths; a jump across two pentagon edges costs two rotations:
+\[
+ c\longrightarrow a\longrightarrow e\longrightarrow c
+ \quad\text{and}\quad
+ c\longrightarrow b\longrightarrow d\longrightarrow b\longrightarrow d\longrightarrow c.
+\]
+These paths cost $4+7=11$ rotations. Including eight requests, the cost is $19$.
+The bit flips after each planned access; shape and request identify the
+remaining phase. Unexpected requests use a legal fallback, so this is an
+online algorithm on all inputs, not merely a serving schedule for one word.
+
+A tree-only algorithm faces the same pair $(c,0)$ at the start of both blocks.
+It must make the same choice there. A finite case analysis proves that its two
+blocks together require at least $12$ rotations, hence total cost at least $20$.
+Both blocks end at $c$, so the argument repeats indefinitely:
+\[
+ \cost_A(c,W^m)=19m,\qquad \cost_B(c,W^m)\ge20m.
+\]
+For any fixed $f(3)$, choosing $m>f(3)$ refutes
+$\cost_B\le\cost_A+f(n)$. Seven short periodic tests strengthen this:
+every rational coefficient below $12/11$ fails for the same one-bit $A$.
+A matching tree-only simulator satisfies, for every valid input,
+\[
+  11\cost_B(T,X)\le12\cost_A(T,X)+6.
+\]
+Thus this particular algorithm's optimal simulation factor is exactly $12/11$.
+Both directions are Lean checked in \code{OneBitRatio.lean} and
+\code{OneBitUpperBound.lean}; the basic $19m$ versus $20m$ separation is in
+\code{ThreeKeySeparation.lean} and \code{OneBitSeparation.lean}.
+This example does not rule out constant-factor simulation in general.
+
+\newpage
+# Why arbitrary additive slack does not make the question easier
+
+The constant-factor question has quantifiers
+\[
+ \forall A\;\exists B,C_A,f_A\;\forall T,X:\quad
+ \cost_B(T,X)\le C_A\cost_A(T,X)+f_A(|T|).
+\]
+The constants may depend on $A$. They cannot depend on tree size or input
+length. For a fixed $n$, the additive term is one constant for every sequence.
+The same initial tree is used on both sides.
+
+Call a tree-only algorithm ***universally competitive*** if
+\[
+ \exists C,D\;\forall T,X:\quad
+ \cost_B(T,X)\le C\OPT(T,X)+D|T|,
+\]
+where $\OPT$ is the minimum request-plus-rotation cost of any offline execution
+from $T$. In Lean we quantify over every execution rather than define $\OPT$.
+
+\leansnippet{Equivalence}
+
+The second theorem says that the additive allowance can be restricted to
+linear without changing the existence question. It does not claim that the
+same simulator produced by an arbitrary state-elimination argument already
+has a linear allowance.
+
+\textbf{Easy direction.}
+A universally competitive tree-only algorithm competes with every online
+algorithm, since each online run is also a legal offline execution.
+
+\textbf{Hard direction: one probing algorithm suffices.}
+Construct one stateful learner that eventually predicts every ultimately
+periodic request sequence. It keeps the least still-consistent candidate
+(prefix, period). On an actually ultimately periodic input, all smaller false
+candidates are eventually eliminated, so its chosen forecast stabilizes.
+For each forecast, a fixed good infinite serving plan is chosen. Resets align
+the actual tree with that plan; after stabilization no further resets are needed.
+The checked construction uses classical choice and unbounded history.
+
+This learner matches the average cost of every periodic offline schedule,
+up to an additive constant depending on the particular prefix and period.
+If state elimination holds, one tree-only $B$ must simulate this single learner.
+
+Now follow the pair of current trees: $B$'s tree and an offline execution's
+tree. An edge has weight
+\[
+   \text{cost of }B\text{'s access}-C\,\text{cost of the offline access}.
+\]
+A reachable positive cycle could be repeated forever. The learner would
+asymptotically match the offline loop, while $B$ would accumulate positive
+excess each repetition, contradicting any additive allowance independent of
+sequence length. Thus there are no positive cycles.
+
+For fixed $n$, this graph is finite. Erasing nonpositive cycles bounds the
+excess of every path by a function of $n$. A final reset-and-potential argument
+reduces that allowance to $O(n)$. This proves the displayed equivalence,
+without producing a universally competitive tree-only algorithm.
+
+\newpage
+# What the reset idea proves, and what it still needs
+
+The proposed argument has a useful ingredient: two trees of size $n$ can be
+converted into one another in at most $2n$ rotations. The checked construction
+passes through a canonical right spine. Performing a reset \emph{before} the
+next access preserves the requirement that each access finish at its requested
+root.
+
+But equal tree shape does not imply equal private state. Selecting a good
+starting state for one observed block does not ensure it is good for every
+possible continuation. Nor does an $O(n)$ reset restore that private state.
+Repeated blocks in the three-key example demonstrate a real additive loss;
+for constant-factor simulation, the missing uniform choice remains unresolved.
+
+There is nevertheless a checked, stronger use of resets. Suppose a tree-only
+algorithm already satisfies
+\[
+ \cost_B(T,X)\le C\OPT(T,X)+f(n).
+\]
+For two starting trees $s,t$, define the least nonnegative credit needed to
+compare $B$ from $s$ with offline executions from $t$ over all continuations.
+Changing $t$ changes this credit by at most $2Cn$. For each size there is a
+pair of trees requiring zero credit; otherwise a worst-case continuation
+could repeatedly spend positive credit and contradict boundedness.
+
+Using one such pair as a reference, the new tree-only rule either follows
+$B$, or resets to the reference tree when the credit of its present shape
+is too large. The trigger depends only on that shape and fixed data for $n$.
+There is no phase counter. A potential pays for the resets and proves
+\[
+ \boxed{\cost_{B'}(T,X)\le C\OPT(T,X)+(2+6C)n.}
+\]
+The coefficient $C$ is unchanged. This is \code{normalize\_additive} in
+\code{AdditiveNormalization.lean}. The construction is noncomputable and
+assumes offline competitiveness to begin with; it is not a direct simulation
+of an arbitrary stateful algorithm.
+
+# Finite tests and the remaining target
+
+Every positive comparison cycle has a witness with a short reaching prefix
+and a short repeating block. Lean now bounds both lengths by a finite
+size-dependent cover of tree pairs. Consequently only finitely many
+(prefix, period) request words need to be tested at each $n$.
+
+This suggests a probe with finite memory for each $n$: eliminate candidates
+from that finite list and follow precomputed minimum-average serving cycles.
+The bounded-witness and bounded-probe reduction are checked. The finite-memory
+construction itself is currently a mathematical argument, not a Lean theorem.
+Its memory bound would grow with $n$; it says nothing about a fixed number of
+private states independent of $n$.
+
+\textbf{The remaining question is precise:} construct one tree-only algorithm
+with a uniform constant competitive factor, or prove that none exists in
+this rotation model. The reset lemmas, periodic probe, and cycle arguments
+reduce and clarify this task. They do not yet solve it.
+
+\vfill
+\begin{small}
+\textbf{Verification and scope.} Lean 4.33.1; \code{Std} only. The displayed
+code is extracted from checked declarations. Axiom checks report only
+\code{propext}, \code{Classical.choice}, and \code{Quot.sound}.
+Experimental optimal factors $8/7$ for three keys and $6/5$ for four keys
+are separate computational evidence, not formal lower bounds or evidence
+of a uniform bound. No novelty claim is made.
+\end{small}
+\end{document}

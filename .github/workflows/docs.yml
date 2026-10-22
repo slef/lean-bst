@@ -1,9 +1,9 @@
 name: Documentation
 on:
   push:
-    paths: ['RotationBST.lean', 'docs/**', '.github/workflows/docs.yml']
+    paths: ['RotationBST.lean', 'StateElimination.lean', 'PeriodicProbe.lean', 'docs/**', '.github/workflows/docs.yml']
   pull_request:
-    paths: ['RotationBST.lean', 'docs/**', '.github/workflows/docs.yml']
+    paths: ['RotationBST.lean', 'StateElimination.lean', 'PeriodicProbe.lean', 'docs/**', '.github/workflows/docs.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -25,5 +25,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lean-bst-description
-          path: docs/build/main.pdf
+          path: docs/build/*.pdf
           if-no-files-found: error
