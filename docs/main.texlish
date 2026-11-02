@@ -32,7 +32,7 @@
   keepspaces=true,breaklines=true,showstringspaces=false,extendedchars=false,
   keywordstyle=\bfseries\color{figblue},keywordstyle=[2]\color{figgreen},
   literate={→}{{$\to$}}1 {∀}{{$\forall$}}1 {∃}{{$\exists$}}1
-    {∈}{{$\in$}}1 {∧}{{$\wedge$}}1 {≤}{{$\le$}}1 {·}{{$\cdot$}}1 {⟨}{{$\langle$}}1 {⟩}{{$\rangle$}}1}
+    {≠}{{$\ne$}}1 {∈}{{$\in$}}1 {∧}{{$\wedge$}}1 {≤}{{$\le$}}1 {·}{{$\cdot$}}1 {⟨}{{$\langle$}}1 {⟩}{{$\rangle$}}1}
 \newtcolorbox{leanbox}{colback=black!3,colframe=black!40,boxrule=0.5pt,arc=2pt,
   left=6pt,right=6pt,top=3pt,bottom=3pt}
 \newcommand{\leansnippet}[1]{\begin{leanbox}\lstinputlisting[style=lean]{lean-snippets/#1.lean}\end{leanbox}}
@@ -461,6 +461,110 @@ zig-zig versus move-to-root, both zig-zag orientations, empty inputs,
 repeated root requests, update boundaries, and guarded kernel-axiom audits.
 The proof dependencies are Lean's standard logical axioms; there are no
 admitted results or project-specific axioms.
+
+\clearpage
+\section*{Arboral geometry and Tango: checked foundations}
+
+A point is a pair of natural numbers: key and time. Arboral satisfaction uses
+closed rectangles, so a boundary witness counts:
+\leansnippet{Rectangle}
+\leansnippet{ASS}
+
+The geometric online model fills one new row per request, preserving all earlier
+rows. Its cost is the number of points, including the requests. GreedyASS adds
+exactly the projections of old points whose rectangles with the new request have
+no third old point. The checked sweep produces an ASS set, and every legal
+completion contains its points. Thus its minimum-cardinality completion is unique.
+
+The row-by-row execution theorem equates point-set cardinality with the sum of
+row costs. Conversely, an offline ASS solution can be exposed as legal rows at
+the same cost, although those choices may depend on future requests. The library
+also proves existence of a minimum offline geometric solution, the request-count
+lower bound, and arboral satisfaction of rooted touches in a fixed BST.
+
+\textbf{The offline BST equivalence is now checked.}
+ASS cardinality equals the cost of a rooted-subtree execution with a freely
+chosen initial tree. A rotation execution with $R$ rotations and $m$ requests
+has an ASS solution with at most $2R+m$ points. Conversely, an ASS solution of
+size $G$ has a pointer execution of cost at most $33G$ from a future-dependent
+initial tree, or a rotation execution of total cost at most $2n+99G$ from any
+prescribed initial shape. The proof explicitly preserves every fringe subtree
+when restoring the next-touch treap invariant.
+
+The causal ASS-to-BST conversion is also checked. For each online geometric
+algorithm on $n$ keys, a single BST policy serves all valid request sequences
+from every initial shape of size $n$, with at most $6018G+6018n$ rotations.
+The proof uses shared split trees, canonical last-touch supernodes, and a
+nested potential that pays for recursive extraction and rebuilding. Choices
+are fixed by request prefixes, and deferred root restoration is fully charged.
+
+The Tango development proves Wilber's lower bound via stable, distinct
+transition points and a mismatch potential. For any reference tree on the same
+universe, $IB\le 2G$ for every ASS solution, $IB\le 4R+2m$ for every rotation
+execution, and $IB\le 12C$ for every pointer execution. Preferred-region switches
+sum exactly to $IB$, while first settings add at most $n$. Perfect reference
+trees have $2^h-1$ keys and height $h$.
+
+The executable preferred-path decomposition partitions all reference keys into
+nonempty components of length at most the reference height. The requested key
+belongs to the root component after preferences are updated. Splay-based auxiliary
+operations now have checked full-BST rotation costs: one auxiliary rotation is
+one global rotation, with the attached fringe unchanged. Prefix/suffix cuts and
+front/back joins have amortized cost at most $3\log_2 H+1$; interior interval
+cuts and joins have bounds $6\log_2 H+2$ and $8\log_2 H+2$. Here $H$ bounds the
+participating auxiliary nodes; attached subtree sizes do not enter the potential.
+The whole BST also has an explicit marked representation. Its invariant records
+the preferred-path partition and the root preferred path. Initial singleton
+components have zero global potential. The stronger maintenance invariant also
+fixes the ordered nesting of components to the canonical reference marking;
+the partition and root condition alone do not determine this nesting.
+Canonical markings satisfy the stronger invariant for every history. Auxiliary
+rotations preserve the marked fringe and component key sets; root-component
+access preserves the stronger invariant. The nesting signature determines subtree
+sizes and matches attached components at identical absolute key offsets. A
+nonempty reference fringe component can be located in the maintained BST with
+its marked boundary context. Embedding a local update in that context preserves
+its exact rotation count and global potential change.
+Cuts and joins produce actual marked states with the same global potential bounds.
+Every preferred path is proved to be a downward reference path, and a nonempty
+depth suffix is exactly the keys between two boundaries within that path.
+An executable preference-update log skips unchanged choices, never repeats a node
+within a request, and preserves its prefix when later requests arrive. Its total
+length is at most $IB+n$, hence at most $4R+2m+n$ against every offline rotation
+execution. Interval cuts and component merges now realize exact grouping and
+expansion of nesting slots from any equivalent auxiliary shape. At a reference
+component root, first settings and both switch directions are realized; a switch
+has amortized cost at most $14\log_2(L+R+1)+4$ for child auxiliary sizes $L,R$.
+These changes also lift through any number of unmarked ancestors within a
+preferred component: a switch costs at most $14\log_2 H+4$ when both endpoint
+component sizes are at most $H$, without an additional depth factor. They also
+lift across arbitrarily many marked component boundaries. Intermediate reference
+markings remain downward paths, bounding their sizes by the reference height.
+
+Applying the generated log now produces exactly the next canonical marking.
+Each request then accesses its key in the root component, preserving the full
+invariant. A fixed causal marked-tree policy exists and its whole execution is
+proved. Put $C=14\log_2 H+4$, where $H$ is reference height. Its conventional
+cost against every offline execution of $m$ requests using $R$ rotations is at
+most $4C(R+m)+Cn$. For a perfect tree on $n=2^h-1$ keys, $H=h$, giving the
+doubly logarithmic competitive factor with a separate initialization term.
+For every universe size $n$, an executable balanced reference constructor gives
+exactly $n$ keys and height at most $\lfloor\log_2 n\rfloor+1$ (using the integer
+logarithm convention $\operatorname{log2}(0)=0$ at zero). No padding keys are
+needed. The same competitive theorem thus holds for arbitrary sizes.
+The policy now computes reference-key locations, component addresses, preference
+edits, and the final splay. Its implementation no longer selects local realizations
+by classical choice. The checked address theorem specifies both the reached
+component and the exact effect of replacing it. Planning and reference lookup
+remain uncharged in the abstract BST model. The auxiliary primitives use amortized
+splaying; the paper's red-black implementation is not formalized.
+
+The sources are
+\href{https://people.csail.mit.edu/mip/papers/arboral/paper.pdf}{\emph{The Geometry of Binary Search Trees}}
+and
+\href{https://erikdemaine.org/papers/Tango_SICOMP/paper.pdf}{\emph{Dynamic Optimality---Almost}}.
+The concise, audited interfaces are
+\code{Arboral/Abstract.lean} and \code{Tango/Abstract.lean}.
 
 \vfill
 \begin{small}

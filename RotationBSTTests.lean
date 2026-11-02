@@ -3,6 +3,7 @@ module
 public import RotationBST
 public import RotationBSTTests.AbstractBoundary
 public import RotationBSTTests.Axioms
+public import RotationBSTTests.Arboral
 
 @[expose] public section
 

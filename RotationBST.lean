@@ -11,6 +11,9 @@ public import RotationBST.Normalization.Abstract
 public import RotationBST.Pointer.Abstract
 public import RotationBST.Bounds.Implications.Abstract
 public import RotationBST.Splay.Abstract
+public import RotationBST.Arboral.Abstract
+public import RotationBST.Arboral.Equivalence.Abstract
+public import RotationBST.Tango.Abstract
 
 @[expose] public section
 

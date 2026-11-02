@@ -16,3 +16,10 @@ statements = [line.removesuffix(' := by') for line in lines
               if line.startswith('theorem ')]
 variables = [line for line in lines if line.startswith('variable ')]
 (root / 'lean-snippets' / 'Invariants.lean').write_text('\n'.join(variables + [''] + statements) + '\n')
+
+# Keep the geometric definition directly synchronized with its public abstract.
+arboral = (root.parent / 'RotationBST/Arboral/Definitions/Abstract.lean').read_text().splitlines()
+for name in ['Rectangle', 'ASS', 'greedySweep']:
+    start = next(i for i, line in enumerate(arboral) if line.startswith(f'def {name} '))
+    end = next(j for j in range(start + 1, len(arboral)) if not arboral[j])
+    (root / 'lean-snippets' / f'{name}.lean').write_text('\n'.join(arboral[start:end]) + '\n')
