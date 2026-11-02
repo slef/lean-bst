@@ -1,0 +1,21 @@
+{
+  "name": "lean-bst-book",
+  "private": true,
+  "type": "module",
+  "description": "An interactive textbook documenting the lean-bst Lean library.",
+  "scripts": {
+    "extract": "node scripts/extract.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "serve": "node scripts/serve.mjs",
+    "all": "node scripts/extract.mjs && node scripts/build.mjs && node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/source-serif-4": "^5.3.1",
+    "katex": "^0.19.1",
+    "markdown-it": "^15.0.3",
+    "markdown-it-container": "^4.0.0"
+  }
+}

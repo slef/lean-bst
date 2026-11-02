@@ -1,0 +1,25 @@
+{
+  "title": "Binary Search Trees in Lean",
+  "subtitle": "A literate companion to the lean-bst library",
+  "repo": "https://github.com/slef/lean-bst",
+  "branch": "main",
+  "katexMacros": {
+    "\\Rot": "\\mathrm{R}",
+    "\\lg": "\\log_2"
+  },
+  "chapters": [
+    { "slug": "index", "file": "00-preface.md", "title": "Preface" },
+    { "slug": "shapes", "file": "01-shapes.md", "title": "Trees without keys", "number": 1, "part": "I · The rotation model" },
+    { "slug": "rotations", "file": "02-rotations.md", "title": "Rotations", "number": 2 },
+    { "slug": "accesses", "file": "03-accesses.md", "title": "Accesses and executions", "number": 3 },
+    { "slug": "keys", "file": "04-keys.md", "title": "Putting the keys back", "number": 4, "part": "II · Equivalent formulations" },
+    { "slug": "pointer", "file": "05-pointer.md", "title": "The pointer machine", "number": 5 },
+    { "slug": "online", "file": "06-online.md", "title": "Online algorithms and cost", "number": 6, "part": "III · Algorithms and bounds" },
+    { "slug": "bounds", "file": "07-bounds.md", "title": "Adaptive bounds", "number": 7 },
+    { "slug": "splay", "file": "08-splay.md", "title": "Splaying", "number": 8, "part": "IV · Splay trees" },
+    { "slug": "analysis", "file": "09-analysis.md", "title": "The amortized analysis", "number": 9 },
+    { "slug": "beyond", "file": "10-beyond.md", "title": "Beyond single accesses", "number": 10 },
+    { "slug": "audit", "file": "11-audit.md", "title": "What Lean checks", "part": "Appendices" },
+    { "slug": "declarations", "file": "12-declarations.md", "title": "Index of declarations" }
+  ]
+}
