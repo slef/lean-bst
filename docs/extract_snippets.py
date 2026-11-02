@@ -1,7 +1,10 @@
 """Refresh the displayed definitions from the accompanying Lean source."""
 from pathlib import Path
 root = Path(__file__).resolve().parent
-lines = (root.parent / 'RotationBST.lean').read_text().splitlines()
+sources = ['Model/Abstract.lean', 'Model/Basic.lean',
+           'Online/Abstract.lean', 'WorkingSet/Abstract.lean']
+lines = '\n'.join((root.parent / 'RotationBST' / path).read_text()
+                  for path in sources).splitlines()
 names = ['Tree', 'Tree.size', 'Rotate', 'Rotations', 'Access', 'Execution', 'Algorithm', 'Algorithm.runFrom', 'Algorithm.cost', 'DynamicallyOptimal', 'workingSetNumber', 'workingSetSum', 'HasWorkingSetBound']
 for name in names:
     start = next(i for i, line in enumerate(lines)
@@ -11,4 +14,5 @@ for name in names:
     (root / 'lean-snippets' / f'{name}.lean').write_text('\n'.join(lines[start:end]) + '\n')
 statements = [line.removesuffix(' := by') for line in lines
               if line.startswith('theorem ')]
-(root / 'lean-snippets' / 'Invariants.lean').write_text('\n'.join(statements) + '\n')
+variables = [line for line in lines if line.startswith('variable ')]
+(root / 'lean-snippets' / 'Invariants.lean').write_text('\n'.join(variables + [''] + statements) + '\n')

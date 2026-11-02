@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check library import coverage
+        run: python3 scripts/check_imports.py
       - uses: leanprover/lean-action@v1
         with:
           build-args: "--wfail"

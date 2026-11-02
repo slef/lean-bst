@@ -1,3 +1,3 @@
 inductive Rotations : Tree → Tree → Nat → Prop where
-  | refl : Rotations t t 0
-  | step : Rotate s t → Rotations t u k → Rotations s u (k + 1)
+  | refl {t : Tree} : Rotations t t 0
+  | step {s t u : Tree} {k : Nat} : Rotate s t → Rotations t u k → Rotations s u (k + 1)

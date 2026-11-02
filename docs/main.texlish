@@ -29,7 +29,7 @@
   morekeywords=[2]{Prop,Type,List,Nat,Tree,Rotate,Rotations,Access,Execution,Algorithm},
   sensitive=true,morecomment=[l]{--},morestring=[b]"}
 \lstdefinestyle{lean}{language=lean,basicstyle=\ttfamily\small,columns=fullflexible,
-  keepspaces=true,showstringspaces=false,extendedchars=false,
+  keepspaces=true,breaklines=true,showstringspaces=false,extendedchars=false,
   keywordstyle=\bfseries\color{figblue},keywordstyle=[2]\color{figgreen},
   literate={→}{{$\to$}}1 {∀}{{$\forall$}}1 {∃}{{$\exists$}}1
     {∈}{{$\in$}}1 {∧}{{$\wedge$}}1 {≤}{{$\le$}}1 {·}{{$\cdot$}}1 {⟨}{{$\langle$}}1 {⟩}{{$\rangle$}}1}
@@ -67,8 +67,8 @@ A rotation preserves inorder order. Thus erasing labels before a rotation
 and restoring them afterward gives exactly the usual labelled rotation.
 If the final tree is \code{node l r}, its root's key is $\sz{l}$.
 Requiring $\sz{l}=x$ therefore says exactly that key $x$ has been brought
-to the root. This representation correspondence is the first result to
-formalize in Lean.
+to the root. This representation correspondence is now proved in Lean, including arbitrary
+key lists and exact rotation counts.
 
 \textbf{Why require the requested key at the root?}
 A pointer search reaching depth $d$ can expose its key at the root by $d$
@@ -86,11 +86,11 @@ Its comparison with the connected node-touch model uses lazy handling of
 rotations outside the active connected region. The geometric BST model is
 also discussed in \href{https://people.csail.mit.edu/mip/papers/arboral/paper.pdf}{Demaine et al.,
 \emph{The Geometry of Binary Search Trees}}, Section~2.1.
-These give the literature setting for the intended constant-factor simulation;
+These give the literature setting for the checked constant-factor simulation;
 they are not Lean proofs about the definitions below.
 
-Our file deliberately records just $R$. For standard total-cost comparisons,
-use
+The original access and execution relations record just $R$.
+For standard comparisons, \code{Algorithm.totalCost} now uses
 \[
   \cost_{\mathrm{total}}(t,X)=\sz{X}+\cost_{\mathrm{rot}}(t,X).
 \]
@@ -100,20 +100,32 @@ In particular, the current \code{DynamicallyOptimal} predicate concerns
 rotation cost; its converse connection to conventional dynamic optimality
 cannot be obtained by simply dropping the $m$ term.
 
-\textbf{What remains to formalize.}
-Besides the label/shape correspondence, we need costed simulations between
-root-access rotations and a chosen pointer model. Rotations deep in a subtree
-cannot simply be declared to have constant pointer cost: locating them must
-be justified by a global simulation. For online algorithms, the translation
-must also preserve the lack of future information. Exact final-tree agreement
-may require delayed work; the interface and initial-tree allowance must be
-stated explicitly in the simulation theorem.
+\textbf{Checked constant-factor correspondence.}
+The shape/label correspondence is proved for arbitrary fixed inorder key lists.
+The local BST ordering invariant is equivalent to increasing inorder traversal,
+and every shape has exactly one BST labelling by any prescribed increasing list.
+A conventional pointer execution is simulated by root accesses at total cost
+at most three times its cost, retaining a charged final rotation suffix.
+Conversely, a rotation execution with $R$ rotations and $m$ requests has a pointer
+execution of cost $C$ and a final deferred suffix of $d$ rotations satisfying
+\[
+ C+32d\le 32R+17m.
+\]
+The lazy proof selects the rotation-graph component of the current root,
+commutes independent rotations into a deferred suffix, and reshapes the selected
+connected region in linear pointer cost. The causal transformer uses only past
+requests and current state; its prefix-composition theorem excludes lookahead.
+It uses classical choice for planning, which is uncharged in this model.
+For the concrete splay algorithm, a more direct pointer simulation costs at
+most $m+3R$ and preserves the exact final shape.
 
 \newpage
-The rest of the document explains every definition in \code{RotationBST.lean}.
-Each explanation is followed by the corresponding Lean code, extracted from
-that file. The source remains authoritative. It imports only \code{Std};
-all declarations live in the namespace \code{RotationBST}.
+The rest of the document explains the original model definitions, now grouped
+under \code{RotationBST/} and re-exported by \code{RotationBST.lean}.
+Each explanation is followed by Lean code extracted from those modules.
+The source remains authoritative. The elementary model uses \code{Std};
+the analytic proofs use Mathlib through the pinned CSLib dependency.
+All declarations live in the namespace \code{RotationBST}.
 
 # Trees and implicit keys
 
@@ -198,7 +210,8 @@ We write \code{Rotations s t k} when exactly $k$ rotations transform $s$ into $t
 The rule \code{refl} is the empty sequence. The rule \code{step} performs one
 rotation from $s$ to $t$, followed by $k$ rotations from $t$ to $u$, giving $k+1$
 rotations in total. The intermediate tree connects consecutive operations.
-Implicit variables such as $s,t,u,k$ are inferred from the rule's use.
+Parameters such as $s,t,u,k$ are explicitly bound in braces; their values
+are inferred when a rule is used. The library disables automatic implicit binding.
 
 \newpage
 # An access
@@ -365,32 +378,96 @@ For a nonempty tree, the allowance is $O(n\log(n+1))$.
 The empty tree admits only an empty valid request sequence, so its total cost
 is zero. Lean defines \code{Nat.log2 0} as zero, making the formula total.
 
-# What has been defined, and what remains to prove
+# Checked splay results
 
-The code defines the model and two desired properties of algorithms.
-It proves size preservation and the range condition for accesses.
-It does not yet define a particular algorithm, prove that every valid access
-can be served, or prove dynamic optimality or a working-set theorem for any
-algorithm. Those are subsequent mathematical developments.
+The implementation uses bottom-up zig, zig-zig, and zig-zag steps on shapes.
+It is distinct from the separately retained move-to-root baseline.
+The executable definition appears in \code{Splay/Algorithm/Abstract.lean};
+\code{Splay/Abstract.lean} links the short result-specific abstracts.
 
-Two conventions deserve to stay visible when using these definitions.
-First, every access must finish with the requested key at the root, and
-accessing the current root may cost zero. Second, every local rotation costs
-one, even deep inside a subtree; there is no cost for locating it.
-Thus all bounds here refer to this rotation-only, root-access model.
-The opening discussion explains the standard total-cost normalization and
-the simulation results that remain to be formalized.
+For positive node weights $w$, let $W$ be their sum and let $\Phi$ be the sum
+over nodes of the binary logarithm of the node's subtree mass.
+The checked weighted access lemma is
+\[
+  R+\Phi_{\mathrm{after}}-\Phi_{\mathrm{before}}
+  \le 3\bigl(\log_2 W-\log_2 s(x)\bigr)+1,
+\]
+where $s(x)$ is the initial subtree mass at the accessed node.
+A weaker form substitutes the node's own weight $w(x)$.
+Weights are analysis data, not data stored by the algorithm.
 
-The representation needs no \code{Valid} predicate: every finite binary-tree
-shape already determines a unique BST on its inorder ranks.
-The remaining obligations concern transformations, access endpoints, and costs.
+The working-set proof uses changing reciprocal-square recency weights.
+After the requested node reaches the root, its recency update cannot increase
+potential. Telescoping gives the explicit rotation bound
+\[
+ R\le 10\,\mathrm{WS}(X)+6n\bigl(1+\lfloor\log_2 n\rfloor\bigr).
+\]
+The conventional pointer execution has cost at most
+$31\,\mathrm{WS}(X)+18n(1+\lfloor\log_2n\rfloor)$.
+
+The implications from working set to static optimality and from static
+optimality to static finger are proved for \emph{every} algorithm satisfying
+the corresponding property. They are sequence inequalities independent of
+splay. Static cost is frequency entropy plus one per request:
+\[
+  E(X)=m+\sum_{x=0}^{n-1}q_x\log_2(m/q_x),
+\]
+with zero-frequency terms zero. When every key occurs, the sharper direct
+splay analysis proves total cost at most $4E(X)$ without a startup allowance.
+A prefix-code argument proves $E(X)$ is at most three times the ordinary pointer
+search cost in any fixed BST on the same keys. The generic implication therefore
+establishes competitiveness against every fixed comparison tree.
+
+The development also proves the 1985 unified bound, taking the minimum of
+frequency, fixed-finger, and working-set logarithms separately at each request;
+the balance theorem with rank-based access, insertion, deletion, split, and join on forests;
+the long-splay theorem for threshold $6\log_2(W/w(x))+2$; and the snapshot theorem
+for independent requests and a uniformly chosen stopping time. The snapshot
+expectations are explicit finite sums and permit zero-probability keys.
+The long-splay theorem bounds restructuring only, not the cost of all searches.
+
+The sequential-access/scanning theorem also checks: from any initial shape,
+accessing all $n$ keys in increasing order uses at most $13n$ rotations,
+$14n$ normalized operations, or $40n$ pointer operations. The ghost-marked-tree
+analysis uses a quadratic right-spine potential adapted from
+\href{https://arxiv.org/abs/2609.19746}{Kakimura and Terai (2026)}.
+It proves a generous linear constant rather than their sharper bound.
+
+# Scope and remaining work
+
+The checked results cover versions of all nine numbered theorems of Sleator
+and Tarjan's
+\href{https://www.cs.cmu.edu/~sleator/papers/self-adjusting.pdf}{\emph{Self-Adjusting Binary Search Trees}}
+(1985), with the explicit conventions in the source abstracts.
+Top-down splaying, semisplaying, and the paper's further applications are not
+implemented. Upstream namespace, linter and formal abstract audit
+integration also remain. The local result abstracts now audit their statements
+and definition bodies against explicit readable foundation lists; the audit
+rejects hidden implementation dependencies.
+
+Every root access ends with its key at the root and may cost zero rotations;
+total cost adds one per request. The general model equivalence permits deferred
+final rotations, while the concrete splay simulation preserves the exact final
+shape. These endpoint conventions are explicit in the Lean statements.
+
+Every finite shape determines a unique BST on a fixed inorder key list.
+Insertions and deletions change that list and renumber subsequent ranks;
+splits and joins use the local rank universe of each tree.
+The operation-sensitive update bound charges only participating keys,
+not the size of unrelated trees in the forest.
+
+The library builds with warnings treated as errors. The tests include
+zig-zig versus move-to-root, both zig-zag orientations, empty inputs,
+repeated root requests, update boundaries, and guarded kernel-axiom audits.
+The proof dependencies are Lean's standard logical axioms; there are no
+admitted results or project-specific axioms.
 
 \vfill
 \begin{small}
 \textbf{Source and presentation.}
-The repository's \code{RotationBST.lean} is the exact 98-line source explained
-here, checked with Lean 4.33.1. Displayed definitions are extracted from it;
-only the three invariant theorem proofs are omitted.
+The repository's \code{RotationBST.lean} imports the modular library,
+checked with Lean 4.36.0-rc2. Displayed definitions are extracted from the model,
+online, and working-set modules; invariant theorem proofs are omitted.
 The prose-and-snippet presentation follows the Lean section of
 \href{https://github.com/edemaine/translation-tiling-paper/blob/5309313e662377d2efb353acba454859469606bd/paper.texlish}{Demaine and Langerman's translation-tiling paper}.
 This document is written in \href{https://texlish.org/}{Texlish}; all tree

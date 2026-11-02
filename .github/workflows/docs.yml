@@ -1,9 +1,9 @@
 name: Documentation
 on:
   push:
-    paths: ['RotationBST.lean', 'docs/**', '.github/workflows/docs.yml']
+    paths: ['RotationBST.lean', 'RotationBST/**', 'docs/**', '.github/workflows/docs.yml']
   pull_request:
-    paths: ['RotationBST.lean', 'docs/**', '.github/workflows/docs.yml']
+    paths: ['RotationBST.lean', 'RotationBST/**', 'docs/**', '.github/workflows/docs.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,7 +19,7 @@ jobs:
         run: |
           npm install -g texlish@0.2.0
           sudo apt-get update
-          sudo apt-get install -y latexmk texlive-latex-extra texlive-fonts-extra
+          sudo apt-get install -y latexmk texlive-latex-extra texlive-fonts-extra texlive-plain-generic
       - name: Build document
         run: make -C docs
       - uses: actions/upload-artifact@v4
