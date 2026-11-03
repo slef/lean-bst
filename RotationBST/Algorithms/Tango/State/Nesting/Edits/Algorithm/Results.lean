@@ -31,6 +31,8 @@ theorem merge (s reference child : MarkedTree) (same : s.nesting = reference.nes
 
 end RotationBST.Tango.State.EditAlgorithm.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.EditAlgorithm.Results`: 2 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.EditAlgorithm.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Nesting.Defs, RotationBST.Algorithms.Tango.State.Nesting.Edits.Defs,

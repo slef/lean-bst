@@ -69,6 +69,8 @@ theorem join_interior (s middle : MarkedTree) (i : Nat)
 
 end RotationBST.Tango.State.Updates.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.Updates.Results`: 6 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.Updates.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract, RotationBST.Algorithms.Tango.Paths.Abstract,

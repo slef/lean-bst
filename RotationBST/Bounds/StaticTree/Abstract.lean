@@ -29,6 +29,8 @@ theorem workingSet_competes (a : Algorithm) (workingSet : HasWorkingSetBound a) 
 
 end RotationBST.StaticTree.Results
 
+/-- info: abstract audit passed for `RotationBST.StaticTree.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.StaticTree.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract, RotationBST.Bounds.WorkingSet.Abstract,
   RotationBST.Bounds.Abstract, RotationBST.Bounds.StaticTree.Definitions.Abstract,

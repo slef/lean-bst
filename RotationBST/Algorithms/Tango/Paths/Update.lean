@@ -4,6 +4,7 @@ public import RotationBST.Algorithms.Tango.Paths.Bounds
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 private theorem rest_mem_parts (d : PathDecomposition) {p : List Nat} (h : p ∈ d.2) : p ∈ d.parts := by
   unfold PathDecomposition.parts

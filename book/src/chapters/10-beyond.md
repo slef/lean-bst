@@ -59,7 +59,7 @@ The potential is the unit-weight splay potential ([Chapter 9](analysis.html)), s
 splitting adds nothing beyond the access, because cutting the root's right edge only lowers the root's subtree size.
 Joining is an access to the maximum of $l$, after which the root's rank grows from $\log_2|l|$ to $\log_2(|l|+|r|)$, giving $3\log_2(|l|+|r|)+1$ in total.
 Insertion is a split plus a new root, giving $4\log_2(n+1)+1$.
-Deletion is an access plus a join, giving $5\log_2 n + 2$. With the unit charge, every case is at most $5\log_2(n+1)+3$. The initial potential is at most $|s|\log_2(|s|+1)$ and the final potential is nonnegative. See `Splay/Updates/Potential.lean` and `Balance.lean`.
+Deletion is an access plus a join, giving $5\log_2 n + 2$. With the unit charge, every case is at most $5\log_2(n+1)+3$. The initial potential is at most $|s|\log_2(|s|+1)$ and the final potential is nonnegative. See `Algorithms/Splay/Updates/Potential.lean` and `Balance.lean`.
 :::
 
 @viz updates {}
@@ -108,7 +108,7 @@ The expected static cost of the snapshot is at most $5 + 3H(p) + n(1+\log_2 n)/m
 ::: details Proof sketch
 The analysis uses the weights $w(x) = p(x) + 1/n$, which are positive even where $p$ vanishes, and total $W = 2$. Averaging the weighted access lemma over one random request gives
 $\mathbb E[\text{depth} + 1] + \mathbb E[\Phi'] \le 2 + 3\sum_x p(x)(\log_2 W - \log_2 w(x)) + \Phi$.
-Iterating this over $j < m$ telescopes the potential, which lies between $n\log_2(1/n)$ and $n \log_2 W = n$. This gives the $n(1+\log_2 n)/m$ term. Finally $w(x) \ge p(x)$, so $\sum_x p(x)(1 - \log_2 w(x)) \le 1 + H(p)$, and $2 + 3(1 + H) = 5 + 3H$. See `Splay/Snapshot.lean`.
+Iterating this over $j < m$ telescopes the potential, which lies between $n\log_2(1/n)$ and $n \log_2 W = n$. This gives the $n(1+\log_2 n)/m$ term. Finally $w(x) \ge p(x)$, so $\sum_x p(x)(1 - \log_2 w(x)) \le 1 + H(p)$, and $2 + 3(1 + H) = 5 + 3H$. See `Algorithms/Splay/Snapshot.lean`.
 :::
 
 ## Sequential access
@@ -132,7 +132,7 @@ A `Marked` value is a tree in which a top part of red nodes (`node`) has been to
 The potential gives each red node a credit $h^2 + 2\alpha(g-h)$, where $h$ is its left child's rank and $g$ its own rank. The correction $\alpha(v)$ is $5$ for $v = 0$ and $3 - v$ otherwise; Lean's truncated subtraction makes it $2, 1, 0, 0, \dots$ for $v = 1, 2, 3, \dots$. A hole holding $s$ untouched nodes carries $18s$: a prepaid budget for marking those nodes red when the scan first reaches them. The docstring describes the total as *twice* the red-node potential plus this budget. The analysis doubles it so that every quantity stays a natural number, and the proof bounds $2R$.
 
 ::: details Proof sketch
-Accessing rank 0 first costs fewer than $n$ rotations ([[RotationBST.Splay.Results.correct]]) and leaves a root with an empty left subtree. From then on, the next key is always the minimum of the right subtree. If the first spine node has an empty left subtree, the access is one rotation. Otherwise the left spine of that left subtree is painted red, paid from the hole budget. The red ancestors of the minimum are then consumed in pairs, which are the zig-zig steps, and the last one or two steps involve the spine node and the old root (`consume_splay` proves that this ghost pairing has exactly the shape `splayAt` produces). Each access satisfies $2k + \Phi' \le \Phi + 6$. Each middle pair pays for its two rotations out of the quadratic credit, by the arithmetic lemma `pair_credit`. Summing over the remaining $n-1$ accesses, starting from an initial potential of at most $18n$, gives at most $12n$ rotations after the first access, hence $R \le 13n$ and $m + R \le 14n$. The pointer bound is $m + 3R \le n + 39n$. See `Splay/Scanning/`.
+Accessing rank 0 first costs fewer than $n$ rotations ([[RotationBST.Splay.Results.correct]]) and leaves a root with an empty left subtree. From then on, the next key is always the minimum of the right subtree. If the first spine node has an empty left subtree, the access is one rotation. Otherwise the left spine of that left subtree is painted red, paid from the hole budget. The red ancestors of the minimum are then consumed in pairs, which are the zig-zig steps, and the last one or two steps involve the spine node and the old root (`consume_splay` proves that this ghost pairing has exactly the shape `splayAt` produces). Each access satisfies $2k + \Phi' \le \Phi + 6$. Each middle pair pays for its two rotations out of the quadratic credit, by the arithmetic lemma `pair_credit`. Summing over the remaining $n-1$ accesses, starting from an initial potential of at most $18n$, gives at most $12n$ rotations after the first access, hence $R \le 13n$ and $m + R \le 14n$. The pointer bound is $m + 3R \le n + 39n$. See `Algorithms/Splay/Scanning/`.
 :::
 
 ::: check

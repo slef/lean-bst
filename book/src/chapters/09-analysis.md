@@ -97,7 +97,7 @@ The same bound in the conventional pointer model: the [pointer implementation](s
 
 Theorem 5 of the paper charges each access the *smallest* of its three logarithmic costs: frequency, finger distance and working set.
 
-@decl RotationBST.Splay.unifiedCharge RotationBST.Splay.unifiedSum
+@decl RotationBST.Bounds.unifiedCharge RotationBST.Bounds.unifiedSum
 
 For a request $x$ with history `past`, `unifiedCharge` is
 $$1 + \min\Bigl(\log_2 \texttt{workingSetNumber},\; \log_2\frac{m}{q_x},\; \log_2(|x - f| + 1)\Bigr).$$

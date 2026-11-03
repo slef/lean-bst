@@ -1,11 +1,23 @@
 module
 
-public import RotationBST.Algorithms.Splay.Logarithms
+public import Mathlib.Analysis.SpecialFunctions.Log.Base
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.NormNum
 public import Mathlib.Tactic.FieldSimp
 
 @[expose] public section
 
 namespace RotationBST.Bounds
+
+/-- The real binary logarithm of a natural number is within one of its integer part. -/
+theorem logb_nat_le (n : Nat) : Real.logb 2 n ≤ (n.log2 : ℝ) + 1 := by
+  have h := Nat.lt_floor_add_one (Real.logb 2 n)
+  rw [show ⌊Real.logb 2 (n : ℝ)⌋₊ = n.log2 by
+    simpa only [Nat.cast_ofNat] using (Real.natFloor_logb_natCast 2 n).trans Nat.log2_eq_log_two.symm] at h
+  exact h.le
+
 
 /-- Finite Jensen inequality for positive integer gaps, with an upper bound on
  their sum. The empty list is included using Lean's total division convention. -/

@@ -3,16 +3,12 @@ module
 public import RotationBST.Algorithms.Splay.AccessLemma
 public import RotationBST.Algorithms.Splay.WorkingSet.Reweight
 public import RotationBST.Bounds.WorkingSet.Abstract
+public import RotationBST.Bounds.Implications.LogSum
 
 @[expose] public section
 
 namespace RotationBST.Recency
-
-theorem logb_nat_le (n : Nat) : Real.logb 2 n ≤ (n.log2 : ℝ) + 1 := by
-  have h := Nat.lt_floor_add_one (Real.logb 2 n)
-  rw [show ⌊Real.logb 2 (n : ℝ)⌋₊ = n.log2 by
-    simpa only [Nat.cast_ofNat] using (Real.natFloor_logb_natCast 2 n).trans Nat.log2_eq_log_two.symm] at h
-  exact h.le
+open Bounds
 
 /-- The amortized cost of one splay is controlled by its pre-access recency rank. -/
 theorem access_bound (order : List Nat) (t : Tree) (x : Nat)
@@ -32,7 +28,7 @@ theorem access_bound (order : List Nat) (t : Tree) (x : Nat)
     exact squareSum_le_two _
   have hlog := Real.logb_le_logb_of_le (by norm_num : (1 : ℝ) < 2) ht hm
   rw [Real.logb_self_eq_one (by norm_num)] at hlog
-  have hrank := logb_nat_le (order.idxOf x + 1)
+  have hrank := Bounds.logb_nat_le (order.idxOf x + 1)
   simp only [Nat.cast_add, Nat.cast_one] at hrank
   simp only [weight, Real.logb_inv, Real.logb_pow, Nat.cast_ofNat] at hb
   have hpot : Splay.potential (weight (touch order x)) (Splay.run t x).1 0 ≤

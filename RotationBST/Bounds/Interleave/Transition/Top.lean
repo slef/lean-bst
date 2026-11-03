@@ -4,7 +4,7 @@ public import RotationBST.Bounds.Interleave.Transition.Abstract
 public import RotationBST.Models.Region.Bounds
 
 @[expose] public section
-namespace RotationBST.Tango
+namespace RotationBST.Wilber
 open Arboral Pointer.Lazy.Skeleton
 
 theorem topIn_bounds {t : Tree} {lo low high x : Nat} (h : topIn t lo low high = some x) :
@@ -84,4 +84,4 @@ theorem topIn_active (s : Region) (lo low high x root : Nat)
         rw [← he]
         exact Finset.mem_insert_self ..
 
-end RotationBST.Tango
+end RotationBST.Wilber

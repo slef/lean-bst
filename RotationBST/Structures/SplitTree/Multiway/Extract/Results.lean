@@ -22,7 +22,9 @@ theorem wide_height {h : Nat} {t : Multiway} (valid : Balanced h t) (wide : Wide
 
 end RotationBST.Arboral.Split.Multiway.Extract.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Extract.Results`: 4 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Split.Multiway.Extract.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Defs,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,
   RotationBST.Structures.SplitTree.Multiway.Extract.Defs]

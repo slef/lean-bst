@@ -4,6 +4,7 @@ public import RotationBST.Algorithms.Tango.Paths.Partition
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 private theorem parts_bound (d : PathDecomposition) (n : Nat)
     (head : d.1.length ≤ n) (rest : ∀ p ∈ d.2, p.length ≤ n) :

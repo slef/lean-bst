@@ -1,7 +1,8 @@
 module
 
-public import RotationBST.Algorithms.Splay.WorkingSet.Distinct
-public import RotationBST.Algorithms.Splay.WorkingSet.LogBound
+public import RotationBST.Bounds.WorkingSet.Abstract
+public import Mathlib.Analysis.SpecialFunctions.Log.Base
+public import Mathlib.Data.List.Nodup
 public import Mathlib.Data.Finset.Card
 public import Mathlib.Data.List.Count
 

@@ -27,6 +27,8 @@ theorem staticOptimality_fixedTree (t u : Tree) (xs : List Nat) (same : t.size =
 end RotationBST.Splay.Results
 
 -- Explicit reading boundary; proof bodies remain behind the bridge.
+/-- info: abstract audit passed for `RotationBST.Splay.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Splay.Results allowing [
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Online.Abstract,

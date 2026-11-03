@@ -24,6 +24,8 @@ theorem workingSet_implies_staticFinger (a : Algorithm) (h : HasWorkingSetBound 
 end RotationBST.Bounds
 
 -- Explicit reading boundary; proof bodies remain behind the bridge.
+/-- info: abstract audit passed for `RotationBST.Bounds`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Bounds allowing [
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Online.Abstract,

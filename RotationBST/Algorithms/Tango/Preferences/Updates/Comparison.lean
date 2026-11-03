@@ -2,7 +2,7 @@ module
 
 public import RotationBST.Algorithms.Tango.Preferences.Updates.Validity
 public import RotationBST.Bounds.Interleave.Wilber.Bound
-public import RotationBST.Models.Rotation.Existence.AbstractBridge
+public import RotationBST.Models.Rotation.Existence.Proofs
 
 @[expose] public section
 namespace RotationBST.Tango

@@ -37,16 +37,18 @@ theorem one_level {h : Nat} {focus : Multiway} {fs : List Context.Frame}
 
 end RotationBST.Arboral.Split.Multiway.Finger.Repair.Context.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Repair.Context.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Repair.Context.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Defs,
-  RotationBST.Structures.SplitTree.Multiway.Context.Defs,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
+  RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,
   RotationBST.Structures.SplitTree.Multiway.Join.Compact.Defs,
   RotationBST.Structures.SplitTree.Multiway.Partition.Defs,
-  RotationBST.Structures.SplitTree.Finger.Defs,
+  RotationBST.Structures.SplitTree.Finger.Abstract,
   RotationBST.Structures.SplitTree.Finger.Locate.Embedding.Defs,
-  RotationBST.Structures.SplitTree.Finger.Binary.Defs,
+  RotationBST.Structures.SplitTree.Finger.Binary.Abstract,
   RotationBST.Structures.SplitTree.Finger.Binary.Repair.Defs,
   RotationBST.Structures.SplitTree.Finger.Binary.Join.Defs,
   RotationBST.Structures.SplitTree.Finger.Repair.Frame.Defs,

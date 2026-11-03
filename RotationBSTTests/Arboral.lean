@@ -32,9 +32,9 @@ example : scheduleCost (fill greedySweep 0 ∅ [1, 3, 2]) 3 = 6 := by decide
 example : rowCost greedySweep 0 ∅ [1, 1, 1] = 3 := by decide
 
 -- A first observation is not a switch. The reference node itself is left.
-example : Tango.interleave (Tango.perfect 2) [0, 2, 0, 2] = 3 := by decide
-example : Tango.interleave (Tango.perfect 2) [2, 1, 2] = 2 := by decide
-example : Tango.interleave (Tango.perfect 2) [1, 1, 1] = 0 := by decide
+example : Wilber.interleave (Tango.perfect 2) [0, 2, 0, 2] = 3 := by decide
+example : Wilber.interleave (Tango.perfect 2) [2, 1, 2] = 2 := by decide
+example : Wilber.interleave (Tango.perfect 2) [1, 1, 1] = 0 := by decide
 example : Tango.changeCost (Tango.perfect 2) [] [0, 2, 0, 2] = 3 := by decide
 example : (Tango.perfect 3).size = 7 := by decide
 example : Tango.height (Tango.perfect 3) = 3 := by decide
@@ -44,21 +44,21 @@ example : Tango.height (Tango.perfect 3) = 3 := by decide
 example (s : Tree) (xs : List Nat) (valid : ∀ x ∈ xs, x < s.size) :
     ∃ t r, RotationBST.Execution s xs t r ∧ xs.length + r ≤
       2 * s.size + 99 * rowCost greedySweep 0 ∅ xs := by
-  obtain ⟨E, _, hc⟩ := Arboral.Results.online_solution (Arboral.Results.greedyASS s.size) xs valid
-  obtain ⟨t, r, execution, cost⟩ := Arboral.Results.ass_to_rotations s xs E
-  exact ⟨t, r, execution, by simpa only [hc, Arboral.Results.greedyASS] using cost⟩
+  obtain ⟨E, _, hc⟩ := Arboral.Results.online_solution (Arboral.GreedyASS.Results.greedyASS s.size) xs valid
+  obtain ⟨t, r, execution, cost⟩ := Arboral.Equivalence.Results.ass_to_rotations s xs E
+  exact ⟨t, r, execution, by simpa only [hc, Arboral.GreedyASS.Results.greedyASS] using cost⟩
 
 -- Exact cardinality, including the zero-request and unused-key cases.
 example (n : Nat) : ∃ s t, s.size = n ∧ Arboral.RegionExecution s [] t 0 := by
-  apply (Arboral.Results.ass_iff_region_execution n [] 0).mp
+  apply (Arboral.Equivalence.Results.ass_iff_region_execution n [] 0).mp
   exact ⟨⟨⟨∅, by simp [requestsAt], ass_empty⟩, by simp [History]⟩, rfl⟩
 
 example : Tango.preferenceChanges (Tango.perfect 2) [0, 2, 0, 2] = 6 := by decide
-example : Tango.transitionKeys (Tango.perfect 2) 0 (Tango.perfect 2) = [2] := by decide
-example : Tango.transitionKeys (Tango.perfect 3) 0 (Tango.perfect 3) = [5, 2, 6] := by decide
+example : Wilber.transitionKeys (Tango.perfect 2) 0 (Tango.perfect 2) = [2] := by decide
+example : Wilber.transitionKeys (Tango.perfect 3) 0 (Tango.perfect 3) = [5, 2, 6] := by decide
 example (reference : Tree) (xs : List Nat) (E : Offline reference.size xs) :
-    Tango.interleave reference xs ≤ 2 * E.points.card :=
-  Tango.Results.interleave_lower_bound reference rfl E
+    Wilber.interleave reference xs ≤ 2 * E.points.card :=
+  Wilber.Results.interleave_lower_bound reference rfl E
 
 example : Tango.preferredPaths (Tango.perfect 2) [] = [[1], [0], [2]] := by decide
 example : Tango.preferredPaths (Tango.perfect 2) [0] = [[1, 0], [2]] := by decide
@@ -153,7 +153,7 @@ example : Represents misplaced (perfect 3) [] := by unfold Represents; decide
 example : ¬ Maintains misplaced (perfect 3) [] := by
   intro h
   have nesting := h.2
-  simp [misplaced, chain, initial, perfect, MarkedTree.nesting, canonical, labels] at nesting
+  simp [misplaced, chain, initial, perfect, MarkedTree.nesting, canonical, Wilber.labels] at nesting
 
 example (reference : Tree) (past : List Nat) : Maintains (canonical reference 0 past) reference past :=
   canonical_maintains reference past
@@ -704,7 +704,7 @@ example : searchLevels (.four .nil .nil .nil .nil) 2 = 1 := by decide
 
 example : Multiway.Context.plug ((leftSpine seven).take (searchLevels seven 2)) .nil = three := by decide
 example : nearSearchLevels seven 3 ≤ Nat.log2 (min 3 (seven.size - 1 - 3) + 1) + 1 :=
-  Results.nearer_endpoint
+  Multiway.Finger.Results.nearer_endpoint
     (.two (.two (.two .nil .nil) (.two .nil .nil)) (.two (.two .nil .nil) (.two .nil .nil))) 3
 
 end MultiwayFingerSearch

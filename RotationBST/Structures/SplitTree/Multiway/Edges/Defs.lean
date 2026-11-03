@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Structures.SplitTree.Multiway.Defs
+public import RotationBST.Structures.SplitTree.Multiway.Abstract
 
 @[expose] public section
 namespace RotationBST.Arboral.Split.Multiway

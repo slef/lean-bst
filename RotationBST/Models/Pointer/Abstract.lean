@@ -41,6 +41,8 @@ theorem to_pointer (h : RotationBST.Execution s xs t k) :
 end RotationBST.Pointer.Results
 
 -- Explicit reading boundary; proof bodies remain behind the bridge.
+/-- info: abstract audit passed for `RotationBST.Pointer.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Pointer.Results allowing [
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Pointer.Machine.Abstract]

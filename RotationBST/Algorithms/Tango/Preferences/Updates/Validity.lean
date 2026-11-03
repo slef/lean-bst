@@ -4,6 +4,7 @@ public import RotationBST.Algorithms.Tango.Preferences.Updates.Counts
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 theorem preferenceUpdates_changed (t : Tree) (lo : Nat) (past : List Nat) (x : Nat) :
     ∀ e ∈ preferenceUpdates t lo past x, e.previous ≠ some e.next := by

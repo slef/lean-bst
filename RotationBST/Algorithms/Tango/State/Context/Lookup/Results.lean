@@ -38,6 +38,8 @@ theorem simulate (s reference child target : MarkedTree) (i : Nat) (bound : ℝ)
 
 end RotationBST.Tango.State.Lookup.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.Lookup.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.Lookup.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Context.Defs, RotationBST.Algorithms.Tango.State.Context.Lookup.Defs,

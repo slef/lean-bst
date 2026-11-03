@@ -1,6 +1,7 @@
 module
 
 public import RotationBST.Algorithms.Splay.WeightedBound
+public import RotationBST.Algorithms.Splay.WorkingSet.WeightSum
 public import RotationBST.Bounds.Implications.WeightedEntropy
 public import Mathlib.Order.Interval.Finset.Nat
 

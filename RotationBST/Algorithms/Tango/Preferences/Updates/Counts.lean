@@ -5,6 +5,7 @@ public import RotationBST.Algorithms.Tango.Preferences.Proofs
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 theorem runs_append (xs : List Bool) (x : Bool) :
     runs (xs ++ [x]) = runs xs + if xs.getLast? = some x then 0 else 1 := by

@@ -29,8 +29,10 @@ theorem attach_open (hf hs : Nat) (focus sibling : Multiway) (rest : Tree) :
 
 end RotationBST.Arboral.Split.Multiway.Finger.Maximum.Join.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Maximum.Join.Results`: 2 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Maximum.Join.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Defs,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,
   RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Defs,
   RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Join.Defs]

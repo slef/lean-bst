@@ -6,6 +6,7 @@ public import RotationBST.Algorithms.Tango.Preferences.Updates.Validity
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
+open Wilber
 
 private theorem root_phase (l r : MarkedTree) (root lo : Nat) (size : l.tree.size = root)
     (previous : Option Bool) (next : Bool) :

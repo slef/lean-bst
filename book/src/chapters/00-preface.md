@@ -22,7 +22,9 @@ The library and this book are built from the same sources. The build fails if a 
 
 ## The reading interface
 
-The library follows the [abstractlean](https://github.com/slef/abstractlean) convention. Every topic has a short file called `Abstract.lean` containing only definitions and theorem statements; proofs are imported from separate "bridge" modules. Each such file ends with a command like
+The library is laid out as a textbook rather than by source paper: `Models/` holds the BST models and their equivalences, `Bounds/` the sequence bounds and their relations, `Algorithms/` one directory per algorithm with its definition followed by its bounds, and `Structures/` the supporting data structures. The parts of this book follow the same order; the geometric model, Wilber's bound, GreedyASS, the causal simulation and Tango have no chapters yet, and [Appendix A](audit.html) lists their statements as not shown.
+
+Within each directory the library follows the [abstractlean](https://github.com/slef/abstractlean) convention. Every topic has a short file called `Abstract.lean` containing only definitions and theorem statements; proofs are imported through a single `AbstractBridge.lean` module, and internal lemma contracts and definitions of a proof are named `Results.lean` and `Defs.lean`. Each statements file ends with a command like
 
 ```lean
 #check_bst_abstract RotationBST.Splay.Results allowing [

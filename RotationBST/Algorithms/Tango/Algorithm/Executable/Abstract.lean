@@ -2,7 +2,7 @@ module
 
 import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Tango.Algorithm.Definitions.Abstract
-public import RotationBST.Algorithms.Tango.Algorithm.Request
+public import RotationBST.Algorithms.Tango.Algorithm.Executable.AbstractBridge
 
 @[expose] public section
 namespace RotationBST.Tango
@@ -32,6 +32,8 @@ theorem request (s : MarkedTree) (reference : Tree) (past : List Nat) (x : Nat)
 
 end RotationBST.Tango.Algorithm.Executable.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.Algorithm.Executable.Results`: 1 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.Algorithm.Executable.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.Algorithm.Definitions.Abstract,
   RotationBST.Algorithms.Tango.Algorithm.Request.Abstract,

@@ -37,6 +37,8 @@ theorem reshape (s t : Skeleton) (same : s.fringe = t.fringe) :
 end RotationBST.Pointer.Lazy.Results
 
 -- Explicit reading boundary; proof bodies remain behind the bridge.
+/-- info: abstract audit passed for `RotationBST.Pointer.Lazy.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Pointer.Lazy.Results allowing [
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Pointer.Machine.Abstract,

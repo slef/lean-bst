@@ -1,7 +1,7 @@
 module
 
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Height.Proofs
-public import RotationBST.Models.Rotation.Connectivity.AbstractBridge
+public import RotationBST.Models.Rotation.Connectivity.Proofs
 
 @[expose] public section
 namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded

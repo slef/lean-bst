@@ -34,6 +34,8 @@ theorem merge (s reference child attached : MarkedTree) (path : List Nat) (i : N
 
 end RotationBST.Tango.State.ComponentPath.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.ComponentPath.Results`: 2 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.ComponentPath.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.ComponentPath.Defs, RotationBST.Algorithms.Tango.State.Context.Defs,

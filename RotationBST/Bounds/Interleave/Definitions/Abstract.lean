@@ -13,7 +13,7 @@ subtree alternate between the two regions, summed over all subtrees.
 The lower-bound theorems are in `Bounds/Interleave/Abstract`. The `Tango`
 namespace is historical: Tango's own vocabulary is in
 `Algorithms/Tango/Definitions/Abstract`. -/
-namespace RotationBST.Tango
+namespace RotationBST.Wilber
 
 /-- The reference-tree convention of Demaine–Harmon–Iacono–Pătraşcu:
 the node itself belongs to its left region. `true` denotes that region. -/
@@ -45,4 +45,4 @@ def switch (past : List Bool) (next : Bool) : Nat :=
   | none => 0
   | some previous => if previous = next then 0 else 1
 
-end RotationBST.Tango
+end RotationBST.Wilber

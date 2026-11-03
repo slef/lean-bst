@@ -33,5 +33,7 @@ theorem rotations_preserve_order {s t : LabelledTree α} {k : Nat}
 
 end RotationBST.Representation
 
+/-- info: abstract audit passed for `RotationBST.Representation`: 4 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Representation allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Labelled.Ordering.Definitions.Abstract]

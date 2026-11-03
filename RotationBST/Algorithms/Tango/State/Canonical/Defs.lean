@@ -4,6 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Defs
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
+open Wilber
 
 /-- The reference tree with exactly the preferred edges left unmarked. This
 specifies the component nesting independently of auxiliary-tree rotations. -/

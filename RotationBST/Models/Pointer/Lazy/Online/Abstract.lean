@@ -48,6 +48,8 @@ theorem dynamicOptimality (a : RotationBST.Algorithm) (optimal : TotallyDynamica
 end RotationBST.Pointer.Lazy.Online.Results
 
 -- Explicit reading boundary; proof bodies remain behind the bridge.
+/-- info: abstract audit passed for `RotationBST.Pointer.Lazy.Online.Results`: 4 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Pointer.Lazy.Online.Results allowing [
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Online.Abstract, RotationBST.Bounds.WorkingSet.Abstract,

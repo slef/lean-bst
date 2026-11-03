@@ -24,6 +24,8 @@ theorem nesting_preserved (fs : List Frame) {s t : MarkedTree} (same : s.nesting
 
 end RotationBST.Tango.Context.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.Context.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.Context.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Context.Defs, RotationBST.Algorithms.Tango.State.Nesting.Defs,

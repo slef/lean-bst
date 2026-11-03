@@ -6,7 +6,8 @@ public import RotationBST.Bounds.Interleave.Definitions.Abstract
 
 /-! Tango's reference-tree vocabulary: preference switches along the reference
 search path, tree height, perfect trees, and preferred paths. Wilber's
-interleave quantity itself is defined in `Bounds/Interleave/Definitions/Abstract`. -/
+interleave quantity and its region bookkeeping are defined in
+`Bounds/Interleave/Definitions/Abstract` under the `Wilber` namespace. -/
 namespace RotationBST.Tango
 
 /-- Actual preference switches on the reference search path for one request. -/
@@ -14,10 +15,10 @@ def changes : Tree → List Nat → Nat → Nat
   | .nil, _, _ => 0
   | .node l r, past, x =>
       if x < l.size + 1 + r.size then
-        switch (regions l.size (l.size + 1 + r.size) past) (x ≤ l.size) +
-        if x < l.size then changes l (leftRequests l.size past) x
+        Wilber.switch (Wilber.regions l.size (l.size + 1 + r.size) past) (x ≤ l.size) +
+        if x < l.size then changes l (Wilber.leftRequests l.size past) x
         else if x = l.size then 0
-        else changes r (rightRequests l.size past) (x - l.size - 1)
+        else changes r (Wilber.rightRequests l.size past) (x - l.size - 1)
       else 0
 
 /-- Total changes made while processing a sequence online. -/

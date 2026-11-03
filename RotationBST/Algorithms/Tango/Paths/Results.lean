@@ -21,6 +21,8 @@ theorem requested_root_path (reference : Tree) (past : List Nat) (x : Nat) (vali
 
 end RotationBST.Tango.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract,
   RotationBST.Bounds.Interleave.Wilber.Abstract, RotationBST.Algorithms.Tango.Paths.Abstract,

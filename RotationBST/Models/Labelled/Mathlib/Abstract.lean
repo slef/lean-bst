@@ -28,6 +28,8 @@ theorem numNodes_toBinaryTree (t : Tree) : (toBinaryTree t).numNodes = t.size :=
 end RotationBST.Representation
 
 -- Explicit reading boundary; proof bodies remain behind the bridge.
+/-- info: abstract audit passed for `RotationBST.Representation`: 4 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Representation allowing [
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Labelled.Mathlib.Definitions.Abstract]

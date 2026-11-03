@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Structures.SplitTree.Multiway.Context.Defs
+public import RotationBST.Structures.SplitTree.Multiway.Context.Abstract
 public import RotationBST.Structures.SplitTree.Multiway.Edges.Bounds
 
 @[expose] public section

@@ -27,5 +27,7 @@ def moveToRootAlgorithm : Algorithm where
 
 end RotationBST
 
+/-- info: abstract audit passed for `RotationBST.MoveToRoot.Results`: 1 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.MoveToRoot.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.MoveToRoot.Algorithm.Abstract]

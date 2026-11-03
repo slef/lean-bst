@@ -4,7 +4,7 @@ public import RotationBST.Bounds.Interleave.Transition.Intervals
 import Mathlib.Data.List.Nodup
 
 @[expose] public section
-namespace RotationBST.Tango
+namespace RotationBST.Wilber
 
 theorem transitionKeys_bounds (reference : Tree) (lo : Nat) (actual : Tree) (x : Nat)
     (h : x ∈ transitionKeys reference lo actual) : lo ≤ x ∧ x < lo + reference.size := by
@@ -82,4 +82,4 @@ theorem transitionKeys_nodup (reference : Tree) (lo : Nat) (actual : Tree) :
       change (point :: (transitionKeys l lo actual ++ transitionKeys r (lo + l.size + 1) actual)).Nodup
       exact List.nodup_cons.mpr ⟨fun hp => (List.mem_append.mp hp).elim hn.1 hn.2, child⟩
 
-end RotationBST.Tango
+end RotationBST.Wilber

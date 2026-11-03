@@ -1,11 +1,12 @@
 module
 
 public import RotationBST.Algorithms.Tango.Paths.Abstract
-public import RotationBST.Models.Labelled.AbstractBridge
+public import RotationBST.Models.Labelled.Labelling
 import Mathlib.Data.List.Perm.Basic
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 @[simp] theorem parts_flatten (d : PathDecomposition) : d.parts.flatten = d.1 ++ d.2.flatten := by
   rcases d with ⟨head, rest⟩

@@ -35,8 +35,10 @@ theorem access {h : Nat} {t : Multiway} (valid : Balanced h t)
 
 end RotationBST.Arboral.Split.Multiway.Finger.Binary.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Binary.Results`: 4 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Binary.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Defs,
-  RotationBST.Structures.SplitTree.Finger.Binary.Defs,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
+  RotationBST.Structures.SplitTree.Finger.Binary.Abstract,
   RotationBST.Bounds.StaticTree.Definitions.Abstract, RotationBST.Algorithms.Splay.Algorithm.Abstract,
   RotationBST.Models.Pointer.Model, RotationBST.Models.Pointer.Machine.Abstract, RotationBST.Models.Online.Abstract]

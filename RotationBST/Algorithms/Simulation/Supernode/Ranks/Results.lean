@@ -59,6 +59,8 @@ theorem retained_interval {P : Finset Point}
 
 end RotationBST.Arboral.Online.Supernode.Ranks.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Ranks.Results`: 6 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Online.Supernode.Ranks.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Pointer.Lazy.Skeleton.Abstract,
   RotationBST.Models.Region.Abstract,

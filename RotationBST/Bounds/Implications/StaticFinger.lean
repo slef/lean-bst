@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Bounds.Implications.WeightedEntropy
 public import RotationBST.Bounds.Implications.Properties
+public import RotationBST.Bounds.Implications.SquareSum
 
 @[expose] public section
 
@@ -14,12 +15,12 @@ theorem fingerWeight_pos (f x : Nat) : 0 < fingerWeight f x := by
   positivity
 
 theorem squareSum_finset (n : Nat) :
-    ∑ i ∈ Finset.range n, (((i : ℝ) + 1) ^ 2)⁻¹ = Recency.squareSum n := by
-  simpa only [List.toFinset_range, Recency.squareSum] using
+    ∑ i ∈ Finset.range n, (((i : ℝ) + 1) ^ 2)⁻¹ = squareSum n := by
+  simpa only [List.toFinset_range, squareSum] using
     List.sum_toFinset (fun i : Nat => (((i : ℝ) + 1) ^ 2)⁻¹) (l := List.range n) List.nodup_range
 
 theorem fingerWeight_left (f : Nat) :
-    ∑ i ∈ Finset.range (f + 1), fingerWeight f i = Recency.squareSum (f + 1) := by
+    ∑ i ∈ Finset.range (f + 1), fingerWeight f i = squareSum (f + 1) := by
   have hd : ∑ i ∈ Finset.range (f + 1), fingerWeight f i =
       ∑ i ∈ Finset.range (f + 1), ((((f - i : Nat) : ℝ) + 1) ^ 2)⁻¹ := by
     apply Finset.sum_congr rfl
@@ -32,7 +33,7 @@ theorem fingerWeight_left (f : Nat) :
   rw [href, squareSum_finset]
 
 theorem fingerWeight_right (f m : Nat) :
-    ∑ i ∈ Finset.range m, fingerWeight f (f + 1 + i) ≤ Recency.squareSum m := by
+    ∑ i ∈ Finset.range m, fingerWeight f (f + 1 + i) ≤ squareSum m := by
   rw [← squareSum_finset]
   apply Finset.sum_le_sum
   intro i _
@@ -52,13 +53,13 @@ theorem fingerWeight_sum (n f : Nat) : ∑ i ∈ Finset.range n, fingerWeight f 
       Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono h)
         (fun i _ _ => (fingerWeight_pos f i).le)
     rw [fingerWeight_left] at hs
-    have := Recency.squareSum_le_two (f + 1)
+    have := squareSum_le_two (f + 1)
     linarith
   · have hn : n = (f + 1) + (n - (f + 1)) := by omega
     rw [hn, Finset.sum_range_add, fingerWeight_left]
     have hr := fingerWeight_right f (n - (f + 1))
-    have h₁ := Recency.squareSum_le_two (f + 1)
-    have h₂ := Recency.squareSum_le_two (n - (f + 1))
+    have h₁ := squareSum_le_two (f + 1)
+    have h₂ := squareSum_le_two (n - (f + 1))
     linarith
 
 theorem finger_log_weight (f x : Nat) :

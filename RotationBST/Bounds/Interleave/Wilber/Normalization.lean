@@ -4,7 +4,7 @@ public import RotationBST.Bounds.Interleave.Wilber.Abstract
 import Mathlib.Tactic.SplitIfs
 
 @[expose] public section
-namespace RotationBST.Tango
+namespace RotationBST.Wilber
 
 /-- Restrict an absolute history to an interval and translate it to local ranks. -/
 def localRequests (lo high : Nat) (xs : List Nat) : List Nat :=
@@ -74,4 +74,4 @@ theorem absoluteInterleave_eq (t : Tree) (xs : List Nat) (valid : ∀ x ∈ xs, 
   intro x hx
   simpa using valid x hx
 
-end RotationBST.Tango
+end RotationBST.Wilber

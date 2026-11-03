@@ -1,7 +1,7 @@
 module
 
 public import RotationBST.Models.Pointer.Model
-public import RotationBST.Models.Rotation.Connectivity.AbstractBridge
+public import RotationBST.Models.Rotation.Connectivity.Proofs
 
 @[expose] public section
 

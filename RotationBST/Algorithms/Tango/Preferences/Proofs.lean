@@ -5,6 +5,7 @@ public import RotationBST.Bounds.Interleave.Basic
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 theorem runs_eq (trace : List Bool) :
     runs trace = alternations trace + if trace = [] then 0 else 1 := by

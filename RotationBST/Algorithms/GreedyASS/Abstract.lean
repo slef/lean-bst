@@ -9,7 +9,7 @@ public import RotationBST.Algorithms.GreedyASS.AbstractBridge
 geometric algorithm, and every legal completion of the current row contains
 its points, so it is the unique minimum-cardinality completion of that row.
 This local minimum is not a claim of global (dynamic) optimality. -/
-namespace RotationBST.Arboral.Results
+namespace RotationBST.Arboral.GreedyASS.Results
 
 /-- The standard empty-rectangle sweep completes the current row. -/
 theorem greedy_step {n time request : Nat} {P : Finset Point}
@@ -36,9 +36,11 @@ theorem greedy_minimum {n time request : Nat} {P : Finset Point} {keys : Finset 
   · rintro rfl
     exact sweep_greedy history satisfied valid
 
-end RotationBST.Arboral.Results
+end RotationBST.Arboral.GreedyASS.Results
 
-#check_bst_abstract RotationBST.Arboral.Results allowing [
+/-- info: abstract audit passed for `RotationBST.Arboral.GreedyASS.Results`: 4 root declarations -/
+#guard_msgs in
+#check_bst_abstract RotationBST.Arboral.GreedyASS.Results allowing [
   RotationBST.Models.Geometric.Definitions.Abstract,
   RotationBST.Models.Geometric.Online.Abstract,
   RotationBST.Algorithms.GreedyASS.Algorithm.Abstract]

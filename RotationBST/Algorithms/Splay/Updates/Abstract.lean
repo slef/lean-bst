@@ -50,6 +50,8 @@ theorem balance_initially_empty (execution : LocalExecution s ns t c) (empty : f
 end RotationBST.Splay.Updates.Results
 
 -- Explicit reading boundary; proof bodies remain behind the bridge.
+/-- info: abstract audit passed for `RotationBST.Splay.Updates.Results`: 7 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Splay.Updates.Results allowing [
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Online.Abstract,

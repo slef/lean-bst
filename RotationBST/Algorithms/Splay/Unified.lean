@@ -10,6 +10,7 @@ public import RotationBST.Bounds.Implications.StaticFinger
 /-! The unified bound here is Sleator--Tarjan's fixed-finger theorem (1985,
 Theorem 5), not the later dynamic unified bound conjecture. -/
 namespace RotationBST.Splay
+open Bounds
 open Recency
 
 noncomputable def unifiedFixed (original : List Nat) (f x : Nat) : ℝ :=

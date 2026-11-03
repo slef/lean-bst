@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Structures.SplitTree.Finger.Defs
+public import RotationBST.Structures.SplitTree.Finger.Abstract
 public import RotationBST.Structures.SplitTree.Multiway.Context.Proofs
 
 @[expose] public section

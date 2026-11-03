@@ -31,6 +31,8 @@ theorem unmark_in_component (outer : List Context.Frame) (boundary : Context.Bou
 
 end RotationBST.Tango.State.WholeEdits.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.WholeEdits.Results`: 2 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.WholeEdits.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Nesting.Defs, RotationBST.Algorithms.Tango.State.Context.Defs,

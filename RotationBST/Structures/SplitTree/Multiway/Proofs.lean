@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Structures.SplitTree.Multiway.Defs
+public import RotationBST.Structures.SplitTree.Multiway.Abstract
 public import RotationBST.Models.Rotation.Rotations
 import Mathlib.Data.Nat.Basic
 

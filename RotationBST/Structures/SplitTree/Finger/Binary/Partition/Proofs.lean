@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Partition.Defs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Conversion.Proofs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Bounds
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Cost.Proofs
-public import RotationBST.Models.Rotation.Connectivity.AbstractBridge
+public import RotationBST.Models.Rotation.Connectivity.Proofs
 
 @[expose] public section
 namespace RotationBST.Arboral.Split.Multiway.Finger

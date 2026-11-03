@@ -27,6 +27,8 @@ end RotationBST.Splay.Results
 
 -- The readable foundations below contain the model, executable algorithm and
 -- its correctness certificate; the potential proof is outside this boundary.
+/-- info: abstract audit passed for `RotationBST.Splay.Results`: 2 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Splay.Results allowing [RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Online.Abstract, RotationBST.Models.Pointer.Machine.Abstract,
   RotationBST.Algorithms.Splay.Algorithm.Abstract, RotationBST.Algorithms.Splay.Online.Abstract]

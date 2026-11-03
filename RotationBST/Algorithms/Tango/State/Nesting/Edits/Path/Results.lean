@@ -40,6 +40,8 @@ theorem switch_in_path_bound (fs : List Context.Frame) (unmarked : ∀ f ∈ fs,
 
 end RotationBST.Tango.State.PathEdits.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.PathEdits.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.PathEdits.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Nesting.Defs, RotationBST.Algorithms.Tango.State.Context.Defs,

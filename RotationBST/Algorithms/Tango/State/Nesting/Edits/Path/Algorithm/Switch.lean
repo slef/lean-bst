@@ -4,6 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Nesting.Edits.Path.Algorithm.Pr
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
+open Wilber
 open Context
 
 /-- A compiled preference switch retains the same logarithmic bound as the

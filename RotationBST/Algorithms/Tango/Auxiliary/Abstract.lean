@@ -1,8 +1,7 @@
 module
 
 import RotationBST.Audit.Check
-public import RotationBST.Algorithms.Tango.Auxiliary.Execution
-public import RotationBST.Algorithms.Tango.Auxiliary.Interval.Results
+public import RotationBST.Algorithms.Tango.Auxiliary.AbstractBridge
 
 @[expose] public section
 namespace RotationBST.Tango.Auxiliary.Results
@@ -36,6 +35,8 @@ theorem join (left right : Region) (attached : left.fringe.getLast? = some right
 
 end RotationBST.Tango.Auxiliary.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.Auxiliary.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.Auxiliary.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Pointer.Lazy.Skeleton.Abstract,
   RotationBST.Models.Pointer.Traces, RotationBST.Models.Pointer.Machine.Abstract,

@@ -55,6 +55,8 @@ theorem switch_left (s l r : MarkedTree) (same : s.nesting = (MarkedTree.node l 
 
 end RotationBST.Tango.State.Edits.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.Edits.Results`: 6 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.Edits.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Nesting.Defs, RotationBST.Algorithms.Tango.State.Nesting.Edits.Defs,

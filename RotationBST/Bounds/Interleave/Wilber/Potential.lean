@@ -4,7 +4,7 @@ public import RotationBST.Bounds.Interleave.Wilber.Cut
 public import RotationBST.Bounds.Interleave.Transition.Distinct
 
 @[expose] public section
-namespace RotationBST.Tango.Wilber
+namespace RotationBST.Wilber
 open Arboral
 
 def potential : Tree → Nat → Tree → List Nat → Nat
@@ -95,4 +95,4 @@ theorem amortized_step (reference : Tree) (lo : Nat) (past : List Nat)
   have := charges_le reference lo s
   omega
 
-end RotationBST.Tango.Wilber
+end RotationBST.Wilber

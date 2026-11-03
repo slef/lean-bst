@@ -19,6 +19,8 @@ theorem snapshot (t : Tree) (p : Nat → ℝ) (nonnegative : ∀ i, 0 ≤ p i)
 end RotationBST.Splay.Results
 
 -- Explicit reading boundary; proof bodies remain behind the bridge.
+/-- info: abstract audit passed for `RotationBST.Splay.Results`: 1 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Splay.Results allowing [
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Online.Abstract,

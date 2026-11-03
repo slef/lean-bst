@@ -46,6 +46,8 @@ theorem update_sequence (s reference : MarkedTree) (updates : List PreferenceUpd
 
 end RotationBST.Tango.State.Preferences.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.Preferences.Results`: 5 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.Preferences.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Canonical.Defs, RotationBST.Bounds.Interleave.Wilber.Abstract,

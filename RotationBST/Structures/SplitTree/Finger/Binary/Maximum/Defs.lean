@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Structures.SplitTree.Finger.Binary.Defs
+public import RotationBST.Structures.SplitTree.Finger.Binary.Abstract
 
 @[expose] public section
 namespace RotationBST.Arboral.Split.Multiway.Finger

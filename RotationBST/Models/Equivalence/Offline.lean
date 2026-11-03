@@ -2,7 +2,7 @@ module
 
 public import RotationBST.Models.Region.View.Rotations
 public import RotationBST.Structures.Treap.Execution
-public import RotationBST.Models.Rotation.Connectivity.AbstractBridge
+public import RotationBST.Models.Rotation.Connectivity.Proofs
 
 @[expose] public section
 namespace RotationBST.Arboral

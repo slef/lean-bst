@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Structures.SplitTree.Multiway.Context.Defs
+public import RotationBST.Structures.SplitTree.Multiway.Context.Abstract
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Defs
 
 @[expose] public section

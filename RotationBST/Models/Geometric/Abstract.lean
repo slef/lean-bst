@@ -42,6 +42,8 @@ theorem fixed_tree_view (t : Tree) (lo : Nat) (P : Finset Point)
 
 end RotationBST.Arboral.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Results`: 6 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Geometric.Definitions.Abstract,
   RotationBST.Models.Geometric.Online.Abstract, RotationBST.Models.Geometric.Offline.Abstract,

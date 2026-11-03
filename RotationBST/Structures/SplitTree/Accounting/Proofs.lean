@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Structures.SplitTree.Accounting.Defs
+public import RotationBST.Structures.SplitTree.Accounting.Abstract
 
 @[expose] public section
 namespace RotationBST.Arboral.Split

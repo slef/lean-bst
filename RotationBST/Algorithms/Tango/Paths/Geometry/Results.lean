@@ -25,6 +25,8 @@ theorem suffix_boundaries (reference : Tree) (past : List Nat) {path : List Nat}
 
 end RotationBST.Tango.Paths.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.Paths.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.Paths.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract,
   RotationBST.Algorithms.Tango.Paths.Abstract, RotationBST.Algorithms.Tango.Paths.Geometry.Defs,

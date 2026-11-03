@@ -55,6 +55,8 @@ theorem untouched {time : Nat} {P : Finset Point} {keys : Finset Nat}
 
 end RotationBST.Arboral.Online.Supernode.Layer.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Layer.Results`: 5 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Online.Supernode.Layer.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Pointer.Lazy.Skeleton.Abstract,
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Structures.Treap.Abstract,

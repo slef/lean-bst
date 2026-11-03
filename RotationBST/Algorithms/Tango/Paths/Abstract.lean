@@ -5,6 +5,7 @@ public import RotationBST.Algorithms.Tango.Definitions.Abstract
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 /-- A component beginning at the current root, and the remaining components. -/
 abbrev PathDecomposition := List Nat × List (List Nat)

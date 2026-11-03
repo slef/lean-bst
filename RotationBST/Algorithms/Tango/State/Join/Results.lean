@@ -41,6 +41,8 @@ theorem interior (s middle : MarkedTree) (i : Nat)
 
 end RotationBST.Tango.State.Joins.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.Joins.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.Joins.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Rebuild.Defs, RotationBST.Algorithms.Tango.State.Splay.Defs,

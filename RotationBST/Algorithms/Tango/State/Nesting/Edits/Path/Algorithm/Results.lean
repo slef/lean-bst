@@ -38,6 +38,8 @@ theorem switch_preference (s : MarkedTree) (fs : List Frame) (unmarked : âˆ€ g â
 
 end RotationBST.Tango.State.PathAlgorithm.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.PathAlgorithm.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.PathAlgorithm.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Context.Defs, RotationBST.Algorithms.Tango.State.Context.Fringe.Defs,

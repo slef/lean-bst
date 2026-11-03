@@ -5,6 +5,7 @@ public import RotationBST.Algorithms.Splay.Unified
 @[expose] public section
 
 namespace RotationBST.Splay
+open Bounds
 open Recency
 
 /-- Telescope the changing mixed-weight potential along the actual splay run. -/

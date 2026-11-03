@@ -37,6 +37,8 @@ theorem accounting (s : MarkedTree) : 0 ≤ s.potential ∧
 
 end RotationBST.Tango.State.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.Results`: 4 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract, RotationBST.Algorithms.Tango.Paths.Abstract,

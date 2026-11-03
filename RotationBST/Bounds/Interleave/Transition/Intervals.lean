@@ -3,7 +3,7 @@ module
 public import RotationBST.Bounds.Interleave.Transition.Top
 
 @[expose] public section
-namespace RotationBST.Tango
+namespace RotationBST.Wilber
 
 theorem topIn_nested (t : Tree) (lo low high innerLow innerHigh root : Nat)
     (top : topIn t lo low high = some root)
@@ -53,4 +53,4 @@ theorem transition_exists (t : Tree) (low cut high : Nat)
   · exact topIn_exists t 0 (cut + 1) high (Nat.zero_le _) (by simpa using upper) split
   · exact topIn_exists t 0 low (cut + 1) (Nat.zero_le _) (by simp only [Nat.zero_add]; omega) (by omega)
 
-end RotationBST.Tango
+end RotationBST.Wilber

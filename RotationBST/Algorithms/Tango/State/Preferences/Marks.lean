@@ -4,6 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Nesting.Edits.Whole
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 open MarkedTree
 
 /-- Setting a preference is either a no-op, a first join, or a switch. All three

@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Partition.Defs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Proofs
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Cost.Proofs
-public import RotationBST.Models.Rotation.Connectivity.AbstractBridge
+public import RotationBST.Models.Rotation.Connectivity.Proofs
 
 @[expose] public section
 namespace RotationBST.Arboral.Split.Multiway.Finger

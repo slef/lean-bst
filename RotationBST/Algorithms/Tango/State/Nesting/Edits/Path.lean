@@ -5,6 +5,7 @@ public import RotationBST.Algorithms.Tango.State.Nesting.Edits.Path.Algorithm.Sw
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 open MarkedTree
 
 /-- Mark an edge anywhere within a reference component. The operation is

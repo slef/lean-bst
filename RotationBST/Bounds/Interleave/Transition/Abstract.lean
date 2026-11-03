@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Rotation.Abstract
 
 @[expose] public section
-namespace RotationBST.Tango
+namespace RotationBST.Wilber
 
 /-- The shallowest node in the half-open key interval `[low, high)`, in a tree
 whose inorder interval starts at `lo`. Empty intervals return `none`. -/
@@ -28,4 +28,4 @@ def transitionKeys : Tree → Nat → Tree → List Nat
       (transition actual lo (lo + l.size) (lo + l.size + 1 + r.size)).toList ++
       transitionKeys l lo actual ++ transitionKeys r (lo + l.size + 1) actual
 
-end RotationBST.Tango
+end RotationBST.Wilber

@@ -28,8 +28,10 @@ theorem rebuilding {h : Nat} {t : Multiway} (valid : Balanced h t)
 
 end RotationBST.Arboral.Split.Multiway.Partition.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Partition.Results`: 2 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Split.Multiway.Partition.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Defs,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,
   RotationBST.Structures.SplitTree.Multiway.Join.Compact.Defs,
   RotationBST.Structures.SplitTree.Multiway.Partition.Defs]

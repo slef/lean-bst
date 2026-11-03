@@ -4,7 +4,7 @@ public import RotationBST.Bounds.Abstract
 
 @[expose] public section
 
-namespace RotationBST.Splay
+namespace RotationBST.Bounds
 
 /-- One request's best frequency, static-finger, or working-set logarithm. -/
 noncomputable def unifiedCharge (n f : Nat) (original past : List Nat) (x : Nat) : ℝ :=
@@ -17,4 +17,4 @@ noncomputable def unifiedSum (n f : Nat) (original : List Nat) : List Nat → Li
   | _, [] => 0
   | past, x :: xs => unifiedCharge n f original past x + unifiedSum n f original (past ++ [x]) xs
 
-end RotationBST.Splay
+end RotationBST.Bounds

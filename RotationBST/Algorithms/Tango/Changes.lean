@@ -5,6 +5,7 @@ public import RotationBST.Algorithms.Tango.Definitions.Abstract
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 theorem interleave_step (t : Tree) (past : List Nat) (x : Nat) (valid : x < t.size) :
     interleave t (past ++ [x]) = interleave t past + changes t past x := by

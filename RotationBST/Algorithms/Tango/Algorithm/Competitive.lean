@@ -6,6 +6,7 @@ public import RotationBST.Algorithms.Tango.Changes
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 /-- The online policy costs logarithmically in reference height per preferred
 path change, plus one final component access per request. -/

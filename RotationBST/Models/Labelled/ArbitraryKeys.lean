@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Models.Labelled.AbstractBridge
+public import RotationBST.Models.Labelled.Labelling
 
 @[expose] public section
 

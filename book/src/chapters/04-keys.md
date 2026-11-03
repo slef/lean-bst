@@ -2,13 +2,13 @@
 
 Part I worked entirely with shapes, where a node's key is its inorder rank. This chapter proves that nothing was lost. A shape on $n$ nodes is the same thing as a BST on any fixed list of $n$ keys. Rotations, root accesses and whole executions on shapes are exactly the corresponding operations on labelled trees, with the same costs. The local "left smaller, right larger" invariant is equivalent to the inorder formulation used throughout. Finally, the shape type is Mathlib's `BinaryTree Unit` under another name.
 
-All theorems here are in `Representation/Abstract.lean`, `Representation/Ordering/Abstract.lean` and `Representation/Mathlib/Abstract.lean`. Their statements mention only the model definitions of [Chapter 1](shapes.html) and [Chapter 2](rotations.html), the labelled counterparts introduced next, and three small definitions in this chapter.
+All theorems here are in `Models/Labelled/Abstract.lean`, `Models/Labelled/Ordering/Abstract.lean` and `Models/Labelled/Mathlib/Abstract.lean`. Their statements mention only the model definitions of [Chapter 1](shapes.html) and [Chapter 2](rotations.html), the labelled counterparts introduced next, and three small definitions in this chapter.
 
 ## Shapes and canonical labels
 
 ### Labelled rotations, accesses and executions
 
-`Model/Abstract.lean` defines the labelled versions of the three relations of Part I, transcribed constructor by constructor. They are the textbook notions, stated for keys of an arbitrary type `α`.
+`Models/Rotation/Abstract.lean` defines the labelled versions of the three relations of Part I, transcribed constructor by constructor. They are the textbook notions, stated for keys of an arbitrary type `α`.
 
 @decl RotationBST.LabelledTree.Rotate
 
@@ -54,7 +54,7 @@ The figure runs the shape model with the ranks displayed as words. Each rotation
 
 ## The textbook invariant
 
-So far "BST" has meant "labelled tree with a prescribed sorted inorder list". The textbook definition is local instead: at every node, keys in the left subtree are smaller and keys in the right subtree are larger. `Representation/Ordering/Definitions/Abstract.lean` states it in that form:
+So far "BST" has meant "labelled tree with a prescribed sorted inorder list". The textbook definition is local instead: at every node, keys in the left subtree are smaller and keys in the right subtree are larger. `Models/Labelled/Ordering/Definitions/Abstract.lean` states it in that form:
 
 @decl RotationBST.LabelledTree.Ordered
 

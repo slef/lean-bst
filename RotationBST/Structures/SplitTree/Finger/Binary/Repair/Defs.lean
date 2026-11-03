@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Structures.SplitTree.Finger.Binary.Defs
+public import RotationBST.Structures.SplitTree.Finger.Binary.Abstract
 public import RotationBST.Structures.SplitTree.Multiway.Edges.Defs
 
 @[expose] public section

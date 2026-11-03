@@ -43,7 +43,8 @@ The project uses `autoImplicit = false` and explicit module exports.
 Following [abstractlean](https://github.com/slef/abstractlean), definitions and
 result statements are separated from proof implementations. Result abstracts
 use `#check_bst_abstract` to check that their statements depend only on explicitly
-listed readable foundations. The [checker](RotationBST/Audit/Check.lean)
+listed readable foundations, and pin the number of audited statements with
+`#guard_msgs`. The [checker](RotationBST/Audit/Check.lean)
 is local to this repository; upstream abstract registration is separate work.
 
 | Part | Topic | Entry point |

@@ -4,6 +4,7 @@ public import RotationBST.Algorithms.Tango.Preferences.Abstract
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 /-- One changed preference at an absolute reference key. `none` is its first
 setting; an existing equal preference produces no log entry. -/

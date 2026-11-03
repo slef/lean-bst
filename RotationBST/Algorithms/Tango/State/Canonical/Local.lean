@@ -5,6 +5,7 @@ public import RotationBST.Bounds.Interleave.Wilber.Normalization
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
+open Wilber
 
 /-- Subtree-local form of the canonical marking, used to verify the executable
 preference log against the absolute-rank specification. -/

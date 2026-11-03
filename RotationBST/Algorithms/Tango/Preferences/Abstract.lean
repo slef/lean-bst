@@ -4,6 +4,7 @@ public import RotationBST.Algorithms.Tango.Definitions.Abstract
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 /-- First setting plus subsequent changes of an observed region label. -/
 def runs (trace : List Bool) : Nat :=

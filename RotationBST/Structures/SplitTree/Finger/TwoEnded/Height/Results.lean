@@ -32,13 +32,15 @@ theorem restore (state : State) (left : state.left.Valid) (right : state.right.V
 
 end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Height.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Height.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Height.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Defs,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,
   RotationBST.Structures.SplitTree.Multiway.Join.Compact.Defs,
   RotationBST.Structures.SplitTree.Multiway.Partition.Defs,
-  RotationBST.Structures.SplitTree.Finger.Binary.Defs,
+  RotationBST.Structures.SplitTree.Finger.Binary.Abstract,
   RotationBST.Structures.SplitTree.Finger.Binary.Repair.Defs,
   RotationBST.Structures.SplitTree.Finger.Binary.Conversion.Defs,
   RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Defs,

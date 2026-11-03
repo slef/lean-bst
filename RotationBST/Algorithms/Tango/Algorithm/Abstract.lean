@@ -1,8 +1,7 @@
 module
 
 import RotationBST.Audit.Check
-public import RotationBST.Algorithms.Tango.Algorithm.Balanced
-public import RotationBST.Algorithms.Tango.Reference.Results
+public import RotationBST.Algorithms.Tango.Algorithm.AbstractBridge
 
 @[expose] public section
 namespace RotationBST.Tango.Algorithm.Results
@@ -49,6 +48,8 @@ theorem balanced_competitive (n : Nat) (p : Policy (balanced n))
 
 end RotationBST.Tango.Algorithm.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.Algorithm.Results`: 5 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.Algorithm.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.Algorithm.Definitions.Abstract,
   RotationBST.Algorithms.Tango.Reference.Abstract,

@@ -10,7 +10,7 @@ counts and BST costs agree up to the displayed constants; online, every
 geometric algorithm has a causal BST counterpart (proved in
 `Algorithms/Simulation`). Pointer-versus-rotation equivalence is in
 `Models/Pointer/Abstract`; labels-versus-shapes in `Models/Labelled/Abstract`. -/
-namespace RotationBST.Arboral.Results
+namespace RotationBST.Arboral.Equivalence.Results
 
 /-- Exact point-count equivalence with rooted-subtree BST executions.
 The initial tree is free; the conversion is offline. -/
@@ -50,9 +50,11 @@ theorem online_bst (n : Nat) (A : OnlineAlgorithm n) :
         algorithm.cost tree xs ≤ 6018 * rowCost A.step 0 ∅ xs + 6018 * n :=
   Online.Supernode.uniform_online_policy n A
 
-end RotationBST.Arboral.Results
+end RotationBST.Arboral.Equivalence.Results
 
-#check_bst_abstract RotationBST.Arboral.Results allowing [
+/-- info: abstract audit passed for `RotationBST.Arboral.Equivalence.Results`: 6 root declarations -/
+#guard_msgs in
+#check_bst_abstract RotationBST.Arboral.Equivalence.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract,
   RotationBST.Models.Pointer.Machine.Abstract,
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Geometric.Online.Abstract,

@@ -101,7 +101,7 @@ File names carry the abstractlean roles:
 | File | Role | Who reads it |
 |---|---|---|
 | `Abstract.lean` | Textbook surface: definitions a reader must trust, or theorem statements proved by one-line delegation. Ends with `#check_bst_abstract` when it states theorems. | Humans |
-| `AbstractBridge.lean` | The single proof import of a statements abstract; re-exports or assembles the proof modules. Never imports its abstract. | Nobody, by design |
+| `AbstractBridge.lean` | The single proof import of a statements abstract; a thin re-export of proof modules. Never imports its abstract. | Nobody, by design |
 | `Defs.lean` | Internal definitions of a proof cluster (state machines, cost counters). Readable foundations of internal contracts only. | Proof authors |
 | `Results.lean` | Internal lemma contract with `#check_bst_abstract`; allowlists may be long. | Proof authors |
 | anything else | Proofs. | Lean |
@@ -114,9 +114,10 @@ Consequences:
 - A statements `Abstract.lean` lists only readable foundations in its allowlist:
   `Abstract` modules of definitions, never `Defs`, `Results`, or proof modules.
   Long allowlists are a signal that a statement belongs in `Results.lean`.
-- Namespaces are independent of paths in Lean and were **not** changed in this
-  pass. Surface theorems live in `…Results` namespaces (`Splay.Results`,
-  `Tango.Results`, `Arboral.Results`, …); see follow-ups.
+- Surface theorems live in `<Topic>.Results` namespaces (`Splay.Results`,
+  `Wilber.Results`, `Arboral.Equivalence.Results`, …). Namespaces are
+  independent of paths in Lean; they were aligned with the parts in the third
+  pass, except for the `Arboral` root of the geometric definitions.
 
 ## What this pass did
 
@@ -178,37 +179,46 @@ checked by a full build:
   proof; the audit confirms the statements never reach the split trees.
 - `RotationBST.lean` lists the reading interface part by part.
 
-## Follow-ups, in suggested order
+## Third pass: conventions completed
 
-1. **Remaining bridges.** `Bounds/Interleave/Abstract` imports
-   `Wilber/Bound`, and the Tango surface abstracts (`Algorithm/Abstract`,
-   `Algorithm/Executable/Abstract`, `Auxiliary/Abstract`) import proof modules
-   directly; give each an `AbstractBridge.lean`. Move the proofs inside the
-   `Models/Rotation/Existence`, `Connectivity`, `Bounds/Normalization`, and
-   `Models/Labelled/*` bridges into named proof files.
-2. **Namespaces.** Rename where the path and the namespace disagree on the
-   textbook surface: the `Tango.*` interleave definitions and
-   `Tango.Results.*_lower_bound` to an `Interleave` or `Wilber` namespace;
-   `Splay.unifiedCharge` to `Bounds`; `StaticTree.Results` to
-   `Bounds.StaticTree`; `Arboral.Results` to `Geometric.Results` and
-   `GreedyASS.Results`; `MoveToRoot.Results.correct` is the only surface
-   theorem whose namespace already matches its path. Each rename touches the
-   book chapters and tests that mention the old names.
-3. **Layering leaks.** `Bounds/Implications/{Gaps,LogSum}` and
-   `Bounds/StaticTree/Comparison` import `Algorithms/Splay/*`;
-   `Models/Geometric/Offline/Optimal` uses the GreedyASS sweep to show a
-   minimum solution exists. Extract the logarithm and recency lemmas into
-   `Bounds/`, and prove existence from `full_row` directly.
-4. **Pin audit counts.** Wrap each `#check_bst_abstract` in `#guard_msgs` with
-   its root-declaration count, as the upstream convention recommends.
-5. **Surface of Structures.** `Structures/SplitTree/Abstract.lean` states one
-   accounting lemma; promote the finger-search contract (`construction`,
-   `minimum`, `search_depth`, `access`) into it. `Structures/Treap/Abstract`
-   has no statements file at all.
-6. **Book chapters.** The book covers Parts I and II and splay only; its build
-   lists the uncovered surface declarations. Add chapters for the geometric
-   model and its equivalences, Wilber's bound, GreedyASS, the causal
-   simulation, and Tango, mirroring the directory tree.
+- **Bridges everywhere.** Every statements abstract imports exactly one
+  `AbstractBridge.lean`. Bridges that carried proofs became named proof
+  modules (`Proofs.lean`, `Labelled/Labelling.lean`, `Splay/PointerBounds.lean`)
+  behind thin bridges; the Wilber, Tango, and auxiliary-tree abstracts gained
+  bridges.
+- **Namespaces follow the parts.** Wilber's definitions and lower bounds are
+  `RotationBST.Wilber.*` (Tango modules `open Wilber`); the unified charge is
+  `RotationBST.Bounds.unifiedCharge`; geometric results are split into
+  `Arboral.Results` (model facts), `Arboral.Equivalence.Results`,
+  `Arboral.GreedyASS.Results`, and `Arboral.Simulation.Results`. The `Arboral`
+  root namespace of the geometric definitions and the `Tango` namespace of
+  Tango's own vocabulary are unchanged.
+- **Layering.** `Bounds/` no longer imports splay proof modules for lemmas:
+  `logb_nat_le` lives in `Bounds/Implications/LogSum.lean` and the `1/k²`
+  partial sums in `Bounds/Implications/SquareSum.lean`, both under
+  `RotationBST.Bounds`.
+- **Split-tree surface.** `Structures/SplitTree/Abstract.lean` states the
+  finger contract (construction, minimum, search depth, splay access,
+  representation, nearer endpoint) and the accounting lemma; the 2–3–4 tree,
+  context, finger, and binary-view definitions it mentions are `Abstract`
+  modules again.
+- **Pinned audits.** Every `#check_bst_abstract` is wrapped in `#guard_msgs`
+  with its root-declaration count, so adding or removing a surface statement
+  without updating the pin fails the build.
+
+## Remaining follow-ups
+
+1. `Bounds/StaticTree/Comparison` uses splay's `locate` zipper search and its
+   pointer-trace lemma to execute a fixed tree on the pointer machine. Moving
+   `locate` into `Models/Pointer` would remove the last `Bounds` → `Algorithms`
+   proof dependency; it touches the splay abstract and the book's splay chapter.
+2. `Models/Geometric/Offline/Optimal` proves that a minimum offline solution
+   exists by running the GreedyASS sweep; a direct argument from `full_row`
+   would keep the model independent of the algorithm.
+3. The geometric definitions keep the historical `Arboral` namespace.
+4. Book chapters for the geometric model and equivalences, Wilber's bound,
+   GreedyASS, the causal simulation, Tango, and the structures. The book's
+   build lists the uncovered surface declarations.
 
 ## Where new results go
 

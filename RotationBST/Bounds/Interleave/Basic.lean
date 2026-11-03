@@ -4,7 +4,7 @@ public import RotationBST.Bounds.Interleave.Definitions.Abstract
 import Mathlib.Data.List.Induction
 
 @[expose] public section
-namespace RotationBST.Tango
+namespace RotationBST.Wilber
 
 theorem alternations_append (xs : List Bool) (x : Bool) :
     alternations (xs ++ [x]) = alternations xs + switch xs x := by
@@ -37,4 +37,4 @@ theorem switch_le_one (past : List Bool) (next : Bool) : switch past next ≤ 1 
   · omega
   · split <;> omega
 
-end RotationBST.Tango
+end RotationBST.Wilber

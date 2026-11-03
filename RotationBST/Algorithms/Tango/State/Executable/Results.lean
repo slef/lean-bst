@@ -26,6 +26,8 @@ theorem splay (s : MarkedTree) (rank : Nat) (valid : rank < s.region.size) :
 
 end RotationBST.Tango.State.Executable.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.Executable.Results`: 2 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.Executable.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Rebuild.Defs, RotationBST.Algorithms.Tango.State.Splay.Defs,

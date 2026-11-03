@@ -38,6 +38,8 @@ theorem merge_four (a b c d e f : Multiway) :
 
 end RotationBST.Arboral.Split.Multiway.Edges.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Edges.Results`: 4 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Split.Multiway.Edges.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Defs,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs]

@@ -7,6 +7,7 @@ public import RotationBST.Algorithms.Splay.WeightedBound
 @[expose] public section
 
 namespace RotationBST.Splay
+open Bounds
 open Recency
 
 /-- The changing recency weights telescope because reweighting after splaying
@@ -78,7 +79,7 @@ theorem initial_allowance (n : Nat) :
     have hl := Real.logb_le_logb_of_le (by norm_num : (1 : ℝ) < 2)
       (by positivity : 0 < (n : ℝ) + 1) (show (n : ℝ) + 1 ≤ 2 * n by linarith)
     rw [Real.logb_mul (by norm_num) (by positivity), Real.logb_self_eq_one (by norm_num)] at hl
-    have hnlog := logb_nat_le n
+    have hnlog := Bounds.logb_nat_le n
     have hlog : Real.logb 2 ((n : ℝ) + 1) ≤ (n.log2 : ℝ) + 2 := by linarith
     have hm := mul_le_mul_of_nonneg_left hlog (Nat.cast_nonneg (α := ℝ) n)
     have hnn : 0 ≤ (n : ℝ) * n.log2 := by positivity

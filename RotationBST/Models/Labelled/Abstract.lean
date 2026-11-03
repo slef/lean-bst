@@ -2,7 +2,7 @@ module
 
 import RotationBST.Audit.Check
 public import RotationBST.Models.Labelled.Ordering.Abstract
-public import RotationBST.Models.Labelled.Sequences
+public import RotationBST.Models.Labelled.AbstractBridge
 
 @[expose] public section
 
@@ -91,5 +91,7 @@ theorem execution_on_keys_iff (keys : List α) (distinct : keys.Nodup)
 end RotationBST.Representation
 
 -- Explicit reading boundary; proof bodies remain behind the bridge.
+/-- info: abstract audit passed for `RotationBST.Representation`: 12 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Representation allowing [
   RotationBST.Models.Rotation.Abstract]

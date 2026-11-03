@@ -6,7 +6,7 @@ public import RotationBST.Bounds.Interleave.Transition.Intervals
 public import RotationBST.Bounds.Interleave.Basic
 
 @[expose] public section
-namespace RotationBST.Tango.Wilber
+namespace RotationBST.Wilber
 open Arboral
 
 def primary (t : Tree) (low cut high : Nat) : Option Bool :=
@@ -114,4 +114,4 @@ theorem cut_bound {s u : Region} {low cut high x : Nat}
     · unfold cutPotential
       rw [labels_append, ite_eq_right inside, List.append_nil, hp]
 
-end RotationBST.Tango.Wilber
+end RotationBST.Wilber

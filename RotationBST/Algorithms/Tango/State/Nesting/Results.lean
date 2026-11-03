@@ -68,6 +68,8 @@ theorem locate_at (s : MarkedTree) (reference : Tree) (past : List Nat)
 
 end RotationBST.Tango.State.Nesting.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.State.Nesting.Results`: 10 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.State.Nesting.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Canonical.Defs, RotationBST.Algorithms.Tango.State.Nesting.Defs,

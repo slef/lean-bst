@@ -4,7 +4,7 @@ public import RotationBST.Bounds.Interleave.Wilber.Potential
 public import RotationBST.Models.Equivalence.Exact
 
 @[expose] public section
-namespace RotationBST.Tango.Wilber
+namespace RotationBST.Wilber
 open Arboral
 
 private theorem execution_valid {s t : Tree} {xs : List Nat} {cost : Nat}
@@ -72,4 +72,4 @@ theorem interleave_le_pointers (reference : Tree) {s t : Tree} {xs : List Nat} {
   have := interleave_le_ass reference size E
   omega
 
-end RotationBST.Tango.Wilber
+end RotationBST.Wilber

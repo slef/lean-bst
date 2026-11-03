@@ -4,6 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Nesting.Edits.Simulation
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
+open Wilber
 open Pointer.Lazy.Skeleton
 
 /-- Detach the preferred left component at a reference root. -/

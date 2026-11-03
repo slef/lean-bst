@@ -4,7 +4,7 @@ public import RotationBST.Bounds.Interleave.Definitions.Abstract
 public import RotationBST.Bounds.Interleave.Transition.Abstract
 
 @[expose] public section
-namespace RotationBST.Tango
+namespace RotationBST.Wilber
 
 /-- Region observations in absolute (rather than subtree-local) ranks. -/
 def labels (low cut high : Nat) (xs : List Nat) : List Bool :=
@@ -16,4 +16,4 @@ def absoluteInterleave : Tree → Nat → List Nat → Nat
   | .node l r, lo, xs => alternations (labels lo (lo + l.size) (lo + l.size + 1 + r.size) xs) +
       absoluteInterleave l lo xs + absoluteInterleave r (lo + l.size + 1) xs
 
-end RotationBST.Tango
+end RotationBST.Wilber

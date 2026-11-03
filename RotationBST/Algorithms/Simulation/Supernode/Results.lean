@@ -35,6 +35,8 @@ theorem restriction {P : Finset Point} {lo hi first last : Nat}
 
 end RotationBST.Arboral.Online.LastTouch.Supernode.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Online.LastTouch.Supernode.Results`: 4 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Online.LastTouch.Supernode.Results allowing [
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Region.View.Abstract,
   RotationBST.Algorithms.Simulation.LastTouch.Defs,

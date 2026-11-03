@@ -5,6 +5,7 @@ public import RotationBST.Algorithms.Tango.Paths.Update
 
 @[expose] public section
 namespace RotationBST.Tango
+open Wilber
 
 theorem rootPath_bounds {t : Tree} {lo : Nat} {xs : List Nat} (path : RootPath t lo xs) :
     ∀ x ∈ xs, lo ≤ x ∧ x < lo + t.size := by

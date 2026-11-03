@@ -4,7 +4,7 @@ public import RotationBST.Bounds.Interleave.Transition.Top
 public import RotationBST.Models.Region.Holes
 
 @[expose] public section
-namespace RotationBST.Tango
+namespace RotationBST.Wilber
 open Arboral Pointer.Lazy.Skeleton
 
 private theorem covering_hole (s : Region) (lo low high : Nat)
@@ -103,4 +103,4 @@ theorem transition_stable {s u : Region} {low cut high point : Nat}
       exact topIn_stable same (Nat.zero_le _) (by simp only [Nat.zero_add]; omega)
         (by omega) old untouched
 
-end RotationBST.Tango
+end RotationBST.Wilber

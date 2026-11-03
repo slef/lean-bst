@@ -5,6 +5,7 @@ public import RotationBST.Algorithms.Tango.Preferences.Updates.Comparison
 
 @[expose] public section
 namespace RotationBST.Tango.Updates.Results
+open Wilber
 
 /-- The log contains genuine changes, with no repeated node in one request. -/
 theorem valid_log (t : Tree) (lo : Nat) (past : List Nat) (x : Nat) :
@@ -37,6 +38,8 @@ theorem offline_bound (reference : Tree) {s t : Tree} {xs : List Nat} {r : Nat}
 
 end RotationBST.Tango.Updates.Results
 
+/-- info: abstract audit passed for `RotationBST.Tango.Updates.Results`: 5 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Tango.Updates.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract,
   RotationBST.Algorithms.Tango.Preferences.Abstract, RotationBST.Algorithms.Tango.Preferences.Updates.Abstract]

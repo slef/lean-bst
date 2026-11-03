@@ -57,7 +57,7 @@ theorem workingSet_le_static (n : Nat) (xs : List Nat) (valid : ∀ x ∈ xs, x 
   have hg := gapSum_le_entropy n xs valid
   have hn : (newCount [] xs : ℝ) ≤ n := by exact_mod_cast newCount_le n xs valid
   have hp := mul_le_mul_of_nonneg_right hn (logb_nat_nonneg n)
-  have hlog := mul_le_mul_of_nonneg_left (Recency.logb_nat_le n) (Nat.cast_nonneg (α := ℝ) n)
+  have hlog := mul_le_mul_of_nonneg_left (logb_nat_le n) (Nat.cast_nonneg (α := ℝ) n)
   unfold staticCost
   nlinarith
 

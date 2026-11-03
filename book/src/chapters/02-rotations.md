@@ -47,5 +47,5 @@ Sequences preserve size, by induction using `Rotate.size_eq`:
 @stmt RotationBST.Rotations.size_eq
 
 ::: note Where these live
-`Rotate` and `Rotations` are in `Model/Abstract.lean`, the most basic reading module. The five lemmas above are in `Model/Basic.lean` and `Model/Rotations.lean`. They are not part of any theorem statement; they are shown here because they are the first sanity checks a reader would want.
+`Rotate` and `Rotations` are in `Models/Rotation/Abstract.lean`, the most basic reading module. The five lemmas above are in `Models/Rotation/Basic.lean` and `Models/Rotation/Rotations.lean`. They are not part of any theorem statement; they are shown here because they are the first sanity checks a reader would want.
 :::

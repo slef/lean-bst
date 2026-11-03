@@ -18,9 +18,11 @@ theorem before_remainder {h : Nat} {t : Multiway} (valid : Balanced h t) (rest :
 
 end RotationBST.Arboral.Split.Multiway.Finger.Conversion.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Conversion.Results`: 2 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Conversion.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Defs,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,
-  RotationBST.Structures.SplitTree.Finger.Binary.Defs,
+  RotationBST.Structures.SplitTree.Finger.Binary.Abstract,
   RotationBST.Structures.SplitTree.Finger.Binary.Repair.Defs,
   RotationBST.Structures.SplitTree.Finger.Binary.Conversion.Defs]

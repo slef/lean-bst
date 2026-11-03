@@ -24,7 +24,9 @@ theorem nearer_endpoint {h : Nat} {t : Multiway} (valid : Balanced h t) (rank : 
 
 end RotationBST.Arboral.Split.Multiway.Finger.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Results`: 3 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Defs,
-  RotationBST.Structures.SplitTree.Multiway.Context.Defs,
-  RotationBST.Structures.SplitTree.Finger.Defs]
+  RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
+  RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
+  RotationBST.Structures.SplitTree.Finger.Abstract]

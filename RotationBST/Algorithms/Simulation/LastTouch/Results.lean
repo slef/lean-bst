@@ -21,6 +21,8 @@ theorem parent_boundary {n time request boundary key : Nat} {P : Finset Point} {
 
 end RotationBST.Arboral.Online.LastTouch.Results
 
+/-- info: abstract audit passed for `RotationBST.Arboral.Online.LastTouch.Results`: 2 root declarations -/
+#guard_msgs in
 #check_bst_abstract RotationBST.Arboral.Online.LastTouch.Results allowing [
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Region.View.Abstract,
   RotationBST.Algorithms.Simulation.LastTouch.Defs]
