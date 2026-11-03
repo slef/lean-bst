@@ -33,11 +33,9 @@ This is ordinary search by rank. At `node l r`, the root has rank `l.size` withi
 The returned [[RotationBST.Pointer.Config|Config]] has the subtree rooted at $x$ as its focus, and the context as its ancestor list. If `x` is out of range, the search falls off the tree and the focus is `.nil`.
 
 ::: check
-The library proves that `locate` does what this description says, for every rank in range. Plugging the context back around the focus gives the original tree. The focus is the node of rank `x`, which is [[RotationBST.Pointer.Config.key?|key?]] `= offset context + l.size`. The context is shorter than the tree size.
+The library proves that `locate` does what this description says, for every rank in range. Plugging the context back around the focus gives the original tree. The focus is the node of rank `x`, which is [[RotationBST.Pointer.Config.key?|key?]] `= offset context + l.size`. The context is shorter than the tree size. This is the lemma `Splay.locate_correct`.
 
-@stmt RotationBST.Splay.locate_correct
-
-The number of frames is also exactly the ordinary search depth, `(locate t x).context.length = StaticTree.depth t x` ([[RotationBST.StaticTree.locate_depth]], with `depth` from [Chapter 7](bounds.html)).
+The number of frames is also exactly the ordinary search depth: `(locate t x).context.length = t.depth x` (`Splay.locate_depth`, with [[RotationBST.Tree.depth]] from [Chapter 1](shapes.html)). Both lemmas are proof-level facts, outside the reading interface, so their Lean is not quoted here.
 :::
 
 ## The splaying steps
@@ -71,9 +69,7 @@ In each displayed transformation, the subtrees appear in the same left-to-right 
 - The library's tests separate zig-zig from rotating $x$ twice: `Splay.run` on a three-node left path, requesting key $0$, gives the right path, while [[RotationBST.moveToRoot]] gives a different tree.
 :::
 
-**Theorem (splaying a focus).** Let $x$ be the root of the subtree `node l r`, sitting below the ancestors `cs` in the tree `plug cs (node l r)`. Then `splayAt l r cs` is reached from that tree by a root access to $x$, whose rank is `offset cs + l.size`, using exactly `cs.length` rotations, one per ancestor.
-
-@stmt RotationBST.Splay.splayAt_correct
+**Theorem (splaying a focus).** Let $x$ be the root of the subtree `node l r`, sitting below the ancestors `cs` in the tree `plug cs (node l r)`. Then `splayAt l r cs` is reached from that tree by a root access to $x$, whose rank is `offset cs + l.size`, using exactly `cs.length` rotations, one per ancestor. In the library this is `Splay.splayAt_correct`, the lemma from which [[RotationBST.Splay.Results.correct]] below is derived.
 
 This is the invariant behind everything that follows; "root access" is in the sense of [Chapter 3](accesses.html). A zig uses one rotation for one frame, and a double step uses two rotations for two frames, so the count is exact.
 

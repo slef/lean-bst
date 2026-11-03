@@ -304,14 +304,14 @@ def referenceVectors : Array Json := Id.run do
     out := out.push <| Json.mkObj [("balanced", toJson n), ("tree", treeJson (Tango.balanced n))]
   return out
 
-open Geometric.Split in
+open SplitTree in
 def multiwayJson : Multiway → Json
   | .nil => Json.null
   | .two a b => Json.arr #[multiwayJson a, multiwayJson b]
   | .three a b c => Json.arr #[multiwayJson a, multiwayJson b, multiwayJson c]
   | .four a b c d => Json.arr #[multiwayJson a, multiwayJson b, multiwayJson c, multiwayJson d]
 
-open Geometric.Split in
+open SplitTree in
 /-- Balanced 2–3–4 trees of height `h`, with a pseudo-random choice of degrees. -/
 def randomMultiway (seed : Nat) : Nat → Multiway
   | 0 => .nil
@@ -326,7 +326,7 @@ def randomMultiway (seed : Nat) : Nat → Multiway
       | _ => .four (randomMultiway s₁ h) (randomMultiway s₂ h) (randomMultiway s₃ h)
           (randomMultiway s₄ h)
 
-open Geometric.Split Geometric.Split.Multiway.Finger in
+open SplitTree SplitTree.Multiway.Finger in
 def multiwayVectors : Array Json := Id.run do
   let mut out := #[]
   for i in [0:30] do
@@ -358,7 +358,7 @@ def vectors : Json := Id.run do
       splay := splay.push <| Json.mkObj [("tree", treeJson t), ("x", toJson x),
         ("context", Json.arr (c.context.map frameJson).toArray),
         ("result", treeJson u), ("cost", toJson k),
-        ("depth", toJson (StaticTree.depth t x))]
+        ("depth", toJson (Tree.depth t x))]
     if t.size ≤ 5 then
       for k in List.range (t.size + 1) do
         let s := Splay.Updates.split t k

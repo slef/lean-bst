@@ -24,6 +24,14 @@ Only `node`s represent keys. `nil` is an empty subtree, the "external node" of s
 
 Lean's `Nat` is the type of natural numbers, with truncated subtraction: $3 - 5 = 0$. The library uses subtraction only on branches where it cannot truncate, as in the search below.
 
+## Depth
+
+The depth of a key is the length of its search path, which is what a search pays in a tree that never changes:
+
+@decl RotationBST.Tree.depth
+
+`t.depth x` searches by rank. At `node l r`, the root has rank `l.size`. A smaller `x` continues in `l` with the same rank, and a larger one in `r` with rank `x - l.size - 1`; that subtraction is only evaluated when `x > l.size`, so it never truncates. Each step down adds one. On `nil` the result is $0$; this case only makes the function total and is never reached for ranks below `t.size`. Fixed-tree search costs ([Chapter 10](bounds.html)) and the split-tree finger bounds ([Chapter 21](split-trees.html)) are stated with it.
+
 ## Implicit keys
 
 Inorder visits the left subtree, then the root, then the right subtree. So in `node l r` the root has rank `l.size`: exactly `l.size` keys come before it. More generally, take a subtree whose smallest key has rank $lo$ in the whole tree. Its root has rank $lo + {}$`l.size`, its left subtree starts at $lo$, and its right subtree starts at $lo + {}$`l.size`$ + 1$.

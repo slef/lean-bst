@@ -40,7 +40,7 @@ Updates change the key set, so ranks must change too. The library keeps the shap
 
 @decl RotationBST.Splay.Updates.join
 
-`join l r` concatenates two key sets, all of `l` before all of `r`. On shapes this needs no hypothesis: the joined tree's inorder is `l`'s keys followed by `r`'s, by construction. It splays the maximum of `l`, rank `l.size - 1`, which leaves a root with an empty right subtree, and hangs `r` there. The pattern `.node a _` discards that right subtree, which is `.nil` after splaying the maximum ([[RotationBST.Splay.Updates.run_max]] proves this).
+`join l r` concatenates two key sets, all of `l` before all of `r`. On shapes this needs no hypothesis: the joined tree's inorder is `l`'s keys followed by `r`'s, by construction. It splays the maximum of `l`, rank `l.size - 1`, which leaves a root with an empty right subtree, and hangs `r` there. The pattern `.node a _` discards that right subtree, which is `.nil` after splaying the maximum (`Updates.run_max` proves this).
 
 @decl RotationBST.Splay.Updates.insert RotationBST.Splay.Updates.delete
 
@@ -105,7 +105,7 @@ Section 5 of the paper considers splaying less often. A conditional splay search
 ::: check
 - The weights are part of the *algorithm* here, unlike everywhere else in the splay chapters, where they are ghost data of the analysis. Comparing reals is not computable, so the definition is `noncomputable` and decides the threshold classically.
 - $W$ is the total weight of the current tree. Weights are indexed by rank and rotations preserve ranks, so $W$ is the same for every tree reached.
-- The returned number counts **restructuring rotations only**. A short search that does not splay still walks to $x$; it is not a zero-cost root access, and the conditional variant is not an [[RotationBST.Algorithm]] in the sense of [Chapter 6](online.html), because the tree it leaves need not have $x$ at the root. Its search cost is accounted for separately in the pointer model: [[RotationBST.Splay.conditionalStep_pointer]] shows that each conditional step is served by a pointer search of cost at most $1 + 3 \cdot \text{depth}$.
+- The returned number counts **restructuring rotations only**. A short search that does not splay still walks to $x$; it is not a zero-cost root access, and the conditional variant is not an [[RotationBST.Algorithm]] in the sense of [Chapter 6](online.html), because the tree it leaves need not have $x$ at the root. Its search cost is accounted for separately in the pointer model: `Splay.conditionalStep_pointer` shows that each conditional step is served by a pointer search of cost at most $1 + 3 \cdot \text{depth}$.
 :::
 
 **Theorem (long splays).** Fix positive weights $w$, and let $W$ be the total weight of the $n$ keys. For every initial tree and every sequence of valid requests, conditional splaying performs at most $2\sum_{i<n} \log_2(W/w(i))$ restructuring rotations in total. With unit weights, this is at most $2n\log_2 n$.

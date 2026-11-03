@@ -101,9 +101,7 @@ The proof works in the touched-region model of [Chapter 7](regions.html). It is 
 
 Fix a reference node $y$ with key interval $[\mathit{low}, \mathit{high})$, which it cuts after the key $\mathit{cut} = y$. Look at the keys of this interval in the *actual* tree at some moment. Exactly one of them is shallowest, and it is an ancestor of all the others, since a search for any key of the interval must pass through it. Call it the *top* of the interval. The top lies on one side of the cut. The **transition point** of $y$ is the top of the *other* side: the shallowest key in the region that does not contain the interval's top.
 
-@decl RotationBST.Wilber.topIn RotationBST.Wilber.transition
-
-`topIn t lo low high` searches the tree `t`, whose inorder interval starts at `lo`, for the shallowest rank in the half-open interval `[low, high)`. The search goes right while the current node is below `low` and left while it is at or above `high`. It stops at the first node inside the interval, or returns `none` if the interval contains no key. `transition t low cut high` takes the top of the whole interval. If the top is at most `cut`, it returns the top of the right part `[cut + 1, high)`, and otherwise the top of the left part `[low, cut + 1)`. The left part includes `cut`, as in `regions`.
+The proof defines these in `Bounds/Interleave/Transition/Defs.lean`. They are proof vocabulary, which no theorem statement mentions, so the book describes them without quoting the Lean. `topIn t lo low high` searches the tree `t`, whose inorder interval starts at `lo`, for the shallowest rank in the half-open interval `[low, high)`. The search goes right while the current node is below `low` and left while it is at or above `high`. It stops at the first node inside the interval, or returns `none` if the interval contains no key. `transition t low cut high` takes the top of the whole interval. If the top is at most `cut`, it returns the top of the right part `[cut + 1, high)`, and otherwise the top of the left part `[low, cut + 1)`. The left part includes `cut`, as in `regions`.
 
 Three facts about the actual tree make transition points useful. They are proved in `Bounds/Interleave/Transition/` and `Bounds/Interleave/Wilber/Cut.lean`.
 
@@ -118,9 +116,7 @@ The argument is a potential function. For each cut, let the potential be $1$ whe
 
 So the interleave quantity plus the total potential grows by at most twice the number of reference nodes whose transition points are touched. The last ingredient is that different cuts have *different* transition points:
 
-@decl RotationBST.Wilber.transitionKeys
-
-`transitionKeys reference lo actual` lists the transition points in the tree `actual` of all cuts of the reference tree, in preorder. A node whose right region is empty has no transition point, since then `transition` returns `none`. The proof shows that this list has no duplicates. A touched region of $k$ nodes therefore contains at most $k$ transition points, and each request adds at most $2k$ to interleave plus potential. Summing over the execution, and using that the potential starts at $0$ and is never negative, gives $\mathrm{IB}_P(X) \le 2 \cdot \mathrm{cost}$.
+The proof collects them with `transitionKeys reference lo actual`, which lists the transition points in the tree `actual` of all cuts of the reference tree, in preorder. A node whose right region is empty has no transition point, since then `transition` returns `none`. The proof shows that this list has no duplicates. A touched region of $k$ nodes therefore contains at most $k$ transition points, and each request adds at most $2k$ to interleave plus potential. Summing over the execution, and using that the potential starts at $0$ and is never negative, gives $\mathrm{IB}_P(X) \le 2 \cdot \mathrm{cost}$.
 
 ::: details Where the potential is in the library
 The potential and its accounting are internal. They are `cutPotential`, `potential` and `amortized_step` in `Bounds/Interleave/Wilber/Cut.lean` and `Potential.lean`, and `interleave_le_regions` in `Bound.lean`. None of them occurs in the statements above, which depend only on the definitions displayed in this chapter and the model definitions of Part I. The one-line proofs of those statements name the internal theorems (`Wilber.interleave_le_ass` and its siblings), which link to the source.
@@ -130,9 +126,9 @@ The potential and its accounting are internal. They are `cutPotential`, `potenti
 
 The argument is about intervals of the actual tree, which keeps changing. Its keys are global ranks, while `interleave` translates ranks into each subtree's local coordinates. The proof therefore uses a restatement in absolute ranks:
 
-@decl RotationBST.Wilber.labels RotationBST.Wilber.absoluteInterleave
+@decl RotationBST.Wilber.labels
 
-`labels low cut high xs` keeps the requests in `[low, high)` and labels them `x ≤ cut`. `absoluteInterleave t lo xs` sums the alternations of these labels over the nodes of `t`, a node at global rank `lo + l.size` having the interval `[lo, lo + l.size + 1 + r.size)`. Every node sees the whole sequence `xs` and filters it itself; nothing is translated. For valid sequences the two quantities agree (the internal lemma `absoluteInterleave_eq`), so the bound proved for `absoluteInterleave` is the bound for `interleave`. Tango's preferred paths are defined from the same absolute labels ([[Tango.decomposePaths]]): the last label at a node is its preferred child.
+`labels low cut high xs` keeps the requests in `[low, high)` and labels them `x ≤ cut`. The proof's internal `absoluteInterleave t lo xs` sums the alternations of these labels over the nodes of `t`, a node at global rank `lo + l.size` having the interval `[lo, lo + l.size + 1 + r.size)`. Every node sees the whole sequence `xs` and filters it itself; nothing is translated. For valid sequences the two quantities agree (the internal lemma `absoluteInterleave_eq`), so the bound proved for `absoluteInterleave` is the bound for `interleave`. Tango's preferred paths are defined from the same absolute labels ([[Tango.decomposePaths]]): the last label at a node is its preferred child.
 
 Switch the figure above to *preferred paths* to preview them. Each node prefers the side of its most recent request, and following preferences from the root down gives the paths that Tango keeps as auxiliary trees.
 

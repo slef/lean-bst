@@ -10,7 +10,7 @@ The point of this model is the next chapter. Each step is described by a single 
 
 A touched region is a tree whose leaves are either empty or entire untouched subtrees. The library already has this type: the *skeletons* of the lazy pointer simulation ([[Pointer.Lazy.Skeleton]], from [Chapter 6](pointer.html)). A skeleton is built from `node`, an active node of the region, and `hole t`, an untouched subtree `t` hanging below the region. `Skeleton.tree` fills the holes in, `Skeleton.size` counts only the active nodes, and `Skeleton.fringe` lists the hole subtrees in inorder.
 
-@decl RotationBST.Geometric.Region
+@decl RotationBST.Region
 
 `Region` is another name for the same type, so all the skeleton operations apply to regions unchanged.
 
@@ -20,11 +20,11 @@ Being *rooted* and *connected* is not a hypothesis: it is built into the type. A
 
 Regions do not store keys, so, as everywhere in the library, keys are inorder ranks computed with an offset `lo` ([Section 1.3](shapes.html#implicit-keys)). Two functions read a region in absolute ranks:
 
-@decl RotationBST.Geometric.Region.keys RotationBST.Geometric.Region.holes
+@decl RotationBST.Region.keys RotationBST.Region.holes
 
 `keys s lo` is the set of ranks of the active nodes when the region's leftmost key has rank `lo`. The root of `node l r` has rank `lo + l.tree.size`: the size of the *whole* left subtree, holes included, since untouched keys still come before it in inorder. `holes s lo` lists the hole subtrees with the rank at which each one starts. A region with $k$ active nodes has $k + 1$ holes, some of which may be empty trees.
 
-@decl RotationBST.Geometric.Region.Same
+@decl RotationBST.Region.Same
 
 `Same s t lo` says that two regions differ only in the arrangement of their active nodes. They have the same total size, the same active keys and the same holes at the same offsets. It is the invariant that a step preserves, stated in absolute ranks for the proofs of Wilber's bound ([Chapter 11](wilber.html)) and of the treap construction ([Chapter 20](treaps.html)).
 
@@ -42,7 +42,7 @@ It has the same fringe $[L, \mathtt{nil}, \mathtt{nil}, R]$, the same keys and t
 
 ## Steps and executions
 
-@decl RotationBST.Geometric.RegionStep
+@decl RotationBST.RegionStep
 
 A `RegionStep s t request` is a record of one search: a region `before` of the old tree `s`, a region `after` of the new tree `t`, a proof that both have the same fringe, and a proof that the request is one of the touched keys. The fringe condition is the whole content of "rearrange the touched nodes and leave everything else alone". It fixes the hole subtrees and their inorder order. Counting fringe entries, it also forces `before` and `after` to have the same number of active nodes, which then occupy the same ranks: `before` and `after` are `Same` at offset $0$.
 
@@ -52,10 +52,10 @@ A `RegionStep s t request` is a record of one search: a region `before` of the o
 - The new shape of the region is arbitrary. In particular, the request need not end at the root, and nothing limits how far the region is reshaped.
 :::
 
-@decl RotationBST.Geometric.RegionExecution
+@decl RotationBST.RegionExecution
 
 `RegionExecution s xs u cost` serves the requests `xs` one step at a time from `s`, ends at `u`, and charges each step the number of nodes in its `before` region. It has the same shape as [[RotationBST.Execution]] and [[RotationBST.Pointer.Execution]], with a region step in place of a root access or a pointer search.
 
 ::: note Where this model is used
-The region model is the hinge between trees and geometry. [Chapter 9](equivalence.html) proves that a set of points in the key–time plane is an offline solution of the geometric problem of [Chapter 8](geometry.html), with exactly $c$ points, if and only if some region execution, from some initial tree, has cost exactly $c$. Each direction rests on a heap invariant ([Chapter 20](treaps.html)). From a region execution, the touched points are the geometric solution, and the proof that they are arborally satisfied keeps the current tree a max-heap of the time each key was last touched ([[Geometric.lastTouch]], [[Geometric.HistoryHeap]]). Rearranging a region preserves this for free, since the touched nodes are on top and all share the latest time. From a geometric solution, the tree at each time is a treap keyed by the time each key is *next* touched, and the region touched at that time is the top of the treap ([[Geometric.Region.project]]).
+The region model is the hinge between trees and geometry. [Chapter 9](equivalence.html) proves that a set of points in the key–time plane is an offline solution of the geometric problem of [Chapter 8](geometry.html), with exactly $c$ points, if and only if some region execution, from some initial tree, has cost exactly $c$. Each direction rests on a heap invariant ([Chapter 20](treaps.html)). From a region execution, the touched points are the geometric solution, and the proof that they are arborally satisfied keeps the current tree a max-heap of the time each key was last touched (`Geometric.lastTouch`, `Geometric.HistoryHeap`). Rearranging a region preserves this for free, since the touched nodes are on top and all share the latest time. From a geometric solution, the tree at each time is a treap keyed by the time each key is *next* touched, and the region touched at that time is the top of the treap (`Region.project`).
 :::

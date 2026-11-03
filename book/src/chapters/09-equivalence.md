@@ -37,13 +37,13 @@ All conversions in this chapter except the last are *offline*: they read a whole
 
 The rooted-region model of [Chapter 7](regions.html) is the BST model of the 2009 paper. At each request the algorithm touches a connected region containing the root and the requested key, rearranges it, and pays one unit per touched node. Its executions and point sets are the same objects, with the same cost.
 
-**Theorem (regions are points).** For every number of keys $n$, sequence `xs` and number `cost`, there is an offline geometric solution with exactly `cost` points if and only if some initial tree of size $n$ has a [[Geometric.RegionExecution]] serving `xs` with charge exactly `cost`.
+**Theorem (regions are points).** For every number of keys $n$, sequence `xs` and number `cost`, there is an offline geometric solution with exactly `cost` points if and only if some initial tree of size $n$ has a [[RegionExecution]] serving `xs` with charge exactly `cost`.
 
 @decl RotationBST.Geometric.Equivalence.Results.ass_iff_region_execution
 
 The equivalence is exact: one touched node per point, in both directions, with no constant.
 
-- From regions to points, record row $j$ as the keys touched by the $j$-th step. Each row contains the request, since a [[Geometric.RegionStep]] must visit it, and the rows together are arborally satisfied. The proof keeps the current tree a max-heap of last-touch times, and finds the third point of every rectangle as a common ancestor in that heap ([Section 20.4](treaps.html#priorities-from-the-past)).
+- From regions to points, record row $j$ as the keys touched by the $j$-th step. Each row contains the request, since a [[RegionStep]] must visit it, and the rows together are arborally satisfied. The proof keeps the current tree a max-heap of last-touch times, and finds the third point of every rectangle as a common ancestor in that heap ([Section 20.4](treaps.html#priorities-from-the-past)).
 - From points to regions, build a treap whose priorities are next-touch times. Before each row, the keys of that row are exactly the top region of the treap, and rearranging that region alone restores the treap for the next time ([Section 20.2](treaps.html#priorities-from-the-future)). This is the offline step: priorities come from the future of the point set.
 
 ::: check
@@ -88,11 +88,13 @@ The construction chooses the initial tree. It runs the treap construction of [Ch
 
 The initial shape is prescribed here, not chosen. Two steps produce the constants. First, the pointer execution of `ass_to_pointers` becomes a rotation execution by [[RotationBST.Pointer.Results.to_rotations]], which multiplies by $3$: $99 = 3 \cdot 33$. That execution starts from the treap chosen by the construction, so the theorem first rotates `s` into it, using at most $2n$ rotations ([[RotationBST.Geometry.reset]]), merged into the first access. The suffix of postponed rotations that `to_rotations` leaves at the end is dropped, since no final shape is prescribed.
 
-::: caveat Not stated
-The library states the pointer conversion only with a chosen initial tree, and the rotation conversion only with a prescribed one. A pointer conversion from a prescribed initial tree, with an additive $O(n)$ term, would follow the same pattern but is not part of the reading interface.
-:::
+**Theorem (points to pointers, prescribed start).** For every tree `s` with $n$ nodes and every offline geometric solution $E$ of `xs` on $n$ keys, some pointer execution from `s` serves `xs` at total cost at most $64n + 3168\,|E|$.
 
-Together, the four theorems pin down the offline optimum. Writing $\mathrm{OPT}_{\mathrm{ASS}}$ for the size of a smallest geometric solution, every rotation execution from `s` satisfies $\mathrm{OPT}_{\mathrm{ASS}} \le 2R + m$, and the best one satisfies $m + R \le 2n + 99\,\mathrm{OPT}_{\mathrm{ASS}}$. Up to constant factors and the $2n$ for the initial tree, the offline cost of a sequence is a property of a point set.
+@decl RotationBST.Geometric.Equivalence.Results.ass_to_pointers_from
+
+It composes the two conversions already shown: the rotation execution of `ass_to_rotations` from `s`, then the lazy pointer simulation of [[RotationBST.Pointer.Results.to_pointer_lazy]] ([Chapter 6](pointer.html)). The lazy simulation costs at most $32R + 17m \le 32(m + R) \le 32(2n + 99\,|E|)$. Its pending rotations at the end are dropped, since no final shape is prescribed.
+
+Together, these theorems pin down the offline optimum. Writing $\mathrm{OPT}_{\mathrm{ASS}}$ for the size of a smallest geometric solution, every rotation execution from `s` satisfies $\mathrm{OPT}_{\mathrm{ASS}} \le 2R + m$, and the best one satisfies $m + R \le 2n + 99\,\mathrm{OPT}_{\mathrm{ASS}}$. Up to constant factors and the $2n$ for the initial tree, the offline cost of a sequence is a property of a point set.
 
 ## Online: from geometric algorithms to BST algorithms
 
@@ -106,7 +108,7 @@ The conversions above see the whole future. The treap construction in particular
 - **Uniform in the initial tree.** One algorithm works for every initial shape of size $n$, and the additive $6018\,n$ pays for adapting to it.
 - **The constants are not sharp.** The proof is an existence argument through last-touch supernodes stored in split trees, and its constants are the product of several lemmas. They are explicit only so that the statement is closed.
 
-This theorem is the headline of [Chapter 17](simulation.html), which proves it and states variants with total cost and on the pointer machine ([[Geometric.Simulation.Results.uniform_simulation]] is the same statement). Its main use is GreedyASS ([Chapter 16](greedy.html)): the greedy geometric rule becomes an online BST algorithm whose cost is within a constant factor of its point count.
+This theorem is the headline of [Chapter 17](simulation.html), which proves it and states variants for one fixed initial tree, with total cost, and on the pointer machine. Its main use is GreedyASS ([Chapter 16](greedy.html)): the greedy geometric rule becomes an online BST algorithm whose cost is within a constant factor of its point count.
 
 ::: caveat Direction
 Only this direction is stated online. The other direction, from an online BST algorithm to an online geometric algorithm, is immediate in the region model (record the touched nodes), but the library states the tree-to-points conversions offline only, as in the previous sections.
@@ -128,6 +130,7 @@ The correspondences of Part I, with $m$ requests, $n$ keys, $R$ rotations, $K$ p
 | pointer execution | point set | $\lvert E\rvert \le 6K$ | initial forgotten | [[Geometric.Equivalence.Results.pointers_to_ass\|pointers_to_ass]] |
 | point set | pointer execution | $K \le 33\,\lvert E\rvert$ | initial chosen | [[Geometric.Equivalence.Results.ass_to_pointers\|ass_to_pointers]] |
 | point set | rotation execution | $m + R \le 2n + 99\,\lvert E\rvert$ | initial prescribed | [[Geometric.Equivalence.Results.ass_to_rotations\|ass_to_rotations]] |
+| point set | pointer execution | $K \le 64n + 3168\,\lvert E\rvert$ | initial prescribed | [[Geometric.Equivalence.Results.ass_to_pointers_from\|ass_to_pointers_from]] |
 | online geometric algorithm | online BST algorithm | $R \le 6018\,(\text{points} + n)$ | any initial tree | [[Geometric.Equivalence.Results.online_bst\|online_bst]] |
 
 Two consequences shape the rest of the book. Bounds can be stated in whichever model is most convenient and moved to the others at a constant cost: Part II states its sequence bounds for rotation-model algorithms, and Wilber's lower bound in [Chapter 11](wilber.html) is proved on point sets. And an algorithm can be designed in whichever model is most convenient: splaying ([Chapter 13](splay.html)) is a rotation algorithm, GreedyASS ([Chapter 16](greedy.html)) is a geometric one, and Tango ([Chapter 19](tango.html)) maintains a tree whose edges are marked by preferred paths.

@@ -8,36 +8,34 @@ No online BST algorithm is known to be dynamically optimal, that is, within a co
 title: Tango trees are $O(\log\log n)$-competitive
 source: Demaine, Harmon, Iacono and Pătraşcu, *Dynamic optimality—almost* (2004)
 key: yes
-theorems: Tango.Algorithm.Results.policy_exists Tango.Algorithm.Results.execution Tango.Algorithm.Results.balanced_competitive
-skip: Tango.Policy.correct | This field is a proof obligation that every policy must meet. It only narrows which policies count, and `policy_exists` shows that one exists, so the claim holds whatever it says.
-skip: Tango.MarkedTree.Maintains | It appears only as an extra conclusion of `execution`, which the claim does not use.
+theorems: Tango.Algorithm.Results.exists_competitive
 
-For every $n$ there is an online BST algorithm, fixed before any request is known, with the following property. Serve any sequence $X$ of keys from $\{0,\dots,n-1\}$, starting from a fixed balanced tree. Every request is a legal access by rotations, and the total cost (rotations plus one per request) is at most
+For every $n$ there is an online BST algorithm, fixed before any request is known, with the following property. Start from any tree on $n$ keys and serve any sequence $X$ of keys from $\{0,\dots,n-1\}$. Every request is a legal access by rotations, and the total cost (rotations plus one per request) is at most
 
-$$\bigl(56\log_2(\lfloor\log_2 n\rfloor + 1) + 16\bigr)\,(\mathrm{OPT} + |X|) \;+\; \bigl(14\log_2(\lfloor\log_2 n\rfloor + 1) + 4\bigr)\,n,$$
+$$\bigl(56\,L + 16\bigr)\,(\mathrm{OPT} + |X|) \;+\; \bigl(14\,L + 6\bigr)\,n, \qquad L = \log_2(\lfloor\log_2 n\rfloor + 1),$$
 
-where $\mathrm{OPT}$ is the number of rotations of *any* offline execution that serves $X$ from *any* initial tree on $n$ keys. So the algorithm is $O(\log\log n)$-competitive.
+where $\mathrm{OPT}$ is the number of rotations of *any* offline execution that serves $X$ from the same initial tree. So the algorithm is $O(\log\log n)$-competitive.
 
-In Lean, the algorithm is a [[RotationBST.Tango.Policy]]: a step function that sees the past requests, its current state (a BST with marked edges) and the new request. `policy_exists` says one exists for the balanced reference tree; `execution` says its run is a legal [[RotationBST.Execution]]; `balanced_competitive` is the bound.
+In Lean, the algorithm is an [[RotationBST.Algorithm]], the online algorithms of [Chapter 5](online.html): a step function that sees only the past requests, the current tree and the new request, certified to perform a legal [[RotationBST.Access]] at the cost it reports. The cost is its `totalCost`, and the comparator is any [[RotationBST.Execution]].
 ```
 
-The chapter has two layers. To confirm the result, the box above is enough: its statement uses only the rotation model of Part I, the reference tree, and the interface of the algorithm, and the [checking page](checking.html) lists those definitions. You never need to know how Tango trees work. To see why the result holds, read on. The chapter describes the algorithm with its Lean definitions, and states the full theorem again, in English and in Lean, in [Section 19.6](#competitiveness). [Section 19.1](#auxiliary-trees-inside-a-bst) and [Section 19.2](#three-amortized-operations) build the auxiliary trees and their three operations, [Section 19.3](#marked-trees) the state of the data structure, [Section 19.4](#the-online-policy) the interface that any implementation must satisfy, and [Section 19.5](#serving-a-request) the implementation itself.
+The chapter has two layers. To confirm the result, the box above is enough: its statement uses only the rotation model and the online algorithms of Part I, and the [checking page](checking.html) lists those definitions. You never need to know how Tango trees work. To see why the result holds, read on. The chapter describes the algorithm with its Lean definitions, and states the full theorem again, in English and in Lean, in [Section 19.7](#from-a-policy-to-an-algorithm). [Section 19.1](#auxiliary-trees-inside-a-bst) and [Section 19.2](#three-amortized-operations) build the auxiliary trees and their three operations, [Section 19.3](#marked-trees) the state of the data structure, [Section 19.4](#the-online-policy) the interface that any implementation must satisfy, [Section 19.5](#serving-a-request) the implementation itself, [Section 19.6](#competitiveness) the bound for every policy, and [Section 19.7](#from-a-policy-to-an-algorithm) how a policy becomes an ordinary online algorithm.
 
 The construction is that of Demaine, Harmon, Iacono and Pătraşcu (2007). The BST is a tree of **auxiliary trees**, one per preferred path. Each auxiliary tree is a BST on the keys of its path, so it has at most $h$ nodes, where $h$ is the height of the reference tree. The empty subtrees of an auxiliary tree are not empty in the whole BST: each holds the auxiliary trees of the paths that hang below, in key order. A search for $x$ walks down through a sequence of auxiliary trees, one per preferred path it crosses. Crossing from one path to the next is a preference change. To keep the structure in sync with the preferences, Tango cuts and joins auxiliary trees, which takes $O(\log h)$ per change.
 
-The library follows this plan with one difference. The original paper uses red-black trees with worst-case $O(\log h)$ split and concatenate. The library uses **splay trees** as auxiliary trees and analyses them with the splay potential, so the per-request bound is amortized. The definitions are in `Algorithms/Tango/Auxiliary/Definitions/Abstract.lean`, `Algorithm/Definitions/Abstract.lean` and `Algorithm/Request/Abstract.lean`; the theorems are in `Auxiliary/Abstract.lean`, `Algorithm/Executable/Abstract.lean` and `Algorithm/Abstract.lean`.
+The library follows this plan with one difference. The original paper uses red-black trees with worst-case $O(\log h)$ split and concatenate. The library uses **splay trees** as auxiliary trees and analyses them with the splay potential, so the per-request bound is amortized. The definitions are in `Algorithms/Tango/Auxiliary/Definitions/Abstract.lean`, `State/Abstract.lean`, `Algorithm/Definitions/Abstract.lean`, `Algorithm/Request/Abstract.lean` and `Algorithm/Executable/Abstract.lean`; the theorems are in `Auxiliary/Abstract.lean` and `Algorithm/Abstract.lean`.
 
 ## Auxiliary trees inside a BST
 
-An auxiliary tree, together with everything hanging below it, is exactly a rooted region of the BST in the sense of [Chapter 7](regions.html): a [[RotationBST.Geometric.Region]] (the skeleton of [[RotationBST.Pointer.Lazy.Skeleton]]). Its `node`s are the active nodes, here the keys of one preferred path. Its holes hold the untouched subtrees below, here the other auxiliary trees. Rotations among the active nodes move the holes as blocks, so they are rotations of the whole BST that never enter a lower auxiliary tree.
+An auxiliary tree, together with everything hanging below it, is exactly a rooted region of the BST in the sense of [Chapter 7](regions.html): a [[RotationBST.Region]] (the skeleton of [[RotationBST.Pointer.Lazy.Skeleton]]). Its `node`s are the active nodes, here the keys of one preferred path. Its holes hold the untouched subtrees below, here the other auxiliary trees. Rotations among the active nodes move the holes as blocks, so they are rotations of the whole BST that never enter a lower auxiliary tree.
 
 Four small functions translate between a region and the plain binary tree of its active part:
 
-@decl RotationBST.Geometric.Region.shape RotationBST.Geometric.Region.inflate RotationBST.Geometric.Region.index
+@decl RotationBST.Region.shape RotationBST.Region.inflate RotationBST.Region.index
 
 `shape` keeps the active nodes and turns every hole into `nil`. The result is the auxiliary tree itself, as an ordinary [[RotationBST.Tree]] whose ranks are ranks among the active keys. `inflate` goes back: it fills the external leaves of a shape, in inorder, with a list of fringe subtrees. It uses `headD .nil` and `drop` so that it is total on lists of the wrong length; the theorems below only apply it to the region's own fringe, which has exactly one subtree per leaf. `index s lo key` converts an absolute key of the whole BST into its rank among the active keys of `s`, by counting the active keys below it. The offset `lo` is the absolute rank of the region's first key, as usual.
 
-@decl RotationBST.Geometric.Region.auxiliaryRun RotationBST.Geometric.Region.auxiliaryPotential
+@decl RotationBST.Region.auxiliaryRun RotationBST.Region.auxiliaryPotential
 
 `auxiliaryRun s k` splays the active rank `k` with the ordinary [[RotationBST.Splay.run]] of [Chapter 13](splay.html) applied to `shape s`, then re-inflates the result with the original fringe. The rotation count is the count returned by the splay. Splaying the shape and splaying the active part of the full tree perform the same rotations, because a hole is never rotated. `auxiliaryPotential s` is the splay potential of [Chapter 14](analysis.html) with unit weights, applied to the active shape only: $\sum_v \log_2 |\text{active subtree of } v|$. Attached subtrees contribute no mass, because they belong to other auxiliary trees, whose potential is counted separately.
 
@@ -76,24 +74,40 @@ For $0 < k \le |s|$, there are regions `a` and `b` such that rotations turn `s.t
 The hypothesis `attached` says that `right` hangs from the last hole of `left`, meaning it is the rightmost attached subtree. The result `u` has `left`'s fringe with that last hole replaced by `right`'s fringe, so `right`'s active nodes become active in `u`. It is reached from `left.tree` by legal rotations, at amortized cost at most $3\log_2(|left| + |right|) + 1$. The proof splays the maximum of `left`, which exposes `right` as its right subtree, and merges.
 
 ::: check
-All three statements place the region at offset $0$ and conclude [[RotationBST.Access]] or [[RotationBST.Rotations]] on `s.tree`, the region's own subtree. Inside a larger BST, a region sits at some position, and the rotations are lifted there by [[RotationBST.Rotations.inLeft]] and [[RotationBST.Rotations.inRight]] at the same cost.
+All three statements place the region at offset $0$ and conclude [[RotationBST.Access]] or [[RotationBST.Rotations]] on `s.tree`, the region's own subtree. Inside a larger BST, a region sits at some position, and the rotations are lifted there by `Rotations.inLeft` and `Rotations.inRight` at the same cost.
 :::
 
 ## Marked trees
 
-The state of the data structure is a BST with one extra bit per child edge, saying whether the edge leaves the current auxiliary tree. The library calls this a *marked tree*. It is defined in the internal module `Algorithms/Tango/State/Defs.lean`, not in a reading-interface file, so it is described here in words.
+The state of the data structure is a BST with one extra bit per child edge, saying whether the edge leaves the current auxiliary tree. The library calls this a *marked tree*:
 
-- `MarkedTree` is a binary tree whose nodes carry two booleans, `cutLeft` and `cutRight`, one per child edge. A marked edge starts a new auxiliary tree, and an unmarked edge stays inside the current one. `MarkedTree.tree` forgets the marks and returns the [[RotationBST.Tree]].
-- The **components** are the maximal pieces connected by unmarked edges. Each is viewed as a [[RotationBST.Geometric.Region]], whose holes are the marked subtrees below it. The component containing the root is the *root component*.
-- `MarkedTree.potential` is the sum of [[RotationBST.Geometric.Region.auxiliaryPotential]] over all components.
-- `MarkedTree.initial reference` is the reference tree with every edge marked. Every node is its own component, which matches the all-singleton preferred paths before any request. Its potential is $0$, since a singleton contributes $\log_2 1$.
-- `MarkedTree.Maintains s reference past` is the invariant that ties the marked tree to [Chapter 18](preferred-paths.html). It has three parts. The trees have the same size. The key sets of the components are exactly the key sets of [[RotationBST.Tango.preferredPaths]]` reference past`, as a permutation of lists of finite sets. The root component holds the preferred path that starts at the reference root. The invariant also prescribes the *nesting* of the components, which component hangs in which hole of which other component, in key order. This nesting must agree with `MarkedTree.canonical reference 0 past`, the reference tree with exactly the preferred edges left unmarked. Component shapes are deliberately not constrained, since splaying changes them.
+@decl RotationBST.Tango.MarkedTree RotationBST.Tango.MarkedTree.tree
 
-Under this invariant the marks carry no information beyond the BST and the history: an edge is marked exactly when its two endpoints lie on different preferred paths.
+The two booleans `cutLeft` and `cutRight` belong to the two child edges. A marked edge starts a new auxiliary tree, and an unmarked edge stays inside the current one. `tree` forgets the marks and returns the plain [[RotationBST.Tree]].
 
-::: caveat Reading base includes internal modules
-The theorems of this chapter mention `MarkedTree`, `MarkedTree.tree`, `MarkedTree.initial`, `MarkedTree.potential` and `MarkedTree.Maintains`. Their `#check_bst_abstract` allow-lists therefore name internal `…/State/…/Defs.lean` modules, which this book does not display. They are the "statement reads only" lines with plain, unlinked module names. The headline bound `competitive` and its corollaries need only the first three of these definitions, which are short and described above. `Maintains` and `potential` appear only in the per-request contract.
-:::
+The **components** are the maximal pieces connected by unmarked edges. Each is viewed as a [[RotationBST.Region]] whose holes are the marked subtrees below it:
+
+@decl RotationBST.Tango.MarkedTree.region RotationBST.Tango.MarkedTree.rootComponent RotationBST.Tango.MarkedTree.detached RotationBST.Tango.MarkedTree.components
+
+`region` is the component containing the root: it follows unmarked edges and turns each marked subtree into a hole. `rootComponent s lo` is that region with its inorder offset `lo`, or nothing for an empty tree. `detached s lo` collects, in inorder, the root components of all marked subtrees and, recursively, everything below them, with their offsets. `components` is the root component followed by the detached ones, so every node lies in exactly one component.
+
+@decl RotationBST.Tango.MarkedTree.potential RotationBST.Tango.MarkedTree.initial
+
+The potential of a marked tree is the sum of [[RotationBST.Region.auxiliaryPotential]] over its components. `initial reference` is the reference tree with every edge marked. Every node is its own component, which matches the all-singleton preferred paths before any request, and the potential is $0$, since a singleton contributes $\log_2 1$.
+
+The invariant ties the marked tree to [Chapter 18](preferred-paths.html). Its first half says that the components are the preferred paths:
+
+@decl RotationBST.Tango.MarkedTree.Represents
+
+The trees have the same size, the key sets of the components are exactly the key sets of [[RotationBST.Tango.preferredPaths]]` reference past` (as a permutation of lists of finite sets, since rotations change the order in which components are listed), and the root component holds the preferred path that starts at the reference root.
+
+Its second half prescribes the *nesting* of the components: which component hangs in which hole of which other component, in key order. Shapes inside a component are deliberately forgotten, since splaying changes them.
+
+@decl RotationBST.Tango.ComponentNesting RotationBST.Tango.ComponentNesting.fringe RotationBST.Tango.MarkedTree.nesting RotationBST.Tango.MarkedTree.canonical RotationBST.Tango.MarkedTree.Maintains
+
+`nesting` keeps only the tree of components: a branch per component, whose children are the components in its holes, in inorder. `canonical reference lo past` is the reference tree with exactly the preferred edges left unmarked: at each node, the last label of the node's interval (from Wilber's [[RotationBST.Wilber.labels]]) says which child is preferred. `Maintains` asks that the components represent the preferred paths and that their nesting is the nesting of `canonical`.
+
+Under this invariant the marks carry no information beyond the BST and the history: an edge is marked exactly when its two endpoints lie on different preferred paths. [Section 19.7](#from-a-policy-to-an-algorithm) uses exactly this to run Tango without storing the marks.
 
 ## The online policy
 
@@ -135,9 +149,7 @@ Second, `splayRoot` splays `x`, at its active rank in the root component, to the
 
 **Theorem (serving a request).** Suppose the marked tree $s$ satisfies the invariant for the past requests, and all requests so far, and $x$, are keys of the reference tree. Then `serve` performs a legal access of $x$ in the rotation model, the new marked tree satisfies the invariant for the past requests followed by $x$, and the amortized cost is at most $U(14\log_2 h + 4) + 3\log_2 h + 1$, where $U$ is the number of preference updates that $x$ causes and $h$ is the reference height.
 
-@decl RotationBST.Tango.Algorithm.Executable.Results.request
-
-So the interface is not vacuous.
+The library proves this as `Tango.Algorithm.Executable.Results.request`. Its statement unfolds `serve`, so it reads the internal definitions of the state machine (component paths, contexts, cuts, joins and splays). It is therefore an internal contract in `Algorithm/Executable/Results.lean`, not part of the reading interface: the theorems below need only the `Policy` interface, and [Section 19.7](#from-a-policy-to-an-algorithm) needs only that some policy exists. So the interface is not vacuous.
 
 **Theorem (a policy exists).** For every reference tree there is a policy.
 
@@ -177,7 +189,7 @@ For the classical reference trees the height is logarithmic, so the factor is do
 
 **Corollary (perfect reference tree).** On $n = 2^h - 1$ keys, with the perfect reference tree, the bound holds with factor $56\log_2 h + 16$ and additive term $(14\log_2 h + 4)\,n$.
 
-**Corollary (every $n$).** For every $n$, with the balanced reference tree on $n$ keys, the bound holds with $h$ replaced by $\lfloor\log_2 n\rfloor + 1$. This is the result stated at the top of the chapter.
+**Corollary (every $n$).** For every $n$, with the balanced reference tree on $n$ keys, the bound holds with $h$ replaced by $\lfloor\log_2 n\rfloor + 1$. With the reset of [Section 19.7](#from-a-policy-to-an-algorithm), this gives the result stated at the top of the chapter.
 
 @decl RotationBST.Tango.Algorithm.Results.perfect_competitive RotationBST.Tango.Algorithm.Results.balanced_competitive
 
@@ -186,9 +198,24 @@ $$T_{\text{Tango}} \le \bigl(56\log_2(\lfloor\log_2 n\rfloor + 1) + 16\bigr)(R +
 This is the $O(\log\log n)$-competitiveness of Tango trees, with explicit constants.
 
 ::: caveat Compared with the paper
-- **Initial tree.** The policy starts from its reference tree, while the comparator starts from any tree of the same size. [[RotationBST.TotallyDynamicallyOptimal]] in [Chapter 5](online.html#dynamic-optimality) requires the same initial tree on both sides. To serve from the comparator's start tree instead, first rotate it into the reference tree. That costs at most $2n$ rotations by [[RotationBST.Geometry.reset]], which the additive term absorbs.
+- **Initial tree.** A policy starts from its reference tree, while the comparator starts from any tree of the same size. The next section removes this difference.
 - **Amortized auxiliary trees.** The bound is amortized over the whole sequence, through the splay potential. The original analysis with red-black auxiliary trees bounds each request separately. The competitive ratio is the same, $O(\log\log n)$.
 - **Uncharged planning.** As everywhere in the rotation model, only rotations and requests are charged. Locating reference nodes, computing the update log and finding cut boundaries are computation on the history, and are free.
 - **Constants.** The constants are explicit and not optimized. Only the order $O(\log\log n)$ is meaningful.
 - **Not dynamic optimality.** The factor grows with $n$, so this is not a proof that any algorithm is [[RotationBST.TotallyDynamicallyOptimal]].
 :::
+
+## From a policy to an algorithm
+
+A policy is not literally an online algorithm in the sense of [Chapter 5](online.html). Its state is a marked tree rather than a tree, it starts from its own reference tree, and its contract only holds while the invariant does. All three differences disappear in one construction.
+
+- **The marks are recomputed.** An [[RotationBST.Algorithm]] sees the past requests, and the marks are a function of them: the run of the policy on the past requests ends in a marked tree that satisfies the invariant. So the algorithm replays the policy on the past requests to recover its marked tree. If the given tree is that marked tree's plain tree, the algorithm takes the policy's step. Otherwise it splays the request, which is always a legal access. In a run from the reference tree the first case always applies, so the algorithm performs exactly the policy's rotations. Replaying is free, like all planning in the rotation model.
+- **The start is reset.** On the first request, the algorithm rotates whatever tree it is given into the reference tree, using at most $2n$ rotations ([[RotationBST.Geometry.reset]]), and then continues as above. This is the same wrapper that makes the geometric simulation of [Chapter 17](simulation.html) work from every initial tree.
+
+With the balanced reference tree, the $2n$ rotations of the reset raise the additive term from $(14L + 4)\,n$ to $(14L + 6)\,n$.
+
+**Theorem (Tango trees are $O(\log\log n)$-competitive).** For every $n$ there is an online algorithm such that, for every initial tree on $n$ keys and every offline execution that serves a sequence $X$ of $m$ requests from that tree with $R$ rotations, the algorithm's total cost on $X$ is at most $(56L + 16)(R + m) + (14L + 6)\,n$, where $L = \log_2(\lfloor\log_2 n\rfloor + 1)$.
+
+@decl RotationBST.Tango.Algorithm.Results.exists_competitive
+
+This is the result stated at the top of the chapter. The comparator now starts from the same tree as the algorithm, as in the definition of competitiveness ([[RotationBST.TotallyDynamicallyOptimal]], [Chapter 5](online.html#dynamic-optimality)), except that the factor is $O(\log\log n)$ instead of a constant. The statement mentions only the rotation model and the online algorithms of Part I. The proof is in `Algorithms/Tango/Algorithm/Online.lean`; the reset wrapper is in `Models/Online/Reset.lean`.

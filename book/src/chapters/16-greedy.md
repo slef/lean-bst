@@ -57,10 +57,10 @@ The proof checks every new rectangle, between an old point and a new point, by c
 
 So the sweep is an online geometric algorithm, with this theorem as its certificate:
 
-@decl RotationBST.Geometric.GreedyASS.Results.greedyASS
+@decl RotationBST.Geometric.greedyASS
 
 ::: check
-`greedyASS` is a definition, placed in the `Results` namespace next to the theorem it packages. Its `step` sees only the time, the request and the past points, so it is online by construction, exactly as GreedyASS should be. The certificate holds for every satisfied history, not only for histories produced by GreedyASS itself.
+`greedyASS` packages the sweep with this certificate as an online geometric algorithm. Its `step` sees only the time, the request and the past points, so it is online by construction, exactly as GreedyASS should be. The certificate holds for every satisfied history, not only for histories produced by GreedyASS itself.
 :::
 
 ## Each row is the smallest possible
@@ -99,7 +99,7 @@ The sweep is the efficient implementation, and `greedy_minimum` says that the tw
 
 ## From points to a search tree
 
-GreedyASS produces points, not rotations. [Chapter 17](simulation.html) turns any online geometric algorithm into one online BST algorithm, fixed before the request sequence, whose cost is at most a constant times the number of points plus a term linear in $n$ ([[Geometric.Simulation.Results.uniform_simulation]]). Applied to [[Geometric.GreedyASS.Results.greedyASS]], it gives an online BST algorithm whose total cost is $O(\text{GreedyASS points} + n)$. Any future bound on the number of GreedyASS points, such as the conjectured comparison with the offline optimum, would therefore transfer to binary search trees.
+GreedyASS produces points, not rotations. [Chapter 17](simulation.html) turns any online geometric algorithm into one online BST algorithm, fixed before the request sequence, whose cost is at most a constant times the number of points plus a term linear in $n$ ([[Geometric.Equivalence.Results.online_bst]]). Applied to [[Geometric.greedyASS]], it gives an online BST algorithm whose total cost is $O(\text{GreedyASS points} + n)$. Any future bound on the number of GreedyASS points, such as the conjectured comparison with the offline optimum, would therefore transfer to binary search trees.
 
 ::: note Known results
 Fox (2011) proved that GreedyASS satisfies an access lemma analogous to that of splay trees, which gives it the logarithmic amortized bound. Many further adaptive properties have since been established for it. None of these are formalized in the library.

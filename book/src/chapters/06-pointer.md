@@ -48,6 +48,12 @@ There is no instruction that rotates a node the cursor is not on, and there is n
 
 @decl RotationBST.Pointer.Trace
 
+A computation inside a subtree can be replayed from higher up. `Config.under` adds extra frames below the context, so the same focus sits deeper in a larger tree:
+
+@decl RotationBST.Pointer.Config.under
+
+Every instruction only looks at the focus and the nearest frame, so a trace in a subtree is also a trace, with the same count, under any extra context. The library proves this as `Trace.under`; the lazy simulations below use it to run a request inside a region and lift the cost unchanged.
+
 ## Serving a request
 
 @decl RotationBST.Pointer.Serves

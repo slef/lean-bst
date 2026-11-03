@@ -29,7 +29,7 @@ An access can only request an existing key.
 
 **Theorem.** If $k$ rotations turn $s$ into a tree whose root has rank $x$, then $x < |s|$.
 
-@stmt RotationBST.Access.in_range
+The library proves this as `Access.in_range`: rotations preserve size, and the root of a tree of size $n$ has rank below $n$.
 
 ## Executions
 
@@ -43,7 +43,7 @@ Executions also preserve size.
 
 **Theorem.** If an execution serves a sequence from $s$ and ends at $t$, then $s$ and $t$ have the same number of nodes.
 
-@stmt RotationBST.Execution.size_eq
+This is `Execution.size_eq`, by induction on the execution. Both lemmas are proof-level facts, in `Models/Rotation/Basic.lean`; no theorem statement mentions them.
 
 ## Which requests can be served
 
@@ -71,7 +71,7 @@ Rotations connect all shapes of a given size, and linearly many suffice.
 
 @stmt RotationBST.Geometry.reset
 
-The proof rotates both shapes into the right spine `.node .nil (.node .nil …)` with at most $n$ rotations each, then reverses the second sequence; rotations are reversible ([[RotationBST.Rotations.symm]]). The bound $2n$ is the classical one, up to the additive constant in Sleator, Tarjan and Thurston's $2n-6$, which the library does not attempt.
+The proof rotates both shapes into the right spine `.node .nil (.node .nil …)` with at most $n$ rotations each, then reverses the second sequence; rotations are reversible (`Rotations.symm`). The bound $2n$ is the classical one, up to the additive constant in Sleator, Tarjan and Thurston's $2n-6$, which the library does not attempt.
 
 An access may therefore be preceded by a reset to any shape, at an extra cost of at most $2n$.
 

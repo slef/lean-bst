@@ -79,6 +79,13 @@ const home = new Map(); // constant -> {chapter, id}
 const displayed = []; // [{name, chapter}]
 const DIRECTIVE = /^@(decl|stmt)\s+(.+)$/;
 
+// The reading interface: library declarations quoted or linked by the book must
+// live in `*.Abstract` modules. Lean, Std and Mathlib names are always fine.
+function isReadable(name) {
+  const module = consts[name]?.module ?? '';
+  return !module.startsWith(LIB + '.') || /\.Abstract$/.test(module);
+}
+
 function resolveName(text, where) {
   const name = text.trim();
   if (consts[name]) return name;
@@ -110,6 +117,7 @@ for (const ch of homeOrderChapters) {
       const name = resolveName(raw, ch.file);
       if (!name) continue;
       if (!declLoc.has(name)) { fail(`${ch.file}: ${name} has no source range`); continue; }
+      if (!isReadable(name)) { fail(`${ch.file}: ${short(name)} is internal (not in an Abstract module) and cannot be quoted`); continue; }
       if (home.has(name)) continue; // first display is the home
       home.set(name, { chapter: ch, id: declId(name) });
       displayed.push({ name, chapter: ch });
@@ -351,6 +359,7 @@ function renderRefInline(page, text, where) {
   const [nameText, label] = text.split(/\\?\|/);
   const name = resolveName(nameText, where);
   if (!name) return `<code>${escapeHtml(text)}</code>`;
+  if (!isReadable(name)) fail(`${where}: [[${short(name)}]] is internal (not in an Abstract module); write it as plain code`);
   const t = page.target(name);
   const shown = label ?? short(name).split('.').slice(-2).join('.');
   return `<a class="ref inline" href="${escapeHtml(t.href)}" data-c="${t.index}"><code>${escapeHtml(shown)}</code></a>`;

@@ -30,11 +30,7 @@ A rotation preserves size, and therefore the set of keys $\{0, \dots, n-1\}$.
 
 **Theorem (rotations preserve size).** If $t$ is obtained from $s$ by one rotation, then $s$ and $t$ have the same number of nodes.
 
-The proof is a four-case induction:
-
-@stmt RotationBST.Rotate.size_eq
-
-Each base case is the equation $(|a| + 1 + |b|) + 1 + |c| = |a| + 1 + (|b| + 1 + |c|)$, discharged by `omega`. The relation is also symmetric, since `right` and `left` are mutually inverse; this is proved in the library as [[RotationBST.Rotate.symm]].
+The library proves it as `Rotate.size_eq`, by induction on the rotation. Each base case is the equation $(|a| + 1 + |b|) + 1 + |c| = |a| + 1 + (|b| + 1 + |c|)$, discharged by `omega`. The relation is also symmetric, since `right` and `left` are mutually inverse; this is proved in the library as `Rotate.symm`.
 
 ## Counted sequences of rotations
 
@@ -48,14 +44,12 @@ Three closure properties are used throughout.
 
 **Theorem (composition and lifting).** If $j$ rotations turn $s$ into $t$ and $k$ rotations turn $t$ into $u$, then $j + k$ rotations turn $s$ into $u$. If $k$ rotations turn $a$ into $b$, then $k$ rotations turn `node a c` into `node b c`, and `node c a` into `node c b`.
 
-@stmt RotationBST.Rotations.append RotationBST.Rotations.inLeft RotationBST.Rotations.inRight
+These are `Rotations.append`, `Rotations.inLeft` and `Rotations.inRight`.
 
 **Theorem (sequences preserve size).** If $k$ rotations turn $s$ into $t$, then $s$ and $t$ have the same number of nodes.
 
-The proof is an induction using `Rotate.size_eq`:
-
-@stmt RotationBST.Rotations.size_eq
+This is `Rotations.size_eq`, an induction using `Rotate.size_eq`.
 
 ::: note Where these live
-`Rotate` and `Rotations` are in `Models/Rotation/Abstract.lean`, the most basic reading module. The five lemmas above are in `Models/Rotation/Basic.lean` and `Models/Rotation/Rotations.lean`. They are not part of any theorem statement; they are shown here because they are the first sanity checks a reader would want.
+`Rotate` and `Rotations` are in `Models/Rotation/Abstract.lean`, the most basic reading module. The five lemmas above are proved in `Models/Rotation/Basic.lean` and `Models/Rotation/Rotations.lean`. They are not part of any theorem statement, so they are outside the reading interface and the book states them without quoting their Lean. They are the first sanity checks a reader would want, and the proofs use them constantly.
 :::

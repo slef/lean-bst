@@ -6,12 +6,12 @@ You may not want to read the whole book. Perhaps you only want to know whether t
 
 Lean checks every proof, so you never need to read one. What Lean cannot check is that a theorem *says what you think it says*. A statement can be technically true and still miss the point: the cost might be counted in the wrong place, or a definition might quietly assume what it should prove. To trust a result, you have to read its statement, every definition the statement mentions, every definition *those* mention, and so on down to standard Lean and Mathlib notions such as lists, natural numbers and $\log_2$.
 
-That set of definitions is usually small. The book computes it from the compiled library: it starts from the statement and follows definition types and bodies, but never proofs. For Tango trees, it is thirteen definitions: what a tree is, what a rotation, an access and an execution are, the cost bound, and the algorithm's own interface. You do not need to know how Tango trees work.
+That set of definitions is usually small. The book computes it from the compiled library: it starts from the statement and follows definition types and bodies, but never proofs. For Tango trees, it is ten definitions: what a tree is, what a rotation, an access and an execution are, and what an online algorithm and its cost are. You do not need to know how Tango trees work.
 
 Two refinements keep the list honest and short:
 
-- **Skips.** Sometimes a definition can be safely ignored. A structure that bundles an algorithm with an extra correctness obligation is an example: the obligation only narrows which algorithms count, and a separate theorem shows one exists. Each skip is listed on the reading list with its reason, so you can disagree.
-- **Internal modules.** A few definitions that statements use live outside the reading interface, so the book does not quote them. The reading list links them to the library source.
+- **Skips.** Sometimes a definition can be safely ignored. A decidability instance is an example: it only lets Lean compute a test, and any two instances for the same proposition agree, so it cannot change what a definition means. Each skip is listed on the reading list with its reason, so you can disagree.
+- **Internal modules.** If a statement used a definition from outside the reading interface, the book could not quote it, and the reading list would link it to the library source instead. No main result does at present.
 
 The axioms behind each proof are listed in [Appendix A](audit.html). All of them are Lean's three standard axioms.
 

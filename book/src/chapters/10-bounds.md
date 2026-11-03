@@ -137,9 +137,9 @@ Splaying satisfies this bound ([[RotationBST.Splay.Results.unified]], [Chapter 1
 
 Static optimality is usually explained as "as good as the best fixed BST for the access frequencies". The library makes the comparison literal. First, a fixed tree's search cost:
 
-@decl RotationBST.StaticTree.depth RotationBST.StaticTree.cost
+@decl RotationBST.StaticTree.cost
 
-`depth t x` is the number of edges from the root to rank `x`. It is the same three-way rank search as [[RotationBST.Splay.locate]], and the library proves that the search context of `locate` has exactly this length. On `nil` it returns $0$; this case only makes the function total and is never reached for valid ranks. `cost` charges each request one unit plus its depth.
+`cost` charges each request one unit plus its depth, the number of edges from the root to the requested rank ([[RotationBST.Tree.depth]], defined in [Chapter 1](shapes.html#depth)).
 
 This benchmark is exactly the cost of an actual pointer-machine execution that never restructures.
 
