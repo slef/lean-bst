@@ -116,6 +116,114 @@ def randomSeq (seed n len : Nat) : List Nat := Id.run do
     out := out.push (s / 7 % n)
   return out.toList
 
+
+/-! ### Vectors for the later parts: move-to-root, geometry, Wilber/Tango, split trees -/
+
+def moveToRootVectors : Array Json := Id.run do
+  let trees := (List.range 6).flatMap shapes ++ (List.range 6).map fun i => randomTree (i + 40) (9 + 2 * i)
+  let mut out := #[]
+  for t in trees do
+    for x in List.range t.size do
+      let (u, k) := moveToRoot t x
+      out := out.push <| Json.mkObj [("tree", treeJson t), ("x", toJson x),
+        ("result", treeJson u), ("cost", toJson k)]
+  return out
+
+/-- Points of `P` with key `< n` and time `< m`, sorted by time then key. -/
+def pointsJson (P : Finset Geometric.Point) (n m : Nat) : Json :=
+  toJson <| (List.range m).flatMap fun time =>
+    ((List.range n).filter fun x => decide ((x, time) ∈ P)).map fun x => [x, time]
+
+def geometricVectors : Array Json := Id.run do
+  let mut out := #[]
+  for i in [0:14] do
+    let n := 3 + i % 6
+    let len := 4 + i % 7
+    let xs := if i % 5 == 0 then List.range n else randomSeq (31 * i + 5) n len
+    let P := Geometric.fill Geometric.greedySweep 0 ∅ xs
+    out := out.push <| Json.mkObj [("n", toJson n), ("requests", toJson xs),
+      ("points", pointsJson P n xs.length),
+      ("rowCost", toJson (Geometric.rowCost Geometric.greedySweep 0 ∅ xs)),
+      ("satisfied", toJson (decide (Geometric.ASS P)))]
+  return out
+
+/-- Small pseudo-random point sets, to test an arboral-satisfaction checker. -/
+def assVectors : Array Json := Id.run do
+  let mut out := #[]
+  let mut s := 17
+  for i in [0:40] do
+    let n := 3 + i % 4
+    let m := 3 + i % 3
+    let mut P : Finset Geometric.Point := ∅
+    for x in List.range n do
+      for time in List.range m do
+        s := lcg s
+        if s / 13 % 3 == 0 then P := insert (x, time) P
+    out := out.push <| Json.mkObj [("n", toJson n), ("m", toJson m),
+      ("points", pointsJson P n m), ("satisfied", toJson (decide (Geometric.ASS P)))]
+  return out
+
+def referenceVectors : Array Json := Id.run do
+  let mut out := #[]
+  for i in [0:16] do
+    let n := 3 + i
+    let t := if i % 3 == 0 then Tango.balanced n else randomTree (200 + i) n
+    let xs := if i % 4 == 1 then List.range n else randomSeq (11 * i + 7) n (2 * n)
+    let prefixes := (List.range (xs.length + 1)).map fun j => Tango.preferredPaths t (xs.take j)
+    out := out.push <| Json.mkObj [("tree", treeJson t), ("requests", toJson xs),
+      ("interleave", toJson (Wilber.interleave t xs)),
+      ("absoluteInterleave", toJson (Wilber.absoluteInterleave t 0 xs)),
+      ("changes", toJson ((List.range xs.length).map fun j => Tango.changes t (xs.take j) xs[j]!)),
+      ("preferenceChanges", toJson (Tango.preferenceChanges t xs)),
+      ("initializations", toJson (Tango.initializations t xs)),
+      ("preferredPaths", toJson prefixes),
+      ("transitionKeys", toJson (Wilber.transitionKeys t 0 t)),
+      ("height", toJson (Tango.height t))]
+  for n in List.range 12 do
+    out := out.push <| Json.mkObj [("balanced", toJson n), ("tree", treeJson (Tango.balanced n))]
+  return out
+
+open Geometric.Split in
+def multiwayJson : Multiway → Json
+  | .nil => Json.null
+  | .two a b => Json.arr #[multiwayJson a, multiwayJson b]
+  | .three a b c => Json.arr #[multiwayJson a, multiwayJson b, multiwayJson c]
+  | .four a b c d => Json.arr #[multiwayJson a, multiwayJson b, multiwayJson c, multiwayJson d]
+
+open Geometric.Split in
+/-- Balanced 2–3–4 trees of height `h`, with a pseudo-random choice of degrees. -/
+def randomMultiway (seed : Nat) : Nat → Multiway
+  | 0 => .nil
+  | h + 1 =>
+      let s₁ := lcg seed
+      let s₂ := lcg s₁
+      let s₃ := lcg s₂
+      let s₄ := lcg s₃
+      match seed / 7 % 3 with
+      | 0 => .two (randomMultiway s₁ h) (randomMultiway s₂ h)
+      | 1 => .three (randomMultiway s₁ h) (randomMultiway s₂ h) (randomMultiway s₃ h)
+      | _ => .four (randomMultiway s₁ h) (randomMultiway s₂ h) (randomMultiway s₃ h)
+          (randomMultiway s₄ h)
+
+open Geometric.Split Geometric.Split.Multiway.Finger in
+def multiwayVectors : Array Json := Id.run do
+  let mut out := #[]
+  for i in [0:30] do
+    let t := randomMultiway (i * 977 + 3) (1 + i % 4)
+    let v := binaryView t
+    out := out.push <| Json.mkObj [("tree", multiwayJson t), ("size", toJson t.size),
+      ("binary", treeJson t.binary), ("view", treeJson v.tree),
+      ("spine", toJson v.spine.length), ("viewCost", toJson (viewCost t)),
+      ("searchLevels", toJson ((List.range t.size).map (searchLevels t))),
+      ("nearSearchLevels", toJson ((List.range t.size).map (nearSearchLevels t))),
+      ("prepareLeft", match Multiway.prepareLeft t with | (u, k) => Json.arr #[multiwayJson u, toJson k]),
+      ("prepareRight", match Multiway.prepareRight t with | (u, k) => Json.arr #[multiwayJson u, toJson k]),
+      ("mirror", multiwayJson (mirror t))]
+  for h in List.range 6 do
+    out := out.push <| Json.mkObj [("totalChargeTree", treeJson (Tango.balanced (2 ^ h + h))),
+      ("totalCharge", toJson (totalCharge (Tango.balanced (2 ^ h + h))))]
+  return out
+
 def vectors : Json := Id.run do
   let small := (List.range 7).flatMap shapes
   let large := (List.range 12).map fun i => randomTree (i + 1) (8 + 3 * i)
@@ -163,7 +271,9 @@ def vectors : Json := Id.run do
       ("workingSetSum", toJson (workingSetSum n [] xs)),
       ("staticTreeCost", toJson (StaticTree.cost t xs))]
   return Json.mkObj [("splay", Json.arr splay), ("updates", Json.arr updates),
-    ("sequences", Json.arr sequences)]
+    ("sequences", Json.arr sequences), ("moveToRoot", Json.arr moveToRootVectors),
+    ("geometric", Json.arr geometricVectors), ("ass", Json.arr assVectors),
+    ("reference", Json.arr referenceVectors), ("multiway", Json.arr multiwayVectors)]
 
 end BookExport
 

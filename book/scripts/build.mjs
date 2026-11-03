@@ -342,6 +342,9 @@ md.renderer.rules.directive = (tokens, idx) => {
     const name = space < 0 ? args : args.slice(0, space);
     const json = space < 0 ? '{}' : args.slice(space + 1);
     try { JSON.parse(json); } catch (e) { fail(`${currentWhere}: bad @viz JSON: ${e.message}`); }
+    if (!/^[a-z][a-z0-9-]*$/.test(name) || !existsSync(join(srcDir, 'assets', 'viz', `${name}.js`))) {
+      fail(`${currentWhere}: unknown figure @viz ${name}`);
+    }
     page.usesViz = true;
     return `<div class="viz" data-viz="${escapeHtml(name)}" data-config="${escapeHtml(json)}">`
       + `<div class="viz-loading">Interactive figure (requires JavaScript).</div></div>\n`;
@@ -403,6 +406,8 @@ md.renderer.rules.heading_open = (tokens, idx, opts, env, self) => {
   let html = defaultHeadingOpen(tokens, idx, opts, env, self);
   if (t.tag === 'h1' && currentPage.chapter.number) {
     html += `<span class="chapnum">Chapter ${currentPage.chapter.number}</span>`;
+  } else if (t.tag === 'h1' && currentPage.chapter.appendix) {
+    html += `<span class="chapnum">Appendix ${currentPage.chapter.appendix}</span>`;
   }
   if (t.meta?.number) html += `<a class="secnum" href="#${t.meta.id}">${t.meta.number}</a> `;
   else if (t.meta?.id) html += `<a class="secanchor" href="#${t.meta.id}" aria-hidden="true">#</a>`;
@@ -472,7 +477,8 @@ function renderAudit(page) {
 function sidebar(page) {
   const items = chapters.map((ch) => {
     const active = ch === page.chapter;
-    const num = ch.number ? `<span class="toc-num">${ch.number}</span>` : '';
+    const label = ch.number ?? ch.appendix;
+    const num = label ? `<span class="toc-num">${label}</span>` : '';
     let sub = '';
     if (active && page.toc?.length) {
       sub = '<ol class="toc-sections">' + page.toc.filter((t) => t.level === 2)
@@ -541,14 +547,37 @@ rmSync(distDir, { recursive: true, force: true });
 mkdirSync(join(distDir, 'assets'), { recursive: true });
 
 const rendered = new Map();
+const sectionNumbers = new Map(); // href -> id -> section number
 for (const ch of chapters) {
   const page = new Page(ch);
   currentPage = page;
   currentWhere = ch.file;
   const body = md.render(ch.text);
-  const html = layout(page, body);
-  rendered.set(ch.href, html);
-  writeFileSync(join(distDir, ch.href), html);
+  rendered.set(ch.href, { page, body });
+  sectionNumbers.set(ch.href, new Map((page.toc ?? []).map((t) => [t.id, t.number])));
+}
+
+// Cross-references whose text is "Chapter N", "Section N.M" or "Appendix X" are
+// renumbered from their target, so reordering chapters never leaves stale numbers.
+for (const [href, entry] of rendered) {
+  const body = entry.body.replace(/<a href="([\w-]+\.html)?(?:#([^"]*))?">(Chapter|Section|Appendix) [\w.]+<\/a>/g,
+    (whole, file, anchor, word) => {
+      const target = file ?? href;
+      const ch = chapters.find((c) => c.href === target);
+      if (!ch) return whole;
+      let label = null;
+      if (word === 'Chapter' && ch.number) label = `Chapter ${ch.number}`;
+      if (word === 'Appendix' && ch.appendix) label = `Appendix ${ch.appendix}`;
+      if (word === 'Section' && anchor) {
+        const n = sectionNumbers.get(target)?.get(decodeURIComponent(anchor));
+        if (n) label = `Section ${n}`;
+      }
+      if (!label) { fail(`${href}: cannot number cross-reference ${JSON.stringify(whole)}`); return whole; }
+      return whole.replace(/>[^<]*<\/a>$/, `>${label}</a>`);
+    });
+  const html = layout(entry.page, body);
+  rendered.set(href, html);
+  writeFileSync(join(distDir, href), html);
 }
 
 // Internal links: every page.html#anchor must exist.

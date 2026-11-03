@@ -1,19 +1,11 @@
-// Mount every interactive figure on the page.
-const modules = {
-  shape: () => import('./shape.js'),
-  rotate: () => import('./rotate.js'),
-  splay: () => import('./splay.js'),
-  pointer: () => import('./pointer.js'),
-  experiment: () => import('./experiment.js'),
-  workingset: () => import('./workingset.js'),
-  updates: () => import('./updates.js'),
-};
+// Mount every interactive figure on the page. `@viz kind {…}` loads ./kind.js,
+// whose default export receives the container element and the JSON options.
 
 for (const root of document.querySelectorAll('.viz[data-viz]')) {
-  const load = modules[root.dataset.viz];
-  if (!load) { root.textContent = `Unknown figure: ${root.dataset.viz}`; continue; }
+  const kind = root.dataset.viz;
+  if (!/^[a-z][a-z0-9-]*$/.test(kind)) { root.textContent = `Unknown figure: ${kind}`; continue; }
   const cfg = JSON.parse(root.dataset.config || '{}');
-  load().then((m) => m.default(root, cfg)).catch((e) => {
+  import(`./${kind}.js`).then((m) => m.default(root, cfg)).catch((e) => {
     root.textContent = `This figure failed to load: ${e.message}`;
     console.error(e);
   });
