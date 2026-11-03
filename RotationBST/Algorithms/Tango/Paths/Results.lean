@@ -22,6 +22,6 @@ theorem requested_root_path (reference : Tree) (past : List Nat) (x : Nat) (vali
 end RotationBST.Tango.Results
 
 #check_bst_abstract RotationBST.Tango.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract,
   RotationBST.Bounds.Interleave.Wilber.Abstract, RotationBST.Algorithms.Tango.Paths.Abstract,
   RotationBST.Bounds.Interleave.Transition.Abstract]

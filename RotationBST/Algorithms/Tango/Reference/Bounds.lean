@@ -1,7 +1,7 @@
 module
 
 public import RotationBST.Algorithms.Tango.Reference.Abstract
-public import RotationBST.Bounds.Interleave.Changes
+public import RotationBST.Algorithms.Tango.Changes
 import Mathlib.Data.Nat.Init
 
 @[expose] public section

@@ -37,7 +37,7 @@ end RotationBST.Tango.Algorithm.Executable.Results
   RotationBST.Algorithms.Tango.Algorithm.Request.Abstract,
   RotationBST.Algorithms.Tango.State.Defs, RotationBST.Algorithms.Tango.State.Nesting.Defs,
   RotationBST.Algorithms.Tango.State.Canonical.Defs, RotationBST.Algorithms.Tango.Preferences.Updates.Abstract,
-  RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Paths.Abstract,
+  RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract, RotationBST.Algorithms.Tango.Paths.Abstract,
   RotationBST.Bounds.Interleave.Wilber.Abstract, RotationBST.Bounds.Interleave.Transition.Abstract,
   RotationBST.Algorithms.Tango.State.Preferences.Defs, RotationBST.Algorithms.Tango.State.Preferences.Lookup.Defs,
   RotationBST.Algorithms.Tango.State.Preferences.Algorithm.Defs,

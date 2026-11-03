@@ -2,63 +2,20 @@ module
 
 import RotationBST.Audit.Check
 public import RotationBST.Models.Geometric.AbstractBridge
-public import RotationBST.Algorithms.Simulation.LastTouch.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Layer.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Ranks.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Create.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Nested.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Extraction.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Rebuild.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Transition.Results
-public import RotationBST.Algorithms.Simulation.Supernode.Simulation.Results
-public import RotationBST.Algorithms.Simulation.Abstract
-public import RotationBST.Structures.SplitTree.Abstract
 
 @[expose] public section
+
+/-! Facts about the geometric model itself. The definitions are in
+`Definitions/Abstract`, `Online/Abstract`, `Offline/Abstract`, and
+`Static/Abstract`. GreedyASS is in `Algorithms/GreedyASS/Abstract`; the
+correspondence with BST executions is in `Models/Equivalence/Abstract`. -/
 namespace RotationBST.Arboral.Results
-
-/-- The standard empty-rectangle sweep completes the current row. -/
-theorem greedy_step {n time request : Nat} {P : Finset Point}
-    (history : History n time P) (satisfied : ASS P) (valid : request < n) :
-    Completion n time request P (greedySweep time request P) :=
-  sweep_correct history satisfied valid
-
-/-- GreedyASS is an online geometric algorithm; its input contains no future. -/
-def greedyASS (n : Nat) : OnlineAlgorithm n where
-  step := greedySweep
-  correct := fun _ _ _ => greedy_step
-
-/-- Every legal completion contains GreedyASS's points. -/
-theorem greedy_required {n time request : Nat} {P : Finset Point} {keys : Finset Nat}
-    (history : History n time P) (legal : Completion n time request P keys) :
-    greedySweep time request P ⊆ keys := sweep_subset history legal
-
-/-- The minimum-cardinality completion is unique and equals the sweep. -/
-theorem greedy_minimum {n time request : Nat} {P : Finset Point} {keys : Finset Nat}
-    (history : History n time P) (satisfied : ASS P) (valid : request < n) :
-    GreedyRow n time request P keys ↔ keys = greedySweep time request P := by
-  constructor
-  · exact greedy_unique history satisfied valid
-  · rintro rfl
-    exact sweep_greedy history satisfied valid
 
 /-- Online row cost is exactly the cardinality of the resulting ASS solution. -/
 theorem online_solution {n : Nat} (A : OnlineAlgorithm n) (xs : List Nat)
     (valid : ∀ x ∈ xs, x < n) :
     ∃ E : Offline n xs, E.points = fill A.step 0 ∅ xs ∧
       E.points.card = rowCost A.step 0 ∅ xs := offline_of_online A xs valid
-
-/-- Every online geometric algorithm has one causal BST policy, valid from
-all initial shapes, with constant rotation cost per added point and a linear
-initialization allowance. The policy is fixed before the request sequence. -/
-theorem online_bst (n : Nat) (A : OnlineAlgorithm n) :
-    ∃ algorithm : Algorithm, ∀ tree : Tree, tree.size = n →
-      ∀ xs : List Nat, (∀ x ∈ xs, x < n) →
-        algorithm.cost tree xs ≤ 6018 * rowCost A.step 0 ∅ xs + 6018 * n :=
-  Online.Supernode.uniform_online_policy n A
 
 /-- Conversely, an offline ASS solution can be revealed in legal rows.
 The choice of those rows may depend on the future. -/
@@ -75,6 +32,7 @@ theorem optimal_exists {n : Nat} (xs : List Nat) (valid : ∀ x ∈ xs, x < n) :
     ∃ E : Offline n xs, ∀ F : Offline n xs, E.points.card ≤ F.points.card :=
   offline_minimum xs valid
 
+/-- Every solution contains the request points, so it has at least `m` points. -/
 theorem request_lower_bound {n : Nat} {xs : List Nat} (E : Offline n xs) :
     xs.length ≤ E.points.card := offline_lower_bound E
 
@@ -87,4 +45,4 @@ end RotationBST.Arboral.Results
 #check_bst_abstract RotationBST.Arboral.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Geometric.Definitions.Abstract,
   RotationBST.Models.Geometric.Online.Abstract, RotationBST.Models.Geometric.Offline.Abstract,
-  RotationBST.Models.Geometric.Static.Abstract, RotationBST.Models.Online.Abstract]
+  RotationBST.Models.Geometric.Static.Abstract]

@@ -1,6 +1,7 @@
 module
 
 public import RotationBST.Bounds.Interleave.Wilber.Abstract
+public import RotationBST.Algorithms.Tango.Definitions.Abstract
 
 @[expose] public section
 namespace RotationBST.Tango

@@ -15,5 +15,5 @@ theorem balanced_reference (n : Nat) :
 end RotationBST.Tango.Reference.Results
 
 #check_bst_abstract RotationBST.Tango.Reference.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract,
   RotationBST.Algorithms.Tango.Reference.Abstract]

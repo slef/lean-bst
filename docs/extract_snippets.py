@@ -18,8 +18,10 @@ variables = [line for line in lines if line.startswith('variable ')]
 (root / 'lean-snippets' / 'Invariants.lean').write_text('\n'.join(variables + [''] + statements) + '\n')
 
 # Keep the geometric definition directly synchronized with its public abstract.
-arboral = (root.parent / 'RotationBST/Models/Geometric/Definitions/Abstract.lean').read_text().splitlines()
-for name in ['Rectangle', 'ASS', 'greedySweep']:
+for name, source in [('Rectangle', 'Models/Geometric/Definitions/Abstract.lean'),
+                     ('ASS', 'Models/Geometric/Definitions/Abstract.lean'),
+                     ('greedySweep', 'Algorithms/GreedyASS/Algorithm/Abstract.lean')]:
+    arboral = (root.parent / 'RotationBST' / source).read_text().splitlines()
     start = next(i for i, line in enumerate(arboral) if line.startswith(f'def {name} '))
     end = next(j for j in range(start + 1, len(arboral)) if not arboral[j])
     (root / 'lean-snippets' / f'{name}.lean').write_text('\n'.join(arboral[start:end]) + '\n')

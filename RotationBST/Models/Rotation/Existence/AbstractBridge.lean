@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Algorithms.MoveToRoot.Algorithm
+public import RotationBST.Algorithms.MoveToRoot.Abstract
 
 @[expose] public section
 

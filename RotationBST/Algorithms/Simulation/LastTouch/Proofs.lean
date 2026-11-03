@@ -4,6 +4,8 @@ public import RotationBST.Algorithms.Simulation.LastTouch.Defs
 public import RotationBST.Models.Region.View.History
 public import RotationBST.Algorithms.GreedyASS.Sweep
 
+public import RotationBST.Algorithms.GreedyASS.Algorithm.Abstract
+
 @[expose] public section
 namespace RotationBST.Arboral
 

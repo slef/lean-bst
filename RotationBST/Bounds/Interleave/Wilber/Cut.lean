@@ -3,7 +3,7 @@ module
 public import RotationBST.Bounds.Interleave.Wilber.Normalization
 public import RotationBST.Bounds.Interleave.Transition.Stability
 public import RotationBST.Bounds.Interleave.Transition.Intervals
-public import RotationBST.Bounds.Interleave.Changes
+public import RotationBST.Bounds.Interleave.Basic
 
 @[expose] public section
 namespace RotationBST.Tango.Wilber

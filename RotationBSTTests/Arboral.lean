@@ -1,8 +1,12 @@
 module
 
 import RotationBST.Models.Geometric.Abstract
+import RotationBST.Algorithms.GreedyASS.Abstract
 import RotationBST.Models.Equivalence.Abstract
 import RotationBST.Algorithms.Tango.Abstract
+import RotationBST.Algorithms.Simulation.Abstract
+import RotationBST.Bounds.Interleave.Abstract
+import RotationBST.Structures.SplitTree.Abstract
 
 open RotationBST RotationBST.Arboral
 

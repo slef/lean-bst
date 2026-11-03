@@ -38,5 +38,5 @@ theorem offline_bound (reference : Tree) {s t : Tree} {xs : List Nat} {r : Nat}
 end RotationBST.Tango.Updates.Results
 
 #check_bst_abstract RotationBST.Tango.Updates.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract,
   RotationBST.Algorithms.Tango.Preferences.Abstract, RotationBST.Algorithms.Tango.Preferences.Updates.Abstract]

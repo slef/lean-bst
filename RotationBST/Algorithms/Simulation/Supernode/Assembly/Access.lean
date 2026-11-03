@@ -1,7 +1,7 @@
 module
 
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Decomposition
-public import RotationBST.Algorithms.MoveToRoot.Algorithm
+public import RotationBST.Algorithms.MoveToRoot.Abstract
 public import RotationBST.Models.Region.Bounds
 
 @[expose] public section

@@ -1,9 +1,15 @@
 module
 
 import RotationBST.Audit.Check
-public import RotationBST.Models.Equivalence.Exact
+public import RotationBST.Models.Equivalence.AbstractBridge
 
 @[expose] public section
+
+/-! The geometric model is equivalent to the BST models. Offline, point
+counts and BST costs agree up to the displayed constants; online, every
+geometric algorithm has a causal BST counterpart (proved in
+`Algorithms/Simulation`). Pointer-versus-rotation equivalence is in
+`Models/Pointer/Abstract`; labels-versus-shapes in `Models/Labelled/Abstract`. -/
 namespace RotationBST.Arboral.Results
 
 /-- Exact point-count equivalence with rooted-subtree BST executions.
@@ -35,11 +41,22 @@ theorem ass_to_pointers {n : Nat} {xs : List Nat} (E : Offline n xs) :
     ∃ s t cost, s.size = n ∧ Pointer.Execution s xs t cost ∧ cost ≤ 33 * E.points.card :=
   offline_to_pointer E
 
+/-- Online: every online geometric algorithm has one causal BST policy, valid
+from all initial shapes, with constant rotation cost per added point and a
+linear initialization allowance. The policy is fixed before the request sequence. -/
+theorem online_bst (n : Nat) (A : OnlineAlgorithm n) :
+    ∃ algorithm : Algorithm, ∀ tree : Tree, tree.size = n →
+      ∀ xs : List Nat, (∀ x ∈ xs, x < n) →
+        algorithm.cost tree xs ≤ 6018 * rowCost A.step 0 ∅ xs + 6018 * n :=
+  Online.Supernode.uniform_online_policy n A
+
 end RotationBST.Arboral.Results
 
 #check_bst_abstract RotationBST.Arboral.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Models.Pointer.Machine.Abstract,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract,
+  RotationBST.Models.Pointer.Machine.Abstract,
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Geometric.Online.Abstract,
   RotationBST.Models.Geometric.Offline.Abstract, RotationBST.Models.Region.View.Abstract,
   RotationBST.Structures.Treap.Abstract, RotationBST.Models.Region.Abstract,
-  RotationBST.Models.Pointer.Lazy.Skeleton.Abstract, RotationBST.Models.Pointer.Traces, RotationBST.Models.Pointer.Model]
+  RotationBST.Models.Pointer.Lazy.Skeleton.Abstract, RotationBST.Models.Pointer.Traces,
+  RotationBST.Models.Pointer.Model]

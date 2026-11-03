@@ -50,7 +50,7 @@ end RotationBST.Tango.State.Preferences.Results
   RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.State.Defs,
   RotationBST.Algorithms.Tango.State.Canonical.Defs, RotationBST.Bounds.Interleave.Wilber.Abstract,
   RotationBST.Algorithms.Tango.State.Preferences.Defs, RotationBST.Algorithms.Tango.Preferences.Updates.Abstract,
-  RotationBST.Algorithms.Tango.State.Nesting.Defs, RotationBST.Bounds.Interleave.Definitions.Abstract,
+  RotationBST.Algorithms.Tango.State.Nesting.Defs, RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract,
   RotationBST.Models.Region.Abstract, RotationBST.Algorithms.Tango.Auxiliary.Definitions.Abstract,
   RotationBST.Models.Pointer.Lazy.Skeleton.Abstract, RotationBST.Models.Pointer.Traces,
   RotationBST.Models.Pointer.Machine.Abstract, RotationBST.Algorithms.Splay.Algorithm.Abstract,

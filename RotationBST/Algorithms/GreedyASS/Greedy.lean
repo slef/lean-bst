@@ -2,6 +2,8 @@ module
 
 public import RotationBST.Models.Geometric.Basic
 
+public import RotationBST.Algorithms.GreedyASS.Algorithm.Abstract
+
 @[expose] public section
 namespace RotationBST.Arboral
 

@@ -2,7 +2,7 @@ module
 
 public import RotationBST.Algorithms.Tango.Algorithm.Policy
 public import RotationBST.Algorithms.Tango.Preferences.Updates.Comparison
-public import RotationBST.Bounds.Interleave.Changes
+public import RotationBST.Algorithms.Tango.Changes
 
 @[expose] public section
 namespace RotationBST.Tango

@@ -55,15 +55,15 @@ is local to this repository; upstream abstract registration is separate work.
 | Models | Pointer machine, model simulations, causal transformer | [Machine](RotationBST/Models/Pointer/Machine/Abstract.lean), [simulations](RotationBST/Models/Pointer/Abstract.lean), [online](RotationBST/Models/Pointer/Lazy/Online/Abstract.lean) |
 | Models | Rooted-region (touched-subtree) model | [Region](RotationBST/Models/Region/View/Abstract.lean) |
 | Models | Arborally satisfied sets, online and offline geometric algorithms | [Definitions](RotationBST/Models/Geometric/Definitions/Abstract.lean), [online](RotationBST/Models/Geometric/Online/Abstract.lean), [results](RotationBST/Models/Geometric/Abstract.lean) |
-| Models | Offline geometric equivalence | [Equivalence](RotationBST/Models/Equivalence/Abstract.lean) |
+| Models | Offline and online geometric equivalence | [Equivalence](RotationBST/Models/Equivalence/Abstract.lean) |
 | Bounds | Working set, static optimality, static finger, unified | [Working set](RotationBST/Bounds/WorkingSet/Abstract.lean), [static](RotationBST/Bounds/Abstract.lean), [unified](RotationBST/Bounds/Unified/Abstract.lean) |
 | Bounds | Working set ⇒ static optimality ⇒ static finger | [Implications](RotationBST/Bounds/Implications/Abstract.lean) |
 | Bounds | Fixed-tree benchmark and entropy lower bound | [Static tree](RotationBST/Bounds/StaticTree/Abstract.lean) |
-| Bounds | Wilber's interleave lower bound | [Interleave](RotationBST/Bounds/Interleave/Abstract.lean), [definitions](RotationBST/Bounds/Interleave/Definitions/Abstract.lean) |
+| Bounds | Wilber's interleave lower bound | [Interleave](RotationBST/Bounds/Interleave/Abstract.lean), [definition](RotationBST/Bounds/Interleave/Definitions/Abstract.lean) |
 | Bounds | Request charges versus rotation charges | [Normalization](RotationBST/Bounds/Normalization/Abstract.lean) |
-| Algorithms | Move-to-root baseline | [Algorithm](RotationBST/Algorithms/MoveToRoot/Algorithm.lean) |
+| Algorithms | Move-to-root baseline | [Algorithm](RotationBST/Algorithms/MoveToRoot/Algorithm/Abstract.lean), [correctness](RotationBST/Algorithms/MoveToRoot/Abstract.lean) |
 | Algorithms | Splay: algorithm and results | [Algorithm](RotationBST/Algorithms/Splay/Algorithm/Abstract.lean), [overview](RotationBST/Algorithms/Splay/Abstract.lean) |
-| Algorithms | GreedyASS | [Sweep](RotationBST/Algorithms/GreedyASS/Sweep.lean); statements in [geometric results](RotationBST/Models/Geometric/Abstract.lean) |
+| Algorithms | GreedyASS | [Algorithm](RotationBST/Algorithms/GreedyASS/Algorithm/Abstract.lean), [results](RotationBST/Algorithms/GreedyASS/Abstract.lean) |
 | Algorithms | Causal geometric-to-BST simulation | [Simulation](RotationBST/Algorithms/Simulation/Abstract.lean) |
 | Algorithms | Tango: executable policy and competitive bounds | [Policy](RotationBST/Algorithms/Tango/Algorithm/Executable/Abstract.lean), [bounds](RotationBST/Algorithms/Tango/Algorithm/Abstract.lean) |
 | Structures | Next-touch treaps; multiway finger and split trees | [Treap](RotationBST/Structures/Treap/Abstract.lean), [split trees](RotationBST/Structures/SplitTree/Abstract.lean) |
@@ -182,9 +182,9 @@ next-touch treaps; its future-dependent choices are separate from the online pro
 [Online geometric algorithms](RotationBST/Models/Geometric/Online/Abstract.lean) complete
 one row at a time using the old point set and current request. Their row-point
 cost equals the cardinality of the resulting ASS solution. The standard
-**GreedyASS sweep** is proved legal, and every legal current-row completion
-contains its points, so it is the unique minimum-cardinality completion of that
-row. This local minimum is not a claim of global optimality.
+[**GreedyASS sweep**](RotationBST/Algorithms/GreedyASS/Abstract.lean) is proved
+legal, and every legal current-row completion contains its points, so it is the
+unique minimum-cardinality completion of that row. This local minimum is not a claim of global optimality.
 
 The [causal simulation](RotationBST/Algorithms/Simulation/Abstract.lean)
 proves that, for every geometric online algorithm on `n` keys, **one BST policy**

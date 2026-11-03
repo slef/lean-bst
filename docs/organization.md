@@ -120,9 +120,9 @@ Consequences:
 
 ## What this pass did
 
-Purely mechanical: 551 of 560 files moved; module names in imports, allowlists,
-docstring paths, README, tests, and documentation scripts were rewritten. No
-definition, statement, proof, or namespace changed.
+The first commit was purely mechanical: 551 of 560 files moved; module names
+in imports, allowlists, docstring paths, README, tests, and documentation
+scripts were rewritten. No definition, statement, proof, or namespace changed.
 
 | Before | After |
 |---|---|
@@ -149,53 +149,66 @@ definition, statement, proof, or namespace changed.
 | every `X/Results/Abstract.lean` | `X/Results.lean` |
 | internal `X/Abstract.lean` in SplitTree, Simulation, Tango/State, Tango/Paths/Geometry | `X/Defs.lean` or `X/Results.lean` |
 
+## Second pass: content refinements done
+
+After the mechanical move, a second commit made these content changes, each
+checked by a full build:
+
+- `Models/Geometric/Definitions/Abstract.lean` now holds only the geometric
+  model (`Point`, `ASS`, `Completion`, `GreedyRow`, `Solution`); the executable
+  sweep (`Visible`, `greedySweep`, `greedy`) moved to
+  `Algorithms/GreedyASS/Algorithm/Abstract.lean`, and the GreedyASS theorems
+  to `Algorithms/GreedyASS/Abstract.lean` with their own bridge.
+- `Bounds/Interleave/Definitions/Abstract.lean` now holds only Wilber's
+  quantity (`regions`, `alternations`, `interleave`, `switch`); Tango's
+  `changes`, `changeCost`, `height`, `perfect`, `DownwardPath` moved to
+  `Algorithms/Tango/Definitions/Abstract.lean`, with the accompanying lemmas
+  in `Algorithms/Tango/Changes.lean`.
+- The online equivalence `online_bst` moved from the geometric results to
+  `Models/Equivalence/Abstract.lean`, next to the offline equivalences.
+- Move-to-root follows the splay layout: `Algorithm/Abstract.lean`
+  (definition), `Correctness.lean`, `Abstract.lean` (audited statement and the
+  bundled online algorithm).
+- The hubs `Models/Geometric/Abstract`, `Algorithms/Tango/Abstract`,
+  `Algorithms/Simulation/Abstract`, and `Structures/SplitTree/Abstract` import
+  their internal `Results` modules through an `AbstractBridge.lean`, so every
+  statements abstract has exactly one proof import.
+- `Algorithms/Simulation/Abstract.lean` allowlists only the seven definition
+  modules its statements mention, instead of the 59 internal modules of its
+  proof; the audit confirms the statements never reach the split trees.
+- `RotationBST.lean` lists the reading interface part by part.
+
 ## Follow-ups, in suggested order
 
-Content changes, each small and verifiable by an incremental build:
-
-1. **Split mixed definition abstracts.**
-   `Models/Geometric/Definitions/Abstract.lean` holds both the model
-   (`Point`, `ASS`, `Completion`, `Solution`) and GreedyASS (`GreedyRow`,
-   `Visible`, `greedySweep`, `greedy`); move the latter to
-   `Algorithms/GreedyASS/Algorithm/Abstract.lean`.
-   `Bounds/Interleave/Definitions/Abstract.lean` holds Wilber's quantity and
-   also Tango's `switch`, `changes`, `changeCost`, `height`, `perfect`,
-   `DownwardPath`; move those to `Algorithms/Tango/Definitions/Abstract.lean`.
-2. **Split the hubs.** `Models/Geometric/Abstract.lean` states GreedyASS
-   theorems (`greedy_*`), geometric-model facts, and the online equivalence
-   `online_bst`. Move `greedy_*` to `Algorithms/GreedyASS/Abstract.lean` and
-   `online_bst` to `Models/Equivalence/Abstract.lean` next to the offline
-   equivalence. `Algorithms/Tango/Abstract.lean` imports every internal
-   `Results` module only for reachability; replace that with an
-   `Algorithms/Tango/State.lean` aggregator so the abstract reads cleanly.
-3. **One bridge convention.** Give `Models/Geometric/Abstract`,
-   `Models/Equivalence/Abstract`, `Algorithms/Simulation/Abstract`,
-   `Bounds/Interleave/Abstract`, and the Tango surface abstracts an
-   `AbstractBridge.lean`, so that each statements abstract imports exactly one
-   proof module. Move the proofs now inside `Models/Rotation/Existence/`,
-   `Connectivity/`, `Bounds/Normalization/`, `Models/Labelled/*` bridges into
-   named proof files and leave the bridges as thin re-exports.
-4. **Move-to-root as a first-class algorithm.** Split
-   `Algorithms/MoveToRoot/Algorithm.lean` into `Algorithm/Abstract.lean`
-   (definition), `Correctness.lean`, and `Abstract.lean` (the online algorithm
-   and its correctness statement), mirroring `Splay/`.
-5. **Namespaces.** Rename where the path and the namespace now disagree on the
-   textbook surface: `Tango.Results.interleave_lower_bound` and the `Tango.*`
-   interleave definitions to a `Wilber` or `Interleave` namespace;
+1. **Remaining bridges.** `Bounds/Interleave/Abstract` imports
+   `Wilber/Bound`, and the Tango surface abstracts (`Algorithm/Abstract`,
+   `Algorithm/Executable/Abstract`, `Auxiliary/Abstract`) import proof modules
+   directly; give each an `AbstractBridge.lean`. Move the proofs inside the
+   `Models/Rotation/Existence`, `Connectivity`, `Bounds/Normalization`, and
+   `Models/Labelled/*` bridges into named proof files.
+2. **Namespaces.** Rename where the path and the namespace disagree on the
+   textbook surface: the `Tango.*` interleave definitions and
+   `Tango.Results.*_lower_bound` to an `Interleave` or `Wilber` namespace;
    `Splay.unifiedCharge` to `Bounds`; `StaticTree.Results` to
-   `Bounds.StaticTree`; `Arboral.Results` to `Geometric.Results`. Each rename
-   touches the book chapters and tests that mention the old names.
-6. **Layering leaks.** `Bounds/Implications/{Gaps,LogSum}` and
-   `Bounds/StaticTree/Comparison` import `Algorithms/Splay/*`. Extract the
-   logarithm and recency lemmas they use into `Bounds/` modules.
-7. **Pin audit counts.** Wrap each `#check_bst_abstract` in `#guard_msgs` with
+   `Bounds.StaticTree`; `Arboral.Results` to `Geometric.Results` and
+   `GreedyASS.Results`; `MoveToRoot.Results.correct` is the only surface
+   theorem whose namespace already matches its path. Each rename touches the
+   book chapters and tests that mention the old names.
+3. **Layering leaks.** `Bounds/Implications/{Gaps,LogSum}` and
+   `Bounds/StaticTree/Comparison` import `Algorithms/Splay/*`;
+   `Models/Geometric/Offline/Optimal` uses the GreedyASS sweep to show a
+   minimum solution exists. Extract the logarithm and recency lemmas into
+   `Bounds/`, and prove existence from `full_row` directly.
+4. **Pin audit counts.** Wrap each `#check_bst_abstract` in `#guard_msgs` with
    its root-declaration count, as the upstream convention recommends.
-8. **Surface of Structures.** `Structures/SplitTree/Abstract.lean` states one
+5. **Surface of Structures.** `Structures/SplitTree/Abstract.lean` states one
    accounting lemma; promote the finger-search contract (`construction`,
-   `minimum`, `search_depth`, `access`) into it.
-9. **Book chapters.** The book covers Parts I and II and splay only. Add
-   chapters for the geometric model and its equivalence, Wilber's bound,
-   GreedyASS, the causal simulation, and Tango, mirroring the directory tree.
+   `minimum`, `search_depth`, `access`) into it. `Structures/Treap/Abstract`
+   has no statements file at all.
+6. **Book chapters.** The book covers Parts I and II and splay only; its build
+   lists the uncovered surface declarations. Add chapters for the geometric
+   model and its equivalences, Wilber's bound, GreedyASS, the causal
+   simulation, and Tango, mirroring the directory tree.
 
 ## Where new results go
 

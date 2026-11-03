@@ -36,7 +36,7 @@ not merely against build success. Paths are relative to the repository root.
 
 4. Arboral geometry and offline equivalence
    Evidence: Models/Geometric/Definitions/Abstract.lean, Models/Equivalence/Abstract.lean,
-   and Models/Geometric/Abstract.lean.
+   Models/Geometric/Abstract.lean, and Algorithms/GreedyASS/Abstract.lean.
    ASS is the closed-rectangle third-point property. Exact cardinality matches
    rooted-region cost with a free initial tree. Rotation and pointer models
    have constant-factor conversions, with initialization charged where needed.
@@ -45,7 +45,7 @@ not merely against build success. Paths are relative to the repository root.
 
 5. Causal geometric-to-BST simulation
    Evidence: Algorithms/Simulation/Abstract.lean
-   and Models/Geometric/Abstract.lean: online_bst.
+   and Models/Equivalence/Abstract.lean: online_bst.
    Quantifiers: for every n and geometric OnlineAlgorithm, one BST Algorithm
    works for all starting trees of size n and all valid request sequences.
    Its choices are fixed by prefixes, not by the eventual continuation.
