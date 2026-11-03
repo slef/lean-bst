@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Search.Rank
 public import RotationBST.Algorithms.Splay.Pointer
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- A concrete splay accesses any key of the initialized minimum finger within
 the logarithmic rank-distance bound. This does not assert that splaying retains
@@ -22,4 +22,4 @@ theorem binaryView_access {h : Nat} {t : Multiway} (valid : Balanced h t)
     cases focus : (Splay.locate (binaryView t).tree rank).focus <;> simp [focus]
   exact Nat.le_trans rotations (binaryView_depth valid rank existsKey)
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

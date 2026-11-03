@@ -4,7 +4,7 @@ public import RotationBST.Models.Rotation.Abstract
 public import Mathlib.Data.Nat.Log
 
 @[expose] public section
-namespace RotationBST.Geometric.Split
+namespace RotationBST.SplitTree
 
 /-- Charge for splitting around one key, with `left` and `right` keys remaining.
 This measures the smaller-side search term, not an implemented BST operation. -/
@@ -16,4 +16,4 @@ def totalCharge : Tree → Nat
   | .nil => 0
   | .node l r => totalCharge l + totalCharge r + charge l.size r.size
 
-end RotationBST.Geometric.Split
+end RotationBST.SplitTree

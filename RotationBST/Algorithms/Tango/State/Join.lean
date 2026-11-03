@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Tango.State.Join.Interior
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Geometric.Region Pointer.Lazy.Skeleton
+open Region Pointer.Lazy.Skeleton
 
 /-- Merge the final attached component using a maximum splay. The resulting
 state removes the boundary mark, and the bound charges the full-state potential. -/

@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Splay.Potential.Abstract
 public import RotationBST.Algorithms.Splay.Algorithm.Abstract
 
 @[expose] public section
-namespace RotationBST.Geometric.Region
+namespace RotationBST.Region
 
 /-- Shape of an auxiliary tree: each attached auxiliary subtree is a leaf. -/
 def shape : Region → Tree
@@ -31,4 +31,4 @@ def auxiliaryRun (s : Region) (k : Nat) : Region × Nat :=
   let result := Splay.run (shape s) k
   (inflate result.1 s.fringe, result.2)
 
-end RotationBST.Geometric.Region
+end RotationBST.Region

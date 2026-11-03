@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Join.Compact.Height
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Join
+namespace RotationBST.SplitTree.Multiway.Join
 
 theorem rootKeys_bound (t : Multiway) : rootKeys t ≤ 3 := by
   cases t <;> simp [rootKeys]
@@ -74,4 +74,4 @@ theorem compact_below_minimal_right {hl hr h : Nat} {l r : Multiway}
     | three a b c => simp only [rootKeys] at capacity; omega
     | four a b c d => simp only [rootKeys] at capacity; omega
 
-end RotationBST.Geometric.Split.Multiway.Join
+end RotationBST.SplitTree.Multiway.Join

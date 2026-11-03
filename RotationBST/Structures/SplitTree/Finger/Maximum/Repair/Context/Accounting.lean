@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Context.Pro
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Frame.Accounting
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open Context
 
 theorem maximumRepairContext_same (fs : List Frame) (h : Nat) (focus : Multiway) :
@@ -92,4 +92,4 @@ theorem maximumRepairContext_credit (fs : List Frame) {expected actual : Nat} {f
     simp only [maximumRepairContext, same, ite_false, plug]
     cases fs <;> simp_all +arith <;> omega
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

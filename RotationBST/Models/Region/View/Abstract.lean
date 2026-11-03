@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Region.Abstract
 
 @[expose] public section
-namespace RotationBST.Geometric
+namespace RotationBST
 
 /-- One search in the rooted-subtree version of the BST model. The active
 region contains the requested key, and the inorder fringe is unchanged. -/
@@ -23,4 +23,4 @@ inductive RegionExecution : Tree → List Nat → Tree → Nat → Prop
       RegionExecution t xs u cost →
       RegionExecution s (x :: xs) u (step.before.size + cost)
 
-end RotationBST.Geometric
+end RotationBST

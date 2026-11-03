@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Tango.State.Potential
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
 open Wilber
-open Geometric.Region Pointer.Lazy.Skeleton
+open Region Pointer.Lazy.Skeleton
 
 /-- The initial marked BST realizes precisely the initial singleton paths. -/
 theorem initial_components (t : Tree) (lo : Nat) :

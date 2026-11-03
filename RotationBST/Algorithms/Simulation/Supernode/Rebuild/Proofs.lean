@@ -7,7 +7,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Initialize.Proofs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Rebuilding a nonempty exposed region creates the next canonical root
 supernode. Its rotation cost and entire future split budget are charged only

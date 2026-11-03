@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Repair.Frame.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open Context
 
 /-- Repair ancestors until the focused interval regains its expected height.
@@ -21,4 +21,4 @@ def repairContext : Nat → Nat → Multiway → List Frame → Multiway.Join.Re
           | _ :: _ => repairFrameOpenCost expected actual focus f
         ⟨result.tree, result.height, cost + result.cost⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

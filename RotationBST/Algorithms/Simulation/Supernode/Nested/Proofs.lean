@@ -8,7 +8,7 @@ public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- The finite child list supplies every gap exactly once; no default tree is
 used in a well-formed layer. -/

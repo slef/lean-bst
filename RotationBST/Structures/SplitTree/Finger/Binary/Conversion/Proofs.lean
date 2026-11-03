@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Conversion.Defs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Rotations
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- Each multiway level is rearranged once; the enclosing remainder is unchanged. -/
 theorem openConversion_rotations (t : Multiway) (rest : Tree) :
@@ -55,4 +55,4 @@ theorem conversion_cost {h : Nat} {t : Multiway} (valid : Balanced h t) : conver
   | three ha hb hc => have bound := openConversion_cost ha; simp only [conversionCost]; omega
   | four ha hb hc hd => have bound := openConversion_cost ha; simp only [conversionCost]; omega
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

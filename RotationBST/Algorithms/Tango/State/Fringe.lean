@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Potential
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Geometric.Region
+open Region
 
 @[simp] theorem potential_nil : MarkedTree.nil.potential = 0 := rfl
 

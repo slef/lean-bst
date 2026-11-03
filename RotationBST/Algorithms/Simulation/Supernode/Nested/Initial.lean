@@ -7,7 +7,7 @@ public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 private theorem empty_children (count : Nat) :
     (fun (i : Nat) => (((List.replicate count Nested.empty).map Nested.tree)[i]?).getD .nil) =

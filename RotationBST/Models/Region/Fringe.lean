@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Region.Basic
 
 @[expose] public section
-namespace RotationBST.Geometric.Region
+namespace RotationBST.Region
 open Pointer.Lazy.Skeleton
 
 private def canonical : List Tree → Region
@@ -44,4 +44,4 @@ theorem same_of_fringe {s t : Region} (h : s.fringe = t.fringe) (lo : Nat) : Sam
   rw [← h] at ht
   exact hs.trans ⟨ht.1.symm, ht.2.1.symm, ht.2.2.symm⟩
 
-end RotationBST.Geometric.Region
+end RotationBST.Region

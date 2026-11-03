@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Composition
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Partition
+namespace RotationBST.SplitTree.Multiway.Partition
 
 /-- Every recursive split exposes the requested rank and retains two balanced
 multiway outputs. The counter is the exact number of binary rotations. -/
@@ -61,4 +61,4 @@ theorem run_sizes {h : Nat} {t : Multiway} (valid : Balanced h t)
   simp only [Cut.binary, Tree.size, binary_size] at sizes
   exact ⟨left, by omega⟩
 
-end RotationBST.Geometric.Split.Multiway.Partition
+end RotationBST.SplitTree.Multiway.Partition

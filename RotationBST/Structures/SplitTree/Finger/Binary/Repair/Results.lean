@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Binary.Repair.Bounds
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.Repair.Results
+namespace RotationBST.SplitTree.Multiway.Finger.Repair.Results
 
 /-- Repair preserves the concrete finger BST representation in at most three
 rotations, as well as the multiway balance and node reserve. -/
@@ -20,11 +20,11 @@ theorem before_remainder (t : Multiway) (rest : Tree) :
     Rotations (openView t rest) (openView (t.repairFirst).1 rest) (repairOpenCost t) ∧
       repairOpenCost t ≤ 3 := ⟨repairOpen_rotations t rest, repairOpenCost_bound t⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger.Repair.Results
+end RotationBST.SplitTree.Multiway.Finger.Repair.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Repair.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.Repair.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Repair.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.Repair.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,
   RotationBST.Structures.SplitTree.Finger.Binary.Abstract,

@@ -27,7 +27,7 @@ theorem untouched {time : Nat} {P : Finset Point} {keys : Finset Nat}
 /-- Promote an assembled outer layer while retaining its recursively represented
 children. The row consists exactly of the outer active keys. -/
 theorem promote {n time : Nat} {P : Finset Point} (history : History n time P)
-    (lo : Nat) (state : Split.Multiway.Finger.TwoEnded.State) (children : List Nested)
+    (lo : Nat) (state : SplitTree.Multiway.Finger.TwoEnded.State) (children : List Nested)
     (balanced : state.HeightValid) (arity : children.length = state.size + 1)
     (subtrees : ∀ i : Fin children.length,
       Represents P
@@ -40,9 +40,9 @@ theorem promote {n time : Nat} {P : Finset Point} (history : History n time P)
 stored in any valid shared state of the required size. Its children are
 retained by an explicit list slice, with the correct absolute key offsets. -/
 theorem retain {P : Finset Point} {lo : Nat}
-    {state : Split.Multiway.Finger.TwoEnded.State} {children : List Nested}
+    {state : SplitTree.Multiway.Finger.TwoEnded.State} {children : List Nested}
     (valid : Represents P lo (.layer state children))
-    (replacement : Split.Multiway.Finger.TwoEnded.State)
+    (replacement : SplitTree.Multiway.Finger.TwoEnded.State)
     (balanced : replacement.HeightValid) (first : Nat)
     (fits : first + replacement.size ≤ state.size) :
     Represents P

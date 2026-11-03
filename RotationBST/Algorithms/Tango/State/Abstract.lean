@@ -26,32 +26,32 @@ def tree : MarkedTree → Tree
   | .node l r _ _ => .node l.tree r.tree
 
 /-- The auxiliary component at the root, with marked subtrees as holes. -/
-def region : MarkedTree → Geometric.Region
+def region : MarkedTree → Region
   | .nil => .hole .nil
   | .node l r cl cr => .node
       (if cl then .hole l.tree else l.region)
       (if cr then .hole r.tree else r.region)
 
 /-- A nonempty root component, with its global inorder offset. -/
-def rootComponent (s : MarkedTree) (lo : Nat) : List (Nat × Geometric.Region) :=
+def rootComponent (s : MarkedTree) (lo : Nat) : List (Nat × Region) :=
   match s with
   | .nil => []
   | .node _ _ _ _ => [(lo, s.region)]
 
 /-- All components strictly below the root component. -/
-def detached : MarkedTree → Nat → List (Nat × Geometric.Region)
+def detached : MarkedTree → Nat → List (Nat × Region)
   | .nil, _ => []
   | .node l r cl cr, lo =>
       (if cl then l.rootComponent lo else []) ++ l.detached lo ++
       (if cr then r.rootComponent (lo + l.tree.size + 1) else []) ++
       r.detached (lo + l.tree.size + 1)
 
-def components (s : MarkedTree) (lo : Nat) : List (Nat × Geometric.Region) :=
+def components (s : MarkedTree) (lo : Nat) : List (Nat × Region) :=
   s.rootComponent lo ++ s.detached lo
 
 /-- Total potential, summed over actual auxiliary components of the BST. -/
 noncomputable def potential (s : MarkedTree) : ℝ :=
-  ((s.components 0).map fun p => Geometric.Region.auxiliaryPotential p.2).sum
+  ((s.components 0).map fun p => Region.auxiliaryPotential p.2).sum
 
 /-- Initially every reference node is its own component. -/
 def initial : Tree → MarkedTree

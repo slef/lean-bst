@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Expose.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded
 
 /-- Empty intervals have no separating root. -/
 def intervalTree : Option State → Tree
@@ -51,4 +51,4 @@ def split (state : State) (rank : Nat) : SplitResult :=
   let right := normalize exposed.right
   ⟨left.1, right.1, exposed.cost + left.2 + right.2⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded

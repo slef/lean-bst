@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Normalize.Account
 public import RotationBST.Structures.SplitTree.Accounting.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded
 
 theorem hierarchy_rotations (hierarchy : Tree) (input : Option State)
     (valid : IntervalValid input) (sizes : (intervalTree input).size = hierarchy.size) :
@@ -93,4 +93,4 @@ theorem hierarchy_from_balanced {h : Nat} {t : Multiway} (valid : Balanced h t)
   have initial := fromRoot_cost valid
   exact ⟨setup.append steps, by omega⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded

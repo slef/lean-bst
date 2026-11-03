@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Locate.Split.Defs
 public import RotationBST.Structures.SplitTree.Finger.Repair.Context.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- Repair the larger remaining interval after splitting the located subtree. -/
 def repairLocated (t : Multiway) (rank : Nat) : Multiway.Join.Result :=
@@ -20,4 +20,4 @@ def splitFromMinimum (t : Multiway) (rank : Nat) : Multiway.Partition.Cut :=
   let repaired := repairLocated t rank
   ⟨cut.left, ⟨repaired.tree, repaired.height⟩, (splitLocated t rank).2 + repaired.cost⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

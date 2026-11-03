@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Cost.Composition
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Partition
+namespace RotationBST.SplitTree.Multiway.Partition
 open Join
 open RotationBST.Tree (depth)
 
@@ -60,4 +60,4 @@ theorem run_cost {h : Nat} {t : Multiway} (valid : Balanced h t)
     4 * depth t.binary rank at cost
   omega
 
-end RotationBST.Geometric.Split.Multiway.Partition
+end RotationBST.SplitTree.Multiway.Partition

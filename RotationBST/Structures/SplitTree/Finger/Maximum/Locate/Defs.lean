@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Locate.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open Context
 
 /-- Nearest-first ancestors of the maximum external leaf, retaining ordinary
@@ -19,4 +19,4 @@ def locateMaximum (t : Multiway) (distance : Nat) : Location :=
   let levels := ascend (rightSpine t) .nil distance
   ⟨plug ((rightSpine t).take levels) .nil, levels, (rightSpine t).drop levels⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

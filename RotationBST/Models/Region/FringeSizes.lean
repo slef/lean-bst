@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Region.Fringe
 
 @[expose] public section
-namespace RotationBST.Geometric.Region
+namespace RotationBST.Region
 open Pointer.Lazy.Skeleton
 
 private def chain : Nat → Tree
@@ -45,4 +45,4 @@ theorem keys_of_fringe_sizes {s t : Region}
     rw [normalize_fringe, normalize_fringe, mapped]
   simpa only [normalize_keys] using (same_of_fringe hf lo).2.1
 
-end RotationBST.Geometric.Region
+end RotationBST.Region

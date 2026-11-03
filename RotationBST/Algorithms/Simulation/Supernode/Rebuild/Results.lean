@@ -14,8 +14,8 @@ theorem rebuilding {n time : Nat} {P : Finset Point}
     (valid : assembly.Valid P lo) :
     Represents (P ∪ row time (Region.keys assembly.region lo)) lo assembly.rebuild ∧
       ∃ cost, Rotations assembly.region.tree assembly.rebuild.tree cost ∧
-        cost + Split.Multiway.Finger.TwoEnded.intervalCredit
-          (Split.Multiway.Finger.TwoEnded.initialInterval assembly.shape.size) ≤
+        cost + SplitTree.Multiway.Finger.TwoEnded.intervalCredit
+          (SplitTree.Multiway.Finger.TwoEnded.initialInterval assembly.shape.size) ≤
           6016 * (Region.keys assembly.region lo).card :=
   Assembly.rebuild_spec history valid
 

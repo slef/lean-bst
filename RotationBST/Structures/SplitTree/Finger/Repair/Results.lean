@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Repair.Context.Accounting
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.Repair.Context.Results
+namespace RotationBST.SplitTree.Multiway.Finger.Repair.Context.Results
 
 /-- Repair a shortened first-child interval through its enclosing ancestors.
 The computed result is balanced, and its counter counts actual finger rotations. -/
@@ -35,11 +35,11 @@ theorem one_level {h : Nat} {focus : Multiway} {fs : List Context.Frame}
     result.cost + 2 * result.tree.nodes ≤ 2 * (Context.plug fs focus).nodes + 16 :=
   repairContext_one_level fs balanced ancestors left
 
-end RotationBST.Geometric.Split.Multiway.Finger.Repair.Context.Results
+end RotationBST.SplitTree.Multiway.Finger.Repair.Context.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Repair.Context.Results`: 3 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.Repair.Context.Results`: 3 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Repair.Context.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.Repair.Context.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

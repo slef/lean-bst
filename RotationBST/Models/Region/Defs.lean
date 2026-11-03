@@ -5,9 +5,9 @@ public import RotationBST.Models.Region.Abstract
 /-! Internal definitions used by the treap and region proofs. -/
 
 @[expose] public section
-namespace RotationBST.Geometric
+namespace RotationBST.Region
+open Geometric
 
-namespace Region
 /-- Stop at untouched roots; on a next-touch treap this selects the whole row. -/
 def project (P : Finset Point) (time : Nat) : Tree → Nat → Region
   | .nil, _ => .hole .nil
@@ -23,5 +23,4 @@ def ActiveHeap (priority : Nat → WithTop Nat) : Region → Nat → Prop
       (∀ x ∈ keys (.node l r) lo, priority (lo + l.tree.size) ≤ priority x) ∧
       ActiveHeap priority l lo ∧ ActiveHeap priority r (lo + l.tree.size + 1)
 
-end Region
-end RotationBST.Geometric
+end RotationBST.Region

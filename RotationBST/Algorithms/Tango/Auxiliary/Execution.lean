@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Tango.Auxiliary.Analysis
 
 @[expose] public section
-namespace RotationBST.Geometric.Region
+namespace RotationBST.Region
 open Pointer.Lazy.Skeleton
 
 theorem inflate_reconstruct_append (s : Region) (rest : List Tree) :
@@ -47,4 +47,4 @@ theorem auxiliaryRun_bound (s : Region) (k : Nat) (valid : k < s.size) :
   change ((Splay.run (shape s) k).2 : ℝ) + auxiliaryPotential (auxiliaryRun s k).1 - auxiliaryPotential s ≤ _
   simpa only [← shape_eq, Splay.Updates.unitPotential, auxiliaryPotential, shape_size] using bound
 
-end RotationBST.Geometric.Region
+end RotationBST.Region

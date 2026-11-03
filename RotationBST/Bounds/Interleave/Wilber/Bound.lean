@@ -13,10 +13,10 @@ private theorem execution_valid {s t : Tree} {xs : List Nat} {cost : Nat}
   induction execution with
   | nil => simp
   | @cons s v t x cost xs step tail ih =>
-    have same := Geometric.Region.same_of_fringe step.fringe 0
+    have same := Region.same_of_fringe step.fringe 0
     intro y hy
     rcases List.mem_cons.mp hy with rfl | hy
-    · have := Geometric.Region.keys_bounds step.visits
+    · have := Region.keys_bounds step.visits
       simpa only [Nat.zero_add, step.source] using this.2
     · have := ih y hy
       have he : s.size = v.size := by simpa only [step.source, step.target] using same.1
@@ -30,7 +30,7 @@ theorem execution_bound (reference : Tree) (lo : Nat) (past : List Nat)
   induction execution generalizing past with
   | nil => simp
   | @cons s v t x cost xs step tail ih =>
-    have same := Geometric.Region.same_of_fringe step.fringe 0
+    have same := Region.same_of_fringe step.fringe 0
     have single := amortized_step reference lo past same
       (by simpa only [step.source] using upper) step.visits
     simp only [step.source, step.target] at single

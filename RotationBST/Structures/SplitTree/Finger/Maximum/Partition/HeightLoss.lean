@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Maximum.Partition.Accounti
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Context.HeightLoss
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open Context
 
 /-- The retained side loses at most the height of the located interval. -/
@@ -58,4 +58,4 @@ theorem splitFromMaximum_height_loss {h : Nat} {t : Multiway} (valid : Balanced 
   simp only [splitFromMaximum]
   omega
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

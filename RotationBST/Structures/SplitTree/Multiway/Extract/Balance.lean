@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Extract.Ready
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway
+namespace RotationBST.SplitTree.Multiway
 
 private theorem descendFirst_balance (recur : Multiway → Multiway × Nat) {h : Nat} {t : Multiway}
     (valid : Balanced h t) (ready : firstChild t = .nil ∨ Wide (firstChild t))
@@ -75,4 +75,4 @@ theorem extractMinAux_balance (fuel : Nat) {h : Nat} {t : Multiway}
       · intro originalWide
         cases t <;> simp [Wide, rootMerge] at originalWide merged
 
-end RotationBST.Geometric.Split.Multiway
+end RotationBST.SplitTree.Multiway

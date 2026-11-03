@@ -6,7 +6,7 @@ public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode.Create.Results
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Promote the current active keys into a new initialized supernode. Creation
 and its whole lifetime splitting budget are charged to these keys once. -/

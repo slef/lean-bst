@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Multiway.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Results
+namespace RotationBST.SplitTree.Multiway.Results
 
 /-- The binary representation has exactly the same keys. -/
 theorem encoding (t : Multiway) : t.binary.size = t.size := binary_size t
@@ -35,9 +35,9 @@ theorem merge_reserve (a b c d : Multiway) :
       (.two (.two a b) (.two c d) : Multiway).nodes ≤ (.two (.two a b) (.two c d) : Multiway).size :=
   ⟨merge_nodes a b c d, nodes_le_size _⟩
 
-end RotationBST.Geometric.Split.Multiway.Results
+end RotationBST.SplitTree.Multiway.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Results`: 5 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Results`: 5 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract]

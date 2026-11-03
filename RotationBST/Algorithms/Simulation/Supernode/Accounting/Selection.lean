@@ -6,7 +6,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Lifetime.Proofs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Materializing a split hierarchy preserves every child's credit exactly,
 while the old parent credit becomes the credit of its surviving intervals. -/

@@ -4,7 +4,7 @@ public import RotationBST.Models.Region.Abstract
 public import RotationBST.Models.Pointer.Lazy.Skeleton
 
 @[expose] public section
-namespace RotationBST.Geometric.Region
+namespace RotationBST.Region
 open Pointer.Lazy.Skeleton
 
 theorem holes_fringe (s : Region) (lo : Nat) :
@@ -68,4 +68,4 @@ theorem expose (s : Region) (lo x : Nat) (hx : x ∈ keys s lo) :
         exact (same_node (Same.refl _ _) hr).trans rev
       · simp only [tree, Tree.size] at *; omega
 
-end RotationBST.Geometric.Region
+end RotationBST.Region

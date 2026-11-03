@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Cut.Prefix
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Geometric.Region Pointer.Lazy.Skeleton
+open Region Pointer.Lazy.Skeleton
 
 /-- The executable suffix cut has the specified boundary and suffix size. -/
 theorem cutSuffix_spec (s : MarkedTree) (first : Nat)

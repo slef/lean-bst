@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Join.Balance
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Join
+namespace RotationBST.SplitTree.Multiway.Join
 
 theorem joinLeft_rotations (d : Nat) (l r : Multiway) :
     Rotations (.node l.binary r.binary) (joinLeft d l r).1.tree.binary (joinLeft d l r).2 := by
@@ -100,4 +100,4 @@ theorem joinLeft_cost (d : Nat) (l r : Multiway) : (joinLeft d l r).2 ≤ 3 * d 
       cases result : joinLeft d l a with
       | mk up cost => cases up <;> simp only [result] at bound <;> simp only [joinLeft, result] <;> omega
 
-end RotationBST.Geometric.Split.Multiway.Join
+end RotationBST.SplitTree.Multiway.Join

@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Context.Def
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Partition.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- Expose the key at the given distance from the maximum, splitting only its
 containing interval and retaining the smaller-key enclosing remainder. -/
@@ -21,4 +21,4 @@ def splitLocatedMaximum (t : Multiway) (distance : Nat) : Tree × Nat :=
       (.node (maximumOpenView cut.left.tree rest) (maximumView cut.right.tree).tree,
         maximumSplitOpenCost location.height location.focus rank)
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

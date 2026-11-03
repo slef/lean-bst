@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Tango.Auxiliary.AbstractBridge
 
 @[expose] public section
 namespace RotationBST.Tango.Auxiliary.Results
-open Geometric Geometric.Region
+open Geometric Region
 
 /-- Auxiliary splaying preserves every attached subtree and serves the selected
 global key. Its amortized cost depends only on the active auxiliary size. -/

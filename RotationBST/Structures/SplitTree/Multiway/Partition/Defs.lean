@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Join.Compact.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Partition
+namespace RotationBST.SplitTree.Multiway.Partition
 
 /-- A multiway subtree with its computed height. -/
 structure Piece where
@@ -54,4 +54,4 @@ def cutAux : Nat → Nat → Multiway → Nat → Cut
 /-- Split at an existing rank, preserving balanced multiway outputs. -/
 def run (height : Nat) (t : Multiway) (rank : Nat) : Cut := cutAux (t.size + 1) height t rank
 
-end RotationBST.Geometric.Split.Multiway.Partition
+end RotationBST.SplitTree.Multiway.Partition

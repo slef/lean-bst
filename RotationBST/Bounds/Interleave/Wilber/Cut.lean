@@ -47,7 +47,7 @@ theorem primary_from_transition {t : Tree} {low cut high point : Nat}
 
 theorem avoided_side {s : Region} {low cut high point x : Nat}
     (h : transition s.tree low cut high = some point)
-    (untouched : point ∉ Geometric.Region.keys s 0) (active : x ∈ Geometric.Region.keys s 0)
+    (untouched : point ∉ Region.keys s 0) (active : x ∈ Region.keys s 0)
     (lowx : low ≤ x) (xhigh : x < high) :
     primary s.tree low cut high = some (decide (x ≤ cut)) := by
   unfold transition at h
@@ -75,15 +75,15 @@ private theorem labels_append (low cut high : Nat) (past : List Nat) (x : Nat) :
 /-- One interleave switch is paid by a drop of mismatch potential, unless the
 operation touches the transition point. A touch pays for at most two units. -/
 theorem cut_bound {s u : Region} {low cut high x : Nat}
-    (same : Geometric.Region.Same s u 0) (lower : low ≤ cut) (split : cut + 1 < high)
-    (upper : high ≤ s.tree.size) (active : x ∈ Geometric.Region.keys s 0)
+    (same : Region.Same s u 0) (lower : low ≤ cut) (split : cut + 1 < high)
+    (upper : high ≤ s.tree.size) (active : x ∈ Region.keys s 0)
     (past : List Nat) :
     alternations (labels low cut high (past ++ [x])) + cutPotential u.tree (past ++ [x]) low cut high ≤
       alternations (labels low cut high past) + cutPotential s.tree past low cut high +
       2 * (((transition s.tree low cut high).toList.filter
-        fun key => decide (key ∈ Geometric.Region.keys s 0)).length) := by
+        fun key => decide (key ∈ Region.keys s 0)).length) := by
   obtain ⟨point, ht⟩ := transition_exists s.tree low cut high lower split upper
-  by_cases touched : point ∈ Geometric.Region.keys s 0
+  by_cases touched : point ∈ Region.keys s 0
   · have hnew := mismatch_le_one (labels low cut high (past ++ [x])).getLast? (primary u.tree low cut high)
     have increment : alternations (labels low cut high (past ++ [x])) ≤
         alternations (labels low cut high past) + 1 := by

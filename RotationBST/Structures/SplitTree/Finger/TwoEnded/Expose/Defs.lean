@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Partition.Defs
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Partition.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded
 
 /-- Output intervals before restoring the shared-root height invariant. -/
 inductive Fragment where
@@ -49,4 +49,4 @@ def expose (state : State) (rank : Nat) : Exposure :=
     let cut := splitFromMaximum state.right.tree (state.size - 1 - rank)
     ⟨.shared ⟨state.left, cut.left⟩, .maximum cut.right, cut.cost + 1⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded

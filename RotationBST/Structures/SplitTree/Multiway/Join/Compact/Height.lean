@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Join.Compact.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Join
+namespace RotationBST.SplitTree.Multiway.Join
 
 private theorem finish_growth (h : Nat) (result : Promotion × Nat)
     (growth : h < (finish h result).height) : rootKeys (finish h result).tree = 1 := by
@@ -52,4 +52,4 @@ theorem compact_taller_two_right {hl hr : Nat} (taller : hl < hr) (l a b : Multi
   cases result : joinLeft d l a with
   | mk up cost => cases up <;> simp [finish, rootKeys]
 
-end RotationBST.Geometric.Split.Multiway.Join
+end RotationBST.SplitTree.Multiway.Join

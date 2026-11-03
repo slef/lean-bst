@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Join.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Join
+namespace RotationBST.SplitTree.Multiway.Join
 
 /-- Number of separator keys in the root node. -/
 def rootKeys : Multiway → Nat
@@ -21,4 +21,4 @@ def compact (hl hr : Nat) (l r : Multiway) : Result :=
     | _, _ => run hl hr l r
   else run hl hr l r
 
-end RotationBST.Geometric.Split.Multiway.Join
+end RotationBST.SplitTree.Multiway.Join

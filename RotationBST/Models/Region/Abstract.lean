@@ -4,8 +4,10 @@ public import RotationBST.Models.Geometric.Definitions.Abstract
 public import RotationBST.Models.Pointer.Lazy.Skeleton.Abstract
 
 @[expose] public section
-namespace RotationBST.Geometric
+namespace RotationBST
 
+/-- A rooted region of a BST: the active nodes near the root, with untouched
+subtrees hanging from its holes. -/
 abbrev Region := Pointer.Lazy.Skeleton
 
 namespace Region
@@ -26,4 +28,4 @@ def Same (s t : Region) (lo : Nat) : Prop :=
   s.tree.size = t.tree.size ∧ keys s lo = keys t lo ∧ holes s lo = holes t lo
 
 end Region
-end RotationBST.Geometric
+end RotationBST

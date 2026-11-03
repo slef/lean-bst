@@ -6,7 +6,7 @@ public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 theorem supernodeKeys_congr {P Q : Finset Point} {lo hi : Nat}
     (same : ∀ key, lo ≤ key → key < hi → lastTouch P key = lastTouch Q key) :

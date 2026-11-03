@@ -14,7 +14,7 @@ theorem nesting_keys_eq {s t : MarkedTree} (same : s.nesting = t.nesting) (lo : 
     simpa only [List.forall₂_map_left_iff, List.forall₂_map_right_iff] using aligned
   have sizes : s.fringe.map (fun a => a.tree.size) = t.fringe.map (fun b => b.tree.size) := by
     simpa only [List.forall₂_eq_eq_eq] using mapped
-  apply Geometric.Region.keys_of_fringe_sizes
+  apply Region.keys_of_fringe_sizes
   rw [← fringe_tree, ← fringe_tree, List.map_map, List.map_map]
   exact sizes
 

@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Expose.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Expose.Results
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded.Expose.Results
 
 /-- Expose a requested key while retaining both output intervals and their
 balanced pieces. Restoring shared-root height balance is a subsequent step. -/
@@ -28,11 +28,11 @@ theorem amortized {state : State} (valid : state.HeightValid)
         170 * Nat.log2 (min rank (state.size - 1 - rank) + 1) + 285 :=
   expose_near_credit valid rank existsKey
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Expose.Results
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded.Expose.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Expose.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.TwoEnded.Expose.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Expose.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.TwoEnded.Expose.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Extract.Amortized.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- Telescoping the concrete extraction potential gives constant amortized cost. -/
 theorem extractMany_credit (n : Nat) {h : Nat} {t : Multiway} (valid : Balanced h t) :
@@ -50,4 +50,4 @@ theorem extractMany_empty (t : Multiway) : (extractMany t.size t).1 = .nil := by
   have empty := extractMany_size t.size t
   cases result : (extractMany t.size t).1 <;> simp_all [size]
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

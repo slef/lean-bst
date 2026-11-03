@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Expose.Proofs
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Height.Rebalance
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded
 
 theorem normalize_spec (fragment : Fragment) (valid : fragment.Valid) :
     IntervalValid (normalize fragment).1 ∧
@@ -65,4 +65,4 @@ theorem split_sizes {state : State} (valid : state.HeightValid) (rank : Nat)
   change (intervalTree (split state rank).left).size = rank at first
   exact ⟨first, by omega⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded

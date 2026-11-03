@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Abstract
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- A binary right spine, with each off-spine subtree attached on the left. -/
 def comb : List Tree → Tree → Tree
@@ -31,4 +31,4 @@ def viewCost : Multiway → Nat
   | .two a _ | .three a _ _ => viewCost a + (binaryView a).spine.length
   | .four a _ _ _ => viewCost a + 2 * (binaryView a).spine.length + 1
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

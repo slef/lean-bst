@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Partition.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Join.Compact.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Partition
+namespace RotationBST.SplitTree.Multiway.Partition
 
 theorem children_binary (h : Nat) {t : Multiway} (nonempty : t ≠ .nil) :
     t.binary = .node (children h t).1.tree.binary (children h t).2.tree.binary := by
@@ -54,4 +54,4 @@ theorem afterRight_access {source : Tree} {cut : Cut} {rank : Nat}
     change (Join.compact left.height cut.left.height left.tree cut.left.tree).tree.binary.size = _
     rw [binary_size, Join.compact_size, ← binary_size cut.left.tree, root]
 
-end RotationBST.Geometric.Split.Multiway.Partition
+end RotationBST.SplitTree.Multiway.Partition

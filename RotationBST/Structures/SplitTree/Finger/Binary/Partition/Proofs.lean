@@ -7,7 +7,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Partition.Cost.Proofs
 public import RotationBST.Models.Rotation.Connectivity.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 theorem fingerSplit_access {h : Nat} {t : Multiway} (valid : Balanced h t)
     (rank : Nat) (existsKey : rank < t.size) :
@@ -35,4 +35,4 @@ theorem fingerSplit_cost {h : Nat} {t : Multiway} (valid : Balanced h t)
   simp only [fingerSplit]
   omega
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

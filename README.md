@@ -175,6 +175,7 @@ The [offline equivalence](RotationBST/Models/Equivalence/Abstract.lean) proves:
 | Pointer execution → ASS | At most `6C` points for pointer cost `C`. |
 | ASS → pointer execution | At most `33G` operations for `G` points; the initial tree may depend on future requests. |
 | ASS → rotation execution | Normalized cost at most `2n + 99G` from any prescribed initial shape. |
+| ASS → pointer execution, prescribed start | At most `64n + 3168G` operations from any prescribed initial tree. |
 
 A rooted-region operation visits its request and rearranges a connected region
 while preserving its exact inorder fringe. The offline construction uses
@@ -203,6 +204,20 @@ root visits, and deferred restoration across all rows. These constants are not
 claimed to be sharp. Neither splay nor GreedyASS is proved dynamically optimal.
 
 ## Tango
+
+The headline [`exists_competitive`](RotationBST/Algorithms/Tango/Algorithm/Abstract.lean)
+states the result for an ordinary online BST algorithm (`Algorithm`), with no
+Tango vocabulary: for every `n`, some algorithm fixed in advance serves every
+request sequence from every initial tree on `n` keys at normalized cost
+
+```text
+(56 log₂(⌊log₂ n⌋ + 1) + 16)(R + m) + (14 log₂(⌊log₂ n⌋ + 1) + 6)n,
+```
+
+where `R` is the rotation count of any offline execution from the same tree.
+The algorithm is Tango: it rotates the initial tree into a balanced reference
+tree on the first request, then runs the policy below, recomputing the policy's
+marks from the past requests.
 
 The [executable Tango-style policy](RotationBST/Algorithms/Tango/Algorithm/Executable/Abstract.lean)
 maintains preferred paths and their ordered nesting, compiles preference changes

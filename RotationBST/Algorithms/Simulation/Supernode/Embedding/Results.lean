@@ -6,7 +6,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Hierarchy.Proofs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode.Embedding.Results
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Rotations inside a supernode retain all gap subtrees in order, at exactly
 the original cost. The gaps may have arbitrary shapes and sizes. -/
@@ -22,7 +22,7 @@ theorem split_access {state : State} (valid : state.HeightValid)
     (rank : Nat) (existsKey : rank < state.size) (gaps : Nat → Tree) (offset : Nat) :
     Access (withGaps state.tree gaps offset).tree (withGaps (split state rank).tree gaps offset).tree
       (keyRank gaps offset rank) (split state rank).cost :=
-  withGaps_access (Split.Multiway.Finger.TwoEnded.split_access valid rank existsKey) gaps offset
+  withGaps_access (SplitTree.Multiway.Finger.TwoEnded.split_access valid rank existsKey) gaps offset
 
 /-- A whole split hierarchy costs linearly in supernode keys, independently
 of how many ordinary BST keys lie in its untouched gaps. -/

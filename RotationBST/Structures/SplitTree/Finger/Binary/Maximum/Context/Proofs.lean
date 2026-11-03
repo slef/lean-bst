@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Context.Def
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open Context
 
 /-- Retained smaller-key siblings are already in place in the full maximum
@@ -23,4 +23,4 @@ theorem maximumEnclosingView_eq (fs : List Frame) (focus : Multiway)
     all_goals simp [maximumFrameRemainder, Frame.fill, maximumView,
       MaximumView.tree, maximumOpenView, leftComb_append, leftComb]
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

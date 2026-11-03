@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Edges.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway
+namespace RotationBST.SplitTree.Multiway
 
 /-- A root with at least two keys can lose one key without shrinking its height. -/
 def Wide : Multiway → Prop
@@ -50,4 +50,4 @@ def extractMinAux : Nat → Multiway → Multiway × Nat
 the remaining keys and returning the exact number of binary rotations. -/
 def extractMin (t : Multiway) : Multiway × Nat := extractMinAux (t.nodes + 1) t
 
-end RotationBST.Geometric.Split.Multiway
+end RotationBST.SplitTree.Multiway

@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Selection
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Materialization exposes exactly the separator ranks, expanded through the
 original gap sizes to their absolute full-BST positions. -/

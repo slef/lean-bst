@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Height.Defs
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded
 
 theorem fromRoot_valid {h : Nat} {t : Multiway} (valid : Balanced h t) :
     (fromRoot h t).1.HeightValid :=
@@ -66,4 +66,4 @@ theorem chosenDistance_log {state : State} (valid : state.HeightValid) (rank : N
           (Nat.le_log2 (by omega)).mpr (by omega)
         omega
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded

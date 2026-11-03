@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Abstract
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- A left spine with retained larger-key subtrees attached on the right. -/
 def leftComb : List Tree → Tree → Tree
@@ -39,4 +39,4 @@ def maximumCost : Multiway → Nat
   | .three _ _ c => maximumOpenCost c + 1
   | .four _ _ _ d => maximumOpenCost d + 1
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

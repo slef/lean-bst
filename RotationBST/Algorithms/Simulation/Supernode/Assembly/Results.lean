@@ -10,7 +10,7 @@ namespace RotationBST.Geometric.Online.Supernode.Assembly.Results
 subtrees and performs exactly the splitter's counted rotations. Attached
 child sizes do not enter this stage's cost bound. -/
 theorem selection {P : Finset Point} {lo : Nat}
-    {state : Split.Multiway.Finger.TwoEnded.State} {children : List Nested}
+    {state : SplitTree.Multiway.Finger.TwoEnded.State} {children : List Nested}
     (represented : Represents P lo (.layer state children)) (keys : Finset Nat) :
     (selectParent state children lo keys).1.Valid P lo ∧
       Rotations (Nested.layer state children).tree (selectParent state children lo keys).1.region.tree
@@ -20,7 +20,7 @@ theorem selection {P : Finset Point} {lo : Nat}
 
 /-- Exposed keys are exactly this row's parent keys, in full-BST coordinates. -/
 theorem selected_keys {P : Finset Point} {lo : Nat}
-    {state : Split.Multiway.Finger.TwoEnded.State} {children : List Nested}
+    {state : SplitTree.Multiway.Finger.TwoEnded.State} {children : List Nested}
     (represented : Represents P lo (.layer state children)) (keys : Finset Nat) :
     Region.keys (selectParent state children lo keys).1.region lo =
       keys ∩ Region.keys (nestedRegion state children) lo :=

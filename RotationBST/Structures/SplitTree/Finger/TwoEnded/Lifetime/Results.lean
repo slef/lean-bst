@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Lifetime.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Lifetime.Results
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded.Lifetime.Results
 
 /-- Splitting one interval pays for itself and passes all remaining budget to
 its two descendants. No fresh allowance is introduced by a subsequent row. -/
@@ -23,11 +23,11 @@ theorem lifetime {input : Option State} {output : Partitioned} {cost : Nat}
       cost + output.credit ≤ 6014 * (intervalTree input).size :=
   ⟨(steps.spec valid).1, (steps.spec valid).2.1, (steps.spec valid).2.2, steps.linear valid⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Lifetime.Results
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded.Lifetime.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Lifetime.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.TwoEnded.Lifetime.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Lifetime.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.TwoEnded.Lifetime.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

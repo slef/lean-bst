@@ -59,7 +59,8 @@ RotationBST/
       Connectivity/   any shape reaches any shape in 2n rotations
       Existence/      exactly the existing keys can be served
     Labelled/       labelled BSTs, ordering invariant, Mathlib bridge
-    Online/         online algorithms, rotation/total cost, dynamic optimality
+    Online/         online algorithms, rotation/total cost, dynamic optimality,
+                    reset of an algorithm to a fixed initial tree
     Pointer/        single-cursor machine, eager and lazy simulations,
                     causal online transformer (Lazy/Online)
     Region/         rooted-region (touched-subtree) model, skeletons, regions
@@ -216,6 +217,41 @@ the phrase "arborally satisfied" stays in prose). Surface namespaces are now
 `Geometric.Split.Results`. This was done before any book chapter linked to
 these names.
 
+## Fifth pass: reading-interface cleanup (November 2026)
+
+Each change below was checked by a full build with `--wfail`.
+
+- **Tango state on the surface.** The definitions that Tango's statements
+  mention (`MarkedTree` and its components, `potential`, `initial`, `canonical`,
+  `nesting`, `Maintains`) moved from three `State/*Defs.lean` files to
+  `Algorithms/Tango/State/Abstract.lean`. The contract of the executable request,
+  whose statement unfolds the whole state machine, moved from a statements
+  abstract to the internal `Algorithm/Executable/Results.lean`.
+- **Tango as an algorithm.** `Tango.Algorithm.Results.exists_competitive`
+  states the `O(log log n)` bound for an ordinary `Algorithm` from every initial
+  tree. The proof (`Algorithm/Online.lean`) replays the policy on the past
+  requests to recover its marks, and uses the reset wrapper, which moved from the
+  simulation proof to `Models/Online/Reset.lean`.
+- **Pointer conversion from a prescribed start.**
+  `Geometric.Equivalence.Results.ass_to_pointers_from`.
+- **Proof-only definitions out of abstracts.** Wilber's transition points
+  (`Bounds/Interleave/Transition/Defs.lean`), `absoluteInterleave`
+  (`Wilber/Defs.lean`), `Region.project` and `ActiveHeap` (`Models/Region/Defs.lean`),
+  `lastTouch` and `HistoryHeap` (`Models/Region/View/Defs.lean`).
+- **Layering.** No `Models` abstract imports `Structures`. `Config.under` moved
+  into the pointer-machine abstract, so no allowlist names `Pointer.Traces` or
+  `Pointer.Model`. `StaticTree.depth` became `Tree.depth` in the rotation model,
+  and `locate_depth` moved to splay, so `Structures` no longer imports `Bounds`.
+  Remaining proof dependencies on the treap's `Heap`: `Models/Region/Holes`,
+  `Models/Region/View/{Ancestor,Defs}`, `Models/Equivalence/Offline`, and
+  `Bounds/Interleave/Transition/Top`.
+- **Namespaces.** `Geometric.Split` became `SplitTree`; the region model
+  (`Region`, `RegionStep`, `RegionExecution`) and the region operations used by
+  Tango's auxiliary trees left `Geometric` for the root namespace; `greedyASS`
+  left its `Results` namespace (`Geometric.greedyASS`).
+- **Duplicates.** `Simulation.Results.uniform_simulation` was removed; its
+  statement is `Equivalence.Results.online_bst`.
+
 ## Remaining follow-ups
 
 1. `Bounds/StaticTree/Comparison` uses splay's `locate` zipper search and its
@@ -225,9 +261,8 @@ these names.
 2. `Models/Geometric/Offline/Optimal` proves that a minimum offline solution
    exists by running the GreedyASS sweep; a direct argument from `full_row`
    would keep the model independent of the algorithm.
-3. Book chapters for the geometric model and equivalences, Wilber's bound,
-   GreedyASS, the causal simulation, Tango, and the structures. The book's
-   build lists the uncovered surface declarations.
+3. The treap's `Heap` order is used by region-model and Wilber proofs; moving it
+   to `Models` would remove the last proof dependencies on `Structures`.
 
 ## Where new results go
 

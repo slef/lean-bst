@@ -42,7 +42,10 @@ theorem no_current_of_root {P : Finset Point} {time lo : Nat} {l r : Tree}
   have : time + 1 ≤ time := by exact_mod_cast impossible
   omega
 
-namespace Region
+end RotationBST.Geometric
+
+namespace RotationBST.Region
+open Geometric Pointer.Lazy.Skeleton
 
 theorem project_tree (P : Finset Point) (time : Nat) (t : Tree) (lo : Nat) :
     (project P time t lo).tree = t := by
@@ -101,5 +104,4 @@ theorem project_holes {P : Finset Point} {time : Nat} (t : Tree) (lo : Nat)
       intro x hlo hhi
       exact (nextTouch_unchanged (no_current_of_root h hroot x hlo hhi)).symm
 
-end Region
-end RotationBST.Geometric
+end RotationBST.Region

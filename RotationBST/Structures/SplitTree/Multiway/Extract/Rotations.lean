@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Extract.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Edges.Bounds
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway
+namespace RotationBST.SplitTree.Multiway
 
 theorem rootMerge_spec {t u : Multiway} (merged : t.rootMerge = some u) :
     t.binary = u.binary ∧ u.nodes + 2 = t.nodes ∧ u ≠ .nil := by
@@ -81,4 +81,4 @@ theorem extractMin_size (t : Multiway) (nonempty : t ≠ .nil) :
   simp only [Tree.size, binary_size] at equal
   omega
 
-end RotationBST.Geometric.Split.Multiway
+end RotationBST.SplitTree.Multiway

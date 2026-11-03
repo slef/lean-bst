@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Abstract
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- A containing interval and the untouched nearest-first enclosing ancestors. -/
 structure Location where
@@ -17,4 +17,4 @@ def locate (t : Multiway) (rank : Nat) : Location :=
   let levels := searchLevels t rank
   ⟨Context.plug ((leftSpine t).take levels) .nil, levels, (leftSpine t).drop levels⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

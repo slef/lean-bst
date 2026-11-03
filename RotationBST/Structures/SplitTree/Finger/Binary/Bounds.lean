@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Rotations
 public import RotationBST.Structures.SplitTree.Multiway.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- No level of a balanced multiway tree is empty. -/
 theorem height_le_size {h : Nat} {t : Multiway} (valid : Balanced h t) : h ≤ t.size := by
@@ -42,4 +42,4 @@ theorem binaryView_size (t : Multiway) : (binaryView t).tree.size = t.size := by
   rw [binary_size] at equal
   exact equal.symm
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

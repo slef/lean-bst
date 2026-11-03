@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Congruence
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Splitting a parent keeps a consecutive child list with exactly one more
 child than surviving parent keys. -/

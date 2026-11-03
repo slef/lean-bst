@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Join.Proofs
 public import RotationBST.Structures.SplitTree.Multiway.Join.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 theorem attachRight_rotations (hl hr : Nat) (l r : Multiway) :
     Rotations (openView l r.binary) (binaryView (attachRight hl hr l r).tree).tree
@@ -66,4 +66,4 @@ theorem attachRight_taller_three {hl hr : Nat} (taller : hl < hr) (focus a b c :
   cases result : Join.joinLeft d focus a with
   | mk up cost => cases up <;> rfl
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

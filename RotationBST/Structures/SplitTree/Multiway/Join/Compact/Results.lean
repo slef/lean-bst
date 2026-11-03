@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Multiway.Join.Compact.Capacity
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Join.Compact.Results
+namespace RotationBST.SplitTree.Multiway.Join.Compact.Results
 
 /-- Root absorption preserves all join guarantees, including exact rotation
 cost and balance, while avoiding an unnecessary extra level. -/
@@ -27,11 +27,11 @@ theorem growth (hl hr : Nat) (l r : Multiway)
     (increased : max hl hr < (compact hl hr l r).height) :
     rootKeys (compact hl hr l r).tree = 1 := compact_growth hl hr l r increased
 
-end RotationBST.Geometric.Split.Multiway.Join.Compact.Results
+end RotationBST.SplitTree.Multiway.Join.Compact.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Join.Compact.Results`: 3 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Join.Compact.Results`: 3 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Join.Compact.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Join.Compact.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,
   RotationBST.Structures.SplitTree.Multiway.Join.Compact.Defs]

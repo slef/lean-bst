@@ -5,7 +5,8 @@ public import RotationBST.Models.Region.Bounds
 public import RotationBST.Structures.Treap.Abstract
 
 @[expose] public section
-namespace RotationBST.Geometric.Region
+namespace RotationBST.Region
+open Geometric
 open Pointer.Lazy.Skeleton
 
 /-- A rooted region containing `b` contains a common ancestor between `a` and
@@ -39,4 +40,4 @@ theorem between_ancestor {α : Type} [LE α] (priority : Nat → α)
         exact ⟨c, Finset.mem_insert_of_mem (Finset.mem_union_right _ hc), h1, h2, h3⟩
       · exact rootCase ⟨by omega, by omega⟩
 
-end RotationBST.Geometric.Region
+end RotationBST.Region

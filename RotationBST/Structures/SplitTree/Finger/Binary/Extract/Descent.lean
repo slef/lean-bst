@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Repair.Bounds
 public import RotationBST.Structures.SplitTree.Multiway.Extract.Ready
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- Contracting a minimal root only changes grouping in the closed finger view. -/
 theorem rootMerge_view {t u : Multiway} (merged : t.rootMerge = some u) :
@@ -74,4 +74,4 @@ theorem descendFirst_view (recur : Multiway → Multiway × Nat) (cost : Multiwa
     · have step := recursive a k (by simp only [nodes]; omega) ha empty (.node b.binary (.node c.binary d.binary))
       simpa only [openView, binaryView, BinaryView.tree, comb_append, comb, descendFirst, firstChild, empty, ite_false] using step
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

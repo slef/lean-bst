@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Abstract
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway
+namespace RotationBST.SplitTree.Multiway
 
 /-- Repair a minimal first child, for every parent arity. A merge inside a
 3- or 4-node removes a separator but preserves the parent's height. -/
@@ -26,4 +26,4 @@ def repairLast : Multiway → Multiway × Nat
   | .four a b (.four c d e f) (.two g h) => (.four a b (.three c d e) (.three f g h), 4)
   | t => t.prepareRight
 
-end RotationBST.Geometric.Split.Multiway
+end RotationBST.SplitTree.Multiway

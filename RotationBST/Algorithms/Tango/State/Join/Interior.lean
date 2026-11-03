@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Join.Ends
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Geometric.Region Pointer.Lazy.Skeleton
+open Region Pointer.Lazy.Skeleton
 
 /-- The executable interior join charges both boundary splays and the change
 in potential of the enclosing component. -/

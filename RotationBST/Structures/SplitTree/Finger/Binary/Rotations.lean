@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Abstract
 public import RotationBST.Models.Rotation.Rotations
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 theorem comb_append (xs ys : List Tree) (tail : Tree) :
     comb (xs ++ ys) tail = comb xs (comb ys tail) := by
@@ -49,4 +49,4 @@ theorem binaryView_rotations (t : Multiway) :
     rw [cost] at steps
     simpa only [binaryView, BinaryView.tree, binary, comb_append, comb, viewCost] using steps
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

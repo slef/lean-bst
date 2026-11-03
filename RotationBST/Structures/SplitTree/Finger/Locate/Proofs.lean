@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Locate.Defs
 public import RotationBST.Structures.SplitTree.Finger.Search
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Context
+namespace RotationBST.SplitTree.Multiway.Context
 
 theorem valid_take {h : Nat} {fs : List Frame} (valid : Valid h fs) (n : Nat) : Valid h (fs.take n) := by
   induction n generalizing h fs with
@@ -25,9 +25,9 @@ theorem valid_drop {h : Nat} {fs : List Frame} (valid : Valid h fs) (n : Nat)
       have rest := ih valid.2 (by simpa using enough)
       simpa only [List.drop_succ_cons, Nat.add_assoc, Nat.add_comm 1 n] using rest
 
-end RotationBST.Geometric.Split.Multiway.Context
+end RotationBST.SplitTree.Multiway.Context
 
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open Context
 
 theorem locate_reconstruct (t : Multiway) (rank : Nat) :
@@ -52,4 +52,4 @@ theorem locate_contains (t : Multiway) (rank : Nat) (existsKey : rank < t.size) 
 theorem locate_height {h : Nat} {t : Multiway} (valid : Balanced h t) (rank : Nat) :
     (locate t rank).height ≤ Nat.log2 (rank + 1) + 1 := searchLevels_log valid rank
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

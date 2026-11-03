@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Locate.Proofs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Rotations
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open Context
 
 theorem leftSpine_frames (t : Multiway) : ∀ f ∈ leftSpine t, IsLeftFrame f := by
@@ -57,4 +57,4 @@ theorem locate_view (t : Multiway) (rank : Nat) :
       intro f member
       exact leftSpine_frames t f (List.mem_of_mem_drop member))
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

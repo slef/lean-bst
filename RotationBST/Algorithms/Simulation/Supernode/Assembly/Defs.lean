@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Ranks.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Exposed row keys, with recursively represented subtrees at the holes. -/
 inductive Assembly where

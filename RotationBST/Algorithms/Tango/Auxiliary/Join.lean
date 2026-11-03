@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Tango.Auxiliary.Cut
 
 @[expose] public section
-namespace RotationBST.Geometric.Region
+namespace RotationBST.Region
 open Pointer.Lazy.Skeleton
 
 /-- Merge a component attached at an interior fringe position. Two splays in
@@ -75,4 +75,4 @@ theorem auxiliary_join_front (s middle : Region) (nonempty : 0 < s.size)
     rw [hs] at bound
     linarith
 
-end RotationBST.Geometric.Region
+end RotationBST.Region

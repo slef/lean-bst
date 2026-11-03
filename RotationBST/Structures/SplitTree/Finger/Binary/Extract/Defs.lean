@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Repair.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Extract.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- Finger rotations for extracting inside a larger enclosing interval.
 Descending through the comparison spine itself adds no rotations. -/
@@ -33,4 +33,4 @@ this count charges the rotations in the finger BST. -/
 def extractView (t : Multiway) : Multiway × Nat :=
   ((t.extractMin).1, extractViewCost (t.nodes + 1) t)
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Tango.Auxiliary.Updates
 public import RotationBST.Algorithms.Splay.Updates.Potential
 
 @[expose] public section
-namespace RotationBST.Geometric.Region
+namespace RotationBST.Region
 open Pointer.Lazy.Skeleton
 
 theorem auxiliary_access_bound (s : Region) (x : Nat) (hx : x ∈ keys s 0) :
@@ -38,4 +38,4 @@ theorem auxiliary_join_bound (left right : Region)
   refine ⟨u, _, hf, rotations, ?_⟩
   simpa only [← hu, Splay.Updates.unitPotential, auxiliaryPotential, shape_size] using bound
 
-end RotationBST.Geometric.Region
+end RotationBST.Region

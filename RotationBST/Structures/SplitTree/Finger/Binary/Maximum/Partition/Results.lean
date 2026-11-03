@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Partition.P
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Context.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.Maximum.Partition.Results
+namespace RotationBST.SplitTree.Multiway.Finger.Maximum.Partition.Results
 
 /-- Split a balanced maximum-finger interval, preserving both output views. -/
 theorem split {h : Nat} {t : Multiway} (valid : Balanced h t)
@@ -30,11 +30,11 @@ theorem context (fs : List Context.Frame) (focus : Multiway)
     (maximumView (Context.plug fs focus)).tree = maximumEnclosingView focus fs :=
   maximumEnclosingView_eq fs focus right
 
-end RotationBST.Geometric.Split.Multiway.Finger.Maximum.Partition.Results
+end RotationBST.SplitTree.Multiway.Finger.Maximum.Partition.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Maximum.Partition.Results`: 3 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.Maximum.Partition.Results`: 3 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Maximum.Partition.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.Maximum.Partition.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

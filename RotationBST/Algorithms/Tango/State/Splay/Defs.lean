@@ -9,7 +9,7 @@ namespace RotationBST.Tango.MarkedTree
 /-- Splay an active rank within the root component, reconstructing its marked
 fringe in the new shape. The result contains the whole BST and rotation count. -/
 def splayRoot (s : MarkedTree) (rank : Nat) : MarkedTree × Nat :=
-  let (shape, cost) := Splay.run (Geometric.Region.shape s.region) rank
+  let (shape, cost) := Splay.run (Region.shape s.region) rank
   (rebuild shape s.fringe, cost)
 
 end RotationBST.Tango.MarkedTree

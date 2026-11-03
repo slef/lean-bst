@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Partial.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Partial.Results
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded.Partial.Results
 
 /-- Execute current split choices and retain every stopped interval as a
 valid reusable state, with the exact rotation count and unspent reserves. -/
@@ -24,11 +24,11 @@ theorem accounting (plan : Plan) (input : Option State) (valid : IntervalValid i
       14 * intervalNodes input + 3000 * totalCharge result.1.tree :=
   runPlan_credit plan input valid applicable
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Partial.Results
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded.Partial.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Partial.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.TwoEnded.Partial.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Partial.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.TwoEnded.Partial.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

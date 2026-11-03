@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Conversion.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded
 
 /-- One physical nonempty BST with a minimum finger on the left and a maximum
 finger on the right of a separating root key. -/
@@ -39,4 +39,4 @@ def chosenDistance (state : State) (rank : Nat) : Nat :=
   else if rank = state.left.tree.size then 0
   else state.size - 1 - rank
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded

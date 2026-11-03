@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Initialize.Defs
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Lifetime.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded
 
 theorem balancedShape_valid (n : Nat) : (balancedShape n).Valid := by
   induction n with
@@ -55,4 +55,4 @@ theorem initialInterval_budget (shape : Tree) :
   rw [initialInterval_size] at credit
   exact ⟨cost, steps, by omega⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded

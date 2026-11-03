@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Join.Open
 public import RotationBST.Structures.SplitTree.Multiway.Join.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 theorem maximumJoinView_rotations (d : Nat) (l r : Multiway) :
     Rotations (maximumOpenView r l.binary) (maximumView (Join.joinRight d l r).1.tree).tree
@@ -103,4 +103,4 @@ theorem attachLeft_taller_three {hl hr : Nat} (taller : hl < hr) (focus a b c : 
   cases result : Join.joinRight d c focus with
   | mk up cost => cases up <;> rfl
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

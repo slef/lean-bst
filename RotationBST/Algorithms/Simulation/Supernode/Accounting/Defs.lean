@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Rebuild.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Unspent splitting credit over all stored supernodes. -/
 def Nested.credit : Nested → Nat

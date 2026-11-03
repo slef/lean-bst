@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Join.Defs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Rotations
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- Editing the retained remainder does not move or rebuild the finger prefix. -/
 theorem openView_tail_rotations (t : Multiway) {s u : Tree} {cost : Nat} (steps : Rotations s u cost) :
@@ -62,4 +62,4 @@ theorem joinOpen_rotations (d : Nat) (l r : Multiway) (rest : Tree) :
           simp only [result, Join.Promotion.tree] at steps
           simpa only [Join.joinLeft, result, Join.Promotion.tree, joinOpenCost, binary] using steps.append finish
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

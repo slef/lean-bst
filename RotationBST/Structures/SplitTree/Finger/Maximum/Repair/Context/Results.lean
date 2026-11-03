@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Context.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.Maximum.Repair.Results
+namespace RotationBST.SplitTree.Multiway.Finger.Maximum.Repair.Results
 
 /-- Repair a shortened last-child interval directly in its existing maximum
 finger view. All rotations are counted; the repaired tree is balanced. -/
@@ -18,11 +18,11 @@ theorem repair (fs : List Context.Frame) {expected actual : Nat} {focus : Multiw
     (maximumRepairContext_balance fs balanced ancestors right shorter).2,
     maximumRepairContext_rotations fs expected actual focus right⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger.Maximum.Repair.Results
+end RotationBST.SplitTree.Multiway.Finger.Maximum.Repair.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Maximum.Repair.Results`: 1 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.Maximum.Repair.Results`: 1 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Maximum.Repair.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.Maximum.Repair.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,

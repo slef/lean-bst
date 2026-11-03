@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Join.Left
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Join
+namespace RotationBST.SplitTree.Multiway.Join
 
 theorem finish_tree (h : Nat) (result : Promotion × Nat) :
     (finish h result).tree = result.1.tree := by
@@ -64,4 +64,4 @@ theorem run_size (hl hr : Nat) (l r : Multiway) :
   have sizes := (run_rotations hl hr l r).size_eq
   simpa only [Tree.size, binary_size] using sizes.symm
 
-end RotationBST.Geometric.Split.Multiway.Join
+end RotationBST.SplitTree.Multiway.Join

@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Edges.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway
+namespace RotationBST.SplitTree.Multiway
 
 /-- Repairs inside larger parents preserve height; only a minimal root can shrink. -/
 theorem Balanced.repairFirst {h : Nat} {t : Multiway} (valid : Balanced h t) :
@@ -34,4 +34,4 @@ theorem Balanced.repairLast {h : Nat} {t : Multiway} (valid : Balanced h t) :
     cases hc <;> cases hd <;> simp only [Multiway.repairLast, Multiway.prepareRight]
     all_goals solve_by_elim (maxDepth := 20) [Balanced.nil, Balanced.two, Balanced.three, Balanced.four]
 
-end RotationBST.Geometric.Split.Multiway
+end RotationBST.SplitTree.Multiway

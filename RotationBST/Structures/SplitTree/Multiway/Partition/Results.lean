@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Cost.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Partition.Results
+namespace RotationBST.SplitTree.Multiway.Partition.Results
 
 /-- Split at an arbitrary existing rank by actual BST rotations. Both remaining
 intervals retain balanced multiway representations and their exact key counts.
@@ -26,11 +26,11 @@ theorem rebuilding {h : Nat} {t : Multiway} (valid : Balanced h t)
   ⟨(run_height valid rank existsKey).1, (run_height valid rank existsKey).2,
     run_cost valid rank existsKey⟩
 
-end RotationBST.Geometric.Split.Multiway.Partition.Results
+end RotationBST.SplitTree.Multiway.Partition.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Partition.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Partition.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Partition.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Partition.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,
   RotationBST.Structures.SplitTree.Multiway.Join.Compact.Defs,

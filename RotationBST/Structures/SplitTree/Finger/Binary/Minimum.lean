@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Bounds
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 private theorem binaryView_first (t : Multiway) :
     binaryView t = ⟨[], .nil⟩ ∨ ∃ rest tail, binaryView t = ⟨.nil :: rest, tail⟩ := by
@@ -35,4 +35,4 @@ theorem binaryView_minimum (t : Multiway) (nonempty : t ≠ .nil) :
     cases t <;> simp only [BinaryView.tree, comb, Tree.size, size] at sizes <;> simp_all
   · simp only [equal, BinaryView.tree, comb, Tree.size]
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

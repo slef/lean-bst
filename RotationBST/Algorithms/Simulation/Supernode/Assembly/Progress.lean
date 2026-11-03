@@ -6,7 +6,7 @@ public import RotationBST.Models.Region.Holes
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- An exposed region with at least one active key has strictly smaller holes. -/
 theorem region_hole_smaller {region : Region} {lo : Nat}

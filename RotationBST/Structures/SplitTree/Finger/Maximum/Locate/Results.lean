@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Locate.Split.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.Maximum.Locate.Results
+namespace RotationBST.SplitTree.Multiway.Finger.Maximum.Locate.Results
 
 /-- Finger ascent finds a balanced containing interval and retains every outer
 ancestor. Its local height is logarithmic in the requested endpoint distance. -/
@@ -25,11 +25,11 @@ theorem expose {h : Nat} {t : Multiway} (valid : Balanced h t)
       (splitLocatedMaximum t distance).2 ≤ 23 * (Nat.log2 (distance + 1) + 1) + 1 :=
   splitLocatedMaximum_spec valid distance existsKey
 
-end RotationBST.Geometric.Split.Multiway.Finger.Maximum.Locate.Results
+end RotationBST.SplitTree.Multiway.Finger.Maximum.Locate.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Maximum.Locate.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.Maximum.Locate.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Maximum.Locate.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.Maximum.Locate.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Extract.Amortized.Local
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 theorem fingerHeight_eq {h : Nat} {t : Multiway} (valid : Balanced h t) : fingerHeight t = h := by
   induction valid <;> simp_all [fingerHeight]
@@ -88,4 +88,4 @@ theorem extractFingerAux_credit (fuel : Nat) {h : Nat} {t : Multiway}
       simp only [extractOpenCost, extractViewCost, extractMinAux, merged]
       constructor <;> omega
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

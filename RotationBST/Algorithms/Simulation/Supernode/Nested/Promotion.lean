@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Layer.Update
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- The exact child interval appears among the outer region's untouched holes. -/
 theorem nested_child_hole (state : State) (children : List Nested)

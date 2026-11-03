@@ -6,7 +6,7 @@ public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Creation of a current-row supernode pays for all future splits once. Its
 untouched gaps keep their exact trees and offsets, irrespective of their sizes. -/

@@ -5,11 +5,11 @@ public import RotationBST.Algorithms.Tango.Paths.Bounds
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Geometric.Region
+open Region
 
 /-- The preferred-path invariant bounds every actual auxiliary component. -/
 theorem component_size {s : MarkedTree} {reference : Tree} {past : List Nat}
-    (represented : Represents s reference past) {p : Nat × Geometric.Region}
+    (represented : Represents s reference past) {p : Nat × Region}
     (member : p ∈ s.components 0) : p.2.size ≤ height reference := by
   have hm : p.2.keys p.1 ∈ (s.components 0).map (fun p => p.2.keys p.1) :=
     List.mem_map.mpr ⟨p, member, rfl⟩

@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Endpoint
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.Maximum.Results
+namespace RotationBST.SplitTree.Multiway.Finger.Maximum.Results
 
 /-- Construct the maximum-finger view while retaining all off-path subtrees,
 in at most three rotations per multiway level. -/
@@ -15,10 +15,10 @@ theorem construction {h : Nat} {t : Multiway} (valid : Balanced h t) :
 theorem endpoint (t : Multiway) (nonempty : t ≠ .nil) :
     Access t.binary (maximumView t).tree (t.size - 1) (maximumCost t) := maximumView_maximum t nonempty
 
-end RotationBST.Geometric.Split.Multiway.Finger.Maximum.Results
+end RotationBST.SplitTree.Multiway.Finger.Maximum.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Maximum.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.Maximum.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Maximum.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.Maximum.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Defs]

@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Select.Proofs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Parent selection is an exact rotation execution whose retained holes
 remain canonical. Costs are those of the shared splitter, without charging

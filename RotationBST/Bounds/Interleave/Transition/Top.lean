@@ -59,27 +59,27 @@ theorem topIn_minimum {α : Type} [LE α] (priority : Nat → α) (t : Tree)
 
 /-- If a rooted region touches any key of an interval, it touches its top key. -/
 theorem topIn_active (s : Region) (lo low high x root : Nat)
-    (active : x ∈ Geometric.Region.keys s lo) (lowx : low ≤ x) (xhigh : x < high)
-    (top : topIn s.tree lo low high = some root) : root ∈ Geometric.Region.keys s lo := by
+    (active : x ∈ Region.keys s lo) (lowx : low ≤ x) (xhigh : x < high)
+    (top : topIn s.tree lo low high = some root) : root ∈ Region.keys s lo := by
   induction s generalizing lo with
-  | hole t => simp [Geometric.Region.keys] at active
+  | hole t => simp [Region.keys] at active
   | node l r il ir =>
     simp only [tree, topIn] at top
     split at top
-    · have hx : x ∈ Geometric.Region.keys r (lo + l.tree.size + 1) := by
+    · have hx : x ∈ Region.keys r (lo + l.tree.size + 1) := by
         rcases Finset.mem_insert.mp active with he | he
         · omega
         rcases Finset.mem_union.mp he with he | he
-        · have := Geometric.Region.keys_bounds he; omega
+        · have := Region.keys_bounds he; omega
         · exact he
       exact Finset.mem_insert_of_mem (Finset.mem_union_right _ (ir _ hx top))
     · split at top
-      · have hx : x ∈ Geometric.Region.keys l lo := by
+      · have hx : x ∈ Region.keys l lo := by
           rcases Finset.mem_insert.mp active with he | he
           · omega
           rcases Finset.mem_union.mp he with he | he
           · exact he
-          · have := Geometric.Region.keys_bounds he; omega
+          · have := Region.keys_bounds he; omega
         exact Finset.mem_insert_of_mem (Finset.mem_union_left _ (il _ hx top))
       · have he := Option.some.inj top
         rw [← he]

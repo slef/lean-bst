@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Results
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded.Results
 
 /-- Establish both endpoint views in one physical BST, with balanced side
 sizes, at a cost linear in the input multiway height. -/
@@ -18,11 +18,11 @@ theorem endpoint_choice {state : State} (valid : state.Valid) (rank : Nat) (exis
     chosenDistance state rank + 1 ≤ 2 * (min rank (state.size - 1 - rank) + 1) :=
   chosenDistance_bound valid rank existsKey
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Results
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.TwoEnded.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.TwoEnded.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,

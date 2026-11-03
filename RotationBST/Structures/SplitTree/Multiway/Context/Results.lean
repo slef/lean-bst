@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Multiway.Context.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Context.Results
+namespace RotationBST.SplitTree.Multiway.Context.Results
 
 /-- A computed edit retains exactly its local rotations and reserve decrease at
 any depth. In particular, cascading repairs have no extra depth factor here. -/
@@ -22,10 +22,10 @@ theorem reassemble (fs : List Frame) {h : Nat} {t : Multiway}
     (ancestors : Valid h fs) (focus : Balanced h t) : Balanced (h + fs.length) (plug fs t) :=
   plug_balanced fs ancestors focus
 
-end RotationBST.Geometric.Split.Multiway.Context.Results
+end RotationBST.SplitTree.Multiway.Context.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Context.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Context.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Context.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Context.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract]

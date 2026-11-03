@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Abstract
 public import RotationBST.Structures.SplitTree.Multiway.Edges.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- Cost of maintaining the minimum-finger comparison tree during first-child
 repair. This differs from the cost in the ordinary multiway binary encoding. -/
@@ -30,4 +30,4 @@ def repairOpenCost : Multiway → Nat
   | .two (.two _ _) (.four _ _ _ _) => 3
   | t => repairViewCost t
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

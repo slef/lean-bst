@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Maximum.Locate.Proofs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Partition.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- Local maximum-finger exposure has logarithmic endpoint-distance cost.
 Restoring balance in the enclosing context is a separate operation. -/
@@ -46,4 +46,4 @@ theorem splitLocatedMaximum_spec {h : Nat} {t : Multiway} (valid : Balanced h t)
     · simp only [splitLocatedMaximum, rest]
       exact Nat.le_trans cost (by omega)
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

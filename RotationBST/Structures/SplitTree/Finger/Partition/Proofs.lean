@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Locate.Split.Proofs
 public import RotationBST.Structures.SplitTree.Finger.Repair.Context.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open Context
 
 theorem splitLocated_shape (t : Multiway) (rank : Nat) :
@@ -67,4 +67,4 @@ theorem splitFromMinimum_sizes {h : Nat} {t : Multiway} (valid : Balanced h t)
   simp only [splitView, Tree.size, binaryView_size] at sizes
   exact ⟨left, by omega⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

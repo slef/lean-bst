@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Repair.Context.Accounting
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open Context
 
 /-- Repair cannot lower the global height by more than the initial local gap. -/
@@ -95,4 +95,4 @@ theorem repairContext_height_loss (fs : List Frame) {expected actual : Nat} {foc
     simp only [repairContext, different, ite_false, continues, plug, List.length_cons]
     omega
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

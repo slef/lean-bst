@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Store the exposed keys in a fresh shared supernode and retain the exact
 ordered nested children. An empty exposed region retains its sole child. -/

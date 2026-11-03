@@ -49,18 +49,18 @@ theorem maintains_of_fringe {s t : MarkedTree} {reference : Tree} {past : List N
 /-- The computed final splay preserves the full component-nesting invariant. -/
 theorem maintained_splayRoot (s : MarkedTree) (reference : Tree) (past : List Nat)
     (maintained : Maintains s reference past) (x : Nat) (valid : x ∈ s.region.keys 0) :
-    Access s.tree (s.splayRoot (Geometric.Region.index s.region 0 x)).1.tree x
-        (s.splayRoot (Geometric.Region.index s.region 0 x)).2 ∧
-      Maintains (s.splayRoot (Geometric.Region.index s.region 0 x)).1 reference past ∧
-      ((s.splayRoot (Geometric.Region.index s.region 0 x)).2 : ℝ) +
-        (s.splayRoot (Geometric.Region.index s.region 0 x)).1.potential - s.potential ≤
+    Access s.tree (s.splayRoot (Region.index s.region 0 x)).1.tree x
+        (s.splayRoot (Region.index s.region 0 x)).2 ∧
+      Maintains (s.splayRoot (Region.index s.region 0 x)).1 reference past ∧
+      ((s.splayRoot (Region.index s.region 0 x)).2 : ℝ) +
+        (s.splayRoot (Region.index s.region 0 x)).1.potential - s.potential ≤
           3 * Real.logb 2 (height reference) + 1 := by
   have member : (0, s.region) ∈ s.components 0 := by
     cases s with
-    | nil => simp [region, Geometric.Region.keys] at valid
+    | nil => simp [region, Region.keys] at valid
     | node l r cl cr => simp [components, rootComponent]
   have hs := component_size maintained.1 member
-  obtain ⟨hf, _, _, bound⟩ := splayRoot_spec s _ (Geometric.Region.index_valid valid)
+  obtain ⟨hf, _, _, bound⟩ := splayRoot_spec s _ (Region.index_valid valid)
   refine ⟨splayRoot_key s x valid, maintains_of_fringe maintained hf, ?_⟩
   linarith [Splay.Updates.log_nat_mono hs]
 

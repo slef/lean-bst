@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Binary.Join.Balance
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.Join.Results
+namespace RotationBST.SplitTree.Multiway.Finger.Join.Results
 
 /-- Attach a taller sibling while keeping the minimum finger, at cost linear
 in the height difference rather than the height of the enclosing tree. -/
@@ -23,11 +23,11 @@ theorem before_remainder (hl hr : Nat) (l r : Multiway) (rest : Tree) :
       (joinOpenCost (hr - hl) l r) ∧ joinOpenCost (hr - hl) l r ≤ 4 * (hr - hl) :=
   ⟨attachRight_open _ _ _ _ _, joinOpen_cost _ _ _⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger.Join.Results
+end RotationBST.SplitTree.Multiway.Finger.Join.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Join.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Finger.Join.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Join.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Finger.Join.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,

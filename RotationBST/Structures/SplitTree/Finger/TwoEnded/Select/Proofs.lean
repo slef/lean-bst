@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Select.Defs
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Partial.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded
 
 /-- Every selected rank is legal in its recursively shortened interval. -/
 theorem selectionPlan_applicable (keys : List Nat) (input : Option State) (offset : Nat)
@@ -81,4 +81,4 @@ theorem selectKeys_spec (input : Option State) (keys : Finset Nat) (valid : Inte
   exact ⟨result.1, result.2, selectionPlan_keys _ input 0 valid ordered inside,
     runPlan_linear _ input valid applicable⟩
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded

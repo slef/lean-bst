@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Tango.State.Fringe
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Geometric.Region
+open Region
 
 /-- Canonicalize marks on empty edges within the root component. Marks below a
 component boundary are retained verbatim. -/

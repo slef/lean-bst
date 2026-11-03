@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Tango.State.Splay.Proofs
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Geometric.Region
+open Region
 
 theorem represents_of_fringe {s t : MarkedTree} {reference : Tree} {past : List Nat}
     (represented : Represents s reference past) (same : s.fringe = t.fringe) :

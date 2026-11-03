@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Multiway.Edges.Bounds
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Edges.Results
+namespace RotationBST.SplitTree.Multiway.Edges.Results
 
 /-- Repair the first child of any parent: preserve balance and use at most five
 binary rotations, while never increasing the merge reserve. -/
@@ -36,10 +36,10 @@ theorem merge_four (a b c d e f : Multiway) :
         (.four a b (.two c d) (.two e f) : Multiway).nodes :=
   ⟨merge_first_four_nodes a b c d e f, merge_last_four_nodes a b c d e f⟩
 
-end RotationBST.Geometric.Split.Multiway.Edges.Results
+end RotationBST.SplitTree.Multiway.Edges.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Edges.Results`: 4 root declarations -/
+/-- info: abstract audit passed for `RotationBST.SplitTree.Multiway.Edges.Results`: 4 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Geometric.Split.Multiway.Edges.Results allowing [
+#check_bst_abstract RotationBST.SplitTree.Multiway.Edges.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs]

@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Proofs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 private theorem maximumView_first (t : Multiway) :
     maximumView t = ⟨[], .nil⟩ ∨ ∃ rest tail, maximumView t = ⟨.nil :: rest, tail⟩ := by
@@ -36,4 +36,4 @@ theorem maximumView_maximum (t : Multiway) (nonempty : t ≠ .nil) :
     simp only [MaximumView.tree, leftComb, Tree.size] at sizes ⊢
     omega
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

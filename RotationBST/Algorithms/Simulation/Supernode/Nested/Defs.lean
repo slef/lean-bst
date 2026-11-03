@@ -6,7 +6,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Initialize.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- A supernode stores a shared split state and one recursively represented
 subtree for each external gap, in inorder. -/

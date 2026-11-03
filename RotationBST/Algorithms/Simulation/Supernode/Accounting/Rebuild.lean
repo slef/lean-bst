@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Rebuild.Proofs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 theorem Assembly.children_credit (assembly : Assembly) :
     (assembly.children.map Nested.credit).sum = assembly.credit := by

@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Partial.Defs
 public import Mathlib.Data.Finset.Sort
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded
 
 /-- Select increasing absolute ranks using only this row's choices. Intervals
 between consecutive chosen ranks are retained without further splitting. -/
@@ -22,4 +22,4 @@ def Partitioned.keys : Partitioned → Nat → List Nat
 def selectKeys (input : Option State) (keys : Finset Nat) : Partitioned × Nat :=
   runPlan (selectionPlan 0 (keys.sort (· ≤ ·))) input
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded

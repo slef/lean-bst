@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Nested.Initial
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Initially there is one root supernode and all child gaps are empty. -/
 theorem initialNested_credit (n : Nat) :

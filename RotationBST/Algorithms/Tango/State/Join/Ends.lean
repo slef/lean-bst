@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Tango.State.Marking
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Geometric.Region Pointer.Lazy.Skeleton
+open Region Pointer.Lazy.Skeleton
 
 /-- The executable maximum-splay join has the expected endpoint and cost. -/
 theorem joinBack_spec (s right : MarkedTree) (positive : 0 < s.region.size)

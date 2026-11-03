@@ -18,7 +18,7 @@ theorem initial_state (reference : Tree) :
 
 /-- Every stored component is nonempty and fits within the reference height. -/
 theorem component_bounds {s : MarkedTree} {reference : Tree} {past : List Nat}
-    (represented : Represents s reference past) {p : Nat × Geometric.Region}
+    (represented : Represents s reference past) {p : Nat × Region}
     (member : p ∈ s.components 0) : 0 < p.2.size ∧ p.2.size ≤ height reference :=
   ⟨components_nonempty s 0 p member, component_size represented member⟩
 
@@ -32,7 +32,7 @@ theorem access (s : MarkedTree) (reference : Tree) (past : List Nat)
 
 /-- The complete potential is nonnegative; all detached components are included. -/
 theorem accounting (s : MarkedTree) : 0 ≤ s.potential ∧
-    s.potential = Geometric.Region.auxiliaryPotential s.region + (s.fringe.map potential).sum :=
+    s.potential = Region.auxiliaryPotential s.region + (s.fringe.map potential).sum :=
   ⟨potential_nonneg s, potential_fringe s⟩
 
 end RotationBST.Tango.State.Results

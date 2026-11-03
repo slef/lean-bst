@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Nested.Retention
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode
-open Split.Multiway.Finger.TwoEnded
+open SplitTree.Multiway.Finger.TwoEnded
 
 /-- Materializing retained intervals does not change the full embedded BST. -/
 theorem assemblePartition_tree (parts : Partitioned) (children : List Nested) (first : Nat)

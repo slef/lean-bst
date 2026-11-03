@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Bounds
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open RotationBST.Tree (depth)
 
 theorem depth_node_bound {l r : Tree} {bound : Nat}
@@ -59,4 +59,4 @@ theorem comb_depth_extend (xs : List Tree) (tail rest : Tree) (bound rank : Nat)
         simp only [List.length_cons]
         omega
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

@@ -50,7 +50,7 @@ example (s : Tree) (xs : List Nat) (valid : ∀ x ∈ xs, x < s.size) :
   exact ⟨t, r, execution, by simpa only [hc, Geometric.greedyASS] using cost⟩
 
 -- Exact cardinality, including the zero-request and unused-key cases.
-example (n : Nat) : ∃ s t, s.size = n ∧ Geometric.RegionExecution s [] t 0 := by
+example (n : Nat) : ∃ s t, s.size = n ∧ RegionExecution s [] t 0 := by
   apply (Geometric.Equivalence.Results.ass_iff_region_execution n [] 0).mp
   exact ⟨⟨⟨∅, by simp [requestsAt], ass_empty⟩, by simp [History]⟩, rfl⟩
 
@@ -67,7 +67,7 @@ example : Tango.preferredPaths (Tango.perfect 2) [0, 2] = [[1, 2], [0]] := by de
 example : Tango.preferredPaths (Tango.perfect 3) [0] = [[3, 1, 0], [2], [5], [4], [6]] := by decide
 
 namespace Auxiliary
-open Pointer.Lazy.Skeleton Geometric.Region
+open Pointer.Lazy.Skeleton Region
 
 -- Fringe sizes alter global ranks, but not auxiliary splay shapes or costs.
 private def sample (a b c d : Tree) : Region :=
@@ -559,15 +559,15 @@ private def leaf : Tree := .node .nil .nil
 private def three : Tree := .node leaf leaf
 
 -- The balanced seven-key hierarchy saturates the reserve bound.
-example : Split.totalCharge (.node three three) = 11 := by decide
-example : Split.totalCharge (.node (.node leaf .nil) .nil) = 3 := by decide
-example (hierarchy : Tree) : Split.totalCharge hierarchy ≤ 2 * hierarchy.size :=
-  Split.Results.linear_accounting hierarchy
+example : SplitTree.totalCharge (.node three three) = 11 := by decide
+example : SplitTree.totalCharge (.node (.node leaf .nil) .nil) = 3 := by decide
+example (hierarchy : Tree) : SplitTree.totalCharge hierarchy ≤ 2 * hierarchy.size :=
+  SplitTree.Results.linear_accounting hierarchy
 
 end SplitAccounting
 
 namespace MultiwayRepairs
-open Split
+open SplitTree
 
 private def leaf2 : Multiway := .two .nil .nil
 private def leaf3 : Multiway := .three .nil .nil .nil
@@ -596,7 +596,7 @@ example : Multiway.Balanced 2 (.two leaf3 leaf3) :=
 end MultiwayRepairs
 
 namespace MultiwayEdgeRepairs
-open Split
+open SplitTree
 
 private def two : Multiway := .two .nil .nil
 private def three : Multiway := .three .nil .nil .nil
@@ -629,7 +629,7 @@ example (a b c d e f g : Multiway) :
 end MultiwayEdgeRepairs
 
 namespace MultiwayContexts
-open Split Multiway.Context
+open SplitTree Multiway.Context
 
 private def leaf : Multiway := .two .nil .nil
 private def focus : Multiway := .three leaf leaf leaf
@@ -658,7 +658,7 @@ example : Multiway.Balanced 4 (plug ancestors repaired) := by
 end MultiwayContexts
 
 namespace MultiwayExtraction
-open Split
+open SplitTree
 
 private def leaf : Multiway := .two .nil .nil
 private def leaf3 : Multiway := .three .nil .nil .nil
@@ -688,7 +688,7 @@ example : Access seven.binary (.node .nil (Multiway.three leaf3 leaf leaf).binar
 end MultiwayExtraction
 
 namespace MultiwayFingerSearch
-open Split Multiway.Finger
+open SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -711,7 +711,7 @@ example : nearSearchLevels seven 3 ≤ Nat.log2 (min 3 (seven.size - 1 - 3) + 1)
 end MultiwayFingerSearch
 
 namespace FingerBinaryView
-open Split Multiway.Finger
+open SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -735,7 +735,7 @@ example : viewCost seven ≤ 3 * seven.size :=
 end FingerBinaryView
 
 namespace FingerBinarySearch
-open Split Multiway.Finger
+open SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -756,7 +756,7 @@ example : Tree.depth (binaryView seven).tree 2 ≤ 5 * Nat.log2 3 + 6 :=
 end FingerBinarySearch
 
 namespace FingerRepairMaintenance
-open Split Multiway.Finger
+open SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def leaf3 : Multiway := .three .nil .nil .nil
@@ -784,7 +784,7 @@ example (a b c d e f rest : Multiway) :
 end FingerRepairMaintenance
 
 namespace FingerExtraction
-open Split Multiway.Finger
+open SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def leaf3 : Multiway := .three .nil .nil .nil
@@ -811,7 +811,7 @@ example (rest : Tree) :
 end FingerExtraction
 
 namespace FingerExtractionAmortized
-open Split Multiway.Finger
+open SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -831,7 +831,7 @@ example (n : Nat) : (extractMany n seven).2 ≤ 12 * seven.nodes + 3 * n :=
 end FingerExtractionAmortized
 
 namespace BalancedJoinAndSplit
-open Split Multiway
+open SplitTree Multiway
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -864,7 +864,7 @@ example (rank : Fin 7) : (Partition.run 3 seven rank).Valid :=
 end BalancedJoinAndSplit
 
 namespace SplitRootAbsorption
-open Split Multiway
+open SplitTree Multiway
 
 private def wide : Multiway := .four .nil .nil .nil .nil
 private def full : Multiway := .four wide wide wide wide
@@ -885,7 +885,7 @@ example (h : Nat) (a b c d : Multiway) :
 end SplitRootAbsorption
 
 namespace SplitHeightAndCost
-open Split Multiway
+open SplitTree Multiway
 
 private def wide : Multiway := .four .nil .nil .nil .nil
 private def full : Multiway := .four wide wide wide wide
@@ -903,7 +903,7 @@ example (rank : Fin 15) :
 end SplitHeightAndCost
 
 namespace FingerPreservingSplit
-open Split Multiway.Finger
+open SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -929,7 +929,7 @@ example (rank : Fin 7) (rest : Tree) :
 end FingerPreservingSplit
 
 namespace LocatedFingerSplit
-open Split Multiway.Finger
+open SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -953,7 +953,7 @@ example (rank : Fin 7) :
 end LocatedFingerSplit
 
 namespace FingerSiblingJoin
-open Split Multiway.Finger
+open SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def sibling : Multiway := .two leaf leaf
@@ -974,7 +974,7 @@ example (rest : Tree) :
 end FingerSiblingJoin
 
 namespace CompleteMinimumFingerSplit
-open RotationBST.Geometric.Split Multiway.Finger
+open RotationBST.SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -1002,7 +1002,7 @@ example : (repairContext 2 2 three [.twoLeft three]).cost = 0 := by decide
 end CompleteMinimumFingerSplit
 
 namespace FingerCascadeAccounting
-open RotationBST.Geometric.Split Multiway.Finger
+open RotationBST.SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -1025,7 +1025,7 @@ example : (repairContext 1 0 .nil ancestors).cost + 2 * (repairContext 1 0 .nil 
 end FingerCascadeAccounting
 
 namespace CompleteFingerSplitAccounting
-open RotationBST.Geometric.Split Multiway.Finger
+open RotationBST.SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -1043,7 +1043,7 @@ example (rank : Fin 7) :
 end CompleteFingerSplitAccounting
 
 namespace SharedEndpointViews
-open RotationBST.Geometric.Split Multiway.Finger
+open RotationBST.SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -1067,7 +1067,7 @@ example (rank : Fin 7) :
 end SharedEndpointViews
 
 namespace HeightBalancedEndpoints
-open RotationBST.Geometric.Split Multiway.Finger
+open RotationBST.SplitTree Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf

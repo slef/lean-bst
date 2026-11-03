@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Join.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 
 /-- Attach a taller left sibling, retaining the maximum finger and remainder. -/
 def maximumJoinOpenCost : Nat → Multiway → Multiway → Nat
@@ -30,4 +30,4 @@ def attachLeft (focusHeight siblingHeight : Nat) (focus sibling : Multiway) : Jo
   let result := Join.finish siblingHeight (Join.joinRight (siblingHeight - focusHeight) sibling focus)
   { result with cost := maximumJoinViewCost (siblingHeight - focusHeight) sibling focus }
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

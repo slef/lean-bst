@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Locate.Defs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Repair.Defs
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger
+namespace RotationBST.SplitTree.Multiway.Finger
 open Context
 
 /-- An ancestor reached by following only first-child edges. -/
@@ -34,4 +34,4 @@ def enclosingView (focus : Multiway) (outer : List Frame) : Tree :=
   | none => (binaryView focus).tree
   | some rest => openView focus rest
 
-end RotationBST.Geometric.Split.Multiway.Finger
+end RotationBST.SplitTree.Multiway.Finger

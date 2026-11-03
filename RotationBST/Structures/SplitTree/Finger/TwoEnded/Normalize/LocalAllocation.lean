@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Partition.HeightLoss
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Partition.HeightLoss
 
 @[expose] public section
-namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.SplitTree.Multiway.Finger.TwoEnded
 
 /-- Normalization creates only logarithmically many new reserve nodes, even
 when endpoint conversions traverse the full height of a large remaining side. -/
@@ -51,4 +51,4 @@ theorem split_normalization_nodes {state : State} (valid : state.HeightValid)
         intervalNodes (normalize (.maximum (splitFromMaximum state.right.tree (state.size - 1 - rank)).right)).1 ≤ _
       omega
 
-end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
+end RotationBST.SplitTree.Multiway.Finger.TwoEnded

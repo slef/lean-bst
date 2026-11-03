@@ -3,7 +3,8 @@ module
 public import RotationBST.Models.Region.Basic
 
 @[expose] public section
-namespace RotationBST.Geometric.Region
+namespace RotationBST.Region
+open Geometric
 open Pointer.Lazy.Skeleton
 
 theorem keys_bounds {s : Region} {lo x : Nat} (h : x ∈ keys s lo) :
@@ -68,4 +69,4 @@ theorem complete_children {P : Finset Point} {time lo : Nat} {l r : Region}
       · have := keys_bounds hx; omega
       · exact hx
 
-end RotationBST.Geometric.Region
+end RotationBST.Region

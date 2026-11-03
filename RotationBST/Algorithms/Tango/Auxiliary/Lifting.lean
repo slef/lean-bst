@@ -5,7 +5,7 @@ public import RotationBST.Models.Region.Fringe
 public import RotationBST.Models.Rotation.Rotations
 
 @[expose] public section
-namespace RotationBST.Geometric.Region
+namespace RotationBST.Region
 open Pointer.Lazy.Skeleton
 
 theorem shape_size (s : Region) : (shape s).size = s.size := by
@@ -61,4 +61,4 @@ theorem lift_rotations {a b : Tree} {cost : Nat} (rotations : Rotations a b cost
     obtain ⟨u, hu, hfu, hru⟩ := ih v hv
     exact ⟨u, hu, hf.trans hfu, .step hr hru⟩
 
-end RotationBST.Geometric.Region
+end RotationBST.Region
