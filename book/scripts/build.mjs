@@ -7,6 +7,12 @@
 //   @viz kind {json}    mount an interactive widget (src/assets/viz)
 //   @index              the declaration index (generated)
 //   @audit              the audit tables (generated)
+//   @claims             the list of main results, for the checking page
+//
+// A fenced block ```headline id … ``` states a chapter's main result: header
+// lines (title, source, key, theorems, skip) up to the first blank line, then
+// the statement in English. The build computes the definitions a reader needs
+// to check it (see `claimClosure`) and writes them to assets/claims.json.
 //
 // and inline [[Name]] or [[Name|text]] for a hyperlinked, hoverable reference.
 // Every name must resolve to a constant that Lean exported, or the build fails.
@@ -91,7 +97,10 @@ function resolveName(text, where) {
   return null;
 }
 
-for (const ch of chapters) {
+// Numbered chapters and appendices come first: a declaration the preface
+// previews still has its home where it is explained.
+const homeOrderChapters = [...chapters.filter((c) => c.number || c.appendix), ...chapters.filter((c) => !c.number && !c.appendix)];
+for (const ch of homeOrderChapters) {
   let inFence = false;
   for (const line of ch.text.split('\n')) {
     if (line.startsWith('```')) inFence = !inFence;
@@ -107,6 +116,37 @@ for (const ch of chapters) {
     }
   }
 }
+// Main results: ```headline id``` blocks.
+const claims = [];
+const HEADLINE = /^```headline[ \t]+([\w-]+)[ \t]*\n([\s\S]*?)^```[ \t]*$/gm;
+for (const ch of chapters) {
+  for (const m of ch.text.matchAll(HEADLINE)) {
+    const [, id, content] = m;
+    const where = `${ch.file}: headline ${id}`;
+    const blank = content.search(/\n\s*\n/);
+    const head = blank < 0 ? content : content.slice(0, blank);
+    const body = blank < 0 ? '' : content.slice(blank).trim();
+    const claim = { id, chapter: ch, theorems: [], skips: [], body, key: false, where };
+    for (const line of head.split('\n')) {
+      const kv = line.match(/^(\w+):\s*(.*)$/);
+      if (!kv) { fail(`${where}: bad header line ${JSON.stringify(line)}`); continue; }
+      const [, k, v] = kv;
+      if (k === 'title') claim.title = v;
+      else if (k === 'source') claim.source = v;
+      else if (k === 'key') claim.key = v === 'yes';
+      else if (k === 'theorems') claim.theorems.push(...v.split(/\s+/).filter(Boolean));
+      else if (k === 'skip') {
+        const [name, reason] = v.split(/\s+\|\s+/);
+        claim.skips.push({ name: name.trim(), reason: (reason ?? '').trim() });
+      } else fail(`${where}: unknown header ${k}`);
+    }
+    if (!claim.title) fail(`${where}: missing title`);
+    if (!body) fail(`${where}: missing English statement`);
+    if (claims.some((c) => c.id === id)) fail(`${where}: duplicate headline id`);
+    claims.push(claim);
+  }
+}
+
 // Constructors and fields live inside their parent's block.
 for (const { name, chapter } of displayed) {
   const { module, range } = declLoc.get(name);
@@ -122,6 +162,46 @@ for (const { name, chapter } of displayed) {
   const { module } = declLoc.get(name);
   if (!moduleHome.has(module)) moduleHome.set(module, { chapter, id: declId(name) });
 }
+
+// The definitions a reader must understand to check a claim: every library
+// constant its theorem statements mention, then, recursively, every library
+// constant those definitions mention in their types and bodies (the export
+// skips proofs). A `skip` names a constant, or a structure field, whose
+// reading is unnecessary; the claim records why.
+const deps = data.deps ?? {};
+function claimClosure(claim) {
+  const roots = claim.theorems.map((t) => resolveName(t, claim.where)).filter(Boolean);
+  const skips = claim.skips.map((s) => ({ ...s, full: s.name.startsWith(LIB + '.') ? s.name : `${LIB}.${s.name}` }));
+  const skipSet = new Set(skips.map((s) => s.full));
+  const usedSkips = new Set();
+  const needs = new Map(); // name -> first constant that needed it
+  const external = new Set();
+  const visit = (n, from) => {
+    if (skipSet.has(n)) { usedSkips.add(n); return; }
+    const e = deps[n];
+    if (!e) { external.add(n); return; }
+    if (needs.has(n)) return;
+    needs.set(n, from);
+    let uses = e.uses;
+    if (e.fields) {
+      uses = Object.entries(e.fields).filter(([f]) => {
+        const skipped = skipSet.has(`${n}.${f}`);
+        if (skipped) usedSkips.add(`${n}.${f}`);
+        return !skipped;
+      }).flatMap(([, u]) => u);
+    }
+    for (const u of uses) visit(u, n);
+  };
+  for (const r of roots) {
+    if (consts[r]?.kind !== 'theorem') fail(`${claim.where}: ${short(r)} is not a theorem`);
+    if (!home.has(r)) fail(`${claim.where}: ${short(r)} is not explained in any chapter (add an @decl or @stmt)`);
+    for (const u of deps[r]?.uses ?? []) visit(u, r);
+  }
+  for (const s of skips) if (!usedSkips.has(s.full)) fail(`${claim.where}: skip ${s.name} is not on any reading path`);
+  if (skips.some((s) => !s.reason)) fail(`${claim.where}: every skip needs a reason after " | "`);
+  return { roots, needs, external, skips };
+}
+for (const claim of claims) Object.assign(claim, claimClosure(claim));
 
 // ---------------------------------------------------------------------------
 // Rendering helpers
@@ -213,15 +293,27 @@ function statementEnd(source, range) {
   return null;
 }
 
-function renderDecl(page, name, mode) {
+// Where each declaration's home block sits: book order and enclosing section.
+const homeInfo = new Map(); // name -> {order, section}
+let homeOrder = 0;
+
+function renderDecl(page, name, mode, { noHome = false } = {}) {
   const { module, range } = declLoc.get(name);
   const m = data.modules[module];
   const c = consts[name];
   const h = home.get(name);
-  const isHome = h && h.chapter === page.chapter && !page.placed?.has(name);
+  const isHome = !noHome && h && h.chapter === page.chapter && !page.placed?.has(name);
   page.placed ??= new Set();
   const id = isHome ? declId(name) : null;
-  if (isHome) page.placed.add(name);
+  if (isHome) {
+    page.placed.add(name);
+    const order = ++homeOrder;
+    homeInfo.set(name, { order, section: page.section ?? null });
+    // Constructors and fields share their parent's block.
+    for (const d of m.defs) {
+      if (d[0] >= range[0] && d[0] <= range[2] && !homeInfo.has(d[4])) homeInfo.set(d[4], { order, section: page.section ?? null });
+    }
+  }
 
   const anchors = new Map();
   const extraRefs = [[range[4], range[5], range[6], range[7], name, true]];
@@ -322,7 +414,7 @@ md.renderer.rules.math_block = (tokens, idx) => `<div class="math-display">${tex
 // Directives on their own line.
 md.block.ruler.before('paragraph', 'directive', (state, startLine, _endLine, silent) => {
   const line = state.src.slice(state.bMarks[startLine] + state.tShift[startLine], state.eMarks[startLine]);
-  const m = line.match(/^@(decl|stmt|viz|index|audit)\b(.*)$/);
+  const m = line.match(/^@(decl|stmt|viz|index|audit|claims)\b(.*)$/);
   if (!m) return false;
   if (silent) return true;
   const tok = state.push('directive', '', 0);
@@ -352,8 +444,61 @@ md.renderer.rules.directive = (tokens, idx) => {
   }
   if (kind === 'index') return renderIndex(page);
   if (kind === 'audit') return renderAudit(page);
+  if (kind === 'claims') return renderClaims(page);
   return '';
 };
+
+// Main-result boxes.
+const defaultFence = md.renderer.rules.fence;
+md.renderer.rules.fence = (tokens, idx, opts, env, self) => {
+  const t = tokens[idx];
+  const m = t.info.match(/^headline\s+([\w-]+)/);
+  if (!m) return defaultFence(tokens, idx, opts, env, self);
+  const claim = claims.find((c) => c.id === m[1]);
+  return claim ? renderHeadline(currentPage, claim) : '';
+};
+
+function claimLabel(claim) {
+  return claim.key ? `<span class="headline-star" aria-hidden="true">★</span> Key result` : 'Main result';
+}
+
+function claimCounts(claim) {
+  const shown = [...claim.needs.keys()].filter((n) => home.has(n));
+  const chaptersUsed = new Set(shown.map((n) => home.get(n).chapter));
+  const internal = claim.needs.size - shown.length;
+  return `${claim.needs.size} definition${claim.needs.size === 1 ? '' : 's'} in ${chaptersUsed.size} chapter${chaptersUsed.size === 1 ? '' : 's'}`
+    + (internal ? `, ${internal} more in internal modules` : '');
+}
+
+function renderHeadline(page, claim) {
+  const where = currentWhere;
+  const statement = md.render(claim.body, { nested: true });
+  currentWhere = where;
+  const lean = claim.roots.map((n) => renderDecl(page, n, 'stmt', { noHome: true })).join('');
+  return `<section class="headline" id="claim-${claim.id}" data-claim="${claim.id}">`
+    + `<div class="headline-label">${claimLabel(claim)}${claim.source ? ` · <span class="headline-source">${md.renderInline(claim.source)}</span>` : ''}</div>`
+    + `<div class="headline-title">${md.renderInline(claim.title)}</div>`
+    + `<div class="headline-statement">${statement}</div>`
+    + `<details class="headline-lean"><summary>The Lean statement${claim.roots.length > 1 ? 's' : ''}</summary><div class="decl-group">${lean}</div></details>`
+    + `<div class="headline-check"><label><input type="checkbox" class="claim-toggle" data-claim="${claim.id}"> Highlight what I need to read to check this</label>`
+    + `<span class="headline-count">${claimCounts(claim)} · <a href="checking.html?select=${claim.id}">reading list</a></span></div>`
+    + `</section>\n`;
+}
+
+function renderClaims(page) {
+  const rows = claims.map((claim) => {
+    const ch = claim.chapter;
+    const where = `${ch.number ? `Chapter ${ch.number}` : ch.title}`;
+    return `<li class="claim-row${claim.key ? ' key-result' : ''}" id="claim-${claim.id}">`
+      + `<label><input type="checkbox" class="claim-toggle" data-claim="${claim.id}">`
+      + `<span class="claim-title">${claim.key ? '<span class="headline-star" aria-hidden="true">★</span> ' : ''}${md.renderInline(claim.title)}</span></label>`
+      + `<span class="claim-meta"><a href="${ch.href}#claim-${claim.id}">${escapeHtml(where)}</a>${claim.source ? ` · ${md.renderInline(claim.source)}` : ''} · ${claimCounts(claim)}</span>`
+      + `<details class="claim-statement"><summary>Statement</summary>${md.render(claim.body, { nested: true }).replace(/href="#/g, `href="${ch.href}#`)}</details></li>`;
+  });
+  return `<ul class="claim-list">${rows.join('')}</ul>`
+    + `<div class="claim-actions"><button type="button" class="claims-key">Select the key results</button> <button type="button" class="claims-clear">Clear</button></div>`
+    + `<div id="reading-list" class="reading-list"><p class="reading-empty">Select one or more results above to see what to read.</p></div>\n`;
+}
 
 // Callouts: ::: note Title / ::: caveat / ::: lean / ::: details Title
 for (const kind of ['note', 'caveat', 'check', 'details', 'aside', 'exercise']) {
@@ -375,7 +520,7 @@ for (const kind of ['note', 'caveat', 'check', 'details', 'aside', 'exercise']) 
 // Heading ids and section numbers.
 const slugify = (s) => s.toLowerCase().replace(/<[^>]+>/g, '').replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '');
 md.core.ruler.push('sections', (state) => {
-  if (state.inlineMode) return;
+  if (state.inlineMode || state.env?.nested) return;
   const page = currentPage;
   page.toc = [];
   const counters = [0, 0];
@@ -409,6 +554,9 @@ md.renderer.rules.heading_open = (tokens, idx, opts, env, self) => {
     html += `<span class="chapnum">Chapter ${currentPage.chapter.number}</span>`;
   } else if (t.tag === 'h1' && currentPage.chapter.appendix) {
     html += `<span class="chapnum">Appendix ${currentPage.chapter.appendix}</span>`;
+  }
+  if (t.tag === 'h2' && t.meta?.id) {
+    currentPage.section = { id: t.meta.id, number: t.meta.number, title: tokens[idx + 1].children.filter((c) => c.type === 'text' || c.type === 'code_inline').map((c) => c.content).join('') };
   }
   if (t.meta?.number) html += `<a class="secnum" href="#${t.meta.id}">${t.meta.number}</a> `;
   else if (t.meta?.id) html += `<a class="secanchor" href="#${t.meta.id}" aria-hidden="true">#</a>`;
@@ -520,6 +668,7 @@ function layout(page, body) {
 <header class="topbar"><button class="menu" type="button" aria-label="Show chapters">☰</button>
 <a class="topbar-title" href="index.html">${escapeHtml(config.title)}</a>
 <span class="topbar-spacer"></span>
+<a class="topbar-link" href="checking.html">Check a result</a>
 <a class="topbar-link" href="declarations.html">Declarations</a>
 <a class="topbar-link" href="${config.repo}">Lean source</a>
 <button class="theme" type="button" aria-label="Toggle dark mode">◐</button></header>
@@ -535,6 +684,7 @@ ${nav}
 <div class="hover-card" role="tooltip" hidden></div>
 <script type="application/json" id="lean-hover">${JSON.stringify(page.hover).replace(/</g, '\\u003c')}</script>
 <script src="assets/book.js" defer></script>
+<script src="assets/checking.js" defer></script>
 ${page.usesViz ? '<script type="module" src="assets/viz/index.js"></script>' : ''}
 </body>
 </html>
@@ -579,6 +729,46 @@ for (const [href, entry] of rendered) {
   const html = layout(entry.page, body);
   rendered.set(href, html);
   writeFileSync(join(distDir, href), html);
+}
+
+// Reading paths for the main results, used by assets/book.js.
+{
+  const declInfo = {};
+  const describe = (name) => {
+    if (declInfo[short(name)]) return;
+    const h = home.get(name);
+    const info = homeInfo.get(name);
+    const c = consts[name] ?? deps[name];
+    const entry = { k: c?.kind ?? deps[name]?.kind ?? '' };
+    if (h) {
+      entry.href = `${h.chapter.href}${fragment(h.id)}`;
+      entry.ch = h.chapter.index;
+      entry.o = info?.order ?? 0;
+      if (info?.section) entry.sec = info.section;
+    } else {
+      entry.src = sourceUrl(name);
+      entry.m = (deps[name]?.module ?? '').replace(LIB + '.', '');
+    }
+    declInfo[short(name)] = entry;
+  };
+  const NOISE = /^(inst|Inhabited|Decidable|OfNat|HAdd|HSub|HMul|HDiv|HMod|HPow|HAppend|LT|LE|Membership|Insert|Singleton|EmptyCollection|Union|Inter|SDiff|HasSubset|Add|Sub|Mul|Div|Neg|Zero|One|Max|Min|Append|NatCast|IntCast|BEq|Hashable|Repr|ToString|SizeOf|outParam|semiOutParam|autoParam|optParam|Eq|Ne|And|Or|Not|Iff|Exists|True|False|ite|dite|cond|id|Function|Prod\.(fst|snd)|Subtype\.(val))\b/;
+  const out = claims.map((claim) => {
+    for (const n of claim.needs.keys()) describe(n);
+    return {
+      id: claim.id,
+      title: md.renderInline(claim.title),
+      key: claim.key,
+      chapter: claim.chapter.index,
+      href: `${claim.chapter.href}#claim-${claim.id}`,
+      theorems: claim.roots.map((n) => ({ s: short(n), href: home.has(n) ? `${home.get(n).chapter.href}${fragment(home.get(n).id)}` : null })),
+      needs: [...claim.needs.keys()].map(short),
+      skips: claim.skips.map((s) => ({ s: short(s.full), reason: md.renderInline(s.reason) })),
+      external: [...claim.external].filter((n) => !NOISE.test(n) && !/(^|\.)inst[A-Z]/.test(n) && consts[n]?.kind !== 'instance' && consts[n]?.kind !== 'class')
+        .sort().map((n) => ({ s: n, href: docsUrl(n) })),
+    };
+  });
+  const chapterList = chapters.map((ch) => ({ href: ch.href, number: ch.number ?? ch.appendix ?? null, title: ch.title }));
+  writeFileSync(join(distDir, 'assets', 'claims.json'), JSON.stringify({ claims: out, decls: declInfo, chapters: chapterList }));
 }
 
 // Internal links: every page.html#anchor must exist.

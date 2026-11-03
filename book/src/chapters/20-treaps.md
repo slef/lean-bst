@@ -2,6 +2,21 @@
 
 [Chapter 9](equivalence.html) states that every arborally satisfied point set can be executed by a binary search tree that touches exactly one node per point. The proof, due to Demaine, Harmon, Iacono, Kane and Pătraşcu (2009), is a data structure: a treap whose priorities are the times at which keys will next be touched. The converse, that the touched nodes of any rooted-region execution form an arborally satisfied set, rests on the mirror-image invariant, a heap of the times at which keys were last touched. This chapter presents the definitions these two arguments are built from, and how the proofs use them.
 
+Together the two arguments prove the exact form of the equivalence, with no constant factors at all: a point set and a BST execution in the rooted-region model of [Chapter 7](regions.html) cost the same.
+
+```headline treap-regions
+title: Arborally satisfied sets are exactly rooted-region executions
+source: Demaine, Harmon, Iacono, Kane and Pătraşcu, *The geometry of binary search trees* (2009)
+theorems: Geometric.Equivalence.Results.ass_iff_region_execution
+
+For every $n$, every request sequence $X = x_0, x_1, \dots$ and every number $c$, the following are equivalent:
+
+- there is an arborally satisfied set of exactly $c$ points, with keys less than $n$ and times less than $|X|$, that contains the point $(x_i, i)$ of every request;
+- some BST on $n$ keys can serve $X$ in the rooted-region model, touching exactly $c$ nodes in total.
+
+The initial tree is not fixed: the construction chooses it, and it needs the whole sequence in advance. In Lean, the point sets are [[Geometric.Offline]] solutions and the executions are [[Geometric.RegionExecution]]s.
+```
+
 None of the definitions here appears in a theorem statement of the reading interface. They live in `Structures/Treap/Abstract.lean`, `Models/Region/Abstract.lean` and `Models/Region/View/Abstract.lean`, and they are shown so that the proofs of [[Geometric.Equivalence.Results.ass_iff_region_execution]] and [[Geometric.Equivalence.Results.ass_to_pointers]] can be followed in the source. The regions and region executions they manipulate were defined in [Chapter 7](regions.html), and points, rows and arboral satisfaction in [Chapter 8](geometry.html).
 
 ## Treaps on ranks

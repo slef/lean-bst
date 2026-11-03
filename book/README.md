@@ -22,8 +22,8 @@ npm run serve                    # http://localhost:8000
 |---|---|
 | `src/book.json` | Title, repository URL, chapter order (with parts, numbers and appendix letters), KaTeX macros |
 | `src/chapters/*.md` | Chapters (Markdown with the directives below) |
-| `src/assets/` | Stylesheet, page script, and the figures in `viz/` |
-| `lean/Export.lean` | Exports signatures, docstrings, axioms, declaration ranges and test vectors |
+| `src/assets/` | Stylesheet, page scripts (`book.js`; `checking.js` for reading paths), and the figures in `viz/` |
+| `lean/Export.lean` | Exports signatures, docstrings, axioms, declaration ranges, dependencies and test vectors |
 | `scripts/extract.mjs` | Collects `.ilean` reference data and the export into `build/lean-data.json` |
 | `scripts/build.mjs`, `scripts/lean-html.mjs` | Static site generator and Lean highlighter |
 | `test/*.test.mjs` | Check the JavaScript ports in `src/assets/viz/` against vectors computed by Lean |
@@ -38,5 +38,9 @@ Chapters are Markdown with KaTeX math (`$…$`, `$$…$$`) and these additions:
 - Cross-references whose link text is `Chapter N`, `Section N.M` or `Appendix X`, such as `[Chapter 3](accesses.html)` or `[Section 4.2](keys.html#the-textbook-invariant)`, are renumbered from their target when the book is built, so the number written in the source does not matter. Other link texts are left alone.
 - `::: check`, `::: caveat`, `::: note Title`, `::: exercise Title`, `::: details Title` are callouts.
 - `@audit` and `@index` generate the appendix tables.
+- A fenced block ```` ```headline id ```` states a chapter's main result, as a box at the top of the chapter. Header lines come first: `title:`, optional `source:` (the paper), `key: yes` for results announced in a formalized paper's abstract or introduction, `theorems:` (the Lean theorems that together establish the result; each must also be shown with `@decl` or `@stmt` somewhere), and any number of `skip: Name | reason`. Then a blank line and the statement in English. Display math needs blank lines around it.
+- `@claims` lists the main results, on the checking page.
+
+Each main result has a *reading path*: the library definitions its statements mention, then, recursively, the definitions those mention in their types and bodies. Proofs are never followed. `lean/Export.lean` exports these dependencies (`deps` in `build/lean-data.json`), mapping constructors, recursors and projections back to their types. A `skip` cuts the path at a constant, or at a structure field written `Structure.field`, that a reader can safely ignore, for example a correctness obligation of a structure whose existence a listed theorem proves. Every skip needs a stated reason, which the reading list shows, and the build fails on skips that cut nothing. The paths are written to `dist/assets/claims.json`; `src/assets/checking.js` uses them to highlight what to read across pages.
 
 Names may be fully qualified or any unambiguous suffix. The build fails on unknown names, unknown figures, KaTeX errors, broken internal links and cross-references it cannot number, and it lists the reading-interface declarations that no chapter shows.

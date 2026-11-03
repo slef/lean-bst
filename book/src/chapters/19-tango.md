@@ -1,6 +1,27 @@
 # Tango trees
 
-[Chapter 18](preferred-paths.html) followed the preferred paths of a fixed reference tree as requests arrive, and showed that the number of preference changes is Wilber's interleave quantity, up to an additive $n$ for first settings. This chapter builds the BST that tracks those paths and proves the $O(\log\log n)$ competitive bound.
+No online BST algorithm is known to be dynamically optimal, that is, within a constant factor of the best offline execution on every sequence. Any balanced tree is $O(\log n)$-competitive, and for twenty years after splay trees nothing better was proved. Tango trees were the first online BST with a better ratio: $O(\log\log n)$. This chapter formalizes them.
+
+[Chapter 18](preferred-paths.html) did the counting. It followed the preferred paths of a fixed reference tree as requests arrive, and showed that the number of preference changes is Wilber's interleave quantity, up to an additive $n$ for first settings. This chapter builds the BST that tracks those paths, pays $O(\log\log n)$ per change, and so proves the competitive bound.
+
+```headline tango
+title: Tango trees are $O(\log\log n)$-competitive
+source: Demaine, Harmon, Iacono and Pătraşcu, *Dynamic optimality—almost* (2004)
+key: yes
+theorems: Tango.Algorithm.Results.policy_exists Tango.Algorithm.Results.execution Tango.Algorithm.Results.balanced_competitive
+skip: Tango.Policy.correct | This field is a proof obligation that every policy must meet. It only narrows which policies count, and `policy_exists` shows that one exists, so the claim holds whatever it says.
+skip: Tango.MarkedTree.Maintains | It appears only as an extra conclusion of `execution`, which the claim does not use.
+
+For every $n$ there is an online BST algorithm, fixed before any request is known, with the following property. Serve any sequence $X$ of keys from $\{0,\dots,n-1\}$, starting from a fixed balanced tree. Every request is a legal access by rotations, and the total cost (rotations plus one per request) is at most
+
+$$\bigl(56\log_2(\lfloor\log_2 n\rfloor + 1) + 16\bigr)\,(\mathrm{OPT} + |X|) \;+\; \bigl(14\log_2(\lfloor\log_2 n\rfloor + 1) + 4\bigr)\,n,$$
+
+where $\mathrm{OPT}$ is the number of rotations of *any* offline execution that serves $X$ from *any* initial tree on $n$ keys. So the algorithm is $O(\log\log n)$-competitive.
+
+In Lean, the algorithm is a [[RotationBST.Tango.Policy]]: a step function that sees the past requests, its current state (a BST with marked edges) and the new request. `policy_exists` says one exists for the balanced reference tree; `execution` says its run is a legal [[RotationBST.Execution]]; `balanced_competitive` is the bound.
+```
+
+The chapter has two layers. To confirm the result, the box above is enough: its statement uses only the rotation model of Part I, the reference tree, and the interface of the algorithm, and the [checking page](checking.html) lists those definitions. You never need to know how Tango trees work. To see why the result holds, read on. The chapter describes the algorithm with its Lean definitions, and states the full theorem again, in English and in Lean, in [Section 19.6](#competitiveness). [Section 19.1](#auxiliary-trees-inside-a-bst) and [Section 19.2](#three-amortized-operations) build the auxiliary trees and their three operations, [Section 19.3](#marked-trees) the state of the data structure, [Section 19.4](#the-online-policy) the interface that any implementation must satisfy, and [Section 19.5](#serving-a-request) the implementation itself.
 
 The construction is that of Demaine, Harmon, Iacono and Pătraşcu (2007). The BST is a tree of **auxiliary trees**, one per preferred path. Each auxiliary tree is a BST on the keys of its path, so it has at most $h$ nodes, where $h$ is the height of the reference tree. The empty subtrees of an auxiliary tree are not empty in the whole BST: each holds the auxiliary trees of the paths that hang below, in key order. A search for $x$ walks down through a sequence of auxiliary trees, one per preferred path it crosses. Crossing from one path to the next is a preference change. To keep the structure in sync with the preferences, Tango cuts and joins auxiliary trees, which takes $O(\log h)$ per change.
 
@@ -24,7 +45,9 @@ Four small functions translate between a region and the plain binary tree of its
 
 Tango needs three operations on auxiliary trees: access a key, cut off a contiguous piece of keys as a separate auxiliary tree, and join an attached auxiliary tree back in. Each is a few splays, and the access lemma gives each an amortized cost of $3\log_2(\text{size}) + 1$. Since an auxiliary tree holds one preferred path, its size is at most the reference height $h$, so each operation costs $O(\log h) = O(\log\log n)$ amortized.
 
-**Access.** Splaying a key of an auxiliary tree brings it to the root of the whole region, without disturbing anything attached below:
+**Access.** Splaying a key of an auxiliary tree brings it to the root of the whole region, without disturbing anything attached below.
+
+**Theorem (auxiliary access).** Let $s$ be a region with $|s|$ active keys, and let $x$ be one of them. Splaying $x$ within the auxiliary tree is a legal access of $x$ in the region's subtree, leaves every attached subtree in place, and has amortized cost at most $3\log_2|s| + 1$.
 
 @decl RotationBST.Tango.Auxiliary.Results.access
 
@@ -36,13 +59,17 @@ For a region `s` and an active key `x`, where `s.keys 0` means the region's keys
 
 The bound is the access lemma ([[RotationBST.Splay.Results.access_lemma]]) with unit weights. The root's mass is $|s|$ and $x$'s subtree mass is at least $1$. It does not depend on the sizes of the attached subtrees.
 
-**Split.** Cutting a preferred path at some depth turns its deeper part into a separate auxiliary tree. In key order, the keys of a path below a given depth form a contiguous interval of the path's keys, so a cut separates a prefix, a suffix, or an interior interval of the active keys. The library states the suffix case:
+**Split.** Cutting a preferred path at some depth turns its deeper part into a separate auxiliary tree. In key order, the keys of a path below a given depth form a contiguous interval of the path's keys, so a cut separates a prefix, a suffix, or an interior interval of the active keys. The library states the suffix case.
+
+**Theorem (auxiliary split).** Let $s$ be a region and $0 < k \le |s|$. Rotations bring the $k$-th active key to the root of the region, with the earlier active keys in a region $a$ on its left and the later ones in a region $b$ on its right, and the attached subtrees unchanged. Counting $b$ from then on as a separate auxiliary tree, the amortized cost is at most $3\log_2|s| + 1$.
 
 @decl RotationBST.Tango.Auxiliary.Results.split
 
 For $0 < k \le |s|$, there are regions `a` and `b` such that rotations turn `s.tree` into `node a.tree b.tree`. The root of the result is the $k$-th active key, `a` holds the $k-1$ active keys before it and `b` the rest, and the fringe is unchanged. The potential afterwards treats `b` as a separate auxiliary tree: the root component is `node a (hole b.tree)`, in which `b` is a hole, and `b` carries its own potential. The amortized cost is again at most $3\log_2|s| + 1$. The proof splays the $k$-th key to the root. Detaching `b` only lowers the potential, since it removes `b`'s mass from the root's subtree. Prefix and interior cuts are symmetric, or take two such splays. They are internal operations, used by the policy below.
 
-**Join.** The inverse operation merges an auxiliary tree back into the one above it:
+**Join.** The inverse operation merges an auxiliary tree back into the one above it.
+
+**Theorem (auxiliary join).** Let $\mathit{right}$ be a region attached at the last hole of a region $\mathit{left}$. Rotations turn $\mathit{left}$'s subtree into a single region $u$ whose active keys are those of both, with the other attached subtrees unchanged, at amortized cost at most $3\log_2(|\mathit{left}| + |\mathit{right}|) + 1$.
 
 @decl RotationBST.Tango.Auxiliary.Results.join
 
@@ -104,11 +131,15 @@ Second, `splayRoot` splays `x`, at its active rank in the root component, to the
 
 @decl RotationBST.Tango.policy
 
-`policy reference` packages `serve` as a `Policy`. Its certificate is the following theorem, which states the three conditions of the contract for `serve` itself:
+`policy reference` packages `serve` as a `Policy`. Its certificate is the following theorem, which states the three conditions of the contract for `serve` itself.
+
+**Theorem (serving a request).** Suppose the marked tree $s$ satisfies the invariant for the past requests, and all requests so far, and $x$, are keys of the reference tree. Then `serve` performs a legal access of $x$ in the rotation model, the new marked tree satisfies the invariant for the past requests followed by $x$, and the amortized cost is at most $U(14\log_2 h + 4) + 3\log_2 h + 1$, where $U$ is the number of preference updates that $x$ causes and $h$ is the reference height.
 
 @decl RotationBST.Tango.Algorithm.Executable.Results.request
 
-So the interface is not vacuous:
+So the interface is not vacuous.
+
+**Theorem (a policy exists).** For every reference tree there is a policy.
 
 @decl RotationBST.Tango.Algorithm.Results.policy_exists
 
@@ -116,13 +147,17 @@ The witness is the executable `policy reference`. The proof `⟨policy reference
 
 ## Competitiveness
 
-Every policy, run on a valid sequence, performs a legal execution of the rotation model and ends with the preferred paths of the whole history:
+Every policy, run on a valid sequence, performs a legal execution of the rotation model and ends with the preferred paths of the whole history.
+
+**Theorem (Tango's runs are executions).** Let $p$ be a policy for a reference tree $P$, and let $X$ be a sequence of keys of $P$. The run of $p$ on $X$ is a legal execution of $X$ from $P$ whose rotation count is the count that $p$ reports. The final marked tree satisfies the invariant for $X$.
 
 @decl RotationBST.Tango.Algorithm.Results.execution
 
 The execution starts from `reference`, which is where `run` starts. Its cost is the policy's own count `(p.run xs).2`. This theorem is what gives meaning to that count in the bounds below: it is the exact number of rotations of an [[RotationBST.Execution]].
 
-The main theorem compares the policy's total cost with every offline execution:
+The main theorem compares the policy's total cost with every offline execution.
+
+**Theorem (Tango is competitive).** Let $p$ be a policy for a reference tree of height $h$ on $n$ keys. Take any offline execution that serves a sequence $X$ of $m$ requests with $R$ rotations, starting from any tree on $n$ keys. Then $p$ serves $X$ with total cost, rotations plus $m$, at most $(56\log_2 h + 16)(R + m) + (14\log_2 h + 4)\,n$.
 
 @decl RotationBST.Tango.Algorithm.Results.competitive
 
@@ -138,7 +173,11 @@ The proof composes three facts. Summing the per-request contract and telescoping
 - The hypothesis `size` fixes the key universe. Validity of the requests is not assumed: it follows from the existence of the comparator ([[RotationBST.execution_exists_iff]]).
 :::
 
-For the classical reference trees the height is logarithmic, so the factor is doubly logarithmic:
+For the classical reference trees the height is logarithmic, so the factor is doubly logarithmic.
+
+**Corollary (perfect reference tree).** On $n = 2^h - 1$ keys, with the perfect reference tree, the bound holds with factor $56\log_2 h + 16$ and additive term $(14\log_2 h + 4)\,n$.
+
+**Corollary (every $n$).** For every $n$, with the balanced reference tree on $n$ keys, the bound holds with $h$ replaced by $\lfloor\log_2 n\rfloor + 1$. This is the result stated at the top of the chapter.
 
 @decl RotationBST.Tango.Algorithm.Results.perfect_competitive RotationBST.Tango.Algorithm.Results.balanced_competitive
 

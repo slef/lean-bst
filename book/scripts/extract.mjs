@@ -162,7 +162,7 @@ writeFileSync(join(buildDir, 'lean-data.json'), JSON.stringify({
   generated: new Date().toISOString(),
   leanRoot: relative(bookDir, leanRoot) || '.',
   commit, dirty, toolchain,
-  modules, consts, missing: exported.missing,
+  modules, consts, missing: exported.missing, deps: exported.deps,
 }));
 console.log(`Wrote build/lean-data.json (${Object.keys(consts).length} constants`
   + `${exported.missing.length ? `, ${exported.missing.length} unresolved` : ''}).`);

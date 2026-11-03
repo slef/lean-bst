@@ -1,12 +1,28 @@
 # Preferred paths
 
+This chapter proves the counting identity behind Tango trees. Fix a balanced reference tree on the keys and serve requests one at a time. Each node of the reference tree *prefers* the side of its subtree where the most recent request in that subtree fell. The number of times these preferences change turns out to be exactly Wilber's interleave quantity from [Chapter 11](wilber.html), which is a lower bound on the cost of every BST execution. So an algorithm that pays $O(\log\log n)$ for each preference change is $O(\log\log n)$-competitive. [Chapter 19](tango.html) builds such an algorithm.
+
+```headline preference-interleave
+title: Preference changes are Wilber's interleave bound
+theorems: Tango.Results.interleave_switches Tango.Results.preference_settings
+
+Fix a reference tree $P$ on $n$ keys and a sequence $X$ of requests. Serve $X$ one request at a time. After each request, every node on the search path to the requested key prefers the side of its subtree that holds that key: the left side if the key is the node itself or lies in its left subtree, the right side otherwise. Then:
+
+- if every request is a key of $P$, the number of **switches**, where a node's preference changes from one side to the other, is exactly Wilber's interleave quantity $\mathrm{IB}_P(X)$ of [Chapter 11](wilber.html);
+- the number of **settings**, meaning switches plus the first time each node receives a preference, is at most $\mathrm{IB}_P(X) + n$.
+
+By Wilber's bound, both are $O(\mathrm{OPT} + |X|) + n$, where $\mathrm{OPT}$ is the rotation count of the best offline execution.
+```
+
 Splay trees are conjectured to be dynamically optimal, but the best proven competitive ratio for splaying is still $O(\log n)$, the trivial bound that any balanced tree achieves. Tango trees, introduced by Demaine, Harmon, Iacono and Pătraşcu (FOCS 2004; *Dynamic Optimality—Almost*, SICOMP 2007), were the first online BST algorithm proved $O(\log \log n)$-competitive. Their key idea is to make an algorithm whose cost can be charged directly to a lower bound. They use Wilber's interleave bound from [Chapter 11](wilber.html), which is at most a constant times the cost of any offline execution.
 
 The design uses a fixed balanced **reference tree** $P$ on the same keys. $P$ never changes and it is never stored as a search structure. It serves only as bookkeeping. Each node of $P$ has a **preferred child**: the child on the side where the most recent request in the node's subtree went. Following preferred children from a node gives a downward **preferred path**, and these paths partition the nodes of $P$. Tango stores each preferred path as a small auxiliary BST, of size at most the height $h \approx \log_2 n$ of $P$. The actual BST is made of these auxiliary trees hanging off one another.
 
 A request for $x$ changes the preferred child of some nodes on the reference path from the root to $x$. Each change is repaired by a constant number of cuts and joins on auxiliary trees, at cost $O(\log h) = O(\log\log n)$ each. The total number of changes is essentially Wilber's interleave quantity. The algorithm therefore pays $O(\log\log n)$ per unit of a lower bound on the optimum.
 
-This chapter covers the reference-tree side of the argument. Everything here is a function of the reference tree and the request sequence alone; no BST is restructured. [Chapter 19](tango.html) builds the actual data structure on top of it. The definitions are in `Algorithms/Tango/Definitions/Abstract.lean`, `Reference/`, `Preferences/` and `Paths/`. The theorems are in `Algorithms/Tango/Abstract.lean`.
+This chapter covers the reference-tree side of the argument. Everything here is a function of the reference tree and the request sequence alone; no BST is restructured. [Chapter 19](tango.html) builds the actual data structure on top of it.
+
+The box above states the result; checking it needs only Wilber's definitions and the two counts defined here. The chapter proceeds in order. [Section 18.1](#the-reference-tree) defines the reference trees. [Section 18.2](#preferences-and-switches) defines preferences and proves that switches are the interleave quantity. [Section 18.3](#counting-first-settings) adds the first settings. The last two sections describe the preferred paths themselves and the log of preference updates, which is what the data structure of [Chapter 19](tango.html) replays. The definitions are in `Algorithms/Tango/Definitions/Abstract.lean`, `Reference/`, `Preferences/` and `Paths/`. The theorems are in `Algorithms/Tango/Abstract.lean`.
 
 ## The reference tree
 
@@ -30,7 +46,11 @@ A preferred path is a path in the ordinary sense. It starts at some node and rep
 
 @decl RotationBST.Tango.DownwardPath
 
-`DownwardPath t path` says that the list of directions `path` (`true` for left, `false` for right) can be followed from the root of `t` without falling off the tree. The path visits `path.length + 1` nodes, counting the start. The fact used later is that such a path cannot be longer than the tree is high, and that perfect trees have the expected size and height:
+`DownwardPath t path` says that the list of directions `path` (`true` for left, `false` for right) can be followed from the root of `t` without falling off the tree. The path visits `path.length + 1` nodes, counting the start. Two facts are used later.
+
+**Theorem (paths are short).** A downward path of a tree $t$ visits at most `height t` nodes.
+
+**Theorem (perfect trees).** `perfect h` has $2^h - 1$ keys and height $h$.
 
 @decl RotationBST.Tango.Results.path_size RotationBST.Tango.Results.perfect_reference
 
@@ -50,7 +70,11 @@ Summed over a sequence, with each request appended to the history after it is se
 
 @decl RotationBST.Tango.changeCost
 
-The two theorems below say that this online count is Wilber's quantity. Wilber's definition is offline: for each reference node, it takes the subsequence of requests in the node's subtree and counts how often consecutive ones alternate between the two regions. `changeCost` instead processes requests one at a time and charges each request for the switches it causes. The two agree, step by step and in total:
+The two theorems below say that this online count is Wilber's quantity. Wilber's definition is offline: for each reference node, it takes the subsequence of requests in the node's subtree and counts how often consecutive ones alternate between the two regions. `changeCost` instead processes requests one at a time and charges each request for the switches it causes. The two agree, step by step and in total.
+
+**Theorem (one step).** Let $x$ be a key of the reference tree $t$. Appending $x$ to any history increases $\mathrm{IB}_t$ by exactly the number of switches that $x$ causes, `changes t past x`.
+
+**Theorem (switches are interleave).** If every request in $X$ is a key of $t$, then $\mathrm{IB}_t(X)$ equals the total number of switches when $X$ is served from the empty history, `changeCost t [] X`.
 
 @decl RotationBST.Tango.Results.interleave_increment RotationBST.Tango.Results.interleave_switches
 
@@ -81,7 +105,9 @@ Tango has to pay for first settings as well as switches, because both change the
 
 `preferenceChanges t xs` is the total number of preference settings over the whole sequence: first settings plus switches, summed over all nodes. It has the same recursive structure as [[RotationBST.Wilber.interleave]], with `runs` in place of `alternations`. `initializations` counts the nodes whose region trace is nonempty, which are the nodes that ever receive a preference. As its docstring notes, this includes leaves, whose preferred "child" is an empty subtree. That only overcounts.
 
-The difference between the two counts is at most one first setting per node:
+The difference between the two counts is at most one first setting per node.
+
+**Theorem (settings).** For every reference tree $t$ on $n$ keys and every sequence $X$, the number of preference settings is at most $\mathrm{IB}_t(X) + n$.
 
 @decl RotationBST.Tango.Results.preference_settings
 

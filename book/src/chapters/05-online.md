@@ -2,6 +2,8 @@
 
 An [`Execution`](accesses.html#executions) describes every legal way to serve a sequence: it is an offline object that knows the whole sequence in advance. A BST *algorithm* must decide what to do with each request when that request arrives. This chapter defines online algorithms in the rotation model, their two cost measures, and dynamic optimality. [Chapter 6](pointer.html#running-an-online-algorithm-on-the-pointer-machine) shows that any such algorithm can be run online on a conventional pointer machine, with constant overhead.
 
+The chapter has no main theorem of its own. It fixes the yardstick for Part III. The definition of an online algorithm, [[RotationBST.Algorithm]], is what "there is a BST algorithm that…" means in later statements. Its cost, [[RotationBST.Algorithm.cost]] or [[RotationBST.Algorithm.totalCost]], is what their bounds measure. And dynamic optimality is the property those bounds approximate. The one theorem shown here, that online runs are offline executions, says the comparison is fair.
+
 ## Online algorithms
 
 @decl RotationBST.Algorithm
@@ -25,7 +27,9 @@ Running an algorithm threads the tree through the sequence and adds the counts:
 
 The simplest instance is [[RotationBST.moveToRootAlgorithm]]: it ignores the history and rotates the requested key up one level at a time, the witness used in [Chapter 3](accesses.html#which-requests-can-be-served). It opens Part III in [Chapter 12](move-to-root.html). Splaying ([Chapter 13](splay.html)) is the main example.
 
-A run of an algorithm on valid requests is one of the executions of [Chapter 3](accesses.html#executions). Online algorithms are therefore a special case of offline executions, and their cost is at least the offline optimum:
+A run of an algorithm on valid requests is one of the executions of [Chapter 3](accesses.html#executions). Online algorithms are therefore a special case of offline executions, and their cost is at least the offline optimum.
+
+**Theorem (online runs are executions).** Let $A$ be an online algorithm, $t$ a tree, and $X$ a sequence of valid requests for $t$. Running $A$ on $X$ from $t$, after any history, is an execution of $X$ from $t$ whose cost is exactly the number of rotations $A$ reports.
 
 @decl RotationBST.Algorithm.execution
 
@@ -55,7 +59,9 @@ Read the quantifiers in order. There exist constants $C, D$; then for every init
 - `DynamicallyOptimal` compares rotation counts $R \le C\,k + D\,n$, while `TotallyDynamicallyOptimal` compares total costs $T \le C(m + k) + D\,n$. The total-cost version is the conventional notion of dynamic optimality, and it is the one that transfers to the pointer machine ([Section 6.5](pointer.html#running-an-online-algorithm-on-the-pointer-machine)).
 :::
 
-The rotation-only notion implies the conventional one:
+The rotation-only notion implies the conventional one.
+
+**Theorem.** Every dynamically optimal algorithm is totally dynamically optimal.
 
 @decl RotationBST.DynamicallyOptimal.total
 

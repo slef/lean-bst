@@ -2,6 +2,20 @@
 
 The root-access model of [Chapter 3](accesses.html) lets an access rotate anywhere in the tree and charges only for rotations. The standard BST model of the literature (Wilber; Demaine, Harmon, Iacono, Kane and Pătraşcu) is more operational. A single pointer starts at the root for each request. It moves along edges and rotates the node it points to over its parent. Every move and every rotation costs one unit, and the pointer must visit the requested key. This chapter defines that machine in Lean and proves that the two models agree up to constant factors in total cost, offline for executions and online for algorithms.
 
+```headline pointer-model
+title: The rotation model and the pointer machine agree up to constant factors
+theorems: Pointer.Results.to_rotations Pointer.Results.to_pointer_lazy
+
+Total cost means requests plus rotations ($m + R$) in the rotation model, and requests plus pointer instructions ($K$) on the pointer machine. Let $X$ be a sequence of $m$ requests and $s$ a tree.
+
+1. **Pointers to rotations.** If the pointer machine serves $X$ from $s$ at total cost $K$, ending in tree $t$, then some root-access execution serves $X$ from $s$ with $R$ rotations and ends $q$ rotations away from $t$, where $m + R + q \le 3K$.
+2. **Rotations to pointers.** If a root-access execution serves $X$ from $s$ with $R$ rotations, ending in tree $t$, then the pointer machine serves $X$ from $s$ at total cost $K$, ending $d$ rotations away from $t$, where $K + 32d \le 32R + 17m$.
+
+The constants do not depend on the size of the tree. In both directions the final trees may differ, by a number of rotations that the bound pays for.
+
+In Lean, rotation-model executions are [[RotationBST.Execution]], pointer executions are [[RotationBST.Pointer.Execution]], and [[RotationBST.Rotations]]` u t q` says that `q` rotations turn `u` into `t`.
+```
+
 The definitions are in `Models/Pointer/Machine/Abstract.lean` and the simulation theorems in `Models/Pointer/Abstract.lean`. The later sections walk through the readable interface of the constant-factor ("lazy") simulation, and then run it online.
 
 ## Configurations
@@ -70,24 +84,27 @@ The comparison uses total cost on both sides: requests plus rotations ($m + R$) 
 
 ### From pointers to rotations
 
-@decl RotationBST.Pointer.Results.to_rotations
+**Theorem (pointers to rotations).** A pointer execution of total cost $K$ from `s` to `t` gives a root-access execution from `s` to some `u` with $R$ rotations, plus $q$ further rotations from `u` to `t`, with $m + R + q \le 3K$.
 
-A pointer execution of total cost $K$ from `s` to `t` gives a root-access execution from `s` to some `u` with $R$ rotations, plus $q$ further rotations from `u` to `t`, with $m + R + q \le 3K$.
+@decl RotationBST.Pointer.Results.to_rotations
 
 The proof treats each search separately. Moves cost nothing in the rotation model, and the rotations performed before the visit are kept. At the visit, the cursor is at some depth $d \le$ `before`, since each instruction changes the depth by at most one. Rotating `x` over its $d$ ancestors puts it at the root, which completes a root access. Undoing those $d$ rotations and then replaying the search's remaining rotations yields `t`. These $d + {}$(rotations after the visit) form the suffix, which is prepended to the *next* access, so the rotation execution can continue from the pointer execution's tree. Per search, the rotation cost is at most $(\text{rotations before}) + 2d + (\text{rotations after}) \le 3 \cdot \text{before} + \text{after}$, which with the request unit is at most $3 \cdot \text{cost}$. Only the last search's suffix remains pending at the end. That is the `Rotations u t q` conjunct, and its cost $q$ is included in the bound.
 
 ### From rotations to pointers, exactly
 
+**Theorem (exact simulation).** Every root-access execution from `s` with $R$ rotations has a pointer execution from `s` with *the same final tree* and total cost at most $m + 2nR$, where $n$ = `s.size`.
+
 @decl RotationBST.Pointer.Results.to_pointer
 
-Every root-access execution with $R$ rotations has a pointer execution with *the same final tree* and cost at most $m + 2nR$, with $n$ = `s.size`. Each rotation is simulated separately: walk from the root to the rotated node's parent, step to the child, rotate, and walk back. A rotation at depth $d$ costs $2d + 2 \le 2n$ instructions. After all of an access's rotations the requested key is at the root, where the cursor already is, so the visit is free. The factor $n$ is necessary for this naive simulation, because the rotation model charges a deep rotation the same as a shallow one. This is why the following theorem is needed.
+Each rotation is simulated separately: walk from the root to the rotated node's parent, step to the child, rotate, and walk back. A rotation at depth $d$ costs $2d + 2 \le 2n$ instructions. After all of an access's rotations the requested key is at the root, where the cursor already is, so the visit is free. The factor $n$ is necessary for this naive simulation, because the rotation model charges a deep rotation the same as a shallow one. This is why the following theorem is needed.
 
 ### From rotations to pointers, lazily
 
+**Theorem (lazy simulation).** A root-access execution from `s` to `t` with $R$ rotations and $m$ requests has a pointer execution from `s` of total cost $C$ ending at some `u`, and $d$ deferred rotations take `u` to `t`, with
+$$C + 32\,d \le 32\,R + 17\,m.$$
+
 @decl RotationBST.Pointer.Results.to_pointer_lazy
 
-A root-access execution with $R$ rotations and $m$ requests has a pointer execution of cost $C$ ending at some `u`, and $d$ deferred rotations take `u` to the rotation execution's final tree `t`, with
-$$C + 32\,d \le 32\,R + 17\,m.$$
 The bound does not depend on tree size. Since $d \ge 0$, the pointer cost satisfies $C \le 32(m+R)$. Together with `to_rotations`, this makes the total costs of the two models equivalent within constant factors, for every execution and every tree.
 
 ::: caveat Final trees can differ
@@ -110,9 +127,11 @@ To reason about which rotations interact, the proof works on labelled trees and 
 
 A `Trace` is a rotation sequence together with its program: the list of endpoint pairs `(x, y)`, in order. `rootKey?` reads the root label.
 
+**Theorem (exchange).** If a rotation of `x` over `y` turns `s` into `t`, and a rotation of `u` over `v` turns `t` into `z`, and the four endpoints are distinct, then the two rotations can be performed in the opposite order: rotating `u` over `v` and then `x` over `y` also turns `s` into `z`.
+
 @decl RotationBST.Pointer.Lazy.Results.commute
 
-**Exchange.** Two consecutive rotations with four distinct endpoints can be performed in the opposite order, with the same result. This holds even when one rotation is inside a subtree moved by the other: rotations are identified by their endpoint keys, not by tree positions, so they still make sense after the exchange. The hypothesis says that no endpoint of the first rotation is an endpoint of the second:
+This holds even when one rotation is inside a subtree moved by the other: rotations are identified by their endpoint keys, not by tree positions, so they still make sense after the exchange. The hypothesis says that no endpoint of the first rotation is an endpoint of the second:
 
 @decl RotationBST.Pointer.Lazy.DisjointPairs
 
@@ -120,9 +139,11 @@ A `Trace` is a rotation sequence together with its program: the list of endpoint
 
 Repeated exchanges sort a program by any colouring of keys in which every rotation has both endpoints of the same colour.
 
+**Theorem (postponing).** Colour the keys so that both endpoints of every rotation of a program have the same colour, and suppose the program ends with a selected key `x` at the root. Then the selected rotations alone, in their original order, form an access to `x`, and the unselected rotations, run afterwards, reach the same final tree.
+
 @decl RotationBST.Pointer.Lazy.Results.postpone_access
 
-Colour the keys with `color : α → Bool` so that every rotation of the program `ops` has equally coloured endpoints (`uniform`). Suppose the program ends with `x` at the root and `x` is selected (`color x = true`). Then the selected rotations alone, in their original order, already form a labelled access to `x`, and the unselected ones, run afterwards, reach the same final tree. The two counts add up to `ops.length`, so nothing is added or lost. Unselected rotations never touch the selected root's key, so they can be postponed past the access.
+In Lean: colour the keys with `color : α → Bool` so that every rotation of the program `ops` has equally coloured endpoints (`uniform`). Suppose the program ends with `x` at the root and `x` is selected (`color x = true`). Then the selected rotations alone, in their original order, already form a labelled access to `x`, and the unselected ones, run afterwards, reach the same final tree. The two counts add up to `ops.length`, so nothing is added or lost. Unselected rotations never touch the selected root's key, so they can be postponed past the access.
 
 The proof uses a particular colouring, the connected component of the initial root in the *rotation graph*, whose edges are the endpoint pairs of the program:
 
@@ -140,9 +161,11 @@ The selected rotations only rearrange this top region. Every subtree hanging off
 
 A skeleton is a tree whose leaves are *holes*, each holding an entire untouched `Tree`. The same type reappears in [Chapter 7](regions.html) as the *rooted region* touched by one request, the unit of cost in the region model. `tree` fills the holes in. `size` counts only the region's own nodes, so a hole contributes $0$ however large its subtree is. `fringe` lists the hole subtrees in inorder; a region with $k$ nodes has $k+1$ of them. `vine` builds the canonical right spine whose left children are the fringe subtrees, in order, with the last one at the bottom on the right.
 
+**Theorem (reshaping).** Two regions with the same fringe, in the same order, can be transformed into one another by a pointer trace from root to root with at most $16k$ instructions, where $k$ is the number of nodes in the first region.
+
 @decl RotationBST.Pointer.Lazy.Results.reshape
 
-Two regions with the same fringe, in the same order, can be transformed into one another by a pointer trace from root to root with at most $16k$ instructions, where $k$ is the region size. The bound does not depend on the sizes of the fringe subtrees. The proof flattens both regions into the common vine, using at most $4k$ instructions each, and runs the second flattening backwards. Reversing a pointer trace costs at most three instructions per instruction, since undoing a rotation requires stepping to the demoted node. In total this is $4k + 3 \cdot 4k = 16k$.
+The bound does not depend on the sizes of the fringe subtrees. The proof flattens both regions into the common vine, using at most $4k$ instructions each, and runs the second flattening backwards. Reversing a pointer trace costs at most three instructions per instruction, since undoing a rotation requires stepping to the demoted node. In total this is $4k + 3 \cdot 4k = 16k$.
 
 ### Putting it together
 
@@ -168,7 +191,7 @@ Given state `s` and request `x`, a result `(s', c)` is a valid transition when:
 2. the new virtual tree is exactly what the algorithm's own step produces from the old virtual tree, so the algorithm runs unmodified on its own view; and
 3. an amortized bound holds with potential $32 \cdot{}$`pending`: the actual cost plus the new potential is at most $32$ times the old pending work plus the algorithm's rotations, plus $17$.
 
-Every valid request admits such a transition. This is the per-request form of the lazy simulation above:
+**Theorem (a transition exists).** For every algorithm, history and simulation state, and every request `x` that is a key of the virtual tree, there is a valid transition. This is the per-request form of the lazy simulation above.
 
 @decl RotationBST.Pointer.Lazy.Online.advance_exists
 
@@ -182,7 +205,9 @@ The simulator *chooses* one transition:
 Choosing the pointer instructions requires knowing a valid transition, and finding one involves the lazy-simulation construction on the current pending rotations. As in the rotation model, this planning is not charged. The cost bound counts pointer instructions and requests only. The library's README states this explicitly.
 :::
 
-The main theorem, from the initial state:
+The main theorem runs the simulator from the initial state.
+
+**Theorem (online simulation).** Let `a` be an online rotation-model algorithm, `t` a tree and `xs` a sequence of $m$ keys of `t`, served with $R$ rotations by `a`. Running the simulator on `xs` from `t` produces a pointer execution of total cost $C$ whose final tree is `pending` rotations away from the algorithm's final tree, and $C + 32 \cdot \mathtt{pending} \le 32R + 17m$.
 
 @decl RotationBST.Pointer.Lazy.Online.Results.simulation
 
@@ -192,17 +217,21 @@ The three conjuncts say:
 2. **Agreement up to the deferred suffix.** The final pointer tree reaches the final tree of the rotation-model algorithm by exactly `pending` rotations. The two executions end in the same place, except for work that has been postponed and not yet paid for.
 3. **Cost.** Pointer cost plus $32$ times the pending suffix is at most $32R + 17m$, where $R$ is the algorithm's rotation count. In particular the pointer cost alone is $O(R + m) = O(T)$, with constants independent of $n$.
 
-Causality is visible in the types (`advance` never receives the future), and the library also states it as a theorem:
+Causality is visible in the types (`advance` never receives the future), and the library also states it as a theorem.
+
+**Theorem (no lookahead).** Running the simulator on `xs ++ ys` gives the same result as running it on `xs`, then continuing from the resulting state, with history `past ++ xs`, on `ys`. The costs add.
 
 @decl RotationBST.Pointer.Lazy.Online.Results.prefix_composition
 
-Running on `xs ++ ys` is the same as running on `xs`, then continuing from the resulting state with history `past ++ xs`. The state and cost after the prefix `xs` are therefore the same for every continuation `ys`. Nothing computed for the first requests can depend on later ones, so there is no lookahead.
+The state and cost after the prefix `xs` are therefore the same for every continuation `ys`. Nothing computed for the first requests can depend on later ones, so there is no lookahead.
 
-Finally, the property this transfer was built for:
+Finally, the property this transfer was built for.
+
+**Theorem (dynamic optimality transfers).** If an online algorithm is dynamically optimal in the rotation model, with total cost as the measure, then there are constants $C$ and $D$ such that its pointer-machine simulation, on every tree `t` and every sequence `xs`, costs at most $Ck + D\,n$ for every offline pointer execution of cost $k$ serving `xs` from `t`, where $n$ = `t.size`.
 
 @decl RotationBST.Pointer.Lazy.Online.Results.dynamicOptimality
 
-If an algorithm is dynamically optimal in the normalized rotation model, then its causal pointer implementation competes, with uniform constants, against **every offline pointer execution** `Pointer.Execution t xs u k`. Both sides of this comparison are in the pointer model. The proof composes three bounds: an offline pointer execution of cost $k$ yields a rotation execution of total cost at most $3k$ ([[RotationBST.Pointer.Results.to_rotations]]); total dynamic optimality bounds the algorithm by that execution; and `simulation` bounds the pointer cost by the algorithm's rotation-model cost. The resulting constants are $(96C, 32D)$.
+The comparison is against **every offline pointer execution** `Pointer.Execution t xs u k`. Both sides of this comparison are in the pointer model. The proof composes three bounds: an offline pointer execution of cost $k$ yields a rotation execution of total cost at most $3k$ ([[RotationBST.Pointer.Results.to_rotations]]); total dynamic optimality bounds the algorithm by that execution; and `simulation` bounds the pointer cost by the algorithm's rotation-model cost. The resulting constants are $(96C, 32D)$.
 
 ::: check
 Conventional dynamic optimality is a statement about pointer-model algorithms competing with pointer-model optima. This theorem says that a proof of `TotallyDynamicallyOptimal` for any rotation-model algorithm would give exactly that: an online pointer algorithm that is dynamically optimal in the conventional sense. The hypothesis is the total-cost notion. The rotation-only `DynamicallyOptimal` is stronger, and is never needed.

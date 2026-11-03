@@ -4,7 +4,20 @@ In 1988 Joan Lucas proposed an offline BST algorithm now called *Greedy Future*,
 
 Demaine, Harmon, Iacono, Kane and Pătraşcu (2009) found that in the geometric view of [Chapter 8](geometry.html), Greedy Future no longer needs the future. Its touched points are produced by a sweep that looks only at the past. When request $x$ arrives at time $t$, add the point $(x, t)$, and for every old point whose rectangle with $(x, t)$ contains no other old point, add its projection onto row $t$. Every rectangle that would otherwise be empty receives the cheapest possible repair. Combined with their simulation theorem, which turns any online geometric algorithm into an online BST algorithm at a constant-factor cost ([Chapter 17](simulation.html)), this makes Greedy an *online* BST algorithm. Greedy and splay trees are the two main candidates for a dynamically optimal BST algorithm.
 
-This chapter defines the sweep, proves that it is a legal online geometric algorithm, and proves that each row it adds is the unique smallest legal row. The definitions are in `Algorithms/GreedyASS/Algorithm/Abstract.lean` and the theorems in `Algorithms/GreedyASS/Abstract.lean`.
+This chapter defines the sweep and proves two things about it. First, it is a legal online geometric algorithm: every row it adds keeps the point set arborally satisfied. Second, it is *greedy* in the strongest sense: each row it adds is contained in every legal row, so it is the unique smallest one. That second fact is the chapter's main result.
+
+```headline greedy-minimum
+title: GreedyASS adds the unique smallest legal row
+source: Demaine, Harmon, Iacono, Kane and Pătraşcu, *The geometry of binary search trees* (2009)
+theorems: Geometric.GreedyASS.Results.greedy_minimum Geometric.GreedyASS.Results.greedy_required
+skip: Geometric.instDecidableVisible | A decidability instance, together with the one for rectangles it uses, only lets Lean compute the filter in `greedySweep`. Any two instances for the same proposition agree, so they cannot change which keys the sweep keeps.
+
+Let $P$ be an arborally satisfied set of points on keys $\{0,\dots,n-1\}$, all at times before $t$, and let $r < n$ be the request at time $t$. Call a set of keys $K$ a *legal row* if $r \in K$, every key of $K$ is less than $n$, and $P$ together with the points $K \times \{t\}$ is still arborally satisfied. Then every legal row contains the sweep's row, which is $r$ together with the keys of the old points visible from $(r, t)$. The sweep's row is itself legal, so it is the unique legal row of minimum size.
+
+In Lean, `greedy_required` is the containment, and `greedy_minimum` says that a set of keys is a minimum-size legal row ([[Geometric.GreedyRow]]) exactly when it equals [[Geometric.greedySweep]].
+```
+
+The definitions are in `Algorithms/GreedyASS/Algorithm/Abstract.lean` and the theorems in `Algorithms/GreedyASS/Abstract.lean`.
 
 ## The sweep
 
@@ -34,11 +47,13 @@ On the bit-reversal sequence $0, 4, 2, 6, 1, 5, 3, 7$ GreedyASS adds $21$ points
 
 ## A legal online algorithm
 
-The sweep always produces a legal row:
+The sweep always produces a legal row.
+
+**Theorem (the sweep is legal).** Let $P$ be an arborally satisfied set of points with keys less than $n$ and times less than $t$, and let $r < n$. Then the sweep's row at time $t$ contains $r$, uses only keys less than $n$, and $P$ together with the new row is arborally satisfied.
 
 @decl RotationBST.Geometric.GreedyASS.Results.greedy_step
 
-From any bounded, arborally satisfied history and any valid request, the sweep's row contains the request, uses only valid keys, and keeps the point set arborally satisfied. The proof checks every new rectangle, between an old point and a new point, by cases on where the request lies relative to it. The visible points are exactly what is needed to fill the rectangles that the request alone would leave empty.
+The proof checks every new rectangle, between an old point and a new point, by cases on where the request lies relative to it. The visible points are exactly what is needed to fill the rectangles that the request alone would leave empty.
 
 So the sweep is an online geometric algorithm, with this theorem as its certificate:
 
@@ -50,13 +65,17 @@ So the sweep is an online geometric algorithm, with this theorem as its certific
 
 ## Each row is the smallest possible
 
-Every legal row must contain the sweep's row:
+Every legal row must contain the sweep's row.
+
+**Theorem (the sweep's points are forced).** Let $P$ be a set of points with keys less than $n$ and times less than $t$, and let $K$ be any legal row for request $r$ at time $t$. Then $K$ contains every key of the sweep's row.
 
 @decl RotationBST.Geometric.GreedyASS.Results.greedy_required
 
 The argument is short. Suppose `q` = $(x, t')$ is visible from the request $(r, t)$ but the legal row omits $x$. The row contains $r$, so among the new points between $x$ and $r$, take the one closest to $x$, say $(y, t)$. The rectangle of `q` and $(y, t)$ lies inside the rectangle of `q` and the request, so it contains no other old point by visibility, and no other new point by the choice of $y$. Since $y \ne x$ and $t' < t$, it is nondegenerate, so the completed set is not arborally satisfied, a contradiction. The theorem needs only the `History` hypothesis, which makes old points strictly earlier than the new row.
 
-Together with `greedy_step`, the sweep's row is a legal row contained in every legal row. It is therefore the unique legal row of minimum size, which is the specification [[Geometric.GreedyRow]] of [Chapter 8](geometry.html):
+Together with `greedy_step`, the sweep's row is a legal row contained in every legal row. It is therefore the unique legal row of minimum size, which is the specification [[Geometric.GreedyRow]] of [Chapter 8](geometry.html).
+
+**Theorem (the sweep is the minimum row).** Let $P$ be an arborally satisfied set of points with keys less than $n$ and times less than $t$, and let $r < n$. A set of keys is a legal row of minimum size for request $r$ at time $t$ if and only if it is the sweep's row.
 
 @decl RotationBST.Geometric.GreedyASS.Results.greedy_minimum
 

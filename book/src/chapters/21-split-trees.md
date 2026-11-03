@@ -6,6 +6,22 @@ The classical way to achieve this is a finger search tree in which a split at ra
 
 The library implements split trees as 2–3–4 trees viewed as binary search trees. This chapter shows the vocabulary, all in `Structures/SplitTree`, and the contract that the simulation uses. The implementation of splitting, joining and two-ended fingers is internal to the library; it is checked by Lean but not part of the reading interface.
 
+The chapter's main result has two halves. A finger at the minimum can be built cheaply as a shape, and from it a key of rank $k$ is reached in $O(\log k)$ rotations. Splits charged to their smaller side cost linear time in total.
+
+```headline split-fingers
+title: Fingers as tree shapes, and splits paid for by the smaller side
+source: Demaine, Harmon, Iacono, Kane and Pătraşcu, *The geometry of binary search trees* (2009)
+theorems: Geometric.Split.Results.finger_construction Geometric.Split.Results.finger_access Geometric.Split.Results.linear_accounting
+
+Let $t$ be a 2–3–4 tree of height $h$ with $n$ keys, stored as a BST in its standard binary representation.
+
+1. At most $3n$ rotations turn that BST into its *finger view*, a BST on the same $n$ keys whose right spine has at most $3h$ nodes.
+2. In the finger view, splaying the key of rank $k$ is a legal root access that uses at most $5\lfloor\log_2(k+1)\rfloor + 6$ rotations.
+3. Separately: take any order of splits that eventually separates $n$ keys, and charge $1 + \lfloor\log_2(\min(a, b) + 1)\rfloor$ for splitting a group into sides of $a$ and $b$ keys. The total charge is at most $2n$.
+
+In Lean, $t$ is a [[Geometric.Split.Multiway]] with [[Geometric.Split.Multiway.Balanced]], its BST is [[Geometric.Split.Multiway.binary]], the finger view is [[Geometric.Split.Multiway.Finger.binaryView]], and the order of splits is a binary tree read by [[Geometric.Split.totalCharge]].
+```
+
 ::: note Namespace
 These declarations live under `RotationBST.Geometric.Split`, because split trees entered the library as part of the geometric simulation. Nothing in them is geometric: they are plain unlabelled 2–3–4 trees and binary trees.
 :::
@@ -56,11 +72,11 @@ A finger at the minimum is the path from the leftmost leaf up to the root, read 
 
 `leftSpine t` is the context of the leftmost leaf, nearest ancestor first. Each frame keeps all siblings, so nothing is lost. `ascend fs focus rank` climbs one frame at a time, filling the focus into its parent, and stops as soon as the focus has more than `rank` keys. The focus is always a prefix of the tree in inorder, because it is the leftmost subtree at its height, so "more than `rank` keys" means "contains rank `rank`". `searchLevels t rank` starts from the empty leftmost leaf and counts the levels climbed.
 
-The first theorem says that the left spine is a faithful representation of the tree, with one frame per level:
+The first theorem says that the left spine is a faithful representation of the tree, with one frame per level.
+
+**Theorem (the left spine).** For a balanced 2–3–4 tree `t` of height $h$, plugging the empty leaf into its left spine gives back `t`, the frames are valid from height $0$, and there are exactly $h$ of them.
 
 @decl RotationBST.Geometric.Split.Results.finger_representation
-
-Plugging the empty leaf into the left spine gives back `t`, the frames are valid from height $0$, and there are exactly $h$ of them.
 
 A balanced subtree of height $j$ has at least $2^j - 1$ keys, so the climb for rank $k$ stops after about $\log_2(k+1)$ levels. Splitting needs the same from *both* ends, because the cost must depend on the smaller side. The maximum finger is the minimum finger of the mirror image:
 
@@ -68,9 +84,11 @@ A balanced subtree of height $j$ has at least $2^j - 1$ keys, so the climb for r
 
 `mirror` reverses every node, so rank $k$ becomes rank $n - 1 - k$. `nearSearchLevels` climbs from whichever endpoint is nearer in rank.
 
+**Theorem (climbing from the nearer end).** For a balanced 2–3–4 tree with $n$ keys and any rank $k$, the number of levels climbed from the nearer endpoint is at most $\lfloor\log_2(\min(k, n-1-k) + 1)\rfloor + 1$.
+
 @decl RotationBST.Geometric.Split.Results.nearer_endpoint
 
-The number of levels climbed from the nearer endpoint is at most $\lfloor\log_2(\min(k, n-1-k) + 1)\rfloor + 1$. This is the "logarithm of the smaller side" that the accounting below charges for.
+This is the "logarithm of the smaller side" that the accounting below charges for.
 
 ::: check
 - `nearSearchLevels` and the theorem use truncated subtraction `t.size - 1 - rank`. For `rank ≥ t.size` it is $0$, so the theorem says that an out-of-range rank needs at most one level, which is true: the climb from the minimum ends at the root and `ascend` stops when it runs out of frames. No hypothesis `rank < t.size` is needed.
@@ -89,23 +107,29 @@ In the BST model a finger cannot be a pointer, so the library builds a binary tr
 
 `viewCost` is an exact count of the rotations that turn `t.binary` into the view, level by level: each level costs one rotation per spine node built so far, and twice as many plus one for a 4-node, whose binary representation has its middle key on top.
 
-The four headline facts about the view:
+The view has four properties that the simulation uses.
+
+**Theorem (building the finger).** For a balanced 2–3–4 tree `t` of height $h$ with $n$ keys, exactly `viewCost t` rotations take `t.binary` to the view, and `viewCost t` is at most $3n$. The view has $n$ keys, and its right spine has at most $3h$ nodes.
 
 @decl RotationBST.Geometric.Split.Results.finger_construction
 
-Construction: `viewCost t` rotations take the binary representation to the view, at most three per key. The view has the same size, and its right spine has at most $3h$ nodes. So creating a finger is linear in the group's size, which is what the simulation pays when it creates a new group.
+So creating a finger is linear in the group's size, which is what the simulation pays when it creates a new group.
+
+**Theorem (the minimum is at the root).** For every nonempty 2–3–4 tree `t`, the `viewCost t` rotations from `t.binary` to the view form a root access of rank $0$, in the sense of [Chapter 3](accesses.html).
 
 @decl RotationBST.Geometric.Split.Results.finger_minimum
 
-In the view, the minimum is at the root: `Access t.binary view 0 (viewCost t)` is a root access in the sense of [Chapter 3](accesses.html), for every nonempty `t`.
+**Theorem (search near the minimum).** For a balanced 2–3–4 tree `t` and a rank $k$ of `t`, the key of rank $k$ has depth at most $5\lfloor\log_2(k+1)\rfloor + 6$ in the view.
 
 @decl RotationBST.Geometric.Split.Results.finger_search_depth
 
-Search: rank $k$ has depth at most $5\lfloor\log_2(k+1)\rfloor + 6$ in the view, measured by the static search depth [[StaticTree.depth]] of [Chapter 10](bounds.html). An ordinary root-to-node search, with no finger pointer, now costs logarithmically in the distance to the minimum.
+Depth is the static search depth [[StaticTree.depth]] of [Chapter 10](bounds.html). An ordinary root-to-node search, with no finger pointer, now costs logarithmically in the distance to the minimum.
+
+**Theorem (access near the minimum).** For a balanced 2–3–4 tree `t` and a rank $k$ of `t`, splaying rank $k$ in the view ([[Splay.run]], [Chapter 13](splay.html)) is a legal root access with at most $5\lfloor\log_2(k+1)\rfloor + 6$ rotations.
 
 @decl RotationBST.Geometric.Split.Results.finger_access
 
-Access: splaying rank $k$ in the view ([[Splay.run]], [Chapter 13](splay.html)) is a legal root access whose rotation count meets the same bound. Splaying a node at depth $d$ performs exactly $d$ rotations, so this follows from the depth bound.
+Splaying a node at depth $d$ performs exactly $d$ rotations, so this follows from the depth bound.
 
 ::: check
 - `finger_search_depth` and `finger_access` assume `Balanced h t` but their bounds do not mention `h`. Roughly, the constant $5$ has two sources: the spine grows by up to three nodes per multiway level, and the binary representation of a subtree can be twice as tall as its multiway height.
@@ -124,9 +148,11 @@ The simulation does not use one split but a whole *hierarchy* of them. A group o
 
 `charge left right` is $1 + \lfloor\log_2(\min(\mathit{left}, \mathit{right}) + 1)\rfloor$, where `left` and `right` are the numbers of keys remaining on each side. `totalCharge` adds the charges over a hierarchy.
 
+**Theorem (linear accounting).** For every hierarchy of splits on $n$ keys, the total charge is at most $2n$.
+
 @decl RotationBST.Geometric.Split.Results.linear_accounting
 
-However the splits are chosen, their total charge is at most $2n$. The proof keeps a reserve of $2s - \lfloor\log_2(s+1)\rfloor$ for every interval of $s$ keys. Splitting an interval of $a + b + 1$ keys into $a$ and $b$ releases the reserve of the larger interval and creates those of the two smaller ones, and the difference covers the charge, because $\lfloor\log_2(a+b+2)\rfloor \le 1 + \lfloor\log_2(\max(a,b)+1)\rfloor$. The same quantity appears, scaled by a constant number of rotations per unit, as the credit that the simulation stores with each group ([Section 17.4](simulation.html#how-the-simulation-works)).
+The proof keeps a reserve of $2s - \lfloor\log_2(s+1)\rfloor$ for every interval of $s$ keys. Splitting an interval of $a + b + 1$ keys into $a$ and $b$ releases the reserve of the larger interval and creates those of the two smaller ones, and the difference covers the charge, because $\lfloor\log_2(a+b+2)\rfloor \le 1 + \lfloor\log_2(\max(a,b)+1)\rfloor$. The same quantity appears, scaled by a constant number of rotations per unit, as the credit that the simulation stores with each group ([Section 17.4](simulation.html#how-the-simulation-works)).
 
 ::: caveat What this chapter does not state
 The abstract is a contract, not a split-tree implementation. It states construction, minimum, search and access for a minimum finger, the climb from the nearer endpoint, and the accounting lemma. The BST implementation of splitting, with its per-split rotation bound, the two-ended finger state (a minimum finger and a maximum finger on either side of a median root), joins and rebuilding are proved in internal `Results` modules under `Structures/SplitTree`. The simulation relies on them, and their statements are checked by Lean, but they are outside the reading interface, so trusting the simulation's statement does not require reading them.

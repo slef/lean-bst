@@ -1,5 +1,17 @@
 # Splaying
 
+Splay trees, introduced by Sleator and Tarjan in 1985, are the best-known self-adjusting BST. They store no balance information. After every access they move the accessed node to the root by a fixed rotation pattern, and the analysis shows that this alone yields $O(\log n)$ amortized cost, and much more on structured sequences. This chapter defines the algorithm, proves it is a legal BST algorithm, and shows it can be run on the pointer machine. Its cost guarantees come in the next two chapters. [Chapter 14](analysis.html) proves the balance theorem, static optimality, the static finger bound and the working-set bound. [Chapter 15](beyond.html) treats updates, long splays, snapshots and sequential access.
+
+```headline splay-correct
+title: Splaying is a legal BST algorithm
+source: Sleator and Tarjan, *Self-adjusting binary search trees* (1985)
+theorems: Splay.Results.correct
+
+For every binary search tree $t$ on $n$ keys and every key $x$ of $t$, splaying $x$ is a root access: a sequence of legal rotations that ends with $x$ at the root. The number of rotations is exactly the count the algorithm reports, and it is less than $n$.
+
+In Lean, the algorithm is [[RotationBST.Splay.run]], which returns the new tree and its rotation count. `correct` concludes an [[RotationBST.Access]], the certified notion of "bring $x$ to the root by rotations, at this cost" from [Chapter 3](accesses.html).
+```
+
 Bottom-up splaying, as defined in Section 2 of Sleator and Tarjan's paper, searches for the requested node $x$ and then repeats *splaying steps* until $x$ is the root. A step looks at $x$, its parent $p$ and its grandparent $g$:
 
 - **zig**: if $p$ is the root, rotate $x$ over $p$;
@@ -59,9 +71,11 @@ In each displayed transformation, the subtrees appear in the same left-to-right 
 - The library's tests separate zig-zig from rotating $x$ twice: `Splay.run` on a three-node left path, requesting key $0$, gives the right path, while [[RotationBST.moveToRoot]] gives a different tree.
 :::
 
+**Theorem (splaying a focus).** Let $x$ be the root of the subtree `node l r`, sitting below the ancestors `cs` in the tree `plug cs (node l r)`. Then `splayAt l r cs` is reached from that tree by a root access to $x$, whose rank is `offset cs + l.size`, using exactly `cs.length` rotations, one per ancestor.
+
 @stmt RotationBST.Splay.splayAt_correct
 
-This is the invariant behind everything that follows. Splaying the focus `node l r` with context `cs` is a root access, in the sense of [Chapter 3](accesses.html), of the rank `offset cs + l.size` from the tree `plug cs (node l r)`, using exactly `cs.length` rotations. A zig uses one rotation for one frame, and a double step uses two rotations for two frames, so the count is exact.
+This is the invariant behind everything that follows; "root access" is in the sense of [Chapter 3](accesses.html). A zig uses one rotation for one frame, and a double step uses two rotations for two frames, so the count is exact.
 
 ## The splay function
 
@@ -75,11 +89,17 @@ The figure runs a transcription of `locate`, `splayAt` and `run`. Each **Step** 
 
 ## Correctness
 
+**Theorem (correctness of splaying).** For every tree $t$ and every rank $x < |t|$, `run t x` returns a tree and a count $k$ such that the tree is reached from $t$ by a root access to $x$ using exactly $k$ rotations, and $k < |t|$.
+
 @decl RotationBST.Splay.Results.correct
 
 For every rank in range, the pair returned by `run` is certified by an `Access`. The rotations are legal (each is a `Rotate` step in the sense of [Chapter 2](rotations.html)), the final root has rank `x`, the cost is exactly the reported count, and that count is less than `t.size`. The proof combines `locate_correct` with `splayAt_correct`: `plug` of the context around the focus is `t`, and `offset cs + l.size = x`.
 
 ## Splay as an online algorithm
+
+To compare splaying with other algorithms over whole request sequences, it is packaged as an online algorithm. The certificate the package requires is the correctness theorem again, in the form the package asks for.
+
+**Theorem (splay step).** For every tree $t$ and every rank $x < |t|$, the pair returned by `run t x` is a root access to $x$ at the reported cost.
 
 @decl RotationBST.Splay.step_correct RotationBST.Splay.algorithm
 
@@ -89,7 +109,9 @@ From here on, `algorithm.cost t xs` is the total number of splay rotations over 
 
 ## A pointer implementation
 
-The rotation model charges nothing for walking down the tree. This splay implementation is nevertheless realizable on the single-cursor pointer machine of [Chapter 5](pointer.html), with the same final tree and constant overhead:
+The rotation model charges nothing for walking down the tree. This splay implementation is nevertheless realizable on the single-cursor pointer machine of [Chapter 5](pointer.html), with the same final tree and constant overhead.
+
+**Theorem (splaying on the pointer machine).** For every tree $t$ and every sequence $X$ of valid ranks, there is a pointer-machine execution that serves $X$ from $t$, ends in exactly the tree that splaying produces, and costs at most $3(m + R)$, where $m + R$ is splaying's total cost (requests plus rotations).
 
 @decl RotationBST.Splay.Results.pointer_execution
 

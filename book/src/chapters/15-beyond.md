@@ -1,6 +1,32 @@
 # Beyond single accesses
 
-The theorems of [Chapter 9](analysis.html) are about one algorithm serving a sequence of accesses. Sections 5 and 6 of Sleator and Tarjan's paper go further: updates (insertion, deletion, split, join), a variant that splays only along long paths, the expected cost of a "snapshot" of the tree under random requests, and the linear cost of accessing every key in order. The library proves versions of all four. Each comes with modelling choices that are easy to misread, so this chapter spends more time on the definitions than on the bounds.
+The theorems of [Chapter 14](analysis.html) are about one algorithm serving accesses to a fixed set of keys. Splay trees do more. Sleator and Tarjan show that insertion, deletion, split and join also cost $O(\log n)$ amortized, so a splay tree is a complete dictionary with the same guarantee. Their paper also analyses a variant that splays only along long paths, and the expected shape of the tree under random requests (the *snapshot*). Tarjan later proved the *scanning theorem*: accessing every key once, in increasing order, costs $O(n)$ from any initial tree. The library proves versions of all four. The two headline results are the dictionary bound and the scanning theorem:
+
+```headline splay-updates
+title: Splay trees support updates in $O(\log n)$ amortized time
+source: Sleator and Tarjan, *Self-adjusting binary search trees* (1985)
+key: yes
+theorems: Splay.Updates.Results.balance
+
+Consider any sequence of $m$ operations on a collection of splay trees (a *forest*). Each operation is an access, an insertion, a deletion, a split of one tree into two, or a join of two trees, and is charged one unit plus its rotations. Suppose the forest never holds more than $N$ keys, and initially holds $s$ keys. Then the total cost is at most
+
+$$m\,\bigl(5\log_2(N+1) + 3\bigr) + s\log_2(s+1).$$
+
+In Lean, the operations are [[RotationBST.Splay.Updates.split]], [[RotationBST.Splay.Updates.join]], [[RotationBST.Splay.Updates.insert]] and [[RotationBST.Splay.Updates.delete]], built on [[RotationBST.Splay.run]]. A run of operations is an [[RotationBST.Splay.Updates.Execution]] made of [[RotationBST.Splay.Updates.Step]]s, and `balance` is the bound. Insertions and deletions name their position by rank; the search that finds that rank from a key is not modelled ([Section 15.1](beyond.html#updates)).
+```
+
+```headline splay-scanning
+title: Sequential access in splay trees takes linear time
+source: Tarjan, *Sequential access in splay trees takes linear time* (1985)
+key: yes
+theorems: Splay.Results.scanning
+
+For every initial tree on $n$ keys, accessing the keys $0, 1, \dots, n-1$ in increasing order by splaying costs at most $14n$ in total, counting one unit per request plus one per rotation. The first access alone may take $n-1$ rotations, so the bound is about the whole scan, not about each access.
+
+In Lean, the scan is `List.range t.size`, and `scanning` bounds `totalCost` of [[RotationBST.Splay.algorithm]].
+```
+
+Each of these results comes with modelling choices that are easy to misread, so this chapter spends more time on the definitions than on the bounds.
 
 ## Updates
 
@@ -25,7 +51,9 @@ Updates change the key set, so ranks must change too. The library keeps the shap
 - Out-of-range arguments (`k > t.size` for `split`, `x ≥ t.size` for `delete`) are outside every theorem below, which all assume validity.
 :::
 
-The size lemmas confirm the renumbering. `split_spec` shows that a nontrivial split really is a certified splay `Access` to rank `k - 1`, followed by one cut.
+The size lemmas confirm the renumbering.
+
+**Theorem (sizes).** For valid arguments on a tree with $n$ keys, splitting at gap $k$ gives trees with $k$ and $n - k$ keys, joining gives $|l| + |r|$ keys, insertion adds one key and deletion removes one. A split at $k > 0$ is a certified splay access to rank $k - 1$, followed by cutting the root's right edge (`split_spec`).
 
 @decl RotationBST.Splay.Updates.Results.split_sizes RotationBST.Splay.Updates.Results.split_spec RotationBST.Splay.Updates.Results.join_size RotationBST.Splay.Updates.Results.insert_size RotationBST.Splay.Updates.Results.delete_size
 
@@ -50,9 +78,11 @@ The last two constructors are structural:
 
 ### Balance with updates
 
+**Theorem (balance with updates).** Consider an execution of $m$ operations during which the forest never holds more than $N$ keys, starting from a forest with $s$ keys in total. Its total cost is at most $m\,(5\log_2(N+1) + 3) + s\log_2(s+1)$. If the forest starts empty, the total cost is at most $\sum_j \bigl(5\log_2(n_j + 1) + 3\bigr)$, where $n_j$ is the number of keys in the trees that operation $j$ involves.
+
 @decl RotationBST.Splay.Updates.Results.balance RotationBST.Splay.Updates.Results.balance_initially_empty
 
-The first theorem is the analogue of the balance theorem for arbitrary initial forests. Every one of the `m` operations is charged $5 \log_2(N+1) + 3$, plus a startup term of $|s| \log_2(|s|+1)$ for the initial forest $s$. The second is the paper's version: from an empty forest, each operation costs $5 \log_2(n_j + 1) + 3$ amortized, where $n_j$ counts only the keys of the trees it touches. A small tree is cheap to operate on even when the forest is large.
+The first theorem is the analogue of the balance theorem for arbitrary initial forests, with a startup term for the initial forest. The second is the paper's version, in which an operation pays only for the keys of the trees it touches: a small tree is cheap to operate on even when the forest is large.
 
 ::: details Proof sketch
 The potential is the unit-weight splay potential ([Chapter 9](analysis.html)), summed over the trees of the forest; permuting the forest leaves it unchanged. Each operation is bounded separately using the access lemma with unit weights, i.e. $R + \Delta\Phi \le 3\log_2 n + 1$:
@@ -78,9 +108,11 @@ Section 5 of the paper considers splaying less often. A conditional splay search
 - The returned number counts **restructuring rotations only**. A short search that does not splay still walks to $x$; it is not a zero-cost root access, and the conditional variant is not an [[RotationBST.Algorithm]] in the sense of [Chapter 6](online.html), because the tree it leaves need not have $x$ at the root. Its search cost is accounted for separately in the pointer model: [[RotationBST.Splay.conditionalStep_pointer]] shows that each conditional step is served by a pointer search of cost at most $1 + 3 \cdot \text{depth}$.
 :::
 
+**Theorem (long splays).** Fix positive weights $w$, and let $W$ be the total weight of the $n$ keys. For every initial tree and every sequence of valid requests, conditional splaying performs at most $2\sum_{i<n} \log_2(W/w(i))$ restructuring rotations in total. With unit weights, this is at most $2n\log_2 n$.
+
 @decl RotationBST.Splay.Results.long_splay RotationBST.Splay.Results.long_splay_unit
 
-The total restructuring over *any number* of conditional searches is at most $2\sum_{i<n} \log_2(W/w(i))$. With unit weights this is $2n\log_2 n$. The bound is independent of the length of `xs`: once the tree is shaped so that every key is shallow relative to its weight, conditional splaying stops restructuring altogether. It says nothing about the total search cost, which still grows with the number of requests.
+The bound is independent of the length of `xs`: once the tree is shaped so that every key is shallow relative to its weight, conditional splaying stops restructuring altogether. It says nothing about the total search cost, which still grows with the number of requests.
 
 ::: details Proof sketch
 When a splay is performed, the depth $R$ is at least twice the access lemma's charge $3(\log_2 W - \log_2 w(x)) + 1$, so $R + \Delta\Phi \le R/2$, i.e. $R \le 2(\Phi_{\text{before}} - \Phi_{\text{after}})$. When no splay happens, both sides are zero. Summing telescopes to $2(\Phi_0 - \Phi_{\text{final}})$. Every subtree's mass lies between the weight of its root and $W$, so the total drop is at most $\sum_i (\log_2 W - \log_2 w(i))$.
@@ -101,9 +133,11 @@ Suppose requests are independent and key $x$ is requested with probability $p(x)
 Two division-by-zero conventions matter here. In Lean, $1/0 = 0$ and Mathlib's $\log_2 0 = 0$. So a zero-probability key contributes $0 \cdot \log_2(1/0) = 0$ to the entropy, the usual convention $0 \log 0 = 0$. And `snapshotMean … 0` would be $0/0 = 0$; the theorem excludes this with `0 < m`. Probabilities are only read at ranks below `n`; values of `p` beyond the tree are irrelevant except for the hypothesis `nonnegative`, which quantifies over all indices.
 :::
 
+**Theorem (snapshot).** Let $p$ be a probability distribution on the $n$ keys of a tree $t$, and let $m > 0$. Starting from $t$, perform independent splay accesses drawn from $p$, and freeze the tree just before one of the first $m$ accesses, chosen uniformly at random. In the frozen tree, the expected cost of one static search drawn from $p$ is at most $5 + 3H(p) + n(1 + \log_2 n)/m$, where $H(p)$ is the entropy of $p$ in bits.
+
 @decl RotationBST.Splay.Results.snapshot
 
-The expected static cost of the snapshot is at most $5 + 3H(p) + n(1+\log_2 n)/m$. The last term is the cost of an arbitrary starting tree, amortized over the window of `m` accesses. Keys of probability zero are allowed. The statement's reading base contains no potential function: only the model, the splay algorithm and the finite-sum definitions above.
+The last term is the cost of an arbitrary starting tree, amortized over the window of `m` accesses. Keys of probability zero are allowed. The statement's reading base contains no potential function: only the model, the splay algorithm and the finite-sum definitions above.
 
 ::: details Proof sketch
 The analysis uses the weights $w(x) = p(x) + 1/n$, which are positive even where $p$ vanishes, and total $W = 2$. Averaging the weighted access lemma over one random request gives
@@ -115,9 +149,11 @@ Iterating this over $j < m$ telescopes the potential, which lies between $n\log_
 
 Accessing $0, 1, \dots, n-1$ in order costs $O(n)$ by the scanning theorem, from *any* initial shape. The statement uses only the splay algorithm and the cost of [Chapter 6](online.html):
 
+**Theorem (sequential access).** For every initial tree on $n$ keys, accessing the keys $0, 1, \dots, n-1$ in order by splaying has total cost at most $14n$. On the pointer machine of [Chapter 6](pointer.html), the same scan, ending in exactly the splay tree, costs at most $40n$.
+
 @decl RotationBST.Splay.Results.scanning RotationBST.Splay.Results.pointer_scanning
 
-The scan `List.range t.size` is every key once, in increasing order. Its total cost $m + R$, with $m = n$ requests, is at most $14n$. In the pointer model of [Chapter 5](pointer.html), the same scan, ending in exactly the splay tree, costs at most $40n$. The constants are deliberately generous. The README notes that the sharper $5.5n$ of Kakimura and Terai is not claimed.
+The scan `List.range t.size` is every key once, in increasing order. The constants are deliberately generous. The README notes that the sharper $5.5n$ of Kakimura and Terai is not claimed.
 
 ### The ghost marking
 

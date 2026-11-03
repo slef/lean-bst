@@ -9,6 +9,7 @@
   },
   "chapters": [
     { "slug": "index", "file": "00-preface.md", "title": "Preface" },
+    { "slug": "checking", "file": "00-checking.md", "title": "Checking a result" },
     { "slug": "shapes", "file": "01-shapes.md", "title": "Trees without keys", "number": 1, "part": "I · Models" },
     { "slug": "rotations", "file": "02-rotations.md", "title": "Rotations", "number": 2 },
     { "slug": "accesses", "file": "03-accesses.md", "title": "Accesses and executions", "number": 3 },

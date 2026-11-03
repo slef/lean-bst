@@ -6,6 +6,8 @@ You know what a binary search tree is, and what a rotation does. The question th
 
 So each definition and theorem statement in the library's public interface appears below as it was compiled. The prose between them explains what each piece models, why it is phrased the way it is, and where the formal choices differ from textbook conventions. Proofs are not explained: Lean has checked them, and you can open any of them from its code block.
 
+If you only want to check one result, you do not need to read the book in order. Every chapter that proves something opens with a box that states its main result in English and in Lean. [Checking a result](checking.html) lists all of them, marks the *key results* that the formalized papers announce, and computes, for any selection of results, the few definitions you must read to trust them. The book then highlights those definitions wherever they are explained.
+
 ## How to read the Lean blocks
 
 Here is a block, taken from the [first chapter](shapes.html):

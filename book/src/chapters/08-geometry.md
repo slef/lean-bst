@@ -4,7 +4,7 @@ Run a BST algorithm on a request sequence and record, for each request, the set 
 
 This turns BST optimization into a covering problem in the plane. The offline optimum for a request sequence is, up to a constant factor, the size of the smallest arborally satisfied superset of the request points $\{(x_t, t)\}$. Lower bounds become statements about rectangles, and Wilber's bound of [Chapter 11](wilber.html) is proved here against every arborally satisfied set. Algorithms become rules that complete one row at a time, and the most natural such rule, GreedyASS ([Chapter 16](greedy.html)), is conjectured to be dynamically optimal.
 
-This chapter states the model: points and arborally satisfied sets, offline solutions, and online algorithms that add one row per request. The definitions are in `Models/Geometric/Definitions/Abstract.lean`, `Online/Abstract.lean`, `Offline/Abstract.lean` and `Static/Abstract.lean`, and the theorems in `Models/Geometric/Abstract.lean`. The correspondence with the tree models is [Chapter 9](equivalence.html).
+This chapter states the model: points and arborally satisfied sets, offline solutions, and online algorithms that add one row per request. Its theorems are small facts about these definitions. The result that makes the geometric view worth having, that point counts and BST costs agree up to constant factors, is the key result of [Chapter 9](equivalence.html#claim-ass-equivalence), and every definition it needs is in this chapter or in Part I. The definitions are in `Models/Geometric/Definitions/Abstract.lean`, `Online/Abstract.lean`, `Offline/Abstract.lean` and `Static/Abstract.lean`, and the theorems in `Models/Geometric/Abstract.lean`. The correspondence with the tree models is [Chapter 9](equivalence.html).
 
 ## Points and rectangles
 
@@ -48,6 +48,8 @@ The library states the fixed-tree case for any family of touched sets that are r
 Keys outside the tree's range are ruled out, not ignored. A point with key below `lo` is passed to the left subtree at every level, and eventually reaches a `nil`, where `P = ∅` fails. The same holds for keys at or beyond `lo + t.size`.
 :::
 
+**Theorem (fixed trees give satisfied sets).** For every tree `t`, offset `lo` and finite point set `P`, if `RootedRows t lo P` holds then `P` is arborally satisfied.
+
 @decl RotationBST.Geometric.Results.fixed_tree_view
 
 The proof is the induction above: a pair on the same side of the root is handled by the subtree, and a pair separated by the root, or containing it, finds a root point on one of its two rows. The dynamic version of the argument is part of the equivalence theorems of [Chapter 9](equivalence.html).
@@ -73,11 +75,13 @@ An offline solution for $n$ keys and the sequence `xs` is a solution for `reques
 - No initial tree is mentioned. A geometric solution corresponds to a BST execution from an initial tree of its choosing. Starting from a prescribed tree costs an extra $O(n)$, and the theorems of [Chapter 9](equivalence.html) state this term explicitly.
 :::
 
-Two facts about offline solutions. Every solution contains the $m$ request points, so its cost is at least $m$, just as the total cost of a BST execution is at least the number of requests:
+Two facts about offline solutions. Every solution contains the $m$ request points, so its cost is at least $m$, just as the total cost of a BST execution is at least the number of requests.
+
+**Theorem (requests are paid for).** Every offline solution for a sequence of $m$ requests has at least $m$ points.
 
 @decl RotationBST.Geometric.Results.request_lower_bound
 
-And for every valid sequence a minimum-cost offline solution exists:
+**Theorem (an optimum exists).** For every sequence `xs` of keys below $n$, there is an offline solution $E$ whose number of points is at most that of every offline solution for $n$ keys and `xs`.
 
 @decl RotationBST.Geometric.Results.optimal_exists
 
@@ -117,7 +121,9 @@ An online geometric algorithm is a function from the current time, the current r
 
 `fill step time P xs` runs a step function from history `P`, numbering new rows consecutively from `time`. `rowCost` charges one unit for each point added, the request included, so it is the geometric analogue of the total cost $T = m + R$.
 
-An online run is an offline solution, and its cost is exactly its number of points:
+An online run is an offline solution, and its cost is exactly its number of points.
+
+**Theorem (online runs are solutions).** For every online geometric algorithm `A` on $n$ keys and every sequence `xs` of keys below $n$, the points that `A` produces on `xs`, starting from the empty history, form an offline solution with exactly `rowCost` points.
 
 @decl RotationBST.Geometric.Results.online_solution
 
@@ -129,15 +135,19 @@ Conversely, every offline solution can be read row by row as a sequence of legal
 
 `pastPoints P time` is the part of `P` strictly before `time`, and `keysAt P time` the keys on row `time`.
 
+**Theorem (rows of a solution are legal).** If a finite point set `P` is arborally satisfied, has keys below $n$ and contains the request point at time `time`, then the row of `P` at `time` is a legal completion of the rows of `P` before it.
+
 @decl RotationBST.Geometric.Results.offline_row
 
-If `P` is arborally satisfied, has keys below $n$ and contains the request at time `time`, then the row of `P` at `time` is a legal completion of the rows before it. The reason is that arboral satisfaction is inherited by every prefix of the rows. A rectangle spanned by two points at times at most $t$ has all its points at times at most $t$, so the third point it contains is in the prefix too. The rows of an offline solution are legal, but each may have been chosen with knowledge of later requests, and an online algorithm cannot reproduce them in general.
+The reason is that arboral satisfaction is inherited by every prefix of the rows. A rectangle spanned by two points at times at most $t$ has all its points at times at most $t$, so the third point it contains is in the prefix too. The rows of an offline solution are legal, but each may have been chosen with knowledge of later requests, and an online algorithm cannot reproduce them in general.
 
-Reading an offline solution row by row also accounts for all of its points:
+Reading an offline solution row by row also accounts for all of its points. Here `scheduleCost P time` adds the row sizes of the first `time` rows.
+
+**Theorem (rows account for every point).** For every offline solution $E$ of a sequence of $m$ requests, the sizes of its first $m$ rows add up to its number of points.
 
 @decl RotationBST.Geometric.scheduleCost RotationBST.Geometric.Results.offline_cost
 
-`scheduleCost P time` adds the row sizes of the first `time` rows. For an offline solution all rows are below $m$, so the first $m$ rows hold every point.
+For an offline solution all rows are below $m$, so the first $m$ rows hold every point.
 
 ::: note What comes next
 Online and offline geometric algorithms now mirror online algorithms and offline executions in the BST models. [Chapter 9](equivalence.html) makes the correspondence precise: offline, point counts and BST costs agree up to constant factors (exactly, for the region model), and online, every geometric algorithm can be simulated by an online BST algorithm. The simulation is the subject of [Chapter 17](simulation.html), and GreedyASS, the geometric algorithm it is usually applied to, is [Chapter 16](greedy.html).

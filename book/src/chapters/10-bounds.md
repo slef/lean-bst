@@ -4,6 +4,34 @@ Part I fixed what a BST execution is and what it costs. Part II asks how much a 
 
 Dynamic optimality is a comparison with an unknown optimum. The classical results about splay trees instead compare an algorithm with explicit functions of the request sequence. Each function measures one kind of locality: recency (working set), frequency (static optimality) and spatial proximity to a fixed key (static finger). This chapter defines these functions and the corresponding properties of an [`Algorithm`](online.html#online-algorithms). It also proves the implications between them, which hold for every algorithm. Whether splaying has these properties is the subject of [Chapter 14](analysis.html).
 
+The chapter has two main results. The first is that the working-set bound is the strongest of the three: an algorithm that has it also has the other two, and therefore competes with every fixed BST. The second is the classical entropy lower bound for fixed trees, which makes "static optimality" mean what its name says.
+
+```headline working-set-implies
+title: The working-set bound implies static optimality and the static finger bound
+source: Sleator and Tarjan, *Self-adjusting binary search trees* (1985); Iacono (2001)
+theorems: Bounds.workingSet_implies_staticOptimality Bounds.staticOptimality_implies_staticFinger Bounds.workingSet_implies_staticFinger StaticTree.Results.workingSet_competes
+
+Let $A$ be any online BST algorithm. Suppose there are constants $C, D$ such that, from every initial tree on $n$ keys and for every sequence $X$ of $m$ valid requests, $A$ performs at most $C \sum_j \bigl(1 + \lfloor\log_2 w_j\rfloor\bigr) + D\,n(1 + \lfloor\log_2 n\rfloor)$ rotations, where the working-set number $w_j$ is one plus the number of distinct keys requested since the previous request for $x_j$, or $n$ if $x_j$ has not been requested before (the working-set bound). Then, for new constants $C', D'$, the total cost of $A$ (rotations plus $m$) is at most
+
+- $C' \bigl(m + \sum_x q_x \log_2(m/q_x)\bigr) + D'\,n(1 + \lfloor\log_2 n\rfloor)$, where $q_x$ is the number of requests for $x$ (static optimality);
+- $C' \sum_j \bigl(1 + \log_2(|x_j - f| + 1)\bigr) + D'\,n(1 + \lfloor\log_2 n\rfloor)$, for every finger $f$ at once (static finger);
+- $C' \cdot \mathrm{cost}_u(X) + D'\,n(1 + \lfloor\log_2 n\rfloor)$, where $\mathrm{cost}_u(X)$ is the cost of serving $X$ in *any* fixed BST $u$ on the same keys, one unit per request plus the depth of the requested key.
+
+In Lean, the three bounds are the properties [[RotationBST.HasWorkingSetBound]], [[RotationBST.HasStaticOptimalityBound]] and [[RotationBST.HasStaticFingerBound]] of an [[RotationBST.Algorithm]], and the fixed-tree cost is [[RotationBST.StaticTree.cost]]. Nothing about any specific algorithm is involved.
+```
+
+```headline static-entropy
+title: Every fixed BST pays at least a third of the entropy bound
+source: Mehlhorn, *Nearly optimal binary search trees* (1975)
+theorems: StaticTree.Results.entropy_lower_bound
+
+For every binary search tree $t$ on $n$ keys and every sequence $X$ of $m$ requests to its keys, let $q_x$ be the number of requests for $x$. Serving $X$ in $t$ without restructuring, at one unit per request plus the depth of the requested key, costs at least a third of the entropy bound:
+
+$$m + \sum_x q_x \log_2 \frac{m}{q_x} \;\le\; 3\,\Bigl(m + \sum_j \mathrm{depth}_t(x_j)\Bigr).$$
+
+In Lean, the left side is [[RotationBST.Bounds.staticCost]] and the right side is [[RotationBST.StaticTree.cost]].
+```
+
 All logarithms are base 2. The sequence functions use `Nat.log2` (the floor of $\log_2$, with `Nat.log2 0 = 0`) where the original definitions are natural-number valued, and `Real.logb 2` (with $\log 0 = 0$) where they are real-valued. Every property has the same shape:
 
 $$\exists\, C, D \in \mathbb N.\ \forall t, xs \text{ valid}.\quad \mathrm{cost}(a, t, xs) \;\le\; C \cdot f(xs) \;+\; D \cdot n\,(1 + \lfloor \log_2 n \rfloor),$$
@@ -47,7 +75,9 @@ Read: there are natural constants $C, D$ such that for every initial tree and ev
 - Validity `∀ x ∈ xs, x < t.size` is a hypothesis, so the property says nothing about invalid requests.
 :::
 
-Adding the request count does not change which algorithms have the property:
+Adding the request count does not change which algorithms have the property.
+
+**Theorem (rotations or total cost).** An algorithm has the working-set bound if and only if there are constants $C, D$ such that its total cost, rotations plus one per request, is at most $C \cdot \mathtt{workingSetSum} + D\,n(1 + \lfloor\log_2 n\rfloor)$ for every initial tree and every valid sequence.
 
 @decl RotationBST.workingSet_totalCost_iff
 
@@ -111,19 +141,25 @@ Static optimality is usually explained as "as good as the best fixed BST for the
 
 `depth t x` is the number of edges from the root to rank `x`. It is the same three-way rank search as [[RotationBST.Splay.locate]], and the library proves that the search context of `locate` has exactly this length. On `nil` it returns $0$; this case only makes the function total and is never reached for valid ranks. `cost` charges each request one unit plus its depth.
 
-This benchmark is exactly the cost of an actual pointer-machine execution that never restructures:
+This benchmark is exactly the cost of an actual pointer-machine execution that never restructures.
+
+**Theorem (a fixed tree is a pointer execution).** For every tree `t` and every valid sequence `xs`, there is a pointer-machine execution that serves `xs` from `t`, ends in `t`, and costs exactly `StaticTree.cost t xs`.
 
 @decl RotationBST.StaticTree.Results.pointer_execution
 
 Each request is served by walking down `depth t x` edges, visiting `x`, and stopping. That is `Pointer.Serves t t x (depth t x + 1)` in the [pointer model](pointer.html), with the unit request charge. The next search starts again at the root, and returning there is free in that model. The final tree is `t` itself.
 
-Entropy is a lower bound on the cost of every fixed tree, up to a factor of $3$:
+Entropy is a lower bound on the cost of every fixed tree, up to a factor of $3$.
+
+**Theorem (entropy lower bound).** For every tree `t` and every valid sequence `xs`, $\mathtt{staticCost}(n, xs) \le 3 \cdot \mathtt{cost}(t, xs)$, where $n$ is the size of `t`.
 
 @decl RotationBST.StaticTree.Results.entropy_lower_bound
 
 The proof is the prefix-code argument. Give key $x$ the weight $4^{-(\mathrm{depth}(x)+1)}$, two bits for each comparison step, including the final one. These weights sum to at most $1$ in every shape. Gibbs' inequality bounds the entropy by $\sum_x q_x \log_2(1/w_x) = 2 \cdot \mathtt{cost}$, so $\mathtt{staticCost} \le m + 2\,\mathtt{cost} \le 3\,\mathtt{cost}$.
 
-Consequently, a working-set algorithm competes with every fixed BST:
+Consequently, a working-set algorithm competes with every fixed BST.
+
+**Theorem (working set beats every fixed tree).** If an algorithm has the working-set bound, then there are constants $C, D$ such that, for every initial tree `t`, every tree `u` of the same size and every valid sequence `xs`, the algorithm's total cost from `t` is at most $C \cdot \mathtt{StaticTree.cost}(u, xs) + D\,n(1 + \lfloor\log_2 n\rfloor)$.
 
 @decl RotationBST.StaticTree.Results.workingSet_competes
 
@@ -132,6 +168,8 @@ Here `t` is the algorithm's initial tree and `u` is any comparison tree of the s
 ## Implications between the bounds
 
 The following implications hold for every algorithm and use nothing about splaying. They are inequalities between sequence functions, lifted to properties.
+
+**Theorem (implications).** For every algorithm, the working-set bound implies static optimality, and static optimality implies the static finger bound. Hence the working-set bound implies the static finger bound.
 
 @decl RotationBST.Bounds.workingSet_implies_staticOptimality RotationBST.Bounds.staticOptimality_implies_staticFinger RotationBST.Bounds.workingSet_implies_staticFinger
 
@@ -147,7 +185,9 @@ In Sleator and Tarjan's paper, Theorems 2 and 3 are proved directly from the acc
 
 ## Transfer to the pointer machine
 
-Working-set guarantees proved in the rotation model also hold for the causal pointer simulation of [Section 6.6](pointer.html#running-an-online-algorithm-on-the-pointer-machine):
+Working-set guarantees proved in the rotation model also hold for the causal pointer simulation of [Section 6.6](pointer.html#running-an-online-algorithm-on-the-pointer-machine).
+
+**Theorem (working set on the pointer machine).** If an algorithm has the working-set bound in the rotation model, then there are constants $C, D$ such that its online pointer-machine implementation costs at most $C \cdot \mathtt{workingSetSum} + D\,n(1 + \lfloor\log_2 n\rfloor)$, for every initial tree and every valid sequence.
 
 @decl RotationBST.Pointer.Lazy.Online.Results.workingSet
 

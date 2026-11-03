@@ -4,6 +4,8 @@ Fix keys $k_0 < k_1 < \dots < k_{n-1}$. A binary search tree on these keys has n
 
 The library therefore represents a BST by its **shape** alone. The key of a node is its **inorder rank**, a number in $\{0, \dots, n-1\}$ that the tree does not store but can always compute. This removes the search-tree invariant from every definition: there is no ordering condition to state, maintain or prove preserved. No BST and no access sequence is lost, as [Chapter 4](keys.html) proves.
 
+This chapter has no theorems. It introduces the two definitions that every later statement rests on, the shape type [[RotationBST.Tree]] and its size [[RotationBST.Tree.size]], and shows how a node's key is recovered from the shape. It also introduces the ordinary keyed trees, which [Chapter 4](keys.html) uses to show that working with shapes loses nothing. If you are only checking a result, the first two sections are the part you need.
+
 ## Shapes
 
 @decl RotationBST.Tree

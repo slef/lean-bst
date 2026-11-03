@@ -2,7 +2,23 @@
 
 The bounds of [Chapter 10](bounds.html) are upper-bound benchmarks: explicit functions of the request sequence that a good algorithm should match. To show that an algorithm is *competitive*, one needs the other side as well, a lower bound on what every BST execution must pay. Dynamic optimality compares an algorithm with the offline optimum, and nobody knows how to compute that optimum in closed form. Wilber (1989) gave two lower bounds on it that are explicit functions of the sequence. Fifteen years later, Demaine, Harmon, Iacono and Pătraşcu (2004; journal version 2007) built Tango trees around the first one and obtained the first $O(\log \log n)$-competitive BST.
 
-This chapter defines that first bound, the *interleave bound*. It states it against the three cost models of Part I: arborally satisfied point sets, rotation executions and pointer executions. It then explains the proof, which uses Wilber's transition points. The definitions follow the convention of Demaine, Harmon, Iacono and Pătraşcu, written DHIP below. They are in `Bounds/Interleave/Definitions/Abstract.lean`. The theorems are in `Bounds/Interleave/Abstract.lean`.
+This chapter defines that first bound, the *interleave bound*. Fix any BST $P$ on the $n$ keys, called the reference tree, and count how often the requests alternate between the left and right side of each of its nodes. Wilber's theorem says that every BST execution pays at least a constant fraction of this count. The chapter states the bound against the three cost models of Part I: arborally satisfied point sets, rotation executions and pointer executions. It then explains the proof, which uses Wilber's transition points.
+
+```headline wilber
+title: Wilber's interleave bound is a lower bound on every BST execution
+source: Wilber, *Lower bounds for accessing binary search trees with rotations* (1989)
+key: yes
+theorems: Wilber.Results.rotation_lower_bound
+
+Let $P$ be any binary search tree on $n$ keys, and let $\mathrm{IB}_P(X)$ be the total number of left/right alternations of the sequence $X$ at the nodes of $P$ (defined in [Section 11.1](wilber.html#the-interleave-quantity)). Every execution that serves $X = x_1, \dots, x_m$ by rotations, starting from any initial tree on $n$ keys and using $r$ rotations in total, satisfies
+
+$$\mathrm{IB}_P(X) \;\le\; 4r + 2m.$$
+
+So the offline optimum costs at least $\mathrm{IB}_P(X)/4 - m/2$ rotations, for every choice of $P$.
+
+In Lean, the execution is an [[RotationBST.Execution]] from Part I and $\mathrm{IB}_P$ is [[RotationBST.Wilber.interleave]]. The reference tree only needs the right size; it is unrelated to the trees the execution passes through.
+```
+ The definitions follow the convention of Demaine, Harmon, Iacono and Pătraşcu, written DHIP below. They are in `Bounds/Interleave/Definitions/Abstract.lean`. The theorems are in `Bounds/Interleave/Abstract.lean`.
 
 ## The interleave quantity
 
@@ -57,15 +73,17 @@ The bound can also be computed one request at a time. Appending a request $x$ ad
 
 Wilber's theorem: for every reference tree $P$, every BST execution serving $X$ costs at least a constant fraction of $\mathrm{IB}_P(X)$. The library proves it first in the geometric model of [Chapter 8](geometry.html), where the cost of a solution is its number of points, and transfers it to the two BST models through the equivalences of [Chapter 9](equivalence.html).
 
+**Theorem (interleave bound, geometric form).** Let `reference` be any tree on `n` keys. Every arborally satisfied superset `E` of the request points of `xs` over `n` keys has at least half as many points as the interleave quantity: $\mathrm{IB}(xs) \le 2\,|E|$.
+
 @decl RotationBST.Wilber.Results.interleave_lower_bound
 
-Every arborally satisfied superset `E` of the request points of `xs`, over `n` keys, has at least half as many points as the interleave quantity of any reference tree on `n` keys.
+The two BST versions follow by composing with the conversions from executions to point sets. A rotation execution with $r$ rotations yields a solution with at most $2r + m$ points ([[Geometric.Equivalence.Results.rotations_to_ass]]), and a pointer execution of cost $c$ yields one with at most $6c$ points ([[Geometric.Equivalence.Results.pointers_to_ass]]).
 
-The two BST versions follow by composing with the conversions from executions to point sets. A rotation execution with $r$ rotations yields a solution with at most $2r + m$ points ([[Geometric.Equivalence.Results.rotations_to_ass]]), and a pointer execution of cost $c$ yields one with at most $6c$ points ([[Geometric.Equivalence.Results.pointers_to_ass]]):
+**Theorem (interleave bound, BST forms).** Let $P$ be any tree on $n$ keys and $X$ a sequence of $m$ requests. Every rotation execution serving $X$ from a tree on $n$ keys with $r$ rotations satisfies $\mathrm{IB}_P(X) \le 4r + 2m$. Every pointer-machine execution serving $X$ from a tree on $n$ keys at cost $c$ satisfies $\mathrm{IB}_P(X) \le 12c$.
 
 @decl RotationBST.Wilber.Results.rotation_lower_bound RotationBST.Wilber.Results.pointer_lower_bound
 
-In the rotation model, $\mathrm{IB}_P(X) \le 4r + 2m$; in the pointer model, $\mathrm{IB}_P(X) \le 12 \cdot \mathrm{cost}$. Both quantify over all executions [[RotationBST.Execution]] and [[RotationBST.Pointer.Execution]] from every initial tree `s`. They therefore bound the offline optimum, which is the least cost of such an execution.
+Both quantify over all executions [[RotationBST.Execution]] and [[RotationBST.Pointer.Execution]] from every initial tree `s`. They therefore bound the offline optimum, which is the least cost of such an execution.
 
 ::: check
 - **Two unrelated trees.** The reference tree only has to have the right size (`reference.size = s.size`). It is unrelated to the initial tree `s` of the execution, and to every tree the execution passes through.

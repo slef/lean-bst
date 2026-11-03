@@ -2,6 +2,20 @@
 
 The first three chapters worked entirely with shapes, where a node's key is its inorder rank. This chapter proves that nothing was lost. A shape on $n$ nodes is the same thing as a BST on any fixed list of $n$ keys. Rotations, root accesses and whole executions on shapes are exactly the corresponding operations on labelled trees, with the same costs. The local "left smaller, right larger" invariant is equivalent to the inorder formulation used throughout. Finally, the shape type is Mathlib's `BinaryTree Unit` under another name.
 
+This is the chapter that justifies the library's main simplification. Every later theorem is about shapes and ranks; the results below say that each one is equally a theorem about ordinary BSTs on any set of distinct keys, with identical costs.
+
+```headline keys-and-ranks
+title: Trees on ranks are BSTs on keys, with the same costs
+theorems: Representation.ordered_labels_exist_unique Representation.execution_on_keys_iff
+
+Fix a list of $n$ keys.
+
+1. If the keys are strictly increasing (in any preordered type), then for every tree shape with $n$ nodes there is exactly one labelled tree with that shape whose inorder traversal is the list, and it satisfies the textbook search-tree invariant: at every node, all keys on the left are smaller and all keys on the right are larger.
+2. If the keys are distinct (no order needed), let $s$ and $t$ be labelled trees whose inorder traversals are the list, and let $X$ be a sequence of positions in the list. Then an execution serves the keys at positions $X$ from $s$ to $t$ with exactly $k$ rotations if and only if an execution serves the ranks $X$ from the shape of $s$ to the shape of $t$ with exactly $k$ rotations.
+
+In Lean, a labelled tree is a [[RotationBST.LabelledTree]], its shape is `erase`, the invariant is [[RotationBST.LabelledTree.Ordered]], and the two kinds of execution are [[RotationBST.Execution]] and [[RotationBST.LabelledTree.Execution]].
+```
+
 All theorems here are in `Models/Labelled/Abstract.lean`, `Models/Labelled/Ordering/Abstract.lean` and `Models/Labelled/Mathlib/Abstract.lean`. Their statements mention only the model definitions of [Chapter 1](shapes.html) and [Chapter 2](rotations.html), the labelled counterparts introduced next, and three small definitions in this chapter.
 
 ## Shapes and canonical labels
@@ -26,13 +40,17 @@ If `α` has repeated keys, `LabelledTree.Access s t x k` is satisfied by bringin
 
 The first three theorems say that [[RotationBST.Tree.labelFrom]] and [[RotationBST.LabelledTree.erase]] are inverse to each other on BSTs with consecutive keys.
 
+**Theorem (canonical labels).** For every shape $t$ and offset $lo$: labelling $t$ with $lo, lo+1, \dots$ in inorder and then erasing the labels gives back $t$; the labels read $lo, \dots, lo + |t| - 1$ in inorder; and every labelled tree whose inorder traversal is $lo, \dots, lo + n - 1$ is the canonical labelling of its own shape.
+
 @decl RotationBST.Representation.erase_label RotationBST.Representation.inorder_label RotationBST.Representation.reconstruct
 
 - `erase_label`: labelling a shape and forgetting the labels returns the shape.
 - `inorder_label`: the canonical labels read `lo, lo+1, …, lo + t.size - 1` in inorder. `List.range' lo n` is the list of the `n` consecutive naturals starting at `lo`.
 - `reconstruct`: conversely, a labelled tree whose inorder traversal is `lo, …, lo + n - 1` (with `n` the size of its own shape) *is* the canonical labelling of that shape. So every BST on consecutive keys arises from exactly one shape.
 
-The uniqueness half holds for arbitrary keys and does not even need distinctness:
+The uniqueness half holds for arbitrary keys and does not even need distinctness.
+
+**Theorem (labels are unique).** Two labelled trees with the same shape and the same inorder list are equal.
 
 @decl RotationBST.Representation.labels_unique
 
@@ -40,9 +58,13 @@ Two labelled trees with the same shape and the same inorder list are equal. The 
 
 ### Rotations and accesses correspond exactly
 
+**Theorem (rotations correspond).** For shapes $s$, $t$ and any offset $lo$, one rotation turns $s$ into $t$ if and only if one labelled rotation turns the canonical labelling of $s$ into that of $t$. Any labelled rotation, for any labels, leaves the inorder list unchanged.
+
 @decl RotationBST.Representation.rotation_iff RotationBST.Representation.rotation_preserves_keys
 
 `rotation_iff` says that one shape rotation is exactly one labelled rotation between the canonically labelled trees, for every offset `lo`. As stated, it only concerns labelled rotations whose target is canonically labelled. It covers all of them, because every labelled rotation preserves the inorder list (`rotation_preserves_keys`, stated for arbitrary labels with no order or distinctness hypothesis). A labelled rotation from `s.labelFrom lo` therefore ends at a tree whose labels are still `lo, lo+1, …` in inorder, which by `reconstruct` is `t.labelFrom lo` for its own shape `t`.
+
+**Theorem (sequences and accesses correspond).** For shapes $s$, $t$, exactly $k$ rotations turn $s$ into $t$ if and only if exactly $k$ labelled rotations turn the canonical labelling of $s$ into that of $t$. Likewise, $k$ rotations access rank $x$ in $s$ and end at $t$ if and only if $k$ labelled rotations access key $x$ in $s$ labelled by $0, \dots, |s|-1$, and end at $t$ labelled the same way.
 
 @decl RotationBST.Representation.rotations_iff RotationBST.Representation.access_iff
 
@@ -60,13 +82,19 @@ So far "BST" has meant "labelled tree with a prescribed sorted inorder list". Th
 
 Both subtrees are ordered, every key in `l` is below the root key `x`, and every key in `r` is above it. The quantifiers range over *all* keys of each subtree (via `inorder`, used here only as the list of keys), not just over the children. A condition on children alone would be the classic incorrect definition. The relation `<` comes from any `LT α` instance, and only the theorems below assume more.
 
+**Theorem (local and inorder invariants agree).** Over a preordered key type, a labelled tree satisfies the local search-tree invariant if and only if its inorder list is strictly increasing.
+
 @decl RotationBST.Representation.ordered_iff
 
 With a preorder on `α`, the local invariant is equivalent to the inorder list being strictly increasing: `List.Pairwise (· < ·)` requires `a < b` for every pair of positions, earlier before later. Strictness makes keys pairwise distinct, since `a < a` is impossible in a preorder.
 
+**Theorem (one BST per shape).** Over a preordered key type, let $t$ be a shape with $n$ nodes and let the list of keys be strictly increasing of length $n$. Then exactly one labelled tree has shape $t$, has that inorder list, and satisfies the search-tree invariant.
+
 @decl RotationBST.Representation.ordered_labels_exist_unique
 
 This is the formal version of the opening paragraph of [Chapter 1](shapes.html). Given a shape with $n$ nodes and a strictly increasing list of $n$ keys, there is exactly one (`∃!`) labelled tree with that shape and that inorder list that satisfies the textbook invariant. By `ordered_iff`, the `Ordered` conjunct already follows from the other two. It is included so that the statement is the familiar one, with no reference to inorder lists needed for the meaning of "BST".
+
+**Theorem (order is preserved).** The canonical labelling of every shape satisfies the search-tree invariant. If a sequence of labelled rotations turns $s$ into $t$, then $s$ satisfies the invariant if and only if $t$ does.
 
 @decl RotationBST.Representation.ordered_label RotationBST.Representation.rotations_preserve_order
 
@@ -80,13 +108,19 @@ The direction "`t.Ordered → s.Ordered`" is not a typo. The proof rewrites both
 
 Consecutive ranks are a normalization, but the correspondence does not depend on it. These theorems work for keys of any type `α`, with no order assumed at all.
 
+**Theorem (labels exist).** For every shape $t$ and every list of $|t|$ keys of any type, some labelled tree has shape $t$ and that inorder list.
+
 @decl RotationBST.Representation.labels_exist
 
 Any list of the right length labels any shape. Together with [[RotationBST.Representation.labels_unique]], labelling a shape `t` by a fixed list `keys` with `keys.length = t.size` is a bijection between shapes of that size and labelled trees with inorder list `keys`. For a strictly increasing list these are exactly the BSTs on those keys, by [[RotationBST.Representation.ordered_iff]].
 
+**Theorem (rotations on arbitrary keys).** Let $s$ and $t$ be labelled trees with the same inorder list. Exactly $k$ rotations turn the shape of $s$ into the shape of $t$ if and only if exactly $k$ labelled rotations turn $s$ into $t$.
+
 @decl RotationBST.Representation.arbitrary_rotations_iff
 
 For two labelled trees with the same inorder list, a trace between their shapes is exactly a labelled trace between them, with the same count. The hypothesis `keys : s.inorder = t.inorder` is needed for the backward direction: a shape trace says nothing about labels, so the labels of `t` must already be the ones a rotation trace would carry over from `s`.
+
+**Theorem (accesses on arbitrary keys).** Let $s$ and $t$ be labelled trees with the same inorder list of distinct keys, and let $x$ be a valid position in it. Then $k$ rotations access rank $x$ in the shape of $s$ and end at the shape of $t$ if and only if $k$ labelled rotations access the $x$-th key of $s$ and end at $t$.
 
 @decl RotationBST.Representation.arbitrary_access_iff
 
@@ -95,6 +129,8 @@ This translates rank requests into key requests. Accessing rank `x` in the shape
 - `keys`: both trees carry the same key list, as above.
 - `distinct`: the keys are pairwise distinct. Without it, the labelled access could be served by another node with the same label, which is not the node of rank `x` (see the check box in [Section 4.1](#shapes-and-canonical-labels)).
 - `valid`: `x` is in range. In Lean, `s.inorder[x]` needs a proof of `x < s.inorder.length` to typecheck, and `valid` supplies it.
+
+**Theorem (executions on arbitrary keys).** Let `keys` be a list of distinct keys, let $s$ and $t$ be labelled trees whose inorder lists are `keys`, and let $X$ be a sequence of positions in `keys`. An execution serves the ranks $X$ from the shape of $s$ to the shape of $t$ with exactly $k$ rotations if and only if a labelled execution serves the keys at positions $X$ from $s$ to $t$ with exactly $k$ rotations.
 
 @decl RotationBST.Representation.execution_on_keys_iff
 
@@ -111,6 +147,8 @@ Mathlib's `BinaryTree α` stores a value of type `α` at every node. With `α = 
 @decl RotationBST.Representation.toBinaryTree RotationBST.Representation.fromBinaryTree
 
 Mathlib's `node` takes the stored value first (`.node () l r`), and the library's `node` takes only the subtrees.
+
+**Theorem (shapes are Mathlib's unit-labelled binary trees).** The two conversions are mutually inverse, and the number of nodes of a converted shape is its size.
 
 @decl RotationBST.Representation.from_toBinaryTree RotationBST.Representation.to_fromBinaryTree RotationBST.Representation.binaryTreeEquiv RotationBST.Representation.numNodes_toBinaryTree
 

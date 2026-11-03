@@ -4,6 +4,18 @@ Part III describes algorithms. Each chapter defines an algorithm as an executabl
 
 The simplest self-adjusting rule comes first. **Move-to-root** (Allen and Munro, 1978) serves a request by finding $x$ and then rotating it over its parent, again and again, until it is the root. Recently requested keys stay near the top, which is the intuition behind every self-adjusting tree. Under independent random requests, Allen and Munro showed that its expected cost is within a constant factor of the optimal static tree. In the worst case it is poor: a sequential scan costs $\Theta(n)$ rotations per request, forever. Splaying ([Chapter 13](splay.html)) repairs exactly this defect by rotating in pairs.
 
+What the library proves about move-to-root is that it is correct: it really performs an access in the rotation model, and it reports its rotation count truthfully. It proves no amortized bound, in either direction. The poor behaviour on scans is shown at the end of the chapter as a measurement.
+
+```headline move-to-root
+title: Move-to-root performs a legal access with fewer than $n$ rotations
+source: Allen and Munro, *Self-organizing binary search trees* (1978)
+theorems: MoveToRoot.Results.correct
+
+Let $t$ be any binary search tree on $n$ keys and $x$ any of its keys. Move-to-root returns a tree $u$ and a count $k$ such that $k$ rotations turn $t$ into $u$, the key $x$ is the root of $u$, and $k < n$.
+
+In Lean, the algorithm is the function [[RotationBST.moveToRoot]], which returns the pair $(u, k)$. The conclusion is [[RotationBST.Access]] from [Chapter 3](accesses.html#root-accesses): a sequence of exactly $k$ rotations from $t$ to $u$, with $x$ at the root of $u$.
+```
+
 In the library, move-to-root plays a second role. It is the constructive witness for the existence results of the rotation model ([Chapter 3](accesses.html#which-requests-can-be-served)): every existing key can be brought to the root, with fewer rotations than there are nodes.
 
 ## The algorithm
@@ -26,9 +38,11 @@ The rotations are performed on the way back from the recursion, so the deepest o
 
 ## Correctness
 
+**Theorem (correctness of move-to-root).** For every tree `t` and every rank `x < t.size`, the pair `(moveToRoot t x)` is a legal [root access](accesses.html#root-accesses): there is a sequence of exactly `(moveToRoot t x).2` rotations from `t` to the returned tree, and the returned tree has `x` at its root. Moreover the count is below `t.size`.
+
 @decl RotationBST.MoveToRoot.Results.correct
 
-For every rank below the size, the returned pair is a legal [root access](accesses.html#root-accesses): there is a sequence of exactly `(moveToRoot t x).2` rotations from `t` to the returned tree, and the returned tree has `x` at its root. The count is also below `t.size`. The "statement reads only" line shows that this theorem depends on nothing but the rotation model and the definition above.
+The "statement reads only" line shows that this theorem depends on nothing but the rotation model and the definition above.
 
 This is the witness behind [[RotationBST.access_exists_iff]]. The count is in fact exactly the depth of $x$, which is at most `t.size - 1`; the library states only the weaker bound, which is what the existence result needs.
 

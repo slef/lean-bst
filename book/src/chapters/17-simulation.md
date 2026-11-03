@@ -4,15 +4,32 @@ An online geometric algorithm ([Chapter 8](geometry.html)) answers each request 
 
 Demaine, Harmon, Iacono, Kane and Pătraşcu (2009) showed that the future is not needed. Every online geometric algorithm can be simulated by an online BST algorithm whose cost is a constant times the number of points, plus a startup term. Their construction keeps the tree heap-ordered by the *last* time each key was touched. Keys touched at the same time are grouped into a "supernode", stored as a split tree ([Chapter 21](split-trees.html)) so that it can be broken apart cheaply when later rows touch some of its keys. Applied to GreedyASS ([Chapter 16](greedy.html)), this makes the geometric greedy algorithm an online BST algorithm, so its conjectured dynamic optimality is a statement about binary search trees.
 
-The library formalizes this simulation as a single fixed algorithm, in the sense of [[RotationBST.Algorithm]], whose cost is linear in the geometric point count. This chapter states the four versions of the theorem and outlines the proof. The statements are in `Algorithms/Simulation/Abstract.lean`. They mention only the models: rotation executions, online algorithms, the geometric definitions and the pointer machine. Nothing about supernodes or split trees appears in them.
+The library formalizes this simulation as a single fixed algorithm, in the sense of [[RotationBST.Algorithm]], whose cost is linear in the geometric point count. Here is the theorem in its basic form.
+
+```headline online-simulation
+title: Every online geometric algorithm is an online BST algorithm
+source: Demaine, Harmon, Iacono, Kane and Pătraşcu, *The geometry of binary search trees* (2009)
+key: yes
+theorems: Geometric.Simulation.Results.online_simulation
+
+Fix an initial BST $T$ on $n$ keys and an online geometric algorithm $A$ on those keys: at each time, $A$ sees the request and the points added so far, and adds a row of points that contains the request and keeps the point set arborally satisfied. Then there is an online BST algorithm, chosen before any request is known, such that for every sequence $X$ of keys from $\{0,\dots,n-1\}$, serving $X$ from $T$ takes at most
+
+$$6018\,P_A(X) + 6016\,n$$
+
+rotations, where $P_A(X)$ is the number of points $A$ adds on $X$. In particular, GreedyASS ([Chapter 16](greedy.html)) is an online BST algorithm whose cost is linear in its number of points.
+
+In Lean, $A$ is a [[Geometric.OnlineAlgorithm]], its point count is [[Geometric.rowCost]], and the BST algorithm is an [[RotationBST.Algorithm]], whose `cost` counts rotations.
+```
+
+This chapter states the four versions of the theorem and outlines the proof. The statements are in `Algorithms/Simulation/Abstract.lean`. They mention only the models: rotation executions, online algorithms, the geometric definitions and the pointer machine. Nothing about supernodes or split trees appears in them.
 
 ## The simulation theorem
 
 Fix a key universe of size $n$ and an online geometric algorithm `A` ([[Geometric.OnlineAlgorithm]]). For a request sequence `xs`, [[Geometric.rowCost]]`A.step 0 ∅ xs` is the number of points `A` adds when it runs from an empty history at time $0$: the geometric cost of `A` on `xs`. The first theorem fixes the initial tree.
 
-@decl RotationBST.Geometric.Simulation.Results.online_simulation
+**Theorem (online simulation).** Let `tree` be a BST on $n$ keys and $A$ an online geometric algorithm on $n$ keys. There is a BST algorithm such that, for every sequence $X$ of keys less than $n$, it serves $X$ from `tree` with at most $6018\,P_A(X) + 6016\,n$ rotations, where $P_A(X)$ is `rowCost A.step 0 ∅ X`.
 
-For every initial tree and every online geometric algorithm on its keys, there is a BST algorithm that, on every valid request sequence, performs at most $6018$ rotations per geometric point plus $6016$ per key of the tree.
+@decl RotationBST.Geometric.Simulation.Results.online_simulation
 
 ::: check
 - **One algorithm for all sequences.** The existential `∃ algorithm` comes before `∀ xs`. The algorithm is chosen knowing `tree` and `A`, but not the requests. Since it is an [[RotationBST.Algorithm]], each step receives only the past requests, the current tree and the current request ([Chapter 5](online.html)). This is what makes the simulation online.
@@ -21,7 +38,9 @@ For every initial tree and every online geometric algorithm on its keys, there i
 - **The algorithm is not executable.** The proof chooses it with `Classical.choose` from existence statements, so `algorithm.step` is a mathematical function. Costs count rotations only, and the planning behind each step is not charged, as everywhere in the rotation model.
 :::
 
-The algorithm above is built for one initial tree. A single algorithm can serve every initial tree of the given size, at the price of a slightly larger startup term:
+The algorithm above is built for one initial tree. A single algorithm can serve every initial tree of the given size, at the price of a slightly larger startup term.
+
+**Theorem (uniform simulation).** For every $n$ and every online geometric algorithm $A$ on $n$ keys, there is a BST algorithm such that, for every initial tree on $n$ keys and every sequence $X$ of keys less than $n$, it uses at most $6018\,P_A(X) + 6018\,n$ rotations.
 
 @decl RotationBST.Geometric.Simulation.Results.uniform_simulation
 
@@ -29,11 +48,15 @@ The proof fixes one reference shape. On the first request, the algorithm rotates
 
 This is the online equivalence of the geometric and BST models. [Chapter 9](equivalence.html) states the same theorem as [[Geometric.Equivalence.Results.online_bst]], next to the offline equivalences. The two statements are identical and have the same proof: `online_bst` is `uniform_simulation` filed under the equivalences.
 
-The conventional cost of a BST algorithm also charges one unit per request ([Chapter 5](online.html#two-cost-measures)). Since the geometric cost already pays one point per request, the conversion costs one more unit per point:
+The conventional cost of a BST algorithm also charges one unit per request ([Chapter 5](online.html#two-cost-measures)). Since the geometric cost already pays one point per request, the conversion costs one more unit per point.
+
+**Theorem (conventional cost).** Under the same hypotheses, there is a BST algorithm whose total cost, rotations plus one unit per request, is at most $6019\,P_A(X) + 6018\,n$ from every initial tree on $n$ keys.
 
 @decl RotationBST.Geometric.Simulation.Results.normalized_simulation
 
-Finally, the simulation also runs on the pointer machine of [Chapter 6](pointer.html). The causal transformer [[Pointer.Lazy.Online.run]] takes any rotation-model algorithm and runs it on the pointer machine, starting from [[Pointer.Lazy.Online.initial]], postponing rotations that the current request does not need. Applying it to the simulated algorithm gives a pointer strategy:
+Finally, the simulation also runs on the pointer machine of [Chapter 6](pointer.html). The causal transformer [[Pointer.Lazy.Online.run]] takes any rotation-model algorithm and runs it on the pointer machine, starting from [[Pointer.Lazy.Online.initial]], postponing rotations that the current request does not need. Applying it to the simulated algorithm gives a pointer strategy.
+
+**Theorem (pointer simulation).** Under the same hypotheses, there is a BST algorithm whose pointer-machine run, from every initial tree on $n$ keys and on every sequence $X$ of keys less than $n$, is a legal pointer execution serving $X$, with at most $192593\,P_A(X) + 192576\,n$ pointer instructions.
 
 @decl RotationBST.Geometric.Simulation.Results.pointer_simulation
 

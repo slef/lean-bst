@@ -4,7 +4,7 @@ The rotation model of [Chapter 3](accesses.html) counts rotations, and the point
 
 Serving a request touches a set of nodes that contains the requested key and forms a connected subtree containing the root. The algorithm may then rearrange the touched nodes into any shape, as long as every untouched subtree hangs back in its inorder slot. The cost is the number of touched nodes. A pointer search that visits $k$ nodes is such a step, since the cursor only travels along edges from the root and only rotates nodes it has visited. Conversely, any rearrangement of $k$ touched nodes can be performed by a pointer machine with $O(k)$ instructions. The models therefore agree up to constant factors, and [Chapter 9](equivalence.html) proves it.
 
-The point of this model is the next chapter. Each step is described by a single set of keys, so a whole execution becomes a set of points (key, time) in the plane, and its cost is the number of points. The definitions below are in `Models/Region/Abstract.lean` and `Models/Region/View/Abstract.lean`.
+The point of this model is the next chapter. Each step is described by a single set of keys, so a whole execution becomes a set of points (key, time) in the plane, and its cost is the number of points. This chapter only sets up the model; it has no theorem of its own. Its definitions are used by the exact equivalence between region executions and point sets in [Chapter 9](equivalence.html#regions-are-points), by Wilber's bound ([Chapter 11](wilber.html)) and by Tango trees ([Chapter 19](tango.html)). They are in `Models/Region/Abstract.lean` and `Models/Region/View/Abstract.lean`.
 
 ## Regions
 

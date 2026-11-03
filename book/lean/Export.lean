@@ -67,6 +67,127 @@ def exportConst (n : Name) : MetaM (Option Json) := do
     | none => []
   return some (Json.mkObj (base ++ docField ++ axField))
 
+/-! ## Dependencies
+
+For each library constant: the constants a reader must understand to read it.
+A theorem's statement, a definition's type and body, an inductive type's
+constructors, and a structure's fields (also recorded per field). Proofs are
+skipped: Lean checks them, so a reader never needs the definitions they use.
+Compiler artefacts are mapped back to what the source mentions: constructors and
+recursors to their inductive type, projections to their structure. -/
+
+def isLibrary (env : Environment) (n : Name) : Bool :=
+  match env.getModuleIdxFor? n with
+  | some idx => (`RotationBST).isPrefixOf env.header.moduleNames[idx.toNat]!
+  | none => false
+
+/-- What a reference to `c` asks the reader to understand, if anything. -/
+def normalize (c : Name) : MetaM (Option Name) := do
+  let env ← getEnv
+  match env.find? c with
+  | none => return none
+  | some (.thmInfo _) => return none
+  | some (.ctorInfo i) => return some i.induct
+  | some (.recInfo _) => return some c.getPrefix
+  | some _ =>
+    if isAuxRecursor env c || isNoConfusion env c then return some c.getPrefix
+    if ← Meta.isMatcher c then return none
+    if let some p := env.getProjectionFnInfo? c then return some p.ctorName.getPrefix
+    return some c
+
+def quickIsProof (e : Expr) : MetaM Bool := do
+  try Meta.isProof e catch _ => pure false
+
+partial def collect (e : Expr) : StateRefT NameSet MetaM Unit := do
+  match e with
+  | .const c _ => if let some n ← normalize c then modify (·.insert n)
+  | .app .. =>
+      if ← quickIsProof e then return
+      e.withApp fun f args => do
+        collect f
+        for a in args do collect a
+  | .lam n t b bi =>
+      if ← quickIsProof e then return
+      collect t
+      Meta.withLocalDecl n bi t fun x => collect (b.instantiate1 x)
+  | .forallE n t b bi =>
+      collect t
+      Meta.withLocalDecl n bi t fun x => collect (b.instantiate1 x)
+  | .letE n t v b _ =>
+      collect t; collect v
+      Meta.withLetDecl n t v fun x => collect (b.instantiate1 x)
+  | .mdata _ e => collect e
+  | .proj s _ e => modify (·.insert s); collect e
+  | _ => pure ()
+
+def usesOf (e : Expr) : MetaM NameSet := do
+  let ((), s) ← (collect e).run {}
+  return s
+
+/-- The body a reader sees: the unfolding equation for recursive definitions,
+whose compiled values mention recursion combinators instead of the source. -/
+def bodyOf (n : Name) (value : Expr) : MetaM Expr := do
+  let compiled := value.find? fun e => match e with
+    | .const c _ => c.isInternal || c == ``WellFounded.fix || c.getString! == "brecOn"
+    | _ => false
+  if compiled.isNone then return value
+  match ← (try Meta.getUnfoldEqnFor? n (nonRec := true) catch _ => pure none) with
+  | some eqn =>
+      let some info := (← getEnv).find? eqn | return value
+      return info.type
+  | none => return value
+
+def namesJson (s : NameSet) (self : Name) : Json :=
+  Json.arr ((s.toList.filter (· != self)).map (Json.str ·.toString)).toArray
+
+/-- Dependencies of one constant: `{kind, module, uses, fields?}`. -/
+def depsOf (n : Name) : MetaM (Option (Json × NameSet)) := do
+  let env ← getEnv
+  let some info := env.find? n | return none
+  let mod := match env.getModuleIdxFor? n with
+    | some idx => env.header.moduleNames[idx.toNat]!.toString
+    | none => ""
+  let kind := kindOf env n (← isInstance n) info
+  let mut uses ← usesOf info.type
+  let mut fields : Array (String × Json) := #[]
+  match info with
+  | .defnInfo d => uses := uses.append (← usesOf (← bodyOf n d.value))
+  | .inductInfo i =>
+      for ctor in i.ctors do
+        let some (.ctorInfo c) := env.find? ctor | continue
+        uses := uses.append (← usesOf c.type)
+      if let some s := getStructureInfo? env n then
+        let some (.ctorInfo c) := env.find? i.ctors.head! | pure ()
+        let names := s.fieldNames
+        fields ← Meta.forallTelescope c.type fun xs _ => do
+          let mut acc : Array (String × Json) := #[]
+          for h : k in [0:names.size] do
+            let some x := xs[c.numParams + k]? | continue
+            let t ← Meta.inferType x
+            acc := acc.push (names[k].toString, namesJson (← usesOf t) n)
+          return acc
+  | _ => pure ()
+  let base := [("kind", Json.str kind), ("module", Json.str mod), ("uses", namesJson uses n)]
+  let fieldsField := if fields.isEmpty then [] else [("fields", Json.mkObj fields.toList)]
+  return some (Json.mkObj (base ++ fieldsField), uses)
+
+/-- Dependencies of every library constant reachable from `roots`. -/
+def dependencies (roots : Array Name) : MetaM Json := do
+  let env ← getEnv
+  let mut pending := roots.filter (isLibrary env)
+  let mut seen : NameSet := {}
+  let mut out : Array (String × Json) := #[]
+  while h : pending.size > 0 do
+    let n := pending.back
+    pending := pending.pop
+    if seen.contains n then continue
+    seen := seen.insert n
+    let some (j, uses) ← depsOf n | continue
+    out := out.push (n.toString, j)
+    for u in uses do
+      if isLibrary env u && !seen.contains u then pending := pending.push u
+  return Json.mkObj out.toList
+
 /-! ## Test vectors for the JavaScript ports -/
 
 open RotationBST
@@ -289,7 +410,8 @@ run_meta do
     match ← exportConst line.toName with
     | some j => out := out.push j
     | none => missing := missing.push line
+  let deps ← dependencies (names.map (·.toName))
   IO.FS.writeFile outPath (Json.mkObj [("consts", Json.arr out),
-    ("missing", toJson missing)]).compress
+    ("missing", toJson missing), ("deps", deps)]).compress
   if let some vectorsPath ← IO.getEnv "BOOK_VECTORS" then
     IO.FS.writeFile vectorsPath vectors.compress
