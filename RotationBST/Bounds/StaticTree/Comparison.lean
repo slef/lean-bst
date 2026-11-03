@@ -1,8 +1,8 @@
 module
 
 public import RotationBST.Bounds.StaticTree.Weights
-public import RotationBST.Bounds.Implications
-public import RotationBST.Splay.Pointer
+public import RotationBST.Bounds.Implications.Proofs
+public import RotationBST.Algorithms.Splay.Pointer
 
 @[expose] public section
 

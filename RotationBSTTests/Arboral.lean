@@ -1,8 +1,8 @@
 module
 
-import RotationBST.Arboral.Abstract
-import RotationBST.Arboral.Equivalence.Abstract
-import RotationBST.Tango.Abstract
+import RotationBST.Models.Geometric.Abstract
+import RotationBST.Models.Equivalence.Abstract
+import RotationBST.Algorithms.Tango.Abstract
 
 open RotationBST RotationBST.Arboral
 

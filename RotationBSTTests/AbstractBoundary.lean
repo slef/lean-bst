@@ -1,7 +1,7 @@
 module
 
-import RotationBST.AbstractAudit.Check
-import RotationBST.Splay.Algorithm.Abstract
+import RotationBST.Audit.Check
+import RotationBST.Algorithms.Splay.Algorithm.Abstract
 
 /-! Regression tests for the local abstract dependency audit. -/
 
@@ -11,7 +11,7 @@ def size (t : RotationBST.Tree) : Nat := t.size
 
 /-- info: abstract audit passed for `RotationBSTTests.AbstractBoundary.Good`: 1 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBSTTests.AbstractBoundary.Good allowing [RotationBST.Model.Abstract]
+#check_bst_abstract RotationBSTTests.AbstractBoundary.Good allowing [RotationBST.Models.Rotation.Abstract]
 
 end RotationBSTTests.AbstractBoundary.Good
 
@@ -19,9 +19,9 @@ namespace RotationBSTTests.AbstractBoundary.Bad
 
 def hidden (t : RotationBST.Tree) := RotationBST.Splay.run t 0
 
-/-- error: abstract audit: `RotationBSTTests.AbstractBoundary.Bad.hidden` depends on implementation declaration `RotationBST.Splay.run` from `RotationBST.Splay.Algorithm.Abstract` -/
+/-- error: abstract audit: `RotationBSTTests.AbstractBoundary.Bad.hidden` depends on implementation declaration `RotationBST.Splay.run` from `RotationBST.Algorithms.Splay.Algorithm.Abstract` -/
 #guard_msgs in
-#check_bst_abstract RotationBSTTests.AbstractBoundary.Bad allowing [RotationBST.Model.Abstract]
+#check_bst_abstract RotationBSTTests.AbstractBoundary.Bad allowing [RotationBST.Models.Rotation.Abstract]
 
 end RotationBSTTests.AbstractBoundary.Bad
 
@@ -36,7 +36,7 @@ def cost (t : RotationBST.Tree) := (wrapper t).2
 
 /-- error: abstract audit: `RotationBSTTests.AbstractBoundary.Transitive.Claim.cost` depends on declaration `RotationBSTTests.AbstractBoundary.Transitive.wrapper` outside `RotationBSTTests.AbstractBoundary.Transitive.Claim` -/
 #guard_msgs in
-#check_bst_abstract RotationBSTTests.AbstractBoundary.Transitive.Claim allowing [RotationBST.Model.Abstract]
+#check_bst_abstract RotationBSTTests.AbstractBoundary.Transitive.Claim allowing [RotationBST.Models.Rotation.Abstract]
 
 end Claim
 end RotationBSTTests.AbstractBoundary.Transitive

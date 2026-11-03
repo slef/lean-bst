@@ -1,8 +1,8 @@
 """Refresh the displayed definitions from the accompanying Lean source."""
 from pathlib import Path
 root = Path(__file__).resolve().parent
-sources = ['Model/Abstract.lean', 'Model/Basic.lean',
-           'Online/Abstract.lean', 'WorkingSet/Abstract.lean']
+sources = ['Models/Rotation/Abstract.lean', 'Models/Rotation/Basic.lean',
+           'Models/Online/Abstract.lean', 'Bounds/WorkingSet/Abstract.lean']
 lines = '\n'.join((root.parent / 'RotationBST' / path).read_text()
                   for path in sources).splitlines()
 names = ['Tree', 'Tree.size', 'Rotate', 'Rotations', 'Access', 'Execution', 'Algorithm', 'Algorithm.runFrom', 'Algorithm.cost', 'DynamicallyOptimal', 'workingSetNumber', 'workingSetSum', 'HasWorkingSetBound']
@@ -18,7 +18,7 @@ variables = [line for line in lines if line.startswith('variable ')]
 (root / 'lean-snippets' / 'Invariants.lean').write_text('\n'.join(variables + [''] + statements) + '\n')
 
 # Keep the geometric definition directly synchronized with its public abstract.
-arboral = (root.parent / 'RotationBST/Arboral/Definitions/Abstract.lean').read_text().splitlines()
+arboral = (root.parent / 'RotationBST/Models/Geometric/Definitions/Abstract.lean').read_text().splitlines()
 for name in ['Rectangle', 'ASS', 'greedySweep']:
     start = next(i for i, line in enumerate(arboral) if line.startswith(f'def {name} '))
     end = next(j for j in range(start + 1, len(arboral)) if not arboral[j])

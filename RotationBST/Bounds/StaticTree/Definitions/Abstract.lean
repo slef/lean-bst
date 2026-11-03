@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Model.Abstract
+public import RotationBST.Models.Rotation.Abstract
 
 @[expose] public section
 

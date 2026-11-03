@@ -1,6 +1,6 @@
 module
 
-import RotationBST.AbstractAudit.Check
+import RotationBST.Audit.Check
 public import RotationBST.Bounds.StaticTree.AbstractBridge
 
 @[expose] public section
@@ -30,6 +30,6 @@ theorem workingSet_competes (a : Algorithm) (workingSet : HasWorkingSetBound a) 
 end RotationBST.StaticTree.Results
 
 #check_bst_abstract RotationBST.StaticTree.Results allowing [
-  RotationBST.Model.Abstract, RotationBST.Online.Abstract, RotationBST.WorkingSet.Abstract,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract, RotationBST.Bounds.WorkingSet.Abstract,
   RotationBST.Bounds.Abstract, RotationBST.Bounds.StaticTree.Definitions.Abstract,
-  RotationBST.Pointer.Machine.Abstract]
+  RotationBST.Models.Pointer.Machine.Abstract]

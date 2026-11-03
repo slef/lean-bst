@@ -1,7 +1,7 @@
 module
 
 public import RotationBST.Bounds.StaticTree.Definitions.Abstract
-public import RotationBST.Bounds.WeightedEntropy
+public import RotationBST.Bounds.Implications.WeightedEntropy
 
 @[expose] public section
 

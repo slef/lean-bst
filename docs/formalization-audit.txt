@@ -4,9 +4,9 @@ This audit checks the requested results against exported Lean statements,
 not merely against build success. Paths are relative to the repository root.
 
 1. Simple unlabelled BST model and conventional-model justification
-   Evidence: Model/Abstract.lean, Representation/Abstract.lean,
-   Representation/Ordering/Abstract.lean, Pointer/Abstract.lean, and
-   Pointer/Lazy/Online/Abstract.lean (all below RotationBST/).
+   Evidence: Models/Rotation/Abstract.lean, Models/Labelled/Abstract.lean,
+   Models/Labelled/Ordering/Abstract.lean, Models/Pointer/Abstract.lean, and
+   Models/Pointer/Lazy/Online/Abstract.lean (all below RotationBST/).
    Arbitrary inorder key lists determine unique labelled shapes; rotations
    and accesses preserve costs under labelling. Pointer executions simulate
    root accesses, and the reverse simulation has constant overhead with an
@@ -15,15 +15,15 @@ not merely against build success. Paths are relative to the repository root.
    are not silently treated as zero-cost conventional searches.
 
 2. Executable splaying and working-set consequences
-   Evidence: Splay/Algorithm/Abstract.lean and Splay/WorkingSet/Abstract.lean.
+   Evidence: Algorithms/Splay/Algorithm/Abstract.lean and Algorithms/Splay/WorkingSet/Abstract.lean.
    The algorithm is bottom-up zig/zig-zig/zig-zag splay, not move-to-root.
    Bounds/Implications/Abstract.lean proves working set => static optimality
    => static finger for arbitrary Algorithms, independently of splay.
    Bounds/StaticTree/Abstract.lean connects entropy to fixed comparison trees.
 
 3. Sleator–Tarjan's nine numbered results
-   Evidence: Splay/{Balance,StaticOptimality,StaticFinger,WorkingSet,Unified,
-   Updates,Conditional,Snapshot,Scanning}/Abstract.lean.
+   Evidence: Algorithms/Splay/{Balance,StaticOptimality,StaticFinger,WorkingSet,
+   Unified,Updates,Conditional,Snapshot,Scanning}/Abstract.lean.
    Checked assumptions include first-use working-set number n, startup
    allowances for arbitrary initial trees, coverage conditions where startup
    is removed, positive analysis weights, and nonnegative normalized snapshot
@@ -35,8 +35,8 @@ not merely against build success. Paths are relative to the repository root.
    and allocation-aware pointer updates are not claimed.
 
 4. Arboral geometry and offline equivalence
-   Evidence: Arboral/Definitions/Abstract.lean, Arboral/Equivalence/Abstract.lean,
-   and Arboral/Abstract.lean.
+   Evidence: Models/Geometric/Definitions/Abstract.lean, Models/Equivalence/Abstract.lean,
+   and Models/Geometric/Abstract.lean.
    ASS is the closed-rectangle third-point property. Exact cardinality matches
    rooted-region cost with a free initial tree. Rotation and pointer models
    have constant-factor conversions, with initialization charged where needed.
@@ -44,8 +44,8 @@ not merely against build success. Paths are relative to the repository root.
    minimum-cardinality completion of the current row.
 
 5. Causal geometric-to-BST simulation
-   Evidence: Arboral/Online/LastTouch/Supernode/Policy/Results/Abstract.lean
-   and Arboral/Abstract.lean: online_bst.
+   Evidence: Algorithms/Simulation/Abstract.lean
+   and Models/Geometric/Abstract.lean: online_bst.
    Quantifiers: for every n and geometric OnlineAlgorithm, one BST Algorithm
    works for all starting trees of size n and all valid request sequences.
    Its choices are fixed by prefixes, not by the eventual continuation.
@@ -57,8 +57,8 @@ not merely against build success. Paths are relative to the repository root.
    GreedyASS or splay is asserted.
 
 6. Tango results
-   Evidence: Tango/Algorithm/{Abstract.lean,Executable/Abstract.lean},
-   Tango/Reference/Results/Abstract.lean, and Tango/LowerBound/Abstract.lean.
+   Evidence: Algorithms/Tango/Algorithm/{Abstract.lean,Executable/Abstract.lean},
+   Algorithms/Tango/Reference/Results.lean, and Bounds/Interleave/Abstract.lean.
    The executable policy maintains canonical preferred paths and nesting,
    serves each requested rank, and has an O(log log n) competitive bound
    against every offline comparator, including arbitrary universe sizes.
@@ -69,7 +69,7 @@ not merely against build success. Paths are relative to the repository root.
 7. Readable statements, Lean layout, and upstream basis
    Evidence: the result Abstract.lean modules and their #check_bst_abstract
    invocations; lakefile.toml; RotationBSTTests/Axioms.lean; CI workflows;
-   scripts/check_imports.py; Representation/Mathlib/Abstract.lean.
+   scripts/check_imports.py; Models/Labelled/Mathlib/Abstract.lean.
    All library modules are reachable through import RotationBST. Public
    statement boundaries allow explicit readable foundation modules. The
    entire imported declaration environment is audited for axiom dependencies,

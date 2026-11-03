@@ -1,12 +1,12 @@
 module
 
-import RotationBST.AbstractAudit.Check
+import RotationBST.Audit.Check
 public import RotationBST.Bounds.Implications.AbstractBridge
 
 @[expose] public section
 
 /-! Algorithm-independent implications. The properties and costs appear in
-`WorkingSet/Abstract` and `Bounds/Abstract`; no splay hypothesis is used. -/
+`Bounds/WorkingSet/Abstract` and `Bounds/Abstract`; no splay hypothesis is used. -/
 namespace RotationBST.Bounds
 
 theorem workingSet_implies_staticOptimality (a : Algorithm) (h : HasWorkingSetBound a) :
@@ -25,7 +25,7 @@ end RotationBST.Bounds
 
 -- Explicit reading boundary; proof bodies remain behind the bridge.
 #check_bst_abstract RotationBST.Bounds allowing [
-  RotationBST.Model.Abstract,
-  RotationBST.Online.Abstract,
-  RotationBST.WorkingSet.Abstract,
+  RotationBST.Models.Rotation.Abstract,
+  RotationBST.Models.Online.Abstract,
+  RotationBST.Bounds.WorkingSet.Abstract,
   RotationBST.Bounds.Abstract]

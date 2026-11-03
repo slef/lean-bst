@@ -26,7 +26,7 @@ The library follows the [abstractlean](https://github.com/slef/abstractlean) con
 
 ```lean
 #check_bst_abstract RotationBST.Splay.Results allowing [
-  RotationBST.Model.Abstract, RotationBST.Online.Abstract, …]
+  RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract, …]
 ```
 
 This command fails to compile unless every library definition mentioned in a theorem statement, directly or transitively, comes from one of the listed modules. The proofs are exempt: they may use anything. So to trust a theorem you need to read its statement and the definitions in the listed modules, and nothing else from the library. This book shows that list under every theorem, linked to the chapters where those modules are explained. [Appendix A](audit.html) describes the checks in more detail and summarizes them for all theorems.

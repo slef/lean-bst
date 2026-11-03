@@ -43,27 +43,53 @@ The project uses `autoImplicit = false` and explicit module exports.
 Following [abstractlean](https://github.com/slef/abstractlean), definitions and
 result statements are separated from proof implementations. Result abstracts
 use `#check_bst_abstract` to check that their statements depend only on explicitly
-listed readable foundations. The [checker](RotationBST/AbstractAudit/Check.lean)
+listed readable foundations. The [checker](RotationBST/Audit/Check.lean)
 is local to this repository; upstream abstract registration is separate work.
 
-| Topic | Entry point |
-|---|---|
-| Shapes, rotations, and root accesses | [Model](RotationBST/Model/Abstract.lean) |
-| Arbitrary labels and BST ordering | [Representation](RotationBST/Representation/Abstract.lean), [ordering](RotationBST/Representation/Ordering/Abstract.lean) |
-| Mathlib `BinaryTree Unit` correspondence | [Mathlib interface](RotationBST/Representation/Mathlib/Abstract.lean) |
-| Online algorithms and cost conventions | [Online](RotationBST/Online/Abstract.lean) |
-| Pointer machine and model simulations | [Machine](RotationBST/Pointer/Machine/Abstract.lean), [simulations](RotationBST/Pointer/Abstract.lean) |
-| Splay algorithm and results | [Algorithm](RotationBST/Splay/Algorithm/Abstract.lean), [overview](RotationBST/Splay/Abstract.lean) |
-| Working-set, static-optimality, and static-finger implications | [Generic implications](RotationBST/Bounds/Implications/Abstract.lean) |
-| ASS, GreedyASS, and online geometry | [Arboral overview](RotationBST/Arboral/Abstract.lean) |
-| Offline geometric equivalence | [Equivalence](RotationBST/Arboral/Equivalence/Abstract.lean) |
-| Uniform causal geometric-to-BST simulation | [Online simulation](RotationBST/Arboral/Online/LastTouch/Supernode/Policy/Results/Abstract.lean) |
-| Tango policy and competitive bounds | [Executable policy](RotationBST/Tango/Algorithm/Executable/Abstract.lean), [bounds](RotationBST/Tango/Algorithm/Abstract.lean) |
+| Part | Topic | Entry point |
+|---|---|---|
+| Models | Shapes, rotations, root accesses, executions | [Rotation model](RotationBST/Models/Rotation/Abstract.lean) |
+| Models | Any shape reaches any shape; which requests can be served | [Connectivity](RotationBST/Models/Rotation/Connectivity/Abstract.lean), [existence](RotationBST/Models/Rotation/Existence/Abstract.lean) |
+| Models | Arbitrary labels, BST ordering, Mathlib `BinaryTree Unit` | [Labelled](RotationBST/Models/Labelled/Abstract.lean), [ordering](RotationBST/Models/Labelled/Ordering/Abstract.lean), [Mathlib](RotationBST/Models/Labelled/Mathlib/Abstract.lean) |
+| Models | Online algorithms, cost conventions, dynamic optimality | [Online](RotationBST/Models/Online/Abstract.lean) |
+| Models | Pointer machine, model simulations, causal transformer | [Machine](RotationBST/Models/Pointer/Machine/Abstract.lean), [simulations](RotationBST/Models/Pointer/Abstract.lean), [online](RotationBST/Models/Pointer/Lazy/Online/Abstract.lean) |
+| Models | Rooted-region (touched-subtree) model | [Region](RotationBST/Models/Region/View/Abstract.lean) |
+| Models | Arborally satisfied sets, online and offline geometric algorithms | [Definitions](RotationBST/Models/Geometric/Definitions/Abstract.lean), [online](RotationBST/Models/Geometric/Online/Abstract.lean), [results](RotationBST/Models/Geometric/Abstract.lean) |
+| Models | Offline geometric equivalence | [Equivalence](RotationBST/Models/Equivalence/Abstract.lean) |
+| Bounds | Working set, static optimality, static finger, unified | [Working set](RotationBST/Bounds/WorkingSet/Abstract.lean), [static](RotationBST/Bounds/Abstract.lean), [unified](RotationBST/Bounds/Unified/Abstract.lean) |
+| Bounds | Working set ⇒ static optimality ⇒ static finger | [Implications](RotationBST/Bounds/Implications/Abstract.lean) |
+| Bounds | Fixed-tree benchmark and entropy lower bound | [Static tree](RotationBST/Bounds/StaticTree/Abstract.lean) |
+| Bounds | Wilber's interleave lower bound | [Interleave](RotationBST/Bounds/Interleave/Abstract.lean), [definitions](RotationBST/Bounds/Interleave/Definitions/Abstract.lean) |
+| Bounds | Request charges versus rotation charges | [Normalization](RotationBST/Bounds/Normalization/Abstract.lean) |
+| Algorithms | Move-to-root baseline | [Algorithm](RotationBST/Algorithms/MoveToRoot/Algorithm.lean) |
+| Algorithms | Splay: algorithm and results | [Algorithm](RotationBST/Algorithms/Splay/Algorithm/Abstract.lean), [overview](RotationBST/Algorithms/Splay/Abstract.lean) |
+| Algorithms | GreedyASS | [Sweep](RotationBST/Algorithms/GreedyASS/Sweep.lean); statements in [geometric results](RotationBST/Models/Geometric/Abstract.lean) |
+| Algorithms | Causal geometric-to-BST simulation | [Simulation](RotationBST/Algorithms/Simulation/Abstract.lean) |
+| Algorithms | Tango: executable policy and competitive bounds | [Policy](RotationBST/Algorithms/Tango/Algorithm/Executable/Abstract.lean), [bounds](RotationBST/Algorithms/Tango/Algorithm/Abstract.lean) |
+| Structures | Next-touch treaps; multiway finger and split trees | [Treap](RotationBST/Structures/Treap/Abstract.lean), [split trees](RotationBST/Structures/SplitTree/Abstract.lean) |
 
-For exposition, see the [interactive textbook](book/README.md) and
-[PDF source](docs/main.texlish). The [scope audit](docs/formalization-audit.txt)
+The [organization notes](docs/organization.md) describe the layout, the file
+taxonomy, and planned follow-ups. For exposition, see the
+[interactive textbook](book/README.md) and [PDF source](docs/main.texlish). The [scope audit](docs/formalization-audit.txt)
 records the checked interfaces and implementation variants. Lean statements are
 authoritative for exact hypotheses and constants.
+
+## Library layout
+
+The source tree follows the textbook order rather than the source papers:
+
+| Directory | Contents |
+|---|---|
+| `Models/` | The rotation model on shapes and its equivalent formulations: labelled BSTs, online algorithms and cost conventions, the pointer machine, the rooted-region model, arboral geometry, and the equivalences between them. |
+| `Bounds/` | Sequence bounds and their relations: working set, static optimality, static finger, unified, the fixed-tree benchmark, Wilber's interleave lower bound, and cost normalization. |
+| `Algorithms/` | One directory per algorithm: definition first, then its upper and lower bounds. Move-to-root, splay, GreedyASS, the causal geometric simulation, and Tango. |
+| `Structures/` | Supporting data structures: next-touch treaps and multiway finger/split trees. |
+| `Audit/` | The `#check_bst_abstract` command. |
+
+Within a directory, `Abstract.lean` files are the reading interface, each
+statements abstract imports its proofs through one `AbstractBridge.lean`,
+`Defs.lean` and `Results.lean` are internal definitions and checked lemma
+contracts of a proof cluster, and all other files are proofs.
 
 ## Model and cost conventions
 
@@ -78,9 +104,9 @@ finishes with the requested key at the root. Write `n` for the number of keys,
 is `T = m + R`: a root access may require zero rotations, so request charges
 cannot be dropped from multiplicative comparisons.
 
-The [pointer machine](RotationBST/Pointer/Machine/Abstract.lean) starts each search
+The [pointer machine](RotationBST/Models/Pointer/Machine/Abstract.lean) starts each search
 at the root, charges parent/child moves and rotations, and requires a visit to
-the requested key. The [model simulations](RotationBST/Pointer/Abstract.lean) prove:
+the requested key. The [model simulations](RotationBST/Models/Pointer/Abstract.lean) prove:
 
 - A pointer execution of cost `K` gives a root-access execution and a final
   restoration suffix with combined request-plus-rotation cost at most `3K`.
@@ -89,7 +115,7 @@ the requested key. The [model simulations](RotationBST/Pointer/Abstract.lean) pr
 - Exact final-tree agreement is also available through an eager simulation,
   with the weaker size-dependent bound `m + 2nR`.
 
-The [causal transformer](RotationBST/Pointer/Lazy/Online/Abstract.lean) extends the
+The [causal transformer](RotationBST/Models/Pointer/Lazy/Online/Abstract.lean) extends the
 constant-factor simulation to online algorithms and proves prefix composition.
 The model charges abstract BST operations, **not** the evaluation time of Lean
 functions, subtree-size computation, or planning. General simulations use
@@ -110,17 +136,17 @@ in that paper. All logarithms below are base two.
 
 | Result | Checked form |
 |---|---|
-| [Balance](RotationBST/Splay/Balance/Abstract.lean) | `T ≤ m(2 + 3 log n) + n log n`. |
-| [Static optimality](RotationBST/Splay/StaticOptimality/Abstract.lean) | Frequency-entropy bound; when every key occurs, `T ≤ 4(m + Σ qₓ log(m/qₓ))` without startup. Also compared with every fixed BST. |
-| [Static finger](RotationBST/Splay/StaticFinger/Abstract.lean) | Bound in `Σ(1 + log(\|x−f\|+1))`, using rank distance and an explicit startup allowance; a coverage hypothesis removes startup. |
-| [Working set](RotationBST/Splay/WorkingSet/Abstract.lean) | `R ≤ 10 WS + 6n(1 + floor(log n))`. First use has working-set number `n`; later uses count distinct intervening keys plus one. |
-| [Unified](RotationBST/Splay/Unified/Abstract.lean) | `T ≤ 11 U + 8n(1 + floor(log n))`, using the per-access minimum of frequency, fixed-finger, and working-set terms. |
-| [Updates](RotationBST/Splay/Updates/Abstract.lean) | Rank-based access, insertion, deletion, split, and join. Initially empty forests cost at most `Σⱼ(5 log(nⱼ+1)+3)`, where `nⱼ` counts participating keys. |
-| [Long splay](RotationBST/Splay/Conditional/Abstract.lean) | Conditional splaying bounds total restructuring by `2Σₓ log(W/w(x))`; unit weights give `2n log n`. This is not a bound on all search costs. |
-| [Snapshot](RotationBST/Splay/Snapshot/Abstract.lean) | Independent requests with distribution `p` and uniform stopping give expected static search cost at most `5 + 3H(p) + n(1+log n)/m`, for `m > 0`. Zero probabilities are allowed. |
-| [Scanning](RotationBST/Splay/Scanning/Abstract.lean) | Accessing `0, …, n−1` from any initial shape costs at most `14n` normalized operations, or `40n` pointer operations. |
+| [Balance](RotationBST/Algorithms/Splay/Balance/Abstract.lean) | `T ≤ m(2 + 3 log n) + n log n`. |
+| [Static optimality](RotationBST/Algorithms/Splay/StaticOptimality/Abstract.lean) | Frequency-entropy bound; when every key occurs, `T ≤ 4(m + Σ qₓ log(m/qₓ))` without startup. Also compared with every fixed BST. |
+| [Static finger](RotationBST/Algorithms/Splay/StaticFinger/Abstract.lean) | Bound in `Σ(1 + log(\|x−f\|+1))`, using rank distance and an explicit startup allowance; a coverage hypothesis removes startup. |
+| [Working set](RotationBST/Algorithms/Splay/WorkingSet/Abstract.lean) | `R ≤ 10 WS + 6n(1 + floor(log n))`. First use has working-set number `n`; later uses count distinct intervening keys plus one. |
+| [Unified](RotationBST/Algorithms/Splay/Unified/Abstract.lean) | `T ≤ 11 U + 8n(1 + floor(log n))`, using the per-access minimum of frequency, fixed-finger, and working-set terms. |
+| [Updates](RotationBST/Algorithms/Splay/Updates/Abstract.lean) | Rank-based access, insertion, deletion, split, and join. Initially empty forests cost at most `Σⱼ(5 log(nⱼ+1)+3)`, where `nⱼ` counts participating keys. |
+| [Long splay](RotationBST/Algorithms/Splay/Conditional/Abstract.lean) | Conditional splaying bounds total restructuring by `2Σₓ log(W/w(x))`; unit weights give `2n log n`. This is not a bound on all search costs. |
+| [Snapshot](RotationBST/Algorithms/Splay/Snapshot/Abstract.lean) | Independent requests with distribution `p` and uniform stopping give expected static search cost at most `5 + 3H(p) + n(1+log n)/m`, for `m > 0`. Zero probabilities are allowed. |
+| [Scanning](RotationBST/Algorithms/Splay/Scanning/Abstract.lean) | Accessing `0, …, n−1` from any initial shape costs at most `14n` normalized operations, or `40n` pointer operations. |
 
-Here [WS](RotationBST/WorkingSet/Abstract.lean) sums
+Here [WS](RotationBST/Bounds/WorkingSet/Abstract.lean) sums
 `1 + floor(log₂(working-set number))`; [U](RotationBST/Bounds/Unified/Abstract.lean)
 is the **1985 fixed-finger unified bound**. The later dynamic unified-bound
 conjecture is not asserted.
@@ -137,9 +163,9 @@ final shape and satisfying a working-set bound.
 An **arborally satisfied set (ASS)** is a finite set of key/time points such that
 every pair with different keys and times spans a closed rectangle containing a
 third point. Boundary points count. See the concise
-[definition](RotationBST/Arboral/Definitions/Abstract.lean).
+[definition](RotationBST/Models/Geometric/Definitions/Abstract.lean).
 
-The [offline equivalence](RotationBST/Arboral/Equivalence/Abstract.lean) proves:
+The [offline equivalence](RotationBST/Models/Equivalence/Abstract.lean) proves:
 
 | Conversion | Bound and initial-tree convention |
 |---|---|
@@ -153,14 +179,14 @@ A rooted-region operation visits its request and rearranges a connected region
 while preserving its exact inorder fringe. The offline construction uses
 next-touch treaps; its future-dependent choices are separate from the online proof.
 
-[Online geometric algorithms](RotationBST/Arboral/Online/Abstract.lean) complete
+[Online geometric algorithms](RotationBST/Models/Geometric/Online/Abstract.lean) complete
 one row at a time using the old point set and current request. Their row-point
 cost equals the cardinality of the resulting ASS solution. The standard
 **GreedyASS sweep** is proved legal, and every legal current-row completion
 contains its points, so it is the unique minimum-cardinality completion of that
 row. This local minimum is not a claim of global optimality.
 
-The [causal simulation](RotationBST/Arboral/Online/LastTouch/Supernode/Policy/Results/Abstract.lean)
+The [causal simulation](RotationBST/Algorithms/Simulation/Abstract.lean)
 proves that, for every geometric online algorithm on `n` keys, **one BST policy**
 works for all initial trees of size `n` and all valid request sequences. Its bounds are:
 
@@ -177,15 +203,15 @@ claimed to be sharp. Neither splay nor GreedyASS is proved dynamically optimal.
 
 ## Tango
 
-The [executable Tango-style policy](RotationBST/Tango/Algorithm/Executable/Abstract.lean)
+The [executable Tango-style policy](RotationBST/Algorithms/Tango/Algorithm/Executable/Abstract.lean)
 maintains preferred paths and their ordered nesting, compiles preference changes
 into cuts and joins, and serves each requested rank. It uses **splay-based auxiliary
 trees** with amortized bounds; the original red-black auxiliary implementation
 is not formalized.
 
-[Wilber's interleave lower bound](RotationBST/Tango/LowerBound/Abstract.lean) is
+[Wilber's interleave lower bound](RotationBST/Bounds/Interleave/Abstract.lean) is
 proved against geometric, rotation, and pointer executions. The
-[competitive theorem](RotationBST/Tango/Algorithm/Abstract.lean) compares a fixed
+[competitive theorem](RotationBST/Algorithms/Tango/Algorithm/Abstract.lean) compares a fixed
 policy with every offline rotation execution on the same key universe. If the
 reference tree has height `H`, the policy's normalized cost is at most
 

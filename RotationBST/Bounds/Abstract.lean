@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.WorkingSet.Abstract
+public import RotationBST.Bounds.WorkingSet.Abstract
 public import Mathlib.Analysis.SpecialFunctions.Log.Base
 public import Mathlib.Data.Nat.Dist
 

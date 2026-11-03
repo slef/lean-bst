@@ -1,19 +1,19 @@
 module
 
-public import RotationBST.Representation.Mathlib.Abstract
-public import RotationBST.Geometry.Abstract
-public import RotationBST.Online.Abstract
-public import RotationBST.Model.Rotations
-public import RotationBST.WorkingSet.Abstract
-public import RotationBST.Access.Abstract
-public import RotationBST.Representation.Abstract
-public import RotationBST.Normalization.Abstract
-public import RotationBST.Pointer.Abstract
+public import RotationBST.Models.Labelled.Mathlib.Abstract
+public import RotationBST.Models.Rotation.Connectivity.Abstract
+public import RotationBST.Models.Online.Abstract
+public import RotationBST.Models.Rotation.Rotations
+public import RotationBST.Bounds.WorkingSet.Abstract
+public import RotationBST.Models.Rotation.Existence.Abstract
+public import RotationBST.Models.Labelled.Abstract
+public import RotationBST.Bounds.Normalization.Abstract
+public import RotationBST.Models.Pointer.Abstract
 public import RotationBST.Bounds.Implications.Abstract
-public import RotationBST.Splay.Abstract
-public import RotationBST.Arboral.Abstract
-public import RotationBST.Arboral.Equivalence.Abstract
-public import RotationBST.Tango.Abstract
+public import RotationBST.Algorithms.Splay.Abstract
+public import RotationBST.Models.Geometric.Abstract
+public import RotationBST.Models.Equivalence.Abstract
+public import RotationBST.Algorithms.Tango.Abstract
 
 @[expose] public section
 
