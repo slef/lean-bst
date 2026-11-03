@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Defs
 public import RotationBST.Algorithms.Simulation.Supernode.Nested.Retention
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Materializing retained intervals does not change the full embedded BST. -/
@@ -61,4 +61,4 @@ theorem assemblePartition_valid {P : Finset Point} {lo : Nat} {state : State} {c
     rw [tree, withGaps_tree_size]
     convert child using 1; omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

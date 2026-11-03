@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Create.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode.Create.Results
+namespace RotationBST.Geometric.Online.Supernode.Create.Results
 open Split.Multiway.Finger.TwoEnded
 
 /-- Promote the current active keys into a new initialized supernode. Creation
@@ -22,11 +22,11 @@ theorem create {n time : Nat} {P : Finset Point} (history : History n time P)
       cost + intervalCredit input ≤ 6016 * (Region.keys source lo).card :=
   create_supernode history shape gaps offset lo gapHeaps
 
-end RotationBST.Arboral.Online.Supernode.Create.Results
+end RotationBST.Geometric.Online.Supernode.Create.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Create.Results`: 1 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.Supernode.Create.Results`: 1 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.Supernode.Create.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.Supernode.Create.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

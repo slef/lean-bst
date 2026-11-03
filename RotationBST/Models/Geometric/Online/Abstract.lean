@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Geometric.Definitions.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- An online geometric algorithm sees only the old point set and the current
 request. It must complete the current row without changing past rows. -/
@@ -30,4 +30,4 @@ def requestsAt : Nat → List Nat → Finset Point
   | _, [] => ∅
   | time, x :: xs => insert (x, time) (requestsAt (time + 1) xs)
 
-end RotationBST.Arboral
+end RotationBST.Geometric

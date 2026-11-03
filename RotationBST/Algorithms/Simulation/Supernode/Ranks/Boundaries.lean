@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Ranks.Proofs
 public import RotationBST.Algorithms.Simulation.Supernode.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- A parent key preceding gap `i` lies strictly before that gap. -/
 theorem keyRank_before_gap (gaps : Nat → Tree) (offset : Nat) {j i : Nat}
@@ -94,4 +94,4 @@ theorem gap_left_required {n time request : Nat} {P : Finset Point} {keys : Fins
         rw [this] at above
         omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

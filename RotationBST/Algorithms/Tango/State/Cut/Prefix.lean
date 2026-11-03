@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Tango.State.Marking
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Arboral.Region Pointer.Lazy.Skeleton
+open Geometric.Region Pointer.Lazy.Skeleton
 
 /-- The executable prefix cut returns the specified boundary mark, realizes its
 rotation count, and satisfies the same global-potential bound as the splay. -/

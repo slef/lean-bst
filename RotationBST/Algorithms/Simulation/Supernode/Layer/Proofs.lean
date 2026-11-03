@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Proofs
 public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Regions
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Pointer.Lazy.Skeleton
 
 /-- Equal-priority active keys may use any BST shape: ordering inside the
@@ -73,4 +73,4 @@ theorem Layer.rotate {P : Finset Point} {level : WithBot Nat} {s t : Tree} {cost
   have result := valid.rearrange (withGaps_same steps gaps offset lo)
   exact ⟨result, result.heap⟩
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

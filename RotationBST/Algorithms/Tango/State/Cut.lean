@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Tango.State.Marking
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Arboral.Region Pointer.Lazy.Skeleton
+open Geometric.Region Pointer.Lazy.Skeleton
 
 /-- Expose a boundary by its active rank, transporting all component marks. -/
 theorem expose_rank (s : MarkedTree) (k : Nat) (valid : k < s.region.size) :

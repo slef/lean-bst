@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Transition.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode.Transition.Results
+namespace RotationBST.Geometric.Online.Supernode.Transition.Results
 
 /-- Recursive extraction spends existing nested credit and preserves every
 unused portion in its retained holes. -/
@@ -24,11 +24,11 @@ theorem transition {n time request : Nat} {P : Finset Point} {keys : Finset Nat}
         cost + (nextState state keys).credit ≤ state.credit + 6016 * keys.card :=
   nextState_spec history legal represented size
 
-end RotationBST.Arboral.Online.Supernode.Transition.Results
+end RotationBST.Geometric.Online.Supernode.Transition.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Transition.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.Supernode.Transition.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.Supernode.Transition.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.Supernode.Transition.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

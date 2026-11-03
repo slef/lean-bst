@@ -5,7 +5,7 @@ public import RotationBST.Structures.Treap.Execution
 public import RotationBST.Models.Rotation.Connectivity.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- Conventional pointer executions also admit bounded geometric solutions. -/
 theorem pointer_to_offline {s t : Tree} {xs : List Nat} {cost : Nat}
@@ -31,4 +31,4 @@ theorem offline_from_initial (s : Tree) (xs : List Nat) (E : Offline s.size xs) 
       simp only [List.length_cons] at *
       omega
 
-end RotationBST.Arboral
+end RotationBST.Geometric

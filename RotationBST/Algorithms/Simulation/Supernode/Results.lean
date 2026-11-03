@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Restriction
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.LastTouch.Supernode.Results
+namespace RotationBST.Geometric.Online.LastTouch.Supernode.Results
 
 /-- Every nonempty interval has a nonempty root supernode, including intervals
 whose keys have never been touched. -/
@@ -33,11 +33,11 @@ theorem restriction {P : Finset Point} {lo hi first last : Nat}
     supernodeKeys P first last = supernodeKeys P lo hi ∩ Finset.Ico first last :=
   supernodeKeys_restrict lower upper retained
 
-end RotationBST.Arboral.Online.LastTouch.Supernode.Results
+end RotationBST.Geometric.Online.LastTouch.Supernode.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.LastTouch.Supernode.Results`: 4 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.LastTouch.Supernode.Results`: 4 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.LastTouch.Supernode.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.LastTouch.Supernode.Results allowing [
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Region.View.Abstract,
   RotationBST.Algorithms.Simulation.LastTouch.Defs,
   RotationBST.Algorithms.Simulation.Supernode.Defs]

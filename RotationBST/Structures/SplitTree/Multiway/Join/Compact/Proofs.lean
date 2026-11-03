@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Join.Compact.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Join.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Join
+namespace RotationBST.Geometric.Split.Multiway.Join
 
 theorem compact_rotations (hl hr : Nat) (l r : Multiway) :
     Rotations (.node l.binary r.binary) (compact hl hr l r).tree.binary (compact hl hr l r).cost := by
@@ -38,4 +38,4 @@ theorem compact_size (hl hr : Nat) (l r : Multiway) :
   have sizes := (compact_rotations hl hr l r).size_eq
   simpa only [Tree.size, binary_size] using sizes.symm
 
-end RotationBST.Arboral.Split.Multiway.Join
+end RotationBST.Geometric.Split.Multiway.Join

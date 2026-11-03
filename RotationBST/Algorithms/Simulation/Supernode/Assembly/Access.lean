@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.MoveToRoot.Abstract
 public import RotationBST.Models.Region.Bounds
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- An exposed key can be brought to the root by rotating only the exposed
 key shape, with cost less than the number of exposed keys. -/
@@ -25,4 +25,4 @@ theorem Assembly.access {assembly : Assembly} {key : Nat}
   rw [Region.keys_card, ← assembly.shape_size]
   exact moved.2
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

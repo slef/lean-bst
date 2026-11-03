@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Search.Height
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open StaticTree
 
 /-- Search in a minimum-finger comparison tree depends on the rank distance,
@@ -63,4 +63,4 @@ theorem binaryView_depth {h : Nat} {t : Multiway} (valid : Balanced h t)
   exact Nat.le_trans (comb_depth_le_extend _ _ .nil rank within)
     (extended_depth_rank valid .nil rank existsKey)
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

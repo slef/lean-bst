@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Extract.Balance
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway
+namespace RotationBST.Geometric.Split.Multiway
 
 private theorem descendFirst_cost (recur : Multiway → Multiway × Nat) {h : Nat} {t : Multiway}
     (valid : Balanced h t) (nonempty : t ≠ .nil)
@@ -52,4 +52,4 @@ theorem extractMinAux_cost (fuel : Nat) {h : Nat} {t : Multiway}
       simp only [extractMinAux, merged]
       omega
 
-end RotationBST.Arboral.Split.Multiway
+end RotationBST.Geometric.Split.Multiway

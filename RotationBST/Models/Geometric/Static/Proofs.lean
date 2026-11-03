@@ -4,7 +4,7 @@ public import RotationBST.Models.Geometric.Static.Abstract
 public import RotationBST.Models.Geometric.Basic
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- Any execution that touches connected root regions of one fixed BST has
 an arborally satisfied geometric view. Rotating executions require more. -/
@@ -36,4 +36,4 @@ theorem rootedRows_ass (t : Tree) (lo : Nat) (P : Finset Point)
       · intro he; have := congrArg (fun p : Point => p.2) he; exact hy this
       · exact ⟨between.1, between.2, min_le_left _ _, le_max_left _ _⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

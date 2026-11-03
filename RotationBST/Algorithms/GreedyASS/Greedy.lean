@@ -5,7 +5,7 @@ public import RotationBST.Models.Geometric.Basic
 public import RotationBST.Algorithms.GreedyASS.Algorithm.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem mem_subsets (n : Nat) (keys : Finset Nat) :
     keys ∈ subsets n ↔ keys ⊆ Finset.range n := by
@@ -82,4 +82,4 @@ theorem greedy_correct {n time request : Nat} {P : Finset Point}
     apply fold_le_member
     exact List.mem_filter.mpr ⟨(mem_subsets n other).mpr ho.2.1, by simpa using ho⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

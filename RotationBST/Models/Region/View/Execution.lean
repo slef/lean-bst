@@ -4,7 +4,7 @@ public import RotationBST.Models.Region.View.Preservation
 public import RotationBST.Models.Geometric.Offline.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem region_execution_view {s t : Tree} {xs : List Nat} {cost n : Nat}
     (execution : RegionExecution s xs t cost) (size : s.size = n)
@@ -57,4 +57,4 @@ theorem region_to_offline {s t : Tree} {xs : List Nat} {cost : Nat}
     region_execution_view execution rfl 0 ∅ hist ass_empty (historyHeap_empty s)
   exact ⟨⟨⟨Q, requests, sat⟩, by simpa using bound⟩, by simpa using card⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

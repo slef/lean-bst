@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Simulation.Initial
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode.Simulation.Results
+namespace RotationBST.Geometric.Online.Supernode.Simulation.Results
 
 /-- Serve the request at the root and pay for restoring the canonical state.
 The potential bound includes both parts of the execution. -/
@@ -26,11 +26,11 @@ theorem execution (tree : Tree) (A : OnlineAlgorithm tree.size) (xs : List Nat)
       cost ≤ 6018 * rowCost A.step 0 ∅ xs + 6016 * tree.size :=
   geometric_execution tree A xs bounds
 
-end RotationBST.Arboral.Online.Supernode.Simulation.Results
+end RotationBST.Geometric.Online.Supernode.Simulation.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Simulation.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.Supernode.Simulation.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.Supernode.Simulation.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.Supernode.Simulation.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

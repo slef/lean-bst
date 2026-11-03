@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Context.Abstract
 public import Mathlib.Data.Nat.Log
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 /-- Nearest-first ancestors of the leftmost external leaf. Each frame retains
@@ -37,4 +37,4 @@ def nearSearchLevels (t : Multiway) (rank : Nat) : Nat :=
   if rank ≤ t.size - 1 - rank then searchLevels t rank
   else searchLevels (mirror t) (t.size - 1 - rank)
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Selection
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Lifetime.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Materializing a split hierarchy preserves every child's credit exactly,
@@ -71,4 +71,4 @@ theorem selectParent_credit {P : Finset Point} {lo : Nat} {state : State} {child
   change (selectKeys (some state) ranks).2 + (selectKeys (some state) ranks).1.credit ≤ _ at budget
   omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

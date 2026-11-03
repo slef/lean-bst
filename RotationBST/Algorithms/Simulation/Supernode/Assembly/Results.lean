@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Attachment
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode.Assembly.Results
+namespace RotationBST.Geometric.Online.Supernode.Assembly.Results
 
 /-- Parent selection materializes the split hierarchy into canonical retained
 subtrees and performs exactly the splitter's counted rotations. Attached
@@ -38,11 +38,11 @@ theorem attachment {P Q : Finset Point} (expand : Nested → Nat → Assembly ×
         (assembly.fill expand lo).2 :=
   Assembly.fill_spec expand correct valid
 
-end RotationBST.Arboral.Online.Supernode.Assembly.Results
+end RotationBST.Geometric.Online.Supernode.Assembly.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Assembly.Results`: 3 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.Supernode.Assembly.Results`: 3 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.Supernode.Assembly.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.Supernode.Assembly.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

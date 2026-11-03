@@ -9,7 +9,7 @@ public import RotationBST.Algorithms.Simulation.AbstractBridge
 Pătraşcu, 2009, made online). The policy is existential: the proof constructs
 it from last-touch supernodes represented by shared split trees, and the
 statements below mention only the models. The constants are not claimed sharp. -/
-namespace RotationBST.Arboral.Simulation.Results
+namespace RotationBST.Geometric.Simulation.Results
 
 /-- Fix the initial BST and an online geometric algorithm. A single BST
 algorithm, chosen before the sequence, simulates every valid request sequence
@@ -46,11 +46,11 @@ theorem pointer_simulation (n : Nat) (A : OnlineAlgorithm n) :
           192593 * rowCost A.step 0 ∅ xs + 192576 * n :=
   Online.Supernode.uniform_online_pointer n A
 
-end RotationBST.Arboral.Simulation.Results
+end RotationBST.Geometric.Simulation.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Simulation.Results`: 4 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Simulation.Results`: 4 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Simulation.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Simulation.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract,
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Geometric.Online.Abstract,
   RotationBST.Models.Pointer.Machine.Abstract,

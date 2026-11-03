@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Normalize.Defs
 public import RotationBST.Structures.SplitTree.Accounting.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 /-- Execute a complete hierarchy of splits. Each node chooses its separating
 rank by the size of the requested left interval and recurses on the normalized
@@ -16,4 +16,4 @@ def hierarchyCost : Tree → Option State → Nat
       let result := split state l.size
       result.cost + hierarchyCost l result.left + hierarchyCost r result.right
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

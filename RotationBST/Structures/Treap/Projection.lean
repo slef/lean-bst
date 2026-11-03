@@ -4,7 +4,7 @@ public import RotationBST.Models.Region.Basic
 public import RotationBST.Structures.Treap.Priorities
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 open Pointer.Lazy.Skeleton
 
 theorem heap_congr {α : Type} [LE α] {p q : Nat → α} (t : Tree) (lo : Nat)
@@ -101,4 +101,4 @@ theorem project_holes {P : Finset Point} {time : Nat} (t : Tree) (lo : Nat)
       exact (nextTouch_unchanged (no_current_of_root h hroot x hlo hhi)).symm
 
 end Region
-end RotationBST.Arboral
+end RotationBST.Geometric

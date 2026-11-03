@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Context.Def
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 /-- Group the retained siblings of a last-child frame into one balanced tree. -/
@@ -36,4 +36,4 @@ def maximumRepairFrameOpenCost (expected actual : Nat) (focus : Multiway) (frame
   let sibling := maximumFrameSibling expected frame
   maximumFrameGroupingCost frame + maximumJoinOpenCost (sibling.height - actual) sibling.tree focus
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

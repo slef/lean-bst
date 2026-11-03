@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Context.Abstract
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 /-- An ancestor reached by following only last-child edges. -/
@@ -34,4 +34,4 @@ def maximumEnclosingView (focus : Multiway) (outer : List Frame) : Tree :=
   | none => (maximumView focus).tree
   | some rest => maximumOpenView focus rest
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

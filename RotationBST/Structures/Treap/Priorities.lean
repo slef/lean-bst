@@ -4,7 +4,7 @@ public import RotationBST.Structures.Treap.Abstract
 public import RotationBST.Models.Geometric.Rectangle
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem nextTouch_le {P : Finset Point} {time key future : Nat}
     (hp : (key, future) ∈ P) (ht : time ≤ future) : nextTouch P time key ≤ future := by
@@ -65,4 +65,4 @@ theorem adjacent_nextTouch {P : Finset Point} {time a b : Nat}
   have hn := nextTouch_le hmem (show time + 1 ≤ p.2 by omega)
   exact hn.trans (by exact_mod_cast (show p.2 ≤ future by omega))
 
-end RotationBST.Arboral
+end RotationBST.Geometric

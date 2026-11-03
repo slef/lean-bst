@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Normalize.Accounting
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Normalize.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Normalize.Results
 
 /-- Complete splitting returns reusable height-valid intervals, including empty
 ones, with exact rotations and sizes. -/
@@ -50,11 +50,11 @@ theorem amortized {state : State} (valid : state.HeightValid)
         3000 * (Nat.log2 (min rank (state.size - 1 - rank) + 1) + 1) :=
   split_credit valid rank existsKey
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Normalize.Results
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Normalize.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Normalize.Results`: 5 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Normalize.Results`: 5 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Normalize.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Normalize.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

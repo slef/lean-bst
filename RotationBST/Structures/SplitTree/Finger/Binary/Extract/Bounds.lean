@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Extract.Rotations
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 private theorem descent_cost (cost : Multiway → Nat) {h : Nat} {t : Multiway}
     (valid : Balanced h t) (nonempty : t ≠ .nil)
@@ -55,4 +55,4 @@ theorem extractFingerAux_cost (fuel : Nat) {h : Nat} {t : Multiway}
       simp only [extractOpenCost, extractViewCost, merged]
       constructor <;> omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

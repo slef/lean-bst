@@ -6,7 +6,7 @@ public import RotationBST.Structures.SplitTree.Finger.Maximum.Partition.Accounti
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Height.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 theorem expose_valid (state : State) (left : state.left.Valid) (right : state.right.Valid)
     (rank : Nat) (existsKey : rank < state.size) :
@@ -90,4 +90,4 @@ theorem expose_near_credit {state : State} (valid : state.HeightValid)
   have near := chosenDistance_log valid rank existsKey
   omega
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Accounting.Selection
 public import RotationBST.Algorithms.Simulation.Supernode.Extraction.Execution
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Independent child extractions spend only the credits stored in their
 original holes; their costs and remaining credits add under exposed keys. -/
@@ -42,4 +42,4 @@ theorem extract_credit (fuel : Nat) (keys : Finset Nat) {P : Finset Point}
         dsimp only
         omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

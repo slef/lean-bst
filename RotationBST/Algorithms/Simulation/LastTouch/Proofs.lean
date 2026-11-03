@@ -7,7 +7,7 @@ public import RotationBST.Algorithms.GreedyASS.Sweep
 public import RotationBST.Algorithms.GreedyASS.Algorithm.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- Appending a row raises precisely its keys to the new maximum priority. -/
 theorem lastTouch_extend {n time : Nat} {P : Finset Point} (hist : History n time P)
@@ -63,4 +63,4 @@ theorem boundary_required {n time request boundary key : Nat} {P : Finset Point}
   apply Finset.mem_insert_of_mem
   exact Finset.mem_image.mpr ⟨(boundary, old), Finset.mem_filter.mpr ⟨member, visible⟩, rfl⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

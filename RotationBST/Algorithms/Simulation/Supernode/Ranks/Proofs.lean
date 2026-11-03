@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Ranks.Defs
 public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Regions
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Pointer.Lazy.Skeleton
 
 theorem gapWeight_mono (gaps : Nat → Tree) (offset : Nat) {n m : Nat} (ordered : n ≤ m) :
@@ -90,4 +90,4 @@ theorem touchedRanks_card_le (shape : Tree) (gaps : Nat → Tree) (offset lo : N
   rw [touchedRanks_card]
   exact Finset.card_le_card Finset.inter_subset_left
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

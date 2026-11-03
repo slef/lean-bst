@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Join
+namespace RotationBST.Geometric.Split.Multiway.Join
 
 /-- A subtree either fits at its old height or promotes a separator between
  two children of that height. -/
@@ -83,4 +83,4 @@ def run (leftHeight rightHeight : Nat) (left right : Multiway) : Result :=
     finish leftHeight (joinRight (leftHeight - rightHeight) left right)
   else finish rightHeight (joinLeft (rightHeight - leftHeight) left right)
 
-end RotationBST.Arboral.Split.Multiway.Join
+end RotationBST.Geometric.Split.Multiway.Join

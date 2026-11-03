@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Equivalence.Offline
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 private theorem treap_regions {P : Finset Point} (sat : ASS P) (time : Nat)
     (t : Tree) (heap : Heap (nextTouch P time) t 0)
@@ -46,4 +46,4 @@ theorem offline_iff_regions (n : Nat) (xs : List Nat) (cost : Nat) :
     subst n
     exact ⟨E, hcard⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

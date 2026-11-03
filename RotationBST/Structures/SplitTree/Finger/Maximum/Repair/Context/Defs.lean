@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Frame.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 /-- Repair ancestors until the focused interval regains its expected height.
@@ -21,4 +21,4 @@ def maximumRepairContext : Nat → Nat → Multiway → List Frame → Multiway.
           | _ :: _ => maximumRepairFrameOpenCost expected actual focus f
         ⟨result.tree, result.height, cost + result.cost⟩
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

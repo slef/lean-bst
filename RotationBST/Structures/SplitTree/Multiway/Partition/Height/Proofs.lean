@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Height.Composition
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Partition
+namespace RotationBST.Geometric.Split.Multiway.Partition
 open Join
 
 /-- Splitting does not increase the lexicographic pair of height and root
@@ -52,4 +52,4 @@ theorem run_height {h : Nat} {t : Multiway} (valid : Balanced h t)
   simp only [Cut.Within, Piece.capacity] at bound
   omega
 
-end RotationBST.Arboral.Split.Multiway.Partition
+end RotationBST.Geometric.Split.Multiway.Partition

@@ -5,7 +5,7 @@ public import RotationBST.Models.Rotation.Rotations
 import Mathlib.Data.Nat.Basic
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway
+namespace RotationBST.Geometric.Split.Multiway
 
 @[simp] theorem binary_size (t : Multiway) : t.binary.size = t.size := by
   induction t <;> simp_all only [binary, size, Tree.size] <;> omega
@@ -140,4 +140,4 @@ theorem merge_nodes (a b c d : Multiway) :
   simp only [nodes]
   omega
 
-end RotationBST.Arboral.Split.Multiway
+end RotationBST.Geometric.Split.Multiway

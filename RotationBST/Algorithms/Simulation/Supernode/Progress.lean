@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- A key outside the root supernode has a nearest root key with no other
 root key between them. This also covers the two exterior gaps. -/
@@ -33,4 +33,4 @@ theorem supernode_touched {n time request lo hi : Nat} {P : Finset Point} {keys 
       (Finset.mem_Ico.mp inside).1 (Finset.mem_Ico.mp inside).2 root
     exact ⟨boundary, Finset.mem_inter.mpr ⟨supernode_gap_required history legal touched gap, gap.1⟩⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

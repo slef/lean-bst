@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Policy.Algorithm
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- One BST policy, fixed before the request sequence, simulates the geometric
 algorithm from the supplied initial tree with linear total rotation cost. -/
@@ -20,4 +20,4 @@ theorem online_policy (tree : Tree) (A : OnlineAlgorithm tree.size) :
   have initialization := initial.2.2.2
   omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Nested.Locality
 public import RotationBST.Algorithms.Simulation.Supernode.Layer.Update
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- The exact child interval appears among the outer region's untouched holes. -/
@@ -41,4 +41,4 @@ theorem Represents.promote {n time : Nat} {P : Finset Point} (history : History 
     intro key lower upper
     exact Region.hole_disjoint (nested_child_hole state children arity lo i) lower upper
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

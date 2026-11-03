@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Rotation.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral.Split
+namespace RotationBST.Geometric.Split
 
 /-- Unlabelled 2–3–4 trees. Inorder ranks supply the keys, just as for binary BSTs. -/
 inductive Multiway where
@@ -63,4 +63,4 @@ def prepareRight : Multiway → Multiway × Nat
   | t => (t, 0)
 
 end Multiway
-end RotationBST.Arboral.Split
+end RotationBST.Geometric.Split

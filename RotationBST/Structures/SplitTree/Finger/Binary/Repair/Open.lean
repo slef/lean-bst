@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Repair.Rotations
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- Repairs retain the same bound with any enclosing larger-key remainder. -/
 theorem repairOpen_rotations (t : Multiway) (restTree : Tree) :
@@ -80,4 +80,4 @@ theorem repairOpen_rotations (t : Multiway) (restTree : Tree) :
         apply comb_rotations
         exact (Rotations.step Rotate.right (.step .right (.step (.inRight .left) .refl))).inRight.inRight
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

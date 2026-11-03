@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Accounting.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral.Split
+namespace RotationBST.Geometric.Split
 
 /-- The logarithmic reserve pays for the smaller-side term at a split. -/
 theorem charge_reserve (left right : Nat) :
@@ -41,4 +41,4 @@ theorem totalCharge_linear (t : Tree) : totalCharge t ≤ 2 * t.size := by
   have := totalCharge_reserve t
   omega
 
-end RotationBST.Arboral.Split
+end RotationBST.Geometric.Split

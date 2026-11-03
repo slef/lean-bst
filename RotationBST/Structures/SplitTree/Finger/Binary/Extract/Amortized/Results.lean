@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Binary.Extract.Amortized.Sequence
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.Extract.Amortized.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.Extract.Amortized.Results
 
 /-- Minimum extraction has constant amortized rotation cost in the maintained
 finger representation, with a linear initial reserve. -/
@@ -22,11 +22,11 @@ theorem drain {h : Nat} {t : Multiway} (valid : Balanced h t) :
   have nodes := nodes_le_size t
   omega
 
-end RotationBST.Arboral.Split.Multiway.Finger.Extract.Amortized.Results
+end RotationBST.Geometric.Split.Multiway.Finger.Extract.Amortized.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Extract.Amortized.Results`: 4 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Extract.Amortized.Results`: 4 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Extract.Amortized.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Extract.Amortized.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,
   RotationBST.Structures.SplitTree.Multiway.Extract.Defs,

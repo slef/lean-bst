@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Tango.State.Initial
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
 open Wilber
-open Arboral.Region Pointer.Lazy.Skeleton
+open Geometric.Region Pointer.Lazy.Skeleton
 
 @[simp] theorem canonical_tree (t : Tree) (lo : Nat) (past : List Nat) :
     (canonical t lo past).tree = t := by

@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Defs
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Initialize.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- A supernode stores a shared split state and one recursively represented
@@ -50,4 +50,4 @@ carrying along exactly its external child gaps. -/
 def retainedNested (state : State) (children : List Nested) (first : Nat) : Nested :=
   .layer state ((children.drop first).take (state.size + 1))
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

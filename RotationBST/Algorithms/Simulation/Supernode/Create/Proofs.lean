@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Initialize.Proofs
 public import RotationBST.Algorithms.Simulation.Supernode.Layer.Update
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Creation of a current-row supernode pays for all future splits once. Its
@@ -27,4 +27,4 @@ theorem create_supernode {n time : Nat} {P : Finset Point} (history : History n 
     Layer.promote_rearranged history same gapHeaps, ?_⟩
   simpa only [Region.keys_card, withGaps_size] using budget
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

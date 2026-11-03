@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Normalize.LocalAllocation
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 private theorem normalization_before {state : State} (valid : state.HeightValid)
     (rank : Nat) (before : rank < state.left.tree.size) :
@@ -125,4 +125,4 @@ theorem split_credit {state : State} (valid : state.HeightValid)
       (normalize (expose state rank).right).2 + 14 * _ ≤ _
     omega
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Extract.Descent
 public import RotationBST.Structures.SplitTree.Multiway.Extract.Balance
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- Finger-maintaining extraction works both at the root and inside an interval
 with an arbitrary larger-key remainder. -/
@@ -54,4 +54,4 @@ theorem extractView_access {h : Nat} {t : Multiway} (valid : Balanced h t) (none
     Access (binaryView t).tree (.node .nil (binaryView (extractView t).1).tree) 0 (extractView t).2 :=
   ⟨(extractFingerAux_rotations _ valid (by omega) nonempty).2, rfl⟩
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

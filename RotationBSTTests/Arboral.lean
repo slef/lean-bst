@@ -8,7 +8,7 @@ import RotationBST.Algorithms.Simulation.Abstract
 import RotationBST.Bounds.Interleave.Abstract
 import RotationBST.Structures.SplitTree.Abstract
 
-open RotationBST RotationBST.Arboral
+open RotationBST RotationBST.Geometric
 
 -- Boundary points count. Adding an arbitrary point need not preserve ASS.
 example : ASS {(0, 0), (2, 0), (2, 2)} := by decide
@@ -44,13 +44,13 @@ example : Tango.height (Tango.perfect 3) = 3 := by decide
 example (s : Tree) (xs : List Nat) (valid : ∀ x ∈ xs, x < s.size) :
     ∃ t r, RotationBST.Execution s xs t r ∧ xs.length + r ≤
       2 * s.size + 99 * rowCost greedySweep 0 ∅ xs := by
-  obtain ⟨E, _, hc⟩ := Arboral.Results.online_solution (Arboral.GreedyASS.Results.greedyASS s.size) xs valid
-  obtain ⟨t, r, execution, cost⟩ := Arboral.Equivalence.Results.ass_to_rotations s xs E
-  exact ⟨t, r, execution, by simpa only [hc, Arboral.GreedyASS.Results.greedyASS] using cost⟩
+  obtain ⟨E, _, hc⟩ := Geometric.Results.online_solution (Geometric.GreedyASS.Results.greedyASS s.size) xs valid
+  obtain ⟨t, r, execution, cost⟩ := Geometric.Equivalence.Results.ass_to_rotations s xs E
+  exact ⟨t, r, execution, by simpa only [hc, Geometric.GreedyASS.Results.greedyASS] using cost⟩
 
 -- Exact cardinality, including the zero-request and unused-key cases.
-example (n : Nat) : ∃ s t, s.size = n ∧ Arboral.RegionExecution s [] t 0 := by
-  apply (Arboral.Equivalence.Results.ass_iff_region_execution n [] 0).mp
+example (n : Nat) : ∃ s t, s.size = n ∧ Geometric.RegionExecution s [] t 0 := by
+  apply (Geometric.Equivalence.Results.ass_iff_region_execution n [] 0).mp
   exact ⟨⟨⟨∅, by simp [requestsAt], ass_empty⟩, by simp [History]⟩, rfl⟩
 
 example : Tango.preferenceChanges (Tango.perfect 2) [0, 2, 0, 2] = 6 := by decide
@@ -66,7 +66,7 @@ example : Tango.preferredPaths (Tango.perfect 2) [0, 2] = [[1, 2], [0]] := by de
 example : Tango.preferredPaths (Tango.perfect 3) [0] = [[3, 1, 0], [2], [5], [4], [6]] := by decide
 
 namespace Auxiliary
-open Pointer.Lazy.Skeleton Arboral.Region
+open Pointer.Lazy.Skeleton Geometric.Region
 
 -- Fringe sizes alter global ranks, but not auxiliary splay shapes or costs.
 private def sample (a b c d : Tree) : Region :=
@@ -973,7 +973,7 @@ example (rest : Tree) :
 end FingerSiblingJoin
 
 namespace CompleteMinimumFingerSplit
-open RotationBST.Arboral.Split Multiway.Finger
+open RotationBST.Geometric.Split Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -1001,7 +1001,7 @@ example : (repairContext 2 2 three [.twoLeft three]).cost = 0 := by decide
 end CompleteMinimumFingerSplit
 
 namespace FingerCascadeAccounting
-open RotationBST.Arboral.Split Multiway.Finger
+open RotationBST.Geometric.Split Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -1024,7 +1024,7 @@ example : (repairContext 1 0 .nil ancestors).cost + 2 * (repairContext 1 0 .nil 
 end FingerCascadeAccounting
 
 namespace CompleteFingerSplitAccounting
-open RotationBST.Arboral.Split Multiway.Finger
+open RotationBST.Geometric.Split Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -1042,7 +1042,7 @@ example (rank : Fin 7) :
 end CompleteFingerSplitAccounting
 
 namespace SharedEndpointViews
-open RotationBST.Arboral.Split Multiway.Finger
+open RotationBST.Geometric.Split Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf
@@ -1066,7 +1066,7 @@ example (rank : Fin 7) :
 end SharedEndpointViews
 
 namespace HeightBalancedEndpoints
-open RotationBST.Arboral.Split Multiway.Finger
+open RotationBST.Geometric.Split Multiway.Finger
 
 private def leaf : Multiway := .two .nil .nil
 private def three : Multiway := .two leaf leaf

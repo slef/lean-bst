@@ -4,7 +4,7 @@ public import RotationBST.Models.Region.Basic
 import Mathlib.Data.Set.Finite.Lemmas
 
 @[expose] public section
-namespace RotationBST.Arboral.Region
+namespace RotationBST.Geometric.Region
 open Pointer.Lazy.Skeleton
 
 /-- Rearrange only the active region into heap order, keeping every fringe
@@ -38,4 +38,4 @@ theorem heapify (priority : Nat → WithTop Nat) (s : Region) (lo : Nat) :
         exact hmin y hy'
       · simpa only [← ha.1] using hhb
 
-end RotationBST.Arboral.Region
+end RotationBST.Geometric.Region

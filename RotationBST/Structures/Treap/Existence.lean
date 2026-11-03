@@ -4,7 +4,7 @@ public import RotationBST.Structures.Treap.Abstract
 import Mathlib.Data.Set.Finite.Lemmas
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- Every finite inorder interval admits a treap, with arbitrary ties. -/
 theorem heap_exists (priority : Nat → WithTop Nat) (n lo : Nat) :
@@ -28,4 +28,4 @@ theorem heap_exists (priority : Nat → WithTop Nat) (n lo : Nat) :
       intro x hx
       exact hmin x (Finset.mem_range.mpr (by omega))
 
-end RotationBST.Arboral
+end RotationBST.Geometric

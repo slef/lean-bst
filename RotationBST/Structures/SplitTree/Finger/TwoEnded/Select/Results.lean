@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Select.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Select.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Select.Results
 
 /-- Select exactly the current finite touch set, exposing its ranks in order
 and retaining valid intervals between them. All rotation costs and unspent
@@ -17,11 +17,11 @@ theorem select (input : Option State) (keys : Finset Nat) (valid : IntervalValid
       result.2 + 14 * result.1.reserve ≤ 6014 * (intervalTree input).size :=
   selectKeys_spec input keys valid bounds
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Select.Results
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Select.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Select.Results`: 1 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Select.Results`: 1 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Select.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Select.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

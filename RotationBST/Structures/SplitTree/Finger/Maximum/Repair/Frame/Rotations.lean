@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Frame.Defs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Join.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 theorem maximumFrame_closed_grouping (h : Nat) (frame : Frame) (right : IsRightFrame frame) :
@@ -39,4 +39,4 @@ theorem maximumRepairFrame_open (expected actual : Nat) (focus : Multiway) (fram
   (maximumOpenView_tail_rotations focus (maximumFrame_grouping expected frame right rest)).append
     (attachLeft_open actual (maximumFrameSibling expected frame).height focus (maximumFrameSibling expected frame).tree rest)
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

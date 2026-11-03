@@ -5,7 +5,7 @@ public import RotationBST.Models.Region.Bounds
 public import RotationBST.Algorithms.Splay.Correctness
 
 @[expose] public section
-namespace RotationBST.Arboral.Region
+namespace RotationBST.Geometric.Region
 open Pointer.Lazy.Skeleton
 
 private theorem filter_lt_strict {S : Finset Nat} {x y : Nat} (hx : x ∈ S) (hxy : x < y) :
@@ -97,4 +97,4 @@ theorem auxiliary_splay (s : Region) (x : Nat) (hx : x ∈ keys s 0) :
   apply lift_access hx
   exact (Splay.run_correct _ _ (by rw [shape_size]; exact index_valid hx)).1
 
-end RotationBST.Arboral.Region
+end RotationBST.Geometric.Region

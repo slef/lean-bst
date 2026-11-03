@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Search
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 @[simp] theorem mirror_size (t : Multiway) : (mirror t).size = t.size := by
   induction t <;> simp_all only [mirror, size] <;> omega
@@ -35,4 +35,4 @@ theorem right_contains (t : Multiway) (rank : Nat) (valid : rank < t.size) :
   rw [mirror_size]
   omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

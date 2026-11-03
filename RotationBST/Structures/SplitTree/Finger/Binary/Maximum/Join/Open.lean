@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Join.Defs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 theorem leftComb_rotations (xs : List Tree) {s u : Tree} {cost : Nat}
     (steps : Rotations s u cost) : Rotations (leftComb xs s) (leftComb xs u) cost := by
@@ -68,4 +68,4 @@ theorem maximumJoinOpen_rotations (d : Nat) (l r : Multiway) (rest : Tree) :
           simp only [result, Join.Promotion.tree] at steps
           simpa only [Join.joinRight, result, Join.Promotion.tree, maximumJoinOpenCost, binary] using steps.append finish
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

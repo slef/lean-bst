@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Tango.State.Lifting
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Arboral.Region
+open Geometric.Region
 
 theorem rebuild_shape_fringe (s : MarkedTree) : rebuild (shape s.region) s.fringe = s.normalizeRoot := by
   have h := congrArg Prod.fst (fill_shape_fringe s [])

@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Cost.Composition
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Partition
+namespace RotationBST.Geometric.Split.Multiway.Partition
 open Join StaticTree
 
 theorem cutAux_cost (fuel : Nat) {h : Nat} {t : Multiway} (valid : Balanced h t)
@@ -59,4 +59,4 @@ theorem run_cost {h : Nat} {t : Multiway} (valid : Balanced h t)
     4 * depth t.binary rank at cost
   omega
 
-end RotationBST.Arboral.Split.Multiway.Partition
+end RotationBST.Geometric.Split.Multiway.Partition

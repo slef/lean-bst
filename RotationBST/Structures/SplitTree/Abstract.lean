@@ -12,7 +12,7 @@ geometric simulation. The statements below are the contract that simulation
 uses: constant-cost construction, logarithmic finger search in rank distance,
 and linear total accounting over a split hierarchy. Rebalancing, joins, and
 two-ended fingers are internal `Results` modules reachable from the bridge. -/
-namespace RotationBST.Arboral.Split.Results
+namespace RotationBST.Geometric.Split.Results
 
 /-- Construct the minimum-finger comparison BST using at most three rotations
 per key. Attached subtrees keep their inorder positions and internal shapes. -/
@@ -62,11 +62,11 @@ implementation and its per-operation bound are separate obligations. -/
 theorem linear_accounting (hierarchy : Tree) : totalCharge hierarchy ≤ 2 * hierarchy.size :=
   totalCharge_linear hierarchy
 
-end RotationBST.Arboral.Split.Results
+end RotationBST.Geometric.Split.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Results`: 7 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Results`: 7 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract,
   RotationBST.Models.Pointer.Model, RotationBST.Models.Pointer.Machine.Abstract,
   RotationBST.Bounds.StaticTree.Definitions.Abstract, RotationBST.Algorithms.Splay.Algorithm.Abstract,

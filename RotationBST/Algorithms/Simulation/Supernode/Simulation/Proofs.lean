@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Transition.Access
 public import RotationBST.Models.Geometric.Online.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Compose row accesses while deferring restoration to the next access.
 The final restoration is included in the bound, so every rotation is paid
@@ -40,4 +40,4 @@ theorem runState_execution {n : Nat} (A : OnlineAlgorithm n) (xs : List Nat)
     simp only [Nat.mul_add]
     omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

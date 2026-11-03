@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Join.Open
 public import RotationBST.Structures.SplitTree.Multiway.Join.Left
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- Attach a right sibling directly to the maintained minimum-finger view. -/
 theorem joinView_rotations (d : Nat) (l r : Multiway) :
@@ -60,4 +60,4 @@ theorem joinView_cost (d : Nat) (l r : Multiway) : joinViewCost d l r ≤ 4 * d 
     | three a b c => have bound := joinOpen_cost d l a; simp only [joinViewCost]; omega
     | four a b c e => have bound := joinOpen_cost d l a; simp only [joinViewCost]; omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

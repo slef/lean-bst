@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Geometric.Online.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- The rows strictly preceding `time`. -/
 def pastPoints (P : Finset Point) (time : Nat) : Finset Point :=
@@ -23,4 +23,4 @@ def scheduleCost (P : Finset Point) : Nat → Nat
   | 0 => 0
   | time + 1 => scheduleCost P time + (keysAt P time).card
 
-end RotationBST.Arboral
+end RotationBST.Geometric

@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- One equal-priority layer with recursively heap-ordered gaps. The priority
 bound covers its whole interval, including every key inside the gaps. -/
@@ -13,4 +13,4 @@ def Layer (P : Finset Point) (level : WithBot Nat) (region : Region) (lo : Nat) 
   ∀ hole ∈ Region.holes region lo,
     Heap (fun key => OrderDual.toDual (lastTouch P key)) hole.2 hole.1
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

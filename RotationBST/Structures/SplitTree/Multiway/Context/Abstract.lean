@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Context
+namespace RotationBST.Geometric.Split.Multiway.Context
 
 /-- One ancestor with a selected child omitted. -/
 inductive Frame where
@@ -57,4 +57,4 @@ def edit (fs : List Frame) (t : Multiway) (operation : Multiway → Multiway × 
   let result := operation t
   (plug fs result.1, result.2)
 
-end RotationBST.Arboral.Split.Multiway.Context
+end RotationBST.Geometric.Split.Multiway.Context

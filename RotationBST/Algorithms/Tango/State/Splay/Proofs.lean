@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Tango.Auxiliary.Execution
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Arboral.Region
+open Geometric.Region
 
 /-- The executable splay preserves the entire marked fringe, serves its active
 rank, and has the logarithmic amortized bound against whole-tree potential. -/

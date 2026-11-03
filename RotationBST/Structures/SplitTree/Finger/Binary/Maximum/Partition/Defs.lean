@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- Exposed split key, with the two remaining intervals both in maximum-finger
 representation. -/
@@ -24,4 +24,4 @@ def maximumSplitOpenCost (height : Nat) (t : Multiway) (rank : Nat) : Nat :=
   maximumOpenCost t + cut.cost + 1 +
     maximumOpenCost cut.left.tree + maximumCost cut.right.tree
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

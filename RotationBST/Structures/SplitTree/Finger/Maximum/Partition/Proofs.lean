@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Maximum.Locate.Split.Proof
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Context.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 theorem splitLocatedMaximum_shape (t : Multiway) (distance : Nat) :
@@ -73,4 +73,4 @@ theorem splitFromMaximum_sizes {h : Nat} {t : Multiway} (valid : Balanced h t)
   simp only [maximumSplitView, Tree.size, maximumView_size] at sizes
   exact ⟨left, by omega⟩
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

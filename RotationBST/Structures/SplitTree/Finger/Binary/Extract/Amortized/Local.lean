@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Extract.Bounds
 import Mathlib.Tactic.SplitIfs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 theorem repairCredit_root (h : Nat) (t : Multiway) :
     repairCredit h false t ≤ repairCredit h true t ∧
@@ -86,4 +86,4 @@ theorem rootMerge_credit (k : Nat) {t u : Multiway} (merged : t.rootMerge = some
     simp only [repairCredit_true]
     split_ifs <;> simp_all +arith
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Locate.Embedding.Proofs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Partition.Open
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- The locally computed rotations expose the requested key in the full input
 finger BST, with logarithmic rank cost and no whole-tree conversion. -/
@@ -34,4 +34,4 @@ theorem splitLocated_spec {h : Nat} {t : Multiway} (valid : Balanced h t)
     · simp only [splitLocated, rest]
       omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

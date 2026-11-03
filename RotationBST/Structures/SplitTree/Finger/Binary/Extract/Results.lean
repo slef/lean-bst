@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Binary.Extract.Bounds
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.Extract.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.Extract.Results
 
 /-- Minimum extraction preserves the finger representation and balance, removes
 one key, and uses at most three rotations per level. This is a height bound;
@@ -25,11 +25,11 @@ theorem before_remainder {h : Nat} {t : Multiway} (valid : Balanced h t)
   ⟨(extractFingerAux_rotations _ valid (by omega) nonempty).1 rest,
     (extractFingerAux_cost _ valid (by omega)).1⟩
 
-end RotationBST.Arboral.Split.Multiway.Finger.Extract.Results
+end RotationBST.Geometric.Split.Multiway.Finger.Extract.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Extract.Results`: 4 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Extract.Results`: 4 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Extract.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Extract.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,
   RotationBST.Structures.SplitTree.Multiway.Extract.Defs,

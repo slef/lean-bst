@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Context.Abstract
 public import RotationBST.Structures.SplitTree.Multiway.Edges.Bounds
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Context
+namespace RotationBST.Geometric.Split.Multiway.Context
 
 theorem Frame.rotations (f : Frame) {s t : Multiway} {cost : Nat}
     (steps : Rotations s.binary t.binary cost) :
@@ -83,4 +83,4 @@ theorem edit_spec (fs : List Frame) (s : Multiway) (operation : Multiway → Mul
   apply plug_nodes_drop fs
   omega
 
-end RotationBST.Arboral.Split.Multiway.Context
+end RotationBST.Geometric.Split.Multiway.Context

@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Extract.Rotations
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway
+namespace RotationBST.Geometric.Split.Multiway
 
 /-- With root contraction excluded, repair makes the first child safe to enter.
 A previously wide parent either stays wide or has a nonempty repaired child. -/
@@ -48,4 +48,4 @@ theorem rootMerge_balance {h : Nat} {t u : Multiway} (valid : Balanced h t)
         subst u
         exact ⟨_, rfl, .four ha hb hc hd, trivial⟩
 
-end RotationBST.Arboral.Split.Multiway
+end RotationBST.Geometric.Split.Multiway

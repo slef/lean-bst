@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Keys
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Valid assemblies have last-touch heaps in every untouched fringe subtree. -/
 theorem Assembly.Valid.holes {P : Finset Point} {assembly : Assembly} {lo : Nat}
@@ -45,4 +45,4 @@ theorem Assembly.fill_spec {P Q : Finset Point} (expand : Nested → Nat → Ass
       exact ⟨l.1, by rw [← size]; exact r.1⟩
     · exact (l.2.inLeft).append r.2.inRight
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

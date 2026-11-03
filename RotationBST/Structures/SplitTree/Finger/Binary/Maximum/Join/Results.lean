@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Join.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.Maximum.Join.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.Maximum.Join.Results
 
 /-- Joining a shortened maximum interval to a taller left sibling preserves
 its finger view, with cost proportional to the height difference. -/
@@ -27,11 +27,11 @@ theorem attach_open (hf hs : Nat) (focus sibling : Multiway) (rest : Tree) :
       maximumJoinOpenCost (hs - hf) sibling focus ≤ 4 * (hs - hf) :=
   ⟨attachLeft_open hf hs focus sibling rest, maximumJoinOpen_cost _ _ _⟩
 
-end RotationBST.Arboral.Split.Multiway.Finger.Maximum.Join.Results
+end RotationBST.Geometric.Split.Multiway.Finger.Maximum.Join.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Maximum.Join.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Maximum.Join.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Maximum.Join.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Maximum.Join.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,
   RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Defs,

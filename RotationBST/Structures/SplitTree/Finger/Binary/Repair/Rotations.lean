@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Repair.Defs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Rotations
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- First-child repair preserves the finger representation with at most three
 local rotations, independently of the finger's length and attached subtree sizes. -/
@@ -80,4 +80,4 @@ theorem repairView_rotations (t : Multiway) :
         apply comb_rotations
         exact (Rotations.step Rotate.right (.step .right (.step (.inRight .left) .refl))).inRight.inRight
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

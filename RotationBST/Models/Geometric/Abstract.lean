@@ -9,7 +9,7 @@ public import RotationBST.Models.Geometric.AbstractBridge
 `Definitions/Abstract`, `Online/Abstract`, `Offline/Abstract`, and
 `Static/Abstract`. GreedyASS is in `Algorithms/GreedyASS/Abstract`; the
 correspondence with BST executions is in `Models/Equivalence/Abstract`. -/
-namespace RotationBST.Arboral.Results
+namespace RotationBST.Geometric.Results
 
 /-- Online row cost is exactly the cardinality of the resulting ASS solution. -/
 theorem online_solution {n : Nat} (A : OnlineAlgorithm n) (xs : List Nat)
@@ -40,11 +40,11 @@ theorem request_lower_bound {n : Nat} {xs : List Nat} (E : Offline n xs) :
 theorem fixed_tree_view (t : Tree) (lo : Nat) (P : Finset Point)
     (rooted : RootedRows t lo P) : ASS P := rootedRows_ass t lo P rooted
 
-end RotationBST.Arboral.Results
+end RotationBST.Geometric.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Results`: 6 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Results`: 6 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Geometric.Definitions.Abstract,
   RotationBST.Models.Geometric.Online.Abstract, RotationBST.Models.Geometric.Offline.Abstract,
   RotationBST.Models.Geometric.Static.Abstract]

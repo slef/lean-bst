@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Defs
 public import RotationBST.Models.Rotation.Basic
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Pointer.Lazy
 
 theorem withGaps_size (shape : Tree) (gaps : Nat → Tree) (offset : Nat) :
@@ -82,4 +82,4 @@ theorem withGaps_access {s t : Tree} {rank cost : Nat} (access : Access s t rank
     rw [withGaps_tree_size, root]
     rfl
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

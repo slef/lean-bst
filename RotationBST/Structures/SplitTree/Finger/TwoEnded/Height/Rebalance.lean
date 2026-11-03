@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Height.Proofs
 public import RotationBST.Models.Rotation.Connectivity.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 theorem rebalance_unchanged {state : State} (valid : state.HeightValid) : rebalance state = (state, 0) := by
   simp only [rebalance, valid.2.2, and_self, ite_true]
@@ -41,4 +41,4 @@ theorem rebalance_size (state : State) (left : state.left.Valid) (right : state.
   have sizes := (rebalance_spec state left right).2.1.size_eq
   simpa only [state_size] using sizes.symm
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

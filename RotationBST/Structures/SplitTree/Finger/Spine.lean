@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Abstract
 public import RotationBST.Structures.SplitTree.Multiway.Context.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Context
+namespace RotationBST.Geometric.Split.Multiway.Context
 
 theorem plug_append (xs ys : List Frame) (t : Multiway) :
     plug (xs ++ ys) t = plug ys (plug xs t) := by
@@ -20,9 +20,9 @@ theorem valid_append {h : Nat} {xs ys : List Frame} (first : Valid h xs)
     refine ⟨first.1, ih first.2 ?_⟩
     simpa only [List.length_cons, Nat.add_assoc, Nat.add_comm 1] using rest
 
-end RotationBST.Arboral.Split.Multiway.Context
+end RotationBST.Geometric.Split.Multiway.Context
 
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 /-- The finger stores every ancestor and every off-path subtree exactly once. -/
@@ -49,4 +49,4 @@ theorem leftSpine_balanced {h : Nat} {t : Multiway} (valid : Balanced h t) :
       exact ⟨⟨hb, hc, hd⟩, trivial⟩
     · simp [leftSpine, ia.2]
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

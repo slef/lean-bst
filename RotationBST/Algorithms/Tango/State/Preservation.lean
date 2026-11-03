@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Lifting
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Arboral.Region
+open Geometric.Region
 
 theorem fringeAt_snd (s : MarkedTree) (lo : Nat) : (s.fringeAt lo).map Prod.snd = s.fringe := by
   induction s generalizing lo with

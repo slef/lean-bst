@@ -4,7 +4,7 @@ public import RotationBST.Models.Geometric.Offline.Abstract
 public import RotationBST.Models.Geometric.Online.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem mem_keysAt (P : Finset Point) (time x : Nat) :
     x ∈ keysAt P time ↔ (x, time) ∈ P := by
@@ -72,4 +72,4 @@ theorem offline_of_online {n : Nat} (A : OnlineAlgorithm n) (xs : List Nat)
   exact ⟨⟨⟨fill A.step 0 ∅ xs, fill_contains A 0 ∅ xs hist ass_empty valid, sat⟩,
     by simpa using bound⟩, rfl, by simpa using cost⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

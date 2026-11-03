@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Proofs
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Select.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Parent selection is an exact rotation execution whose retained holes
@@ -42,4 +42,4 @@ theorem selectParent_spec {P : Finset Point} {lo : Nat} {state : State} {childre
     change (selectKeys (some state) ranks).2 ≤ _
     omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

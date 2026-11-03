@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Height.Rebalance
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Height.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Height.Results
 
 /-- Establish both endpoint views around the existing root, with adjacent side
 heights, using at most six rotations per multiway level. -/
@@ -30,11 +30,11 @@ theorem restore (state : State) (left : state.left.Valid) (right : state.right.V
   ⟨(rebalance_spec state left right).1, (rebalance_spec state left right).2.1,
     rebalance_size state left right, (rebalance_spec state left right).2.2⟩
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Height.Results
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Height.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Height.Results`: 3 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Height.Results`: 3 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Height.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Height.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs,

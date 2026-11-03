@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Ranks.Proofs
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Initialize.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 private theorem empty_children (count : Nat) :
@@ -62,4 +62,4 @@ theorem initialNested_size (n : Nat) : (initialNested n).tree.size = n := by
     rw [initial] at sizes
     simpa only [initialNested, initial, Nested.tree, empty_children, empty_region_size, intervalTree] using sizes
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

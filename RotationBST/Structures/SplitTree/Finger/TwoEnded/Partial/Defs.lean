@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Normalize.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 /-- Current split choices only; a stopped interval is retained for later use. -/
 inductive Plan where
@@ -46,4 +46,4 @@ def Plan.Applicable : Plan → Option State → Prop
   | .branch rank l r, some state =>
       rank < state.size ∧ l.Applicable (split state rank).left ∧ r.Applicable (split state rank).right
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

@@ -4,7 +4,7 @@ public import RotationBST.Models.Geometric.Online.Abstract
 public import RotationBST.Algorithms.GreedyASS.Sweep
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem history_extend {n time request : Nat} {P : Finset Point} {keys : Finset Nat}
     (hist : History n time P) (h : Completion n time request P keys) :
@@ -64,4 +64,4 @@ theorem fill_append (step : Nat → Nat → Finset Point → Finset Nat)
     simpa [fill, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
       (ih (time + 1) (P ∪ row time (step time x P)))
 
-end RotationBST.Arboral
+end RotationBST.Geometric

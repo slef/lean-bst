@@ -4,7 +4,7 @@ public import RotationBST.Models.Region.View.Abstract
 public import RotationBST.Models.Geometric.Basic
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem touch_le_last {P : Finset Point} {key time : Nat} (h : (key, time) ∈ P) :
     (time : WithBot Nat) ≤ lastTouch P key :=
@@ -64,4 +64,4 @@ theorem last_new_untouched {time : Nat} {P : Finset Point} {keys : Finset Nat} {
   unfold lastTouch
   rw [heq]
 
-end RotationBST.Arboral
+end RotationBST.Geometric

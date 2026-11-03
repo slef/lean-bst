@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Join.Compact.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 /-- A structural alternative to side-size balance. Equal-height 2–3–4 trees
 may have very different sizes, but their logarithmic sizes stay comparable. -/
@@ -28,4 +28,4 @@ def rebalance (state : State) : State × Nat :=
     let result := fromRoot joined.height joined.tree
     (result.1, conversionCost state.left.tree + maximumCost state.right.tree + joined.cost + result.2)
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

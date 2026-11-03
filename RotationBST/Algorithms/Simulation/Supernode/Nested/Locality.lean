@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Nested.Proofs
 public import RotationBST.Algorithms.Simulation.Supernode.Ranks.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 theorem supernodeKeys_congr {P Q : Finset Point} {lo hi : Nat}
@@ -65,4 +65,4 @@ theorem Represents.untouched {time : Nat} {P : Finset Point} {keys : Finset Nat}
   intro key lower upper
   exact (last_new_untouched (misses key lower upper)).symm
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

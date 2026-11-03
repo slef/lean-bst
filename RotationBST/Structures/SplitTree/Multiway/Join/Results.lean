@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Multiway.Join.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Join.Results
+namespace RotationBST.Geometric.Split.Multiway.Join.Results
 
 /-- Join across one separator, paying at most three rotations per level of
 height difference. The output is balanced and may grow by one level. -/
@@ -17,10 +17,10 @@ theorem join {hl hr : Nat} {l r : Multiway} (left : Balanced hl l) (right : Bala
   ⟨run_rotations _ _ _ _, (run_balance left right).1, run_size _ _ _ _,
     run_cost _ _ _ _, (run_balance left right).2⟩
 
-end RotationBST.Arboral.Split.Multiway.Join.Results
+end RotationBST.Geometric.Split.Multiway.Join.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Join.Results`: 1 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Join.Results`: 1 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Join.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Join.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Join.Defs]

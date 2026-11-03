@@ -7,7 +7,7 @@ import Mathlib.Data.Set.Finite.Lemmas
 import Mathlib.Tactic.Push
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem rectangle_trans {a b p q : Point} (hp : Rectangle a b p)
     (hq : Rectangle a p q) : Rectangle a b q := by
@@ -63,4 +63,4 @@ theorem side_witness {P : Finset Point} (sat : ASS P)
   · exact hx h.symm
   · exact hy h.symm
 
-end RotationBST.Arboral
+end RotationBST.Geometric

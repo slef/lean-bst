@@ -9,7 +9,7 @@ namespace RotationBST.Wilber.Results
 /-- Wilber's interleave quantity lower-bounds every ASS solution. The reference
 tree is arbitrary; it need not be balanced. -/
 theorem interleave_lower_bound {n : Nat} {xs : List Nat} (reference : Tree)
-    (size : reference.size = n) (E : Arboral.Offline n xs) :
+    (size : reference.size = n) (E : Geometric.Offline n xs) :
     interleave reference xs ≤ 2 * E.points.card := Wilber.interleave_le_ass reference size E
 
 /-- Lower bound against every offline execution in the simplified BST model. -/

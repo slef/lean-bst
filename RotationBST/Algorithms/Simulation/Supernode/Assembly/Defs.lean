@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Select.Defs
 public import RotationBST.Algorithms.Simulation.Supernode.Ranks.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Exposed row keys, with recursively represented subtrees at the holes. -/
@@ -60,4 +60,4 @@ def Assembly.fill (expand : Nested → Nat → Assembly × Nat) : Assembly → N
       let r := right.fill expand (lo + left.region.tree.size + 1)
       (.node l.1 r.1, l.2 + r.2)
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

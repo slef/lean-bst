@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Nested.Promotion
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Initialize.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Rebuilding a nonempty exposed region creates the next canonical root
@@ -67,4 +67,4 @@ theorem Assembly.rebuild_spec {n time : Nat} {P : Finset Point}
   | node left right =>
     exact Assembly.rebuild_nonempty history valid (by simp only [Assembly.shape, Tree.size]; omega)
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

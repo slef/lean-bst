@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Policy.Machine
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 noncomputable def Machine.replay {n : Nat} (A : OnlineAlgorithm n) (initial : Machine n)
     (past : List Nat) : Machine n :=
@@ -65,4 +65,4 @@ theorem simulatedAlgorithm_budget {n : Nat} (A : OnlineAlgorithm n) (initial : M
       rw [step.1, step.2.1] at recursive
       omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

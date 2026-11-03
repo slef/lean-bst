@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Extraction.Completion
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode.Extraction.Results
+namespace RotationBST.Geometric.Online.Supernode.Extraction.Results
 
 /-- Recursively expose exactly the current legal row inside a represented
 interval. The returned region has canonical nested states in its holes and
@@ -17,11 +17,11 @@ theorem extraction {n time request : Nat} {P : Finset Point} {keys : Finset Nat}
       Region.keys (extractRow keys lo state).1.region lo = keys ∩ Finset.Ico lo (lo + state.tree.size) :=
   extractRow_spec history legal represented
 
-end RotationBST.Arboral.Online.Supernode.Extraction.Results
+end RotationBST.Geometric.Online.Supernode.Extraction.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Extraction.Results`: 1 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.Supernode.Extraction.Results`: 1 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.Supernode.Extraction.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.Supernode.Extraction.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

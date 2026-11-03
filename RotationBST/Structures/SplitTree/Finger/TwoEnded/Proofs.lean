@@ -7,7 +7,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Bounds
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Cost.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 theorem state_size (state : State) : state.tree.size = state.size := by
   simp only [State.tree, State.size, Tree.size, binaryView_size, maximumView_size]
@@ -50,4 +50,4 @@ theorem chosenDistance_bound {state : State} (valid : state.Valid) (rank : Nat)
   simp only [State.size] at *
   split <;> (try split) <;> omega
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

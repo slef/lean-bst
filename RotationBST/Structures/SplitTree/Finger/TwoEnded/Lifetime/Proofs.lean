@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Lifetime.Defs
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Partial.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 theorem split_intervalCredit {state : State} (valid : state.HeightValid)
     (rank : Nat) (existsKey : rank < state.size) :
@@ -81,4 +81,4 @@ theorem Refinement.linear {input : Option State} {output : Partitioned} {cost : 
     cost + output.credit ≤ 6014 * (intervalTree input).size :=
   (steps.spec valid).2.2.trans (intervalCredit_linear input)
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

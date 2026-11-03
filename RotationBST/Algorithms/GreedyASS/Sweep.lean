@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.GreedyASS.Greedy
 import Mathlib.Tactic.Push
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem sweep_subset {n time request : Nat} {P : Finset Point} {keys : Finset Nat}
     (hist : History n time P) (completion : Completion n time request P keys) :
@@ -132,4 +132,4 @@ theorem greedy_unique {n time request : Nat} {P : Finset Point} {keys : Finset N
   exact (Finset.eq_of_subset_of_card_le (sweep_subset hist greedyKeys.1)
     (greedyKeys.2 _ (sweep_correct hist sat valid))).symm
 
-end RotationBST.Arboral
+end RotationBST.Geometric

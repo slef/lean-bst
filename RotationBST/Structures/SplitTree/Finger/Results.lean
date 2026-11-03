@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Ends
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.Results
 
 /-- The minimum finger reconstructs the original tree with one frame per level. -/
 theorem representation {h : Nat} {t : Multiway} (valid : Balanced h t) :
@@ -22,11 +22,11 @@ theorem nearer_endpoint {h : Nat} {t : Multiway} (valid : Balanced h t) (rank : 
     nearSearchLevels t rank ≤ Nat.log2 (min rank (t.size - 1 - rank) + 1) + 1 :=
   nearSearchLevels_log valid rank
 
-end RotationBST.Arboral.Split.Multiway.Finger.Results
+end RotationBST.Geometric.Split.Multiway.Finger.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Results`: 3 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Results`: 3 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Finger.Abstract]

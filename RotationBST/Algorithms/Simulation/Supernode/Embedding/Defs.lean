@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Pointer.Lazy.Skeleton.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Pointer.Lazy
 
 /-- Realize a supernode's key-only shape, placing an untouched subtree in each
@@ -22,4 +22,4 @@ def gapWeight (gaps : Nat → Tree) : Nat → Nat → Nat
 def keyRank (gaps : Nat → Tree) (offset rank : Nat) : Nat :=
   rank + gapWeight gaps offset (rank + 1)
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

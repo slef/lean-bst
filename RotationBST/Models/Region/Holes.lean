@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Region.Bounds
 
 @[expose] public section
-namespace RotationBST.Arboral.Region
+namespace RotationBST.Geometric.Region
 open Pointer.Lazy.Skeleton
 
 theorem holes_bounds {s : Region} {lo : Nat} {e : Nat × Tree} (h : e ∈ holes s lo) :
@@ -47,4 +47,4 @@ theorem heap_holes {α : Type} [LE α] (priority : Nat → α) (s : Region) (lo 
     · exact il lo heap.2.1 e he
     · exact ir (lo + l.tree.size + 1) heap.2.2 e he
 
-end RotationBST.Arboral.Region
+end RotationBST.Geometric.Region

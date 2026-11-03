@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Repair.Frame.Balance
 public import RotationBST.Structures.SplitTree.Multiway.Join.Nodes
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 theorem attachRight_nodes (hl hr : Nat) (l r : Multiway) :
@@ -53,4 +53,4 @@ theorem repairFrame_merge {h : Nat} (focus : Multiway) {frame : Frame}
     change (attachRight h (h + 1 + 1) focus (.three b c d)).height = h + 1 at continues
     omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

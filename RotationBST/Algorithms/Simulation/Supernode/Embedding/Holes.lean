@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Regions
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Pointer.Lazy.Skeleton
 
 /-- Every retained gap has its original ordinal and the exact absolute offset
@@ -55,4 +55,4 @@ theorem withGaps_hole_mem (shape : Tree) (gaps : Nat → Tree) (offset lo i : Na
       simp only [withGaps_tree_size, Nat.add_assoc] at child ⊢
       convert child using 1; congr 1; omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

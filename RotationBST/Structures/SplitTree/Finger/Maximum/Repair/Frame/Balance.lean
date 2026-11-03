@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Frame.Rotations
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 theorem maximumRepairFrame_balance {expected actual : Nat} {focus : Multiway} {frame : Frame}
@@ -36,4 +36,4 @@ theorem maximumRepairFrame_cost (expected actual : Nat) (focus : Multiway) (fram
     simp only [maximumRepairFrame, maximumRepairFrameOpenCost, maximumFrameSibling, maximumFrameGroupingCost, maximumFrameClosedCost] at *
     omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

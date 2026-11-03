@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Partition.Proofs
 public import RotationBST.Structures.SplitTree.Multiway.Join.Compact.Capacity
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Partition
+namespace RotationBST.Geometric.Split.Multiway.Partition
 open Join
 
 /-- Lexicographic height and root occupancy, encoded as one natural number. -/
@@ -86,4 +86,4 @@ theorem afterRight_capacity {h : Nat} {t : Multiway} (valid : Balanced h t) (non
     try simp only [rootKeys] at *
     omega
 
-end RotationBST.Arboral.Split.Multiway.Partition
+end RotationBST.Geometric.Split.Multiway.Partition

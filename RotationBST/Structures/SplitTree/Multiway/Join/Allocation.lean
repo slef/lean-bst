@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Join.Compact.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Join
+namespace RotationBST.Geometric.Split.Multiway.Join
 
 /-- The executable join allocates at most one node plus its rotation count. -/
 theorem joinRight_allocation (d : Nat) (l r : Multiway) :
@@ -67,4 +67,4 @@ theorem compact_allocation (hl hr : Nat) (l r : Multiway) :
     omega
   · simpa only [compact, eq, ite_false] using run_allocation hl hr l r
 
-end RotationBST.Arboral.Split.Multiway.Join
+end RotationBST.Geometric.Split.Multiway.Join

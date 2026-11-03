@@ -7,7 +7,7 @@ public import RotationBST.Models.Region.Fringe
 public import RotationBST.Structures.Treap.Projection
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 open Pointer.Lazy.Skeleton
 
 /-- A rooted set of touches in a latest-touch heap completes an ASS row. -/
@@ -79,4 +79,4 @@ theorem region_history_heap {n time : Nat} {P : Finset Point}
     intro x hlo hhi
     exact (last_new_untouched (Region.hole_disjoint he hlo hhi)).symm
 
-end RotationBST.Arboral
+end RotationBST.Geometric

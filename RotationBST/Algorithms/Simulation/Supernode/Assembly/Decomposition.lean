@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Attachment
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 theorem Assembly.children_length (assembly : Assembly) :
     assembly.children.length = assembly.shape.size + 1 := by
@@ -102,4 +102,4 @@ theorem Assembly.Valid.children {P : Finset Point} {assembly : Assembly} {lo : N
       dsimp only [rg] at total
       convert child using 1; omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

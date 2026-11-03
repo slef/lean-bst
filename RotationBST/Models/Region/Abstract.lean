@@ -4,7 +4,7 @@ public import RotationBST.Structures.Treap.Abstract
 public import RotationBST.Models.Pointer.Lazy.Skeleton.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 abbrev Region := Pointer.Lazy.Skeleton
 
@@ -41,4 +41,4 @@ def ActiveHeap (priority : Nat → WithTop Nat) : Region → Nat → Prop
       ActiveHeap priority l lo ∧ ActiveHeap priority r (lo + l.tree.size + 1)
 
 end Region
-end RotationBST.Arboral
+end RotationBST.Geometric

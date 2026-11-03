@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Partial.Defs
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Hierarchy.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 theorem runPlan_spec (plan : Plan) (input : Option State) (valid : IntervalValid input)
     (applicable : plan.Applicable input) :
@@ -60,4 +60,4 @@ theorem runPlan_linear (plan : Plan) (input : Option State) (valid : IntervalVal
   have sizes := (runPlan_spec plan input valid applicable).2.size_eq
   omega
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

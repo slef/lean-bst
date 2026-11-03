@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Repair.Frame.Rotations
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 theorem repairFrame_balance {expected actual : Nat} {focus : Multiway} {frame : Frame}
@@ -36,4 +36,4 @@ theorem repairFrame_cost (expected actual : Nat) (focus : Multiway) (frame : Fra
     simp only [repairFrame, repairFrameOpenCost, frameSibling, frameGroupingCost] at *
     omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

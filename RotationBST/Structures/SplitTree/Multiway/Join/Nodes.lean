@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Join.Left
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Join
+namespace RotationBST.Geometric.Split.Multiway.Join
 
 /-- Count allocated multiway nodes, excluding a separator awaiting promotion. -/
 def Promotion.nodes : Promotion → Nat
@@ -67,4 +67,4 @@ theorem joinRight_nodes (d : Nat) (l r : Multiway) :
         cases up <;> simp only [result, Promotion.nodes] at bound <;>
           simp only [joinRight, result, Promotion.nodes, Multiway.nodes] <;> omega
 
-end RotationBST.Arboral.Split.Multiway.Join
+end RotationBST.Geometric.Split.Multiway.Join

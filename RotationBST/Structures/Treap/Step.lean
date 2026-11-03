@@ -7,7 +7,7 @@ public import RotationBST.Models.Geometric.Offline.Proofs
 public import RotationBST.Models.Region.View.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 open Pointer.Lazy.Skeleton
 
 /-- A connected-region rearrangement can visit any active key and finish in the
@@ -96,4 +96,4 @@ theorem treap_step {P : Finset Point} {time request : Nat} (sat : ASS P)
   · rw [← Region.keys_card s 0, hkeys] at bound
     exact bound
 
-end RotationBST.Arboral
+end RotationBST.Geometric

@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Extract.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- Height-weighted credits on minimal nodes along first-child edges. Other
 child roots carry only the fixed node reserve; their descendants still carry
@@ -34,4 +34,4 @@ def extractMany : Nat → Multiway → Multiway × Nat
       let rest := extractMany n step.1
       (rest.1, step.2 + rest.2)
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

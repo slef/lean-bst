@@ -5,7 +5,7 @@ public import Mathlib.Data.Finset.Lattice.Fold
 public import Mathlib.Order.Interval.Finset.Nat
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- Maximum last-touch priority in the half-open key interval. Bottom means
 that every key there is untouched (or the interval is empty). -/
@@ -24,4 +24,4 @@ def SupernodeGap (P : Finset Point) (lo hi boundary key : Nat) : Prop :=
     ∀ y, min boundary key ≤ y → y ≤ max boundary key → y ≠ boundary →
       y ∉ supernodeKeys P lo hi
 
-end RotationBST.Arboral
+end RotationBST.Geometric

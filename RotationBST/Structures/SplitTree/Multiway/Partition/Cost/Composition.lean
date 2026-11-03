@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Partition.Height.Proofs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Search.Basic
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Partition
+namespace RotationBST.Geometric.Split.Multiway.Partition
 open Join
 
 theorem children_height_gap {h : Nat} {t : Multiway} (valid : Balanced h t) :
@@ -36,4 +36,4 @@ theorem afterRight_cost {left : Piece} {cut : Cut} {depth : Nat}
   simp only [afterRight]
   omega
 
-end RotationBST.Arboral.Split.Multiway.Partition
+end RotationBST.Geometric.Split.Multiway.Partition

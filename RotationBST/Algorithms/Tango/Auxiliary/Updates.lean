@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Tango.Auxiliary.Access
 public import RotationBST.Algorithms.Splay.Updates.Basic
 
 @[expose] public section
-namespace RotationBST.Arboral.Region
+namespace RotationBST.Geometric.Region
 open Pointer.Lazy.Skeleton
 
 /-- Split a nonempty auxiliary prefix by splaying its predecessor. Marking the
@@ -75,4 +75,4 @@ theorem auxiliary_join (left right : Region)
           simp only [Splay.Updates.join, shape]
           split <;> simpa only [s, shape, tree, ht] using rotations
 
-end RotationBST.Arboral.Region
+end RotationBST.Geometric.Region

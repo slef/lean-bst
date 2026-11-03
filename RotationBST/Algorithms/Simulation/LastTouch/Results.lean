@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.LastTouch.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.LastTouch.Results
+namespace RotationBST.Geometric.Online.LastTouch.Results
 
 /-- A new row makes exactly its touched keys the most recent keys. -/
 theorem row_update {n time : Nat} {P : Finset Point} (history : History n time P)
@@ -19,10 +19,10 @@ theorem parent_boundary {n time request boundary key : Nat} {P : Finset Point} {
     (touched : key ∈ keys) (parent : LastTouchBoundary P boundary key) : boundary ∈ keys :=
   boundary_required history legal touched parent
 
-end RotationBST.Arboral.Online.LastTouch.Results
+end RotationBST.Geometric.Online.LastTouch.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.LastTouch.Results`: 2 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.LastTouch.Results`: 2 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.LastTouch.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.LastTouch.Results allowing [
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Region.View.Abstract,
   RotationBST.Algorithms.Simulation.LastTouch.Defs]

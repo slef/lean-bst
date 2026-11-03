@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Accounting.Defs
 public import RotationBST.Algorithms.Simulation.Supernode.Rebuild.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 theorem Assembly.children_credit (assembly : Assembly) :
@@ -43,4 +43,4 @@ theorem Assembly.rebuild_budget {n time : Nat} {P : Finset Point}
   rw [assembly.rebuild_credit]
   omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Locate.Embedding.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 /-- Group the retained siblings of a first-child frame into one balanced tree. -/
@@ -30,4 +30,4 @@ def repairFrameOpenCost (expected actual : Nat) (focus : Multiway) (frame : Fram
   let sibling := frameSibling expected frame
   frameGroupingCost frame + joinOpenCost (sibling.height - actual) focus sibling.tree
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

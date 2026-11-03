@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Frame.Balan
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Locate.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 theorem maximumRepairContext_balance (fs : List Frame) {expected actual : Nat} {focus : Multiway}
@@ -50,4 +50,4 @@ theorem maximumRepairContext_rotations (fs : List Frame) (expected actual : Nat)
         have result := first.append tail
         simpa only [maximumRepairContext, same, ite_false, maximumEnclosingView, maximumContextRemainder] using result
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

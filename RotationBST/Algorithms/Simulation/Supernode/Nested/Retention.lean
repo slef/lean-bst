@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Ranks.Restriction
 public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Congruence
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Splitting a parent keeps a consecutive child list with exactly one more
@@ -90,4 +90,4 @@ theorem Represents.retain {P : Finset Point} {lo : Nat} {state : State} {childre
       rw [equalStart, lookup i.val i.isLt]
       exact child
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

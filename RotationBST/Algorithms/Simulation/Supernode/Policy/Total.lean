@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Policy.Uniform
 public import RotationBST.Models.Pointer.Lazy.Online.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Each legal geometric row includes its request, so point count pays for
 one search charge per request as well as for the simulated rotations. -/
@@ -61,4 +61,4 @@ theorem uniform_online_pointer (n : Nat) (A : OnlineAlgorithm n) :
   change _ + 32 * _ ≤ 32 * algorithm.cost tree xs + 17 * xs.length at pointer
   omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

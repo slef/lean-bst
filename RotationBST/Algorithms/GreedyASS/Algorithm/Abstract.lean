@@ -8,7 +8,7 @@ public import RotationBST.Models.Geometric.Definitions.Abstract
 current row with the request and the projections of every old point whose
 rectangle with the request is empty. Its specification, `GreedyRow`, is part of
 the geometric model in `Models/Geometric/Definitions/Abstract`. -/
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- An old point whose rectangle with the new request has no third old point. -/
 def Visible (P : Finset Point) (time request : Nat) (q : Point) : Prop :=
@@ -38,4 +38,4 @@ def greedy (n time request : Nat) (P : Finset Point) : Finset Nat :=
   ((subsets n).filter fun keys => decide (Completion n time request P keys)).foldl
     smaller (Finset.range n)
 
-end RotationBST.Arboral
+end RotationBST.Geometric

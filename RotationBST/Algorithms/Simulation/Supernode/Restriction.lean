@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- Restricting an interval while retaining one of its maximum-priority keys
 preserves the maximum. No tie-breaking order is needed. -/
@@ -38,4 +38,4 @@ theorem supernodeKeys_restrict {P : Finset Point} {lo hi first last : Nat}
   · rintro ⟨⟨_, equal⟩, inside⟩
     exact ⟨inside, equal⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

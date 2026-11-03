@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Proofs
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Hierarchy.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode.Embedding.Results
+namespace RotationBST.Geometric.Online.Supernode.Embedding.Results
 open Split.Multiway.Finger.TwoEnded
 
 /-- Rotations inside a supernode retain all gap subtrees in order, at exactly
@@ -34,11 +34,11 @@ theorem hierarchy (shape : Tree) (input : Option State)
   ⟨(withGaps_rotations (hierarchy_rotations shape input valid sizes) gaps offset).1,
     hierarchy_linear shape input valid sizes⟩
 
-end RotationBST.Arboral.Online.Supernode.Embedding.Results
+end RotationBST.Geometric.Online.Supernode.Embedding.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Embedding.Results`: 3 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.Supernode.Embedding.Results`: 3 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.Supernode.Embedding.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.Supernode.Embedding.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

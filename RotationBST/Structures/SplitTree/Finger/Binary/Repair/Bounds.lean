@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Repair.Open
 public import RotationBST.Structures.SplitTree.Multiway.Edges.Bounds
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 theorem repairViewCost_bound (t : Multiway) : repairViewCost t ≤ 3 := by
   cases t with
@@ -20,4 +20,4 @@ theorem repairOpenCost_bound (t : Multiway) : repairOpenCost t ≤ 3 := by
   | three a b c => exact repairViewCost_bound _
   | four a b c d => exact repairViewCost_bound _
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

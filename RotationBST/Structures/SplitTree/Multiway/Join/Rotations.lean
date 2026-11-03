@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Join.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Join
+namespace RotationBST.Geometric.Split.Multiway.Join
 
 /-- The join's counter counts actual rotations, including root overflow. -/
 theorem joinRight_rotations (d : Nat) (l r : Multiway) :
@@ -43,4 +43,4 @@ theorem joinRight_rotations (d : Nat) (l r : Multiway) :
           simp only [joinRight, result, Promotion.tree, binary] <;>
           exact .step .right (.step (.inRight .right) (child.inRight.inRight))
 
-end RotationBST.Arboral.Split.Multiway.Join
+end RotationBST.Geometric.Split.Multiway.Join

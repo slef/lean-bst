@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Normalize.Proofs
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Allocation
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 theorem fromRoot_nodes (h : Nat) (t : Multiway) :
     intervalNodes (some (fromRoot h t).1) ≤ t.nodes + 2 := by
@@ -76,4 +76,4 @@ theorem normalize_nodes (fragment : Fragment) :
     · exact Nat.le_trans bound (by omega)
   | shared state => exact rebalance_nodes state
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

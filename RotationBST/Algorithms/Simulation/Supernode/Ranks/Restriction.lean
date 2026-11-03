@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Ranks.Boundaries
 public import RotationBST.Algorithms.Simulation.Supernode.Restriction
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- The end of an embedded segment is the position of the next parent key. -/
 theorem segment_end (segment : Tree) (gaps : Nat → Tree) (offset lo first : Nat) :
@@ -75,4 +75,4 @@ theorem withGaps_segment_canonical {P : Finset Point}
     omega
   exact keys.trans (supernodeKeys_restrict (by dsimp only [start]; omega) endBound retained).symm
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

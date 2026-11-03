@@ -5,7 +5,7 @@ public import RotationBST.Structures.Treap.Projection
 public import RotationBST.Models.Region.Holes
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Promoting exactly a region's active keys forms a new equal-priority layer.
 All gap heaps retain their old priorities; no gap reconstruction is needed. -/
@@ -80,4 +80,4 @@ theorem Layer.untouched {time : Nat} {P : Finset Point} {keys : Finset Nat}
     intro key lower upper
     exact (last_new_untouched (untouched key (by omega) (by omega))).symm
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

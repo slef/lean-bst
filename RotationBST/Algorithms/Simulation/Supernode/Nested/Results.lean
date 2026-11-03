@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Nested.Promotion
 public import RotationBST.Algorithms.Simulation.Supernode.Nested.Retention
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode.Nested.Results
+namespace RotationBST.Geometric.Online.Supernode.Nested.Results
 
 /-- Every valid nested state realizes a last-touch heap over the full BST. -/
 theorem heap {P : Finset Point} {lo : Nat} {state : Nested} (valid : Represents P lo state) :
@@ -49,11 +49,11 @@ theorem retain {P : Finset Point} {lo : Nat}
       (retainedNested replacement children first) :=
   valid.retain replacement balanced first fits
 
-end RotationBST.Arboral.Online.Supernode.Nested.Results
+end RotationBST.Geometric.Online.Supernode.Nested.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Nested.Results`: 7 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.Supernode.Nested.Results`: 7 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.Supernode.Nested.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.Supernode.Nested.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

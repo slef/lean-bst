@@ -115,9 +115,9 @@ Consequences:
   `Abstract` modules of definitions, never `Defs`, `Results`, or proof modules.
   Long allowlists are a signal that a statement belongs in `Results.lean`.
 - Surface theorems live in `<Topic>.Results` namespaces (`Splay.Results`,
-  `Wilber.Results`, `Arboral.Equivalence.Results`, …). Namespaces are
+  `Wilber.Results`, `Geometric.Equivalence.Results`, …). Namespaces are
   independent of paths in Lean; they were aligned with the parts in the third
-  pass, except for the `Arboral` root of the geometric definitions.
+  pass, and the historical `Arboral` root was renamed `Geometric` in the fourth.
 
 ## What this pass did
 
@@ -189,10 +189,9 @@ checked by a full build:
 - **Namespaces follow the parts.** Wilber's definitions and lower bounds are
   `RotationBST.Wilber.*` (Tango modules `open Wilber`); the unified charge is
   `RotationBST.Bounds.unifiedCharge`; geometric results are split into
-  `Arboral.Results` (model facts), `Arboral.Equivalence.Results`,
-  `Arboral.GreedyASS.Results`, and `Arboral.Simulation.Results`. The `Arboral`
-  root namespace of the geometric definitions and the `Tango` namespace of
-  Tango's own vocabulary are unchanged.
+  `Geometric.Results` (model facts), `Geometric.Equivalence.Results`,
+  `Geometric.GreedyASS.Results`, and `Geometric.Simulation.Results`. The
+  `Tango` namespace of Tango's own vocabulary is unchanged.
 - **Layering.** `Bounds/` no longer imports splay proof modules for lemmas:
   `logb_nat_le` lives in `Bounds/Implications/LogSum.lean` and the `1/k²`
   partial sums in `Bounds/Implications/SquareSum.lean`, both under
@@ -206,6 +205,17 @@ checked by a full build:
   with its root-declaration count, so adding or removing a surface statement
   without updating the pin fails the build.
 
+## Fourth pass: the `Geometric` namespace
+
+The geometric definitions, equivalences, GreedyASS, simulation, treap, and
+split-tree modules used the paper-era root namespace `RotationBST.Arboral`.
+It was renamed `RotationBST.Geometric` everywhere (317 files, identifier only;
+the phrase "arborally satisfied" stays in prose). Surface namespaces are now
+`Geometric.Results`, `Geometric.Equivalence.Results`,
+`Geometric.GreedyASS.Results`, `Geometric.Simulation.Results`, and
+`Geometric.Split.Results`. This was done before any book chapter linked to
+these names.
+
 ## Remaining follow-ups
 
 1. `Bounds/StaticTree/Comparison` uses splay's `locate` zipper search and its
@@ -215,8 +225,7 @@ checked by a full build:
 2. `Models/Geometric/Offline/Optimal` proves that a minimum offline solution
    exists by running the GreedyASS sweep; a direct argument from `full_row`
    would keep the model independent of the algorithm.
-3. The geometric definitions keep the historical `Arboral` namespace.
-4. Book chapters for the geometric model and equivalences, Wilber's bound,
+3. Book chapters for the geometric model and equivalences, Wilber's bound,
    GreedyASS, the causal simulation, Tango, and the structures. The book's
    build lists the uncovered surface declarations.
 

@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Basic
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Arboral.Region Pointer.Lazy.Skeleton
+open Geometric.Region Pointer.Lazy.Skeleton
 
 private theorem root_sum (s : MarkedTree) (lo : Nat) :
     ((s.rootComponent lo).map fun p => auxiliaryPotential p.2).sum = auxiliaryPotential s.region := by

@@ -5,7 +5,7 @@ import Mathlib.Data.Set.Finite.Lemmas
 import Mathlib.Data.Nat.Dist
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- A minimum next-touch priority among current-row keys of an interval is
 also a minimum among all keys of that interval. This includes never-used keys. -/
@@ -34,4 +34,4 @@ theorem interval_minimum {P : Finset Point} {time low high root key : Nat}
   simp only [Nat.dist] at hd
   omega
 
-end RotationBST.Arboral
+end RotationBST.Geometric

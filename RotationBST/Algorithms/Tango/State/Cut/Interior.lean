@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Cut.Suffix
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Arboral.Region Pointer.Lazy.Skeleton
+open Geometric.Region Pointer.Lazy.Skeleton
 
 /-- Both boundary splays of the executable interior cut are charged, including
 the potential change of the whole marked tree. -/

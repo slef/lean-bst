@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Partial.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded
 
 /-- Remaining splitting budget: node reserves plus a size/logarithm allowance.
 It is attached to the interval once and passed to its descendants. -/
@@ -28,4 +28,4 @@ inductive Refinement : Partitioned → Partitioned → Nat → Prop where
   | step {s t u : Partitioned} {first rest : Nat} :
       Refine s t first → Refinement t u rest → Refinement s u (first + rest)
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded

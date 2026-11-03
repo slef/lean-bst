@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Conversion.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- Exposed split key, with the two remaining intervals both in minimum-finger
 representation. -/
@@ -24,4 +24,4 @@ def fingerSplitOpenCost (height : Nat) (t : Multiway) (rank : Nat) : Nat :=
   openConversionCost t + cut.cost + 1 +
     conversionCost cut.left.tree + openConversionCost cut.right.tree
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

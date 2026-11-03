@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Proofs
 public import RotationBST.Models.Region.Basic
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Lifting a key-only rotation preserves absolute active keys and the offsets
 of every gap, not just the unlabelled fringe list. -/
@@ -32,4 +32,4 @@ theorem withGaps_same {s t : Tree} {cost : Nat} (steps : Rotations s t cost)
   | refl => exact Region.Same.refl _ _
   | step first rest ih => exact (withGaps_same_step first gaps offset lo).trans ih
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

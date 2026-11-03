@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Layer.Update
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode.Layer.Results
+namespace RotationBST.Geometric.Online.Supernode.Layer.Results
 
 /-- A canonical root supernode with recursively heap-ordered gaps represents
 a last-touch heap, independently of the active keys' BST shape. -/
@@ -53,11 +53,11 @@ theorem untouched {time : Nat} {P : Finset Point} {keys : Finset Nat}
   ⟨valid.untouched misses, supernode_untouched (fun key member =>
     misses key (Finset.mem_Ico.mp member).1 (Finset.mem_Ico.mp member).2)⟩
 
-end RotationBST.Arboral.Online.Supernode.Layer.Results
+end RotationBST.Geometric.Online.Supernode.Layer.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Layer.Results`: 5 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.Supernode.Layer.Results`: 5 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.Supernode.Layer.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.Supernode.Layer.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Pointer.Lazy.Skeleton.Abstract,
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Structures.Treap.Abstract,
   RotationBST.Models.Region.Abstract, RotationBST.Models.Region.View.Abstract,

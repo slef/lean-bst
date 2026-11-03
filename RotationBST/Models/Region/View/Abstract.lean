@@ -3,7 +3,7 @@ module
 public import RotationBST.Models.Region.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- Latest touch in the recorded history; bottom means not yet touched. -/
 def lastTouch (P : Finset Point) (key : Nat) : WithBot Nat :=
@@ -31,4 +31,4 @@ inductive RegionExecution : Tree → List Nat → Tree → Nat → Prop
       RegionExecution t xs u cost →
       RegionExecution s (x :: xs) u (step.before.size + cost)
 
-end RotationBST.Arboral
+end RotationBST.Geometric

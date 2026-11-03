@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Simulation.Proofs
 public import RotationBST.Algorithms.Simulation.Supernode.Nested.Initial
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Initially there is one root supernode and all child gaps are empty. -/
@@ -39,4 +39,4 @@ theorem geometric_execution (tree : Tree) (A : OnlineAlgorithm tree.size) (xs : 
       (initialNested_size tree.size) restore bounds
   exact ⟨target, cost, execution, by omega⟩
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

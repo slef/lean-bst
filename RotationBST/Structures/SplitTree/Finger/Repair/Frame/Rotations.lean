@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Repair.Frame.Defs
 public import RotationBST.Structures.SplitTree.Finger.Binary.Join.Balance
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 theorem repairFrame_rotations (expected actual : Nat) (focus : Multiway) (frame : Frame)
@@ -32,4 +32,4 @@ theorem repairFrame_open (expected actual : Nat) (focus : Multiway) (frame : Fra
   (openView_tail_rotations focus (frame_grouping expected frame left rest)).append
     (attachRight_open actual (frameSibling expected frame).height focus (frameSibling expected frame).tree rest)
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

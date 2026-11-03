@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Repair.Frame.Balance
 public import RotationBST.Structures.SplitTree.Finger.Locate.Embedding.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 theorem repairContext_balance (fs : List Frame) {expected actual : Nat} {focus : Multiway}
@@ -50,4 +50,4 @@ theorem repairContext_rotations (fs : List Frame) (expected actual : Nat) (focus
         have result := first.append tail
         simpa only [repairContext, same, ite_false, enclosingView, contextRemainder] using result
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

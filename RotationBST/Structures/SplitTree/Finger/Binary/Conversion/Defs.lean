@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Repair.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- Conversion with an enclosing separator, carrying its larger-key remainder
 through the recursion instead of repeatedly rotating completed prefixes. -/
@@ -19,4 +19,4 @@ def conversionCost : Multiway → Nat
   | .two a _ | .three a _ _ => openConversionCost a
   | .four a _ _ _ => openConversionCost a + 1
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

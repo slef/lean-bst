@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Extraction.Defs
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Progress
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Every stage of recursive extraction is an exact BST rotation execution,
 with canonical nested states retained in its holes. -/
@@ -26,4 +26,4 @@ theorem extract_execution (fuel : Nat) (keys : Finset Nat) {P : Finset Point}
           (fun child start valid => ih valid) selected.1
         exact ⟨attached.1, selected.2.1.append attached.2⟩
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

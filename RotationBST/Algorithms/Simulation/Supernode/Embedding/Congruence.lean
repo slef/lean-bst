@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- An embedding depends only on the gaps used by its key shape. Offsets may
 change when a consecutive run is stored as an independent supernode. -/
@@ -38,4 +38,4 @@ theorem gapWeight_congr (gaps other : Nat → Tree) (offset start count : Nat)
     have equal := same (1 + i) (by omega)
     simpa only [Nat.add_assoc] using equal
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

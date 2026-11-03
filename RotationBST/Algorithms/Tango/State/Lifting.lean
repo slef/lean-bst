@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Tango.State.Fringe
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Arboral.Region
+open Geometric.Region
 
 /-- Rotations within an auxiliary component transport all component marks.
 The entire marked fringe, including every lower component, stays identical. -/

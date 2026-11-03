@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Join.Rotations
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Join
+namespace RotationBST.Geometric.Split.Multiway.Join
 
 theorem joinRight_balance (d : Nat) {h : Nat} {l r : Multiway}
     (left : Balanced (h + d) l) (right : Balanced h r) :
@@ -56,4 +56,4 @@ theorem joinRight_cost (d : Nat) (l r : Multiway) : (joinRight d l r).2 ≤ 3 * 
       cases result : joinRight d e r with
       | mk up cost => cases up <;> simp only [result] at bound <;> simp only [joinRight, result] <;> omega
 
-end RotationBST.Arboral.Split.Multiway.Join
+end RotationBST.Geometric.Split.Multiway.Join

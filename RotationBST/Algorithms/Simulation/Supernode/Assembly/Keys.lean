@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Selection
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Materialization exposes exactly the separator ranks, expanded through the
@@ -84,4 +84,4 @@ theorem selectParent_keys {P : Finset Point} {lo : Nat} {state : State} {childre
   · rintro ⟨rank, member, equal⟩
     exact ⟨rank, (Finset.mem_sort (· ≤ ·)).mpr member, equal.symm⟩
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

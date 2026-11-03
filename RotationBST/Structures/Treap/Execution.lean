@@ -5,7 +5,7 @@ public import RotationBST.Structures.Treap.Existence
 public import RotationBST.Models.Pointer.Simulation
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem treap_execution {P : Finset Point} (sat : ASS P) (time : Nat)
     (t : Tree) (heap : Heap (nextTouch P time) t 0)
@@ -54,4 +54,4 @@ theorem offline_to_rotations {n : Nat} {xs : List Nat} (E : Offline n xs) :
   obtain ⟨u, rotations, pending, he', hp, hb⟩ := Pointer.execution_to_rotations he
   exact ⟨s, u, t, rotations, pending, hsize, he', hp, by omega⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

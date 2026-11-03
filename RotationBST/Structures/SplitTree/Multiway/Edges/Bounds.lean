@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Multiway.Edges.Balance
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway
+namespace RotationBST.Geometric.Split.Multiway
 
 theorem repairFirst_cost (t : Multiway) : (t.repairFirst).2 ≤ 5 := by
   cases t with
@@ -58,4 +58,4 @@ theorem merge_last_four_nodes (a b c d e f : Multiway) :
   simp only [nodes]
   omega
 
-end RotationBST.Arboral.Split.Multiway
+end RotationBST.Geometric.Split.Multiway

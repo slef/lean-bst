@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Accounting.Rebuild
 public import RotationBST.Algorithms.Simulation.Supernode.Extraction.Completion
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Each legal row has a concrete next state and an amortized rotation bound.
 Old credit pays for extraction; only the current row allocates new credit. -/
@@ -32,4 +32,4 @@ theorem nextState_spec {n time request : Nat} {P : Finset Point} {keys : Finset 
   change _ + _ + (extractRow keys 0 state).1.rebuild.credit ≤ _
   omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

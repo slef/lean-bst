@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Store the exposed keys in a fresh shared supernode and retain the exact
@@ -13,4 +13,4 @@ def Assembly.rebuild (assembly : Assembly) : Nested :=
   | none => (assembly.children[0]?).getD .empty
   | some state => .layer state assembly.children
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Minimum
 public import RotationBST.Structures.SplitTree.Finger.Binary.Search.Access
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.Binary.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.Binary.Results
 
 /-- Construct the minimum-finger comparison BST using at most three rotations
 per key. Attached subtrees keep their inorder positions and internal shapes. -/
@@ -33,11 +33,11 @@ theorem access {h : Nat} {t : Multiway} (valid : Balanced h t)
       (Splay.run (binaryView t).tree rank).2 ≤ 5 * Nat.log2 (rank + 1) + 6 :=
   binaryView_access valid rank existsKey
 
-end RotationBST.Arboral.Split.Multiway.Finger.Binary.Results
+end RotationBST.Geometric.Split.Multiway.Finger.Binary.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Binary.Results`: 4 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Binary.Results`: 4 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Binary.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Binary.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Finger.Binary.Abstract,
   RotationBST.Bounds.StaticTree.Definitions.Abstract, RotationBST.Algorithms.Splay.Algorithm.Abstract,

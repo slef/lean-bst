@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Tango.State.Join.Results
 
 @[expose] public section
 namespace RotationBST.Tango.State.Executable.Results
-open MarkedTree Arboral.Region
+open MarkedTree Geometric.Region
 
 /-- The auxiliary endpoint can be reconstructed by a concrete traversal,
 retaining the entire marked fringe and exactly the given rotation count. -/

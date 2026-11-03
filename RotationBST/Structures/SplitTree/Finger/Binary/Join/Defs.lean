@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Repair.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Join.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- Cost of attaching a taller right sibling while retaining the left finger
 and an arbitrary enclosing separator. -/
@@ -32,4 +32,4 @@ def attachRight (focusHeight siblingHeight : Nat) (focus sibling : Multiway) : J
   let result := Join.finish siblingHeight (Join.joinLeft (siblingHeight - focusHeight) focus sibling)
   { result with cost := joinViewCost (siblingHeight - focusHeight) focus sibling }
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

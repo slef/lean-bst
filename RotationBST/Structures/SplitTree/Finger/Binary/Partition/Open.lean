@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Partition.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- The same local split works before any enclosing separator and larger-key
 remainder. Only the two resulting interval views are changed. -/
@@ -38,4 +38,4 @@ theorem fingerSplit_open_cost {h : Nat} {t : Multiway} (valid : Balanced h t)
   simp only [fingerSplitOpenCost]
   omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

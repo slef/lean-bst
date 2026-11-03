@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Bounds
 public import RotationBST.Bounds.StaticTree.Definitions.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open StaticTree
 
 theorem depth_node_bound {l r : Tree} {bound : Nat}
@@ -60,4 +60,4 @@ theorem comb_depth_extend (xs : List Tree) (tail rest : Tree) (bound rank : Nat)
         simp only [List.length_cons]
         omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

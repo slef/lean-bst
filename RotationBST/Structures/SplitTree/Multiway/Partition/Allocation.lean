@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Partition.Cost.Proofs
 public import RotationBST.Structures.SplitTree.Multiway.Join.Allocation
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Partition
+namespace RotationBST.Geometric.Split.Multiway.Partition
 
 theorem children_nodes (h : Nat) (t : Multiway) :
     (children h t).1.tree.nodes + (children h t).2.tree.nodes ≤ t.nodes + 1 := by
@@ -50,4 +50,4 @@ theorem run_allocation (h : Nat) (t : Multiway) (rank : Nat) (existsKey : rank <
       t.nodes + 2 * (run h t rank).cost + 1 :=
   cutAux_allocation _ h t rank (by omega) existsKey
 
-end RotationBST.Arboral.Split.Multiway.Partition
+end RotationBST.Geometric.Split.Multiway.Partition

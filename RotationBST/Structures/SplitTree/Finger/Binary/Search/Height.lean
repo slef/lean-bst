@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Binary.Search.Basic
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open StaticTree
 
 /-- All blocks attached to the finger are balanced subtrees of bounded height. -/
@@ -60,4 +60,4 @@ theorem extended_depth_height {h : Nat} {t : Multiway} (valid : Balanced h t)
   have length := binaryView_length valid
   omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

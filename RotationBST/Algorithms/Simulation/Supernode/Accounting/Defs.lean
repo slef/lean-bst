@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Rebuild.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- Unspent splitting credit over all stored supernodes. -/
@@ -16,4 +16,4 @@ def Assembly.credit : Assembly → Nat
   | .hole state => state.credit
   | .node left right => left.credit + right.credit
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Progress
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- If child extraction covers each hole's row keys, attaching those regions
 covers the entire row interval. The bound restricts the recursive obligation
@@ -59,4 +59,4 @@ theorem Assembly.fill_keys {P : Finset Point} {keys : Finset Nat} {limit : Nat}
         · exact Or.inl equal
         · exact Or.inr (Or.inr ⟨member, by omega, by omega⟩)
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

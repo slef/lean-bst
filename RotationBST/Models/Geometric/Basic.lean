@@ -4,7 +4,7 @@ public import RotationBST.Models.Geometric.Definitions.Abstract
 import Mathlib.Data.Set.Finite.Lemmas
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 @[simp] theorem mem_row (p : Point) (time : Nat) (keys : Finset Nat) :
     p ∈ row time keys ↔ p.1 ∈ keys ∧ p.2 = time := by
@@ -89,4 +89,4 @@ theorem completion_card {n time request : Nat} {P : Finset Point} {keys : Finset
   congr 1
   exact Finset.card_image_of_injective _ (fun _ _ h => congrArg Prod.fst h)
 
-end RotationBST.Arboral
+end RotationBST.Geometric

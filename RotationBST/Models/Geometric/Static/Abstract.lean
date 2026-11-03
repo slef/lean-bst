@@ -4,7 +4,7 @@ public import RotationBST.Models.Geometric.Definitions.Abstract
 public import RotationBST.Models.Rotation.Abstract
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- In each row, the touched keys form a rooted connected region of one fixed
 BST. The root has absolute rank `lo + left.size`; subtrees stay unlabelled. -/
@@ -15,4 +15,4 @@ def RootedRows : Tree → Nat → Finset Point → Prop
       RootedRows l lo (P.filter fun p => p.1 < lo + l.size) ∧
       RootedRows r (lo + l.size + 1) (P.filter fun p => lo + l.size < p.1)
 
-end RotationBST.Arboral
+end RotationBST.Geometric

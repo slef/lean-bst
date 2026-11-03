@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Policy.Defs
 public import RotationBST.Algorithms.Simulation.Supernode.Simulation.Initial
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Choose this request's certified root access before any continuation is
 known. The choice depends only on the current machine and request. -/
@@ -71,4 +71,4 @@ theorem Machine.initial_spec (tree : Tree) :
       (Machine.initial tree).debt + (Machine.initial tree).stored.credit ≤ 6016 * tree.size :=
   Classical.choose_spec (Machine.initial_exists tree)
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

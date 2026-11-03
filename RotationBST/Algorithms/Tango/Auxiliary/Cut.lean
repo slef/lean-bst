@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Tango.Auxiliary.Analysis
 
 @[expose] public section
-namespace RotationBST.Arboral.Region
+namespace RotationBST.Geometric.Region
 open Pointer.Lazy.Skeleton
 
 /-- Expose an auxiliary rank, counting only active nodes, with the actual
@@ -92,4 +92,4 @@ theorem auxiliary_cut_suffix (s : Region) (i : Nat) (positive : 0 < i) (valid : 
   rw [hs] at bound
   linarith
 
-end RotationBST.Arboral.Region
+end RotationBST.Geometric.Region

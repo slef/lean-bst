@@ -10,7 +10,7 @@ namespace RotationBST.Tango.MarkedTree
 the requested key in the resulting root component. Only the past is inspected. -/
 def serve (s : MarkedTree) (reference : Tree) (past : List Nat) (x : Nat) : MarkedTree × Nat :=
   let updated := s.updatePreferences (canonical reference 0 past) (preferenceUpdates reference 0 past x)
-  let accessed := updated.1.splayRoot (Arboral.Region.index updated.1.region 0 x)
+  let accessed := updated.1.splayRoot (Geometric.Region.index updated.1.region 0 x)
   (accessed.1, updated.2 + accessed.2)
 
 end RotationBST.Tango.MarkedTree

@@ -5,7 +5,7 @@ public import RotationBST.Models.Pointer.Lazy.Projection
 public import RotationBST.Models.Rotation.Basic
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 open Pointer.Lazy
 
 private theorem project_keys_component (color : Nat → Bool) (t : Tree) (lo : Nat) :
@@ -84,4 +84,4 @@ theorem rotations_to_offline {s t : Tree} {xs : List Nat} {rotations : Nat}
   obtain ⟨E, hcard⟩ := region_to_offline execution
   exact ⟨E, by omega⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

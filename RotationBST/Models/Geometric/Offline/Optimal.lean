@@ -4,7 +4,7 @@ public import RotationBST.Models.Geometric.Offline.Proofs
 import Mathlib.Data.Nat.Find
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem request_time {p : Point} (time : Nat) (xs : List Nat)
     (h : p ∈ requestsAt time xs) : time ≤ p.2 ∧ p.2 < time + xs.length := by
@@ -45,4 +45,4 @@ theorem offline_minimum {n : Nat} (xs : List Nat) (valid : ∀ x ∈ xs, x < n) 
   rw [hf]
   exact Nat.find_min' existsCost ⟨G, rfl⟩
 
-end RotationBST.Arboral
+end RotationBST.Geometric

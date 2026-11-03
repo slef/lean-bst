@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Hierarchy.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Hierarchy.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Hierarchy.Results
 
 /-- Execute any complete split hierarchy from a valid shared interval. The
 rotation count includes all splits and normalization of their outputs. -/
@@ -30,11 +30,11 @@ theorem construction {h : Nat} {t : Multiway} (valid : Balanced h t)
         6014 * hierarchy.size + 6 * h :=
   hierarchy_from_balanced valid nonempty hierarchy sizes
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Hierarchy.Results
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Hierarchy.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Hierarchy.Results`: 3 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Hierarchy.Results`: 3 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Hierarchy.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Hierarchy.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

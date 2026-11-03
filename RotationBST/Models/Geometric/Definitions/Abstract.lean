@@ -10,7 +10,7 @@ public import Mathlib.Data.Finset.Powerset
 Pătraşcu, 2009): a BST execution touching key `x` at time `t` is the point
 `(x, t)`, and a point set is realizable exactly when it is arborally satisfied.
 The executable GreedyASS sweep is in `Algorithms/GreedyASS/Algorithm/Abstract`. -/
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- A key and a time, both numbered from zero. -/
 abbrev Point := Nat × Nat
@@ -62,4 +62,4 @@ structure Solution (requests : Finset Point) where
   contains : requests ⊆ points
   satisfied : ASS points
 
-end RotationBST.Arboral
+end RotationBST.Geometric

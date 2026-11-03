@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Recursively expose the current row. Fuel bounds recursion through nested
 subtrees; untouched intervals stop immediately and preserve their states. -/
@@ -23,4 +23,4 @@ The extraction algorithm uses only the stored state and the current row. -/
 def extractRow (keys : Finset Nat) (lo : Nat) (state : Nested) : Assembly × Nat :=
   extract (state.tree.size + 1) keys lo state
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

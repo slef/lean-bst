@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Tango.Auxiliary.Join
 
 @[expose] public section
 namespace RotationBST.Tango.Auxiliary.Results
-open Arboral Arboral.Region
+open Geometric Geometric.Region
 
 /-- Two boundary splays detach an interior interval `[i,j)`. -/
 theorem cut_interval (s : Region) (i j : Nat)

@@ -5,7 +5,7 @@ public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Context.Acc
 public import RotationBST.Structures.SplitTree.Multiway.Partition.Allocation
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 /-- The complete maximum-finger split has logarithmic amortized distance cost.
@@ -34,4 +34,4 @@ theorem splitFromMaximum_credit {h : Nat} {t : Multiway} (valid : Balanced h t)
   simp only [splitFromMaximum]
   omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

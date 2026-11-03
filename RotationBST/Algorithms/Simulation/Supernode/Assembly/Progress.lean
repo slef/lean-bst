@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Progress
 public import RotationBST.Models.Region.Holes
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- An exposed region with at least one active key has strictly smaller holes. -/
@@ -53,4 +53,4 @@ theorem selectParent_hole_smaller {n time request lo : Nat} {P : Finset Point} {
   have same := (selectParent_spec represented keys).2.1.size_eq
   omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

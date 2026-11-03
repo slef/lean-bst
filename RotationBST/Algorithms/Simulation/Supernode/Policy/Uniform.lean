@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Policy.Bound
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 noncomputable def resetCost (source target : Tree) (size : source.size = target.size) : Nat :=
   Classical.choose (reset_linear source target size)
@@ -75,4 +75,4 @@ theorem uniform_online_policy (n : Nat) (A : OnlineAlgorithm n) :
   have simulated := bound xs valid
   omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

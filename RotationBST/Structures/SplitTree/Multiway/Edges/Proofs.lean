@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Edges.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway
+namespace RotationBST.Geometric.Split.Multiway
 
 theorem repairFirst_rotations (t : Multiway) :
     Rotations t.binary (t.repairFirst).1.binary (t.repairFirst).2 := by
@@ -86,4 +86,4 @@ theorem repairLast_rotations (t : Multiway) :
       | three e f g => exact .refl
       | four e f g h => exact .refl
 
-end RotationBST.Arboral.Split.Multiway
+end RotationBST.Geometric.Split.Multiway

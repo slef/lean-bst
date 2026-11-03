@@ -5,7 +5,7 @@ public import RotationBST.Bounds.Interleave.Transition.Distinct
 
 @[expose] public section
 namespace RotationBST.Wilber
-open Arboral
+open Geometric
 
 def potential : Tree → Nat → Tree → List Nat → Nat
   | .nil, _, _, _ => 0
@@ -14,7 +14,7 @@ def potential : Tree → Nat → Tree → List Nat → Nat
       potential l lo actual past + potential r (lo + l.size + 1) actual past
 
 def charges (reference : Tree) (lo : Nat) (s : Region) : Nat :=
-  ((transitionKeys reference lo s.tree).filter fun x => decide (x ∈ Arboral.Region.keys s 0)).length
+  ((transitionKeys reference lo s.tree).filter fun x => decide (x ∈ Geometric.Region.keys s 0)).length
 
 private theorem uniform_alternations (xs : List Bool) (b : Bool) (all : ∀ x ∈ xs, x = b) :
     alternations xs = 0 := by
@@ -54,15 +54,15 @@ theorem absolute_empty (reference : Tree) (lo : Nat) : absoluteInterleave refere
 theorem charges_le (reference : Tree) (lo : Nat) (s : Region) : charges reference lo s ≤ s.size := by
   unfold charges
   have nd := (transitionKeys_nodup reference lo s.tree).filter
-    (fun x => decide (x ∈ Arboral.Region.keys s 0))
-  rw [← List.toFinset_card_of_nodup nd, ← Arboral.Region.keys_card s 0]
+    (fun x => decide (x ∈ Geometric.Region.keys s 0))
+  rw [← List.toFinset_card_of_nodup nd, ← Geometric.Region.keys_card s 0]
   apply Finset.card_le_card
   intro x hx
   exact of_decide_eq_true (List.mem_filter.mp (List.mem_toFinset.mp hx)).2
 
 theorem reference_step (reference : Tree) (lo : Nat) (past : List Nat)
-    {s u : Region} {x : Nat} (same : Arboral.Region.Same s u 0)
-    (upper : lo + reference.size ≤ s.tree.size) (active : x ∈ Arboral.Region.keys s 0) :
+    {s u : Region} {x : Nat} (same : Geometric.Region.Same s u 0)
+    (upper : lo + reference.size ≤ s.tree.size) (active : x ∈ Geometric.Region.keys s 0) :
     absoluteInterleave reference lo (past ++ [x]) + potential reference lo u.tree (past ++ [x]) ≤
       absoluteInterleave reference lo past + potential reference lo s.tree past + 2 * charges reference lo s := by
   induction reference generalizing lo with
@@ -75,7 +75,7 @@ theorem reference_step (reference : Tree) (lo : Nat) (past : List Nat)
         alternations (labels lo (lo + l.size) (lo + l.size + 1 + r.size) past) +
         (if r.size = 0 then 0 else cutPotential s.tree past lo (lo + l.size) (lo + l.size + 1 + r.size)) +
         2 * (((transition s.tree lo (lo + l.size) (lo + l.size + 1 + r.size)).toList.filter
-          fun key => decide (key ∈ Arboral.Region.keys s 0)).length) := by
+          fun key => decide (key ∈ Geometric.Region.keys s 0)).length) := by
       by_cases empty : r.size = 0
       · simp only [empty, Nat.add_zero, ite_true, no_right_alternations, Nat.zero_add]
         omega
@@ -87,8 +87,8 @@ theorem reference_step (reference : Tree) (lo : Nat) (past : List Nat)
     omega
 
 theorem amortized_step (reference : Tree) (lo : Nat) (past : List Nat)
-    {s u : Region} {x : Nat} (same : Arboral.Region.Same s u 0)
-    (upper : lo + reference.size ≤ s.tree.size) (active : x ∈ Arboral.Region.keys s 0) :
+    {s u : Region} {x : Nat} (same : Geometric.Region.Same s u 0)
+    (upper : lo + reference.size ≤ s.tree.size) (active : x ∈ Geometric.Region.keys s 0) :
     absoluteInterleave reference lo (past ++ [x]) + potential reference lo u.tree (past ++ [x]) ≤
       absoluteInterleave reference lo past + potential reference lo s.tree past + 2 * s.size := by
   have := reference_step reference lo past same upper active

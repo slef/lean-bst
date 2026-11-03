@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Partition.HeightLoss
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.Maximum.Partition.Complete.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.Maximum.Partition.Complete.Results
 
 /-- Split from the maximum finger, including repair of the enclosing context.
 Both outputs are balanced and retain their finger representations. This is
@@ -36,11 +36,11 @@ theorem height_loss {h : Nat} {t : Multiway} (valid : Balanced h t)
       t.nodes + 30 * (Nat.log2 (distance + 1) + 1) + 4 :=
   splitFromMaximum_height_loss valid distance existsKey lost
 
-end RotationBST.Arboral.Split.Multiway.Finger.Maximum.Partition.Complete.Results
+end RotationBST.Geometric.Split.Multiway.Finger.Maximum.Partition.Complete.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.Maximum.Partition.Complete.Results`: 3 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.Maximum.Partition.Complete.Results`: 3 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.Maximum.Partition.Complete.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.Maximum.Partition.Complete.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

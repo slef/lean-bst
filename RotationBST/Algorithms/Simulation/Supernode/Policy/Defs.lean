@@ -3,7 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Simulation.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Persistent online simulation state, including the actual root-access tree
 and the charged rotations needed to restore its canonical nested state. -/
@@ -30,4 +30,4 @@ def Machine.Step {n : Nat} (A : OnlineAlgorithm n) (before : Machine n)
   result.2 + result.1.debt + result.1.stored.credit ≤
     before.debt + before.stored.credit + 6018 * (A.step before.time request before.points).card
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

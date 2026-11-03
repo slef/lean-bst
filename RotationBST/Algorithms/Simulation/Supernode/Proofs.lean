@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Defs
 public import RotationBST.Algorithms.Simulation.LastTouch.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 theorem supernodeKeys_nonempty (P : Finset Point) {lo hi : Nat} (nonempty : lo < hi) :
     (supernodeKeys P lo hi).Nonempty := by
@@ -84,4 +84,4 @@ theorem supernode_row_keys {n time lo hi : Nat} {P : Finset Point} {keys : Finse
   · have old := lastTouch_before_row history key
     simp [member, ne_of_lt old]
 
-end RotationBST.Arboral
+end RotationBST.Geometric

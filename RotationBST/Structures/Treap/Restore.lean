@@ -4,7 +4,7 @@ public import RotationBST.Models.Region.Bounds
 public import RotationBST.Structures.Treap.Interval
 
 @[expose] public section
-namespace RotationBST.Arboral.Region
+namespace RotationBST.Geometric.Region
 open Pointer.Lazy.Skeleton
 
 /-- Heapifying the current row restores the full next-touch treap invariant,
@@ -32,4 +32,4 @@ theorem restore {P : Finset Point} {time : Nat} (sat : ASS P) (s : Region) (lo :
     · intro e he
       exact fringe e (List.mem_append_right _ he)
 
-end RotationBST.Arboral.Region
+end RotationBST.Geometric.Region

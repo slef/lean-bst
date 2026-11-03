@@ -6,7 +6,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Holes
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 open Split.Multiway.Finger.TwoEnded
 
 /-- The finite child list supplies every gap exactly once; no default tree is
@@ -35,4 +35,4 @@ theorem Represents.heap {P : Finset Point} {lo : Nat} {state : Nested} (valid : 
   | layer lo state children balanced arity canonical subtrees ih =>
     simpa only [Nested.tree, nestedRegion] using (Layer.canonical canonical (nestedRegion_gap_heap arity ih)).heap
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

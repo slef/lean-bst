@@ -5,7 +5,7 @@ public import RotationBST.Algorithms.Tango.Auxiliary.Cut
 
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
-open Arboral.Region Pointer.Lazy.Skeleton
+open Geometric.Region Pointer.Lazy.Skeleton
 
 @[simp] theorem region_tree (s : MarkedTree) : s.region.tree = s.tree := by
   induction s with
@@ -17,7 +17,7 @@ open Arboral.Region Pointer.Lazy.Skeleton
   | nil => rfl
   | node l r il ir => simp [initial, tree, il, ir]
 
-theorem region_potential_nonneg (s : Arboral.Region) : 0 ≤ auxiliaryPotential s :=
+theorem region_potential_nonneg (s : Geometric.Region) : 0 ≤ auxiliaryPotential s :=
   Splay.Updates.unitPotential_nonneg s.shape
 
 theorem potential_nonneg (s : MarkedTree) : 0 ≤ s.potential := by

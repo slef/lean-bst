@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Ranks.Restriction
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode.Ranks.Results
+namespace RotationBST.Geometric.Online.Supernode.Ranks.Results
 
 /-- Every supernode rank has a distinct full-tree position, even when arbitrary
 subtrees occupy its gaps. -/
@@ -57,11 +57,11 @@ theorem retained_interval {P : Finset Point}
       supernodeKeys P start (start + (withGaps segment gaps (offset + first)).tree.size) :=
   withGaps_segment_canonical shape segment gaps offset lo first canonical fits nonempty
 
-end RotationBST.Arboral.Online.Supernode.Ranks.Results
+end RotationBST.Geometric.Online.Supernode.Ranks.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Ranks.Results`: 6 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.Supernode.Ranks.Results`: 6 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.Supernode.Ranks.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.Supernode.Ranks.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Pointer.Lazy.Skeleton.Abstract,
   RotationBST.Models.Region.Abstract,
   RotationBST.Algorithms.Simulation.Supernode.Embedding.Defs,

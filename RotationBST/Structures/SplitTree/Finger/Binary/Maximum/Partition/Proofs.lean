@@ -6,7 +6,7 @@ public import RotationBST.Structures.SplitTree.Multiway.Partition.Cost.Proofs
 public import RotationBST.Models.Rotation.Connectivity.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 theorem maximumSplit_access {h : Nat} {t : Multiway} (valid : Balanced h t)
     (rank : Nat) (existsKey : rank < t.size) :
@@ -70,4 +70,4 @@ theorem maximumSplit_open_cost {h : Nat} {t : Multiway} (valid : Balanced h t)
   simp only [maximumSplitOpenCost]
   omega
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

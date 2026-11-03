@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Rebuild.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode.Rebuild.Results
+namespace RotationBST.Geometric.Online.Supernode.Rebuild.Results
 
 /-- Rebuild an extracted region into the canonical state for its new row,
 retaining every nested child. Rebuilding and the new supernode's future
@@ -19,11 +19,11 @@ theorem rebuilding {n time : Nat} {P : Finset Point}
           6016 * (Region.keys assembly.region lo).card :=
   Assembly.rebuild_spec history valid
 
-end RotationBST.Arboral.Online.Supernode.Rebuild.Results
+end RotationBST.Geometric.Online.Supernode.Rebuild.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Online.Supernode.Rebuild.Results`: 1 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Online.Supernode.Rebuild.Results`: 1 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Online.Supernode.Rebuild.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Online.Supernode.Rebuild.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

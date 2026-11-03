@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Maximum.Defs
 public import RotationBST.Structures.SplitTree.Multiway.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 theorem leftComb_append (xs ys : List Tree) (tail : Tree) :
     leftComb (xs ++ ys) tail = leftComb xs (leftComb ys tail) := by
@@ -58,4 +58,4 @@ theorem maximumView_size (t : Multiway) : (maximumView t).tree.size = t.size := 
   have sizes := (maximum_rotations t).size_eq
   simpa only [binary_size] using sizes.symm
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

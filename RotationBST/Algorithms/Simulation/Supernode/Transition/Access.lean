@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Transition.Proofs
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Access
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- Serve the request at the root, then restore the canonical next state.
 Both parts are charged: exposing and restoring the root adds at most two
@@ -36,4 +36,4 @@ theorem nextState_access {n time request : Nat} {P : Finset Point} {keys : Finse
   change _ + _ + (extractRow keys 0 state).1.rebuild.credit ≤ _
   omega
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

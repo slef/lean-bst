@@ -4,7 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Initialize.Proofs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Initialize.Results
+namespace RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Initialize.Results
 
 /-- Create a valid shared interval of any size, from any BST shape, with a
 linear charge covering both initialization and its future splitting budget. -/
@@ -15,11 +15,11 @@ theorem create (shape : Tree) :
         cost + intervalCredit (initialInterval shape.size) ≤ 6016 * shape.size :=
   ⟨initialInterval_valid _, initialInterval_size _, initialInterval_budget shape⟩
 
-end RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Initialize.Results
+end RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Initialize.Results
 
-/-- info: abstract audit passed for `RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Initialize.Results`: 1 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Initialize.Results`: 1 root declarations -/
 #guard_msgs in
-#check_bst_abstract RotationBST.Arboral.Split.Multiway.Finger.TwoEnded.Initialize.Results allowing [
+#check_bst_abstract RotationBST.Geometric.Split.Multiway.Finger.TwoEnded.Initialize.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Structures.SplitTree.Multiway.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Edges.Defs,

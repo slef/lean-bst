@@ -3,7 +3,7 @@ module
 public import RotationBST.Structures.SplitTree.Finger.Spine
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 open Context
 
 /-- Ascending never crosses more ancestors than the stored spine contains. -/
@@ -60,4 +60,4 @@ theorem searchLevels_contains (t : Multiway) (rank : Nat) (valid : rank < t.size
   apply ascend_contains
   rwa [leftSpine_plug]
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

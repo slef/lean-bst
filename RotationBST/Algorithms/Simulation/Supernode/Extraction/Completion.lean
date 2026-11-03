@@ -4,7 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Extraction.Execution
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Completion
 
 @[expose] public section
-namespace RotationBST.Arboral.Online.Supernode
+namespace RotationBST.Geometric.Online.Supernode
 
 /-- A size-bounded extraction exposes every key of the legal row in its
 interval, and exposes no other key. The recursion strictly decreases at each
@@ -53,4 +53,4 @@ theorem extractRow_spec {n time request : Nat} {P : Finset Point} {keys : Finset
   ⟨(extract_execution _ keys represented).1, (extract_execution _ keys represented).2,
     extract_keys history legal _ represented (by omega)⟩
 
-end RotationBST.Arboral.Online.Supernode
+end RotationBST.Geometric.Online.Supernode

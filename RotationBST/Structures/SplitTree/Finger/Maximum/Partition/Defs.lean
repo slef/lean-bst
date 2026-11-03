@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Maximum.Locate.Split.Defs
 public import RotationBST.Structures.SplitTree.Finger.Maximum.Repair.Context.Defs
 
 @[expose] public section
-namespace RotationBST.Arboral.Split.Multiway.Finger
+namespace RotationBST.Geometric.Split.Multiway.Finger
 
 /-- Repair the smaller remaining interval after a maximum-finger local split. -/
 def maximumRepairLocated (t : Multiway) (distance : Nat) : Multiway.Join.Result :=
@@ -19,4 +19,4 @@ def splitFromMaximum (t : Multiway) (distance : Nat) : Multiway.Partition.Cut :=
   let repaired := maximumRepairLocated t distance
   ⟨⟨repaired.tree, repaired.height⟩, cut.right, (splitLocatedMaximum t distance).2 + repaired.cost⟩
 
-end RotationBST.Arboral.Split.Multiway.Finger
+end RotationBST.Geometric.Split.Multiway.Finger

@@ -5,7 +5,7 @@ public import RotationBST.Models.Rotation.Abstract
 public import Mathlib.Data.Finset.Max
 
 @[expose] public section
-namespace RotationBST.Arboral
+namespace RotationBST.Geometric
 
 /-- First touch at or after `time`; infinity means that the key is never touched
 again. These priorities depend on the future and are used only offline. -/
@@ -24,4 +24,4 @@ def Heap {α : Type} [LE α] (priority : Nat → α) : Tree → Nat → Prop
 def RowAdjacent (P : Finset Point) (time a b : Nat) : Prop :=
   ∀ x, (x, time) ∈ P → min a b ≤ x → x ≤ max a b → x = a
 
-end RotationBST.Arboral
+end RotationBST.Geometric
