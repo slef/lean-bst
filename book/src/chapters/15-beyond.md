@@ -73,7 +73,7 @@ Section 5 of the paper considers splaying less often. A conditional splay search
 `conditionalStep w t x` splays exactly when the depth of `x`, which is `(run t x).2` ([Chapter 8](splay.html)), is at least $6(\log_2 W - \log_2 w(x)) + 2$, twice the amortized bound of the access lemma, with $W$ = `mass w t 0`. Otherwise it returns the tree unchanged at cost zero. `conditionalRun` sums these costs over a request sequence.
 
 ::: check
-- The weights are part of the *algorithm* here, unlike everywhere else in Part IV, where they are ghost data of the analysis. Comparing reals is not computable, so the definition is `noncomputable` and decides the threshold classically.
+- The weights are part of the *algorithm* here, unlike everywhere else in the splay chapters, where they are ghost data of the analysis. Comparing reals is not computable, so the definition is `noncomputable` and decides the threshold classically.
 - $W$ is the total weight of the current tree. Weights are indexed by rank and rotations preserve ranks, so $W$ is the same for every tree reached.
 - The returned number counts **restructuring rotations only**. A short search that does not splay still walks to $x$; it is not a zero-cost root access, and the conditional variant is not an [[RotationBST.Algorithm]] in the sense of [Chapter 6](online.html), because the tree it leaves need not have $x$ at the root. Its search cost is accounted for separately in the pointer model: [[RotationBST.Splay.conditionalStep_pointer]] shows that each conditional step is served by a pointer search of cost at most $1 + 3 \cdot \text{depth}$.
 :::

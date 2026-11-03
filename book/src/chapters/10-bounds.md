@@ -1,6 +1,8 @@
 # Adaptive bounds
 
-Dynamic optimality is a comparison with an unknown optimum. The classical results about splay trees instead compare an algorithm with explicit functions of the request sequence. Each function measures one kind of locality: recency (working set), frequency (static optimality) and spatial proximity to a fixed key (static finger). This chapter defines these functions and the corresponding properties of an [`Algorithm`](online.html#online-algorithms). It also proves the implications between them, which hold for every algorithm. Whether splaying has these properties is the subject of [Chapter 9](analysis.html).
+Part I fixed what a BST execution is and what it costs. Part II asks how much a request sequence *must* or *may* cost, independently of any algorithm. Two kinds of statements live here. **Upper-bound benchmarks** are explicit functions of the sequence, such as the entropy of its access frequencies, that a good algorithm should match; this chapter defines them and proves the implications between them. **Lower bounds** hold for every execution, hence for the offline optimum; [Chapter 11](wilber.html) proves Wilber's interleave bound, the tool behind the $O(\log\log n)$-competitive Tango trees. Algorithms enter only in Part III, where each is measured against both.
+
+Dynamic optimality is a comparison with an unknown optimum. The classical results about splay trees instead compare an algorithm with explicit functions of the request sequence. Each function measures one kind of locality: recency (working set), frequency (static optimality) and spatial proximity to a fixed key (static finger). This chapter defines these functions and the corresponding properties of an [`Algorithm`](online.html#online-algorithms). It also proves the implications between them, which hold for every algorithm. Whether splaying has these properties is the subject of [Chapter 14](analysis.html).
 
 All logarithms are base 2. The sequence functions use `Nat.log2` (the floor of $\log_2$, with `Nat.log2 0 = 0`) where the original definitions are natural-number valued, and `Real.logb 2` (with $\log 0 = 0$) where they are real-valued. Every property has the same shape:
 
@@ -83,6 +85,24 @@ Each request costs $1 + \log_2(|x - f| + 1)$, where `Nat.dist x f` is $|x - f|$ 
 The quantifier order matters. The constants $C, D$ come first, and then the bound holds for every finger `f < t.size`. A single algorithm with fixed constants competes with **every** finger simultaneously, as in the paper. The algorithm itself never learns `f`.
 :::
 
+## The unified charge
+
+Sleator and Tarjan's Theorem 5 combines the three localities: each access is charged the *smallest* of its three logarithmic costs. The library defines this benchmark in `Bounds/Unified/Abstract.lean`, next to the others, so that the bound is a property of a sequence and not of splaying:
+
+@decl RotationBST.Bounds.unifiedCharge RotationBST.Bounds.unifiedSum
+
+For a request $x$ with history `past`, `unifiedCharge` is
+$$1 + \min\Bigl(\log_2 \texttt{workingSetNumber},\; \log_2\frac{m}{q_x},\; \log_2(|x - f| + 1)\Bigr).$$
+Frequencies come from the **whole** sequence `original`, so $m$ is its length and $q_x$ the number of occurrences of $x$ in it. Recency comes from the prefix `past`, which `unifiedSum` extends one request at a time while keeping `original` fixed. This mixes offline information (frequencies) with online information (recency), as the paper's bound does. An algorithm measured against it still sees only the past; the frequencies are used by the analysis alone.
+
+::: check
+- These logarithms are real: `Real.logb 2 (workingSetNumber …)` is not the floor used in `workingSetSum`.
+- If $x$ did not occur in `original`, then $q_x = 0$, `m / 0 = 0` in Lean, and `logb 2 0 = 0`, so the minimum could collapse to $0$. Theorems apply it as `unifiedSum n f xs [] xs`, so `original` is the very sequence being summed over, and every $x$ occurs in it.
+- Since the minimum is taken per access, `unifiedSum` is at most each of the three earlier sums up to constants, and can be much smaller than all of them: a sequence that alternates between a hot spot near $f$ and a small working set far away is cheap for one charge on one half and for another on the other half.
+:::
+
+Splaying satisfies this bound ([[RotationBST.Splay.Results.unified]], [Chapter 14](analysis.html#the-unified-theorem-theorem-5)). The library defines no `Has…Bound` property for it, because no implication involving it is proved.
+
 ## Comparison with a fixed tree
 
 Static optimality is usually explained as "as good as the best fixed BST for the access frequencies". The library makes the comparison literal. First, a fixed tree's search cost:
@@ -127,8 +147,13 @@ In Sleator and Tarjan's paper, Theorems 2 and 3 are proved directly from the acc
 
 ## Transfer to the pointer machine
 
-Working-set guarantees proved in the rotation model also hold for the causal pointer simulation of [Chapter 6](online.html#running-an-online-algorithm-on-the-pointer-machine):
+Working-set guarantees proved in the rotation model also hold for the causal pointer simulation of [Section 6.6](pointer.html#running-an-online-algorithm-on-the-pointer-machine):
 
 @decl RotationBST.Pointer.Lazy.Online.Results.workingSet
 
 The left-hand side is the cost of the online pointer implementation of `a`, including requests and every pointer instruction. Postponed rotations are not executed at the end, and they need not be: the pointer execution serves every request without them. The proof combines `simulation` ($\text{pointer cost} \le 32R + 17m$) with the hypothesis on $R$ and with $m \le \mathtt{workingSetSum}$, giving constants $(32C + 17, 32D)$. The constants hold for every algorithm, independently of $n$. For splaying specifically, [Chapter 8](splay.html) gives a more direct pointer implementation with better constants.
+
+## What is not formalized
+
+Two well-known benchmarks are absent. The **dynamic finger** bound (Cole, Mishra, Schmidt and Siegel, 2000) charges each access $\log_2$ of the rank distance to the *previous* request. It is stronger than static finger, and splay trees satisfy it, but its proof is long and is not in the library. **Iacono's unified bound** replaces the fixed finger by the distance to recently accessed keys; it is open whether splay trees satisfy it. Both are mentioned here only to place the formalized bounds. The lower-bound side of Part II is [Chapter 11](wilber.html).
+

@@ -6,6 +6,8 @@ Bottom-up splaying, as defined in Section 2 of Sleator and Tarjan's paper, searc
 - **zig-zig**: if $x$ and $p$ are both left children, or both right children, rotate $p$ over $g$, then $x$ over $p$;
 - **zig-zag**: otherwise, rotate $x$ over $p$, then $x$ over $g$.
 
+Zig and zig-zag are exactly what [move-to-root](move-to-root.html) does; only zig-zig differs. That one change turns $\Theta(n)$ amortized rotations per request into $O(\log n)$.
+
 The library implements this without parent pointers, in two purely functional phases. `locate` performs the search and returns the search path as a *zipper*: the subtree rooted at $x$, together with the list of its ancestors. `splayAt` then consumes that list two ancestors at a time. This chapter goes through both, checks each equation against the three cases above, and then states what has been proved about the result.
 
 ## Searching with a zipper
@@ -98,5 +100,5 @@ Search by rank compares `x` with `l.size`. The Lean function recomputes subtree 
 :::
 
 ::: exercise Splay versus move-to-root
-Set the figure to a **left path** with $n = 15$ and request key $0$, then keep the result and request key $1$, then key $2$. Each access costs its depth, and the depths fall quickly. [[RotationBST.moveToRoot|Move-to-root]] on the same sequence leaves a path of nearly the same depth after each access. This is the standard example where single rotations are $\Theta(n)$ amortized while splaying is $O(\log n)$.
+Set the figure to a **left path** with $n = 15$ and request key $0$, then keep the result and request key $1$, then key $2$. Each access costs its depth, and the depths fall quickly. [[RotationBST.moveToRoot|Move-to-root]] on the same sequence leaves a path of nearly the same depth after each access ([Chapter 12](move-to-root.html#why-it-is-not-enough)). This is the standard example where single rotations are $\Theta(n)$ amortized while splaying is $O(\log n)$.
 :::

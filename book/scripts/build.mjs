@@ -255,7 +255,8 @@ function renderDecl(page, name, mode) {
 }
 
 function renderRefInline(page, text, where) {
-  const [nameText, label] = text.split('|');
+  // In a Markdown table cell the separator is written `\|`.
+  const [nameText, label] = text.split(/\\?\|/);
   const name = resolveName(nameText, where);
   if (!name) return `<code>${escapeHtml(text)}</code>`;
   const t = page.target(name);

@@ -26,6 +26,13 @@ test('Splay.locate, Splay.run and StaticTree.depth agree with Lean', { skip }, (
   }
 });
 
+test('moveToRoot agrees with Lean', { skip }, () => {
+  assert.ok(vectors.moveToRoot.length > 300);
+  for (const v of vectors.moveToRoot) {
+    assert.deepEqual(T.moveToRoot(v.tree, v.x), [v.result, v.cost], `moveToRoot ${JSON.stringify(v.tree)} ${v.x}`);
+  }
+});
+
 test('split, join, insert and delete agree with Lean', { skip }, () => {
   for (const v of vectors.updates) {
     if (v.op === 'split') {

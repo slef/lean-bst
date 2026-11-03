@@ -1,6 +1,6 @@
 # Binary Search Trees in Lean
 
-<p class="lead">This book is a guided reading of <a href="https://github.com/slef/lean-bst">lean-bst</a>, a Lean 4 library that formalizes a rotation-based model of binary search trees, shows that it is equivalent to the usual formulations, and proves the main theorems of Sleator and Tarjan's 1985 paper on splay trees.</p>
+<p class="lead">This book is a guided reading of <a href="https://github.com/slef/lean-bst">lean-bst</a>, a Lean 4 library of checked knowledge about binary search trees. It formalizes the standard models of BST computation and the equivalences between them, the classical bounds on request sequences together with Wilber's lower bound, and the main algorithms with their guarantees: splay trees with the theorems of Sleator and Tarjan's 1985 paper, the geometric GreedyASS and its online simulation by a BST, and the $O(\log\log n)$-competitive Tango trees.</p>
 
 You know what a binary search tree is, and what a rotation does. The question this book helps you answer is narrower: *do the Lean definitions say what you think they say, and do the theorems say what the paper says?* A machine-checked proof guarantees that the statement follows from the definitions. It cannot tell you whether those are the right definitions and the right statement. Only a reader can check that, and the reading is easier with explanations next to the code.
 
@@ -22,7 +22,7 @@ The library and this book are built from the same sources. The build fails if a 
 
 ## The reading interface
 
-The library is laid out as a textbook rather than by source paper: `Models/` holds the BST models and their equivalences, `Bounds/` the sequence bounds and their relations, `Algorithms/` one directory per algorithm with its definition followed by its bounds, and `Structures/` the supporting data structures. The parts of this book follow the same order; the geometric model, Wilber's bound, GreedyASS, the causal simulation and Tango have no chapters yet, and [Appendix A](audit.html) lists their statements as not shown.
+The library is laid out as a textbook rather than by source paper: `Models/` holds the BST models and their equivalences, `Bounds/` the sequence bounds and their relations, `Algorithms/` one directory per algorithm with its definition followed by its bounds, and `Structures/` the supporting data structures. The four parts of this book follow the same order.
 
 Within each directory the library follows the [abstractlean](https://github.com/slef/abstractlean) convention. Every topic has a short file called `Abstract.lean` containing only definitions and theorem statements; proofs are imported through a single `AbstractBridge.lean` module, and internal lemma contracts and definitions of a proof are named `Results.lean` and `Defs.lean`. Each statements file ends with a command like
 
@@ -42,27 +42,30 @@ These conventions hold throughout the library. Each is justified where it first 
 | Keys | A tree on $n$ keys stores no keys at all. Its keys are the inorder ranks $0,\dots,n-1$ ([Chapter 1](shapes.html)); arbitrary ordered keys are recovered exactly in [Chapter 4](keys.html). |
 | Access | Serving request $x$ means rotating until $x$ is at the root ([Chapter 3](accesses.html)). |
 | Rotation cost $R$ | The number of rotations, at any depth. No pointer movement is charged. |
-| Total cost $T$ | $T = m + R$ for $m$ requests ([Chapter 6](online.html)). Without the $+m$, a request for the current root would be free. |
-| Pointer cost | One per cursor move or rotation, plus one per request ([Chapter 5](pointer.html)). Within constant factors this is the same as $T$. |
+| Total cost $T$ | $T = m + R$ for $m$ requests ([Chapter 5](online.html)). Without the $+m$, a request for the current root would be free. |
+| Pointer cost | One per cursor move or rotation, plus one per request ([Chapter 6](pointer.html)). Within constant factors this is the same as $T$. |
 | Logarithms | Base 2. `Real.logb 2` on reals, with Mathlib's convention $\log 0 = 0$; `Nat.log2` (floor) on naturals. |
+| Geometric cost | One per point of an arborally satisfied set; the request points are included ([Chapter 8](geometry.html)). Up to constant factors and an additive $O(n)$, this is the same as $T$ ([Chapter 9](equivalence.html)). |
 | Startup | Bounds that hold for every initial tree include an explicit additive term for it, usually $D \cdot n(1+\lfloor\log_2 n\rfloor)$. |
 
 ## Interactive figures
 
-The figures let you rotate, search and splay. They do not imitate the algorithms: they run JavaScript transcriptions of the executable Lean definitions, one equation at a time and with the same names. The book's test suite compares these transcriptions against values computed by the Lean functions themselves, on all shapes with at most six nodes and on larger random cases. Here is one; click any node that is not the root.
+The figures let you rotate, search and splay, run move-to-root and GreedyASS, and watch preferred paths change. They do not imitate the algorithms: they run JavaScript transcriptions of the executable Lean definitions, one equation at a time and with the same names. The book's test suite compares these transcriptions against values computed by the Lean functions themselves, on exhaustive small cases, such as all shapes with at most six nodes, and on larger pseudo-random ones. Here is one; click any node that is not the root.
 
 @viz rotate {"n": 9, "shape": "random", "seed": 3}
 
 ## Map of the book
 
-**Part I** sets up the rotation model: unlabelled shapes ([1](shapes.html)), rotations ([2](rotations.html)), and root accesses and executions ([3](accesses.html)).
+**Part I · Models** fixes what a BST execution is and what it costs. The basic model has unlabelled [shapes](shapes.html), [rotations](rotations.html), and [root accesses](accesses.html) charged by the number of rotations. Labelled trees on arbitrary keys correspond to it exactly ([Chapter 4](keys.html)). [Online algorithms](online.html) and dynamic optimality are defined on top of it. Three further models are standard in the literature: a [single-pointer machine](pointer.html), the [touched-region model](regions.html), in which a request pays for a rooted subtree that it rearranges, and the [geometric view](geometry.html), in which an execution is a set of points in the plane. [Chapter 9](equivalence.html) collects the theorems relating all of them, with explicit constants.
 
-**Part II** proves that nothing was lost. Shapes are in exact correspondence with labelled BSTs on any key set, through rotations, accesses and whole executions ([4](keys.html)). A conventional single-pointer machine is equivalent to the rotation model up to constant factors ([5](pointer.html)).
+**Part II · Bounds** studies request sequences without reference to an algorithm. [Chapter 10](bounds.html) defines the classical upper-bound benchmarks (working set, static optimality, static finger, the unified charge, a fixed comparison tree) and proves the implications between them. [Chapter 11](wilber.html) proves Wilber's interleave lower bound, which holds for every execution in the rotation, pointer and geometric models.
 
-**Part III** defines online algorithms, their cost, and dynamic optimality ([6](online.html)), and then the classical adaptive bounds: working set, static optimality, static finger, and comparison with a fixed tree ([7](bounds.html)).
+**Part III · Algorithms** defines each algorithm, then proves its bounds. [Move-to-root](move-to-root.html) is the simplest rule and the witness behind the existence results. Splaying takes three chapters: the [algorithm](splay.html), the [amortized analysis](analysis.html) with Theorems 1–5 of the paper, and [updates, long splays, the snapshot theorem and sequential access](beyond.html). [GreedyASS](greedy.html) is the greedy algorithm of the geometric view, and [Chapter 17](simulation.html) turns any online geometric algorithm into an online BST algorithm. [Preferred paths](preferred-paths.html) and [Tango trees](tango.html) give an $O(\log\log n)$-competitive BST.
 
-**Part IV** is about splay trees: the algorithm and its correctness ([8](splay.html)), the potential-function analysis and Theorems 1–5 of the paper ([9](analysis.html)), and updates, long splays, the snapshot theorem and sequential access ([10](beyond.html)).
+**Part IV · Structures** contains the data structures used inside proofs: [next-touch treaps](treaps.html), which convert geometric solutions into BST executions, and [split trees](split-trees.html), which implement the online simulation.
+
+**Appendices.** [Appendix A](audit.html) describes what Lean checks and what it cannot, and lists every theorem of the reading interface with its axioms. [Appendix B](declarations.html) indexes every declaration shown.
 
 ::: note Sources
-D. D. Sleator and R. E. Tarjan, [*Self-Adjusting Binary Search Trees*](https://www.cs.cmu.edu/~sleator/papers/self-adjusting.pdf), JACM 32(3), 1985. J. Derryberry, [*Adaptive Binary Search Trees*](https://www.cs.cmu.edu/~jonderry/thesis.pdf), PhD thesis, 2009, for the comparison of BST models. M. Kakimura and K. Terai, [*A Refined Analysis of the Sequential Access Theorem for Splay Trees*](https://arxiv.org/abs/2609.19746), 2026, for the potential used in the scanning proof.
+D. D. Sleator and R. E. Tarjan, [*Self-Adjusting Binary Search Trees*](https://www.cs.cmu.edu/~sleator/papers/self-adjusting.pdf), JACM 32(3), 1985. B. Allen and I. Munro, *Self-organizing binary search trees*, JACM 25(4), 1978. R. Wilber, *Lower bounds for accessing binary search trees with rotations*, SIAM J. Comput. 18(1), 1989. J. Lucas, *Canonical forms for competitive binary search tree algorithms*, Rutgers technical report, 1988, and I. Munro, *On the competitiveness of linear search*, ESA 2000, for the greedy algorithm. E. D. Demaine, D. Harmon, J. Iacono and M. Pătraşcu, *Dynamic optimality—almost*, FOCS 2004 / SIAM J. Comput. 2007, for Tango trees. E. D. Demaine, D. Harmon, J. Iacono, D. Kane and M. Pătraşcu, *The geometry of binary search trees*, SODA 2009, for the geometric view, GreedyASS and the online simulation. J. Derryberry, [*Adaptive Binary Search Trees*](https://www.cs.cmu.edu/~jonderry/thesis.pdf), PhD thesis, 2009, for the comparison of BST models. M. Kakimura and K. Terai, [*A Refined Analysis of the Sequential Access Theorem for Splay Trees*](https://arxiv.org/abs/2609.19746), 2026, for the potential used in the scanning proof.
 :::

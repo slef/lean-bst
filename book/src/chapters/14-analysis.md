@@ -95,18 +95,7 @@ The same bound in the conventional pointer model: the [pointer implementation](s
 
 ## The unified theorem (Theorem 5)
 
-Theorem 5 of the paper charges each access the *smallest* of its three logarithmic costs: frequency, finger distance and working set.
-
-@decl RotationBST.Bounds.unifiedCharge RotationBST.Bounds.unifiedSum
-
-For a request $x$ with history `past`, `unifiedCharge` is
-$$1 + \min\Bigl(\log_2 \texttt{workingSetNumber},\; \log_2\frac{m}{q_x},\; \log_2(|x - f| + 1)\Bigr).$$
-Frequencies come from the **whole** sequence `original`, so $m$ is its length and $q_x$ the number of occurrences of $x$ in it. Recency comes from the prefix `past`, which `unifiedSum` extends one request at a time while keeping `original` fixed. This mixes offline information (frequencies) with online information (recency), as the paper's bound does. Only the analysis sees the frequencies; the algorithm is still `Splay.run`.
-
-::: check
-- These logarithms are real: `Real.logb 2 (workingSetNumber …)` is not the floor used in `workingSetSum`.
-- If $x$ did not occur in `original`, then $q_x = 0$, `m / 0 = 0` in Lean, and `logb 2 0 = 0`, so the minimum could collapse to $0$. That never happens here: the theorem uses `unifiedSum t.size f xs [] xs`, so `original` is the very sequence being summed over, and every $x$ occurs in it.
-:::
+Theorem 5 of the paper charges each access the *smallest* of its three logarithmic costs: frequency, finger distance and working set. The charge [[RotationBST.Bounds.unifiedCharge|unifiedCharge]] and its sum [[RotationBST.Bounds.unifiedSum|unifiedSum]] are sequence functions, defined with the other benchmarks in [Section 10.4](bounds.html#the-unified-charge). The frequencies there come from the whole sequence, but only the analysis sees them; the algorithm is still `Splay.run`.
 
 @decl RotationBST.Splay.Results.unified
 

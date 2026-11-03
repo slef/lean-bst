@@ -1,6 +1,6 @@
 # Online algorithms and cost
 
-An [`Execution`](accesses.html#executions) describes every legal way to serve a sequence: it is an offline object that knows the whole sequence in advance. A BST *algorithm* must decide what to do with each request when that request arrives. This chapter defines online algorithms in the rotation model, their two cost measures, and dynamic optimality. Its last section shows that any such algorithm can be run on the [pointer machine](pointer.html) online, with constant overhead.
+An [`Execution`](accesses.html#executions) describes every legal way to serve a sequence: it is an offline object that knows the whole sequence in advance. A BST *algorithm* must decide what to do with each request when that request arrives. This chapter defines online algorithms in the rotation model, their two cost measures, and dynamic optimality. [Chapter 6](pointer.html#running-an-online-algorithm-on-the-pointer-machine) shows that any such algorithm can be run online on a conventional pointer machine, with constant overhead.
 
 ## Online algorithms
 
@@ -23,9 +23,7 @@ Running an algorithm threads the tree through the sequence and adds the counts:
 
 `runFrom past t xs` serves `xs` starting from history `past`. Each request is appended to the history after it is served (`past ++ [x]`), so the step for the $j$-th request sees exactly the requests before it. `cost` starts with an empty history and keeps only the total number of rotations.
 
-The baseline [[RotationBST.moveToRoot]] from [Chapter 3](accesses.html#which-requests-can-be-served) is an algorithm. It ignores the history, and its certificate is the correctness lemma `moveToRoot_correct`:
-
-@decl RotationBST.moveToRootAlgorithm
+The simplest instance is [[RotationBST.moveToRootAlgorithm]]: it ignores the history and rotates the requested key up one level at a time, the witness used in [Chapter 3](accesses.html#which-requests-can-be-served). It opens Part III in [Chapter 12](move-to-root.html). Splaying ([Chapter 13](splay.html)) is the main example.
 
 A run of an algorithm on valid requests is one of the executions of [Chapter 3](accesses.html#executions). Online algorithms are therefore a special case of offline executions, and their cost is at least the offline optimum:
 
@@ -54,7 +52,7 @@ Read the quantifiers in order. There exist constants $C, D$; then for every init
 - **Same initial tree.** The offline strategy starts from the same `t` as the algorithm. The additive term is linear in $n$, as in the usual statement of the conjecture. By [[RotationBST.Geometry.reset]], allowing the offline strategy to choose its own initial tree would change its cost by at most $2n$, so this choice does not matter.
 - **Uniform constants.** $C$ and $D$ are fixed before the tree and the sequence are chosen. In particular, they cannot depend on $n$.
 - **Invalid sequences are vacuous.** If some request is out of range there is no `Execution` at all ([[RotationBST.execution_exists_iff]]), so the condition holds trivially.
-- `DynamicallyOptimal` compares rotation counts $R \le C\,k + D\,n$, while `TotallyDynamicallyOptimal` compares total costs $T \le C(m + k) + D\,n$. The total-cost version is the conventional notion of dynamic optimality, and it is the one that transfers to the pointer machine (below).
+- `DynamicallyOptimal` compares rotation counts $R \le C\,k + D\,n$, while `TotallyDynamicallyOptimal` compares total costs $T \le C(m + k) + D\,n$. The total-cost version is the conventional notion of dynamic optimality, and it is the one that transfers to the pointer machine ([Section 6.5](pointer.html#running-an-online-algorithm-on-the-pointer-machine)).
 :::
 
 The rotation-only notion implies the conventional one:
@@ -64,67 +62,5 @@ The rotation-only notion implies the conventional one:
 The proof takes the constants $(C+1, D)$: add $m$ to both sides. The converse is deliberately not claimed. It holds only if no totally dynamically optimal algorithm exists, which is the open question itself. Suppose `a` is totally dynamically optimal, and let `a'` behave like `a` but, on every request, first rotate a child of the root up and back down. Then `a'` costs at most $T + 2m \le 3T$, so it is still totally dynamically optimal. But on $m$ requests for the root of a tree with at least two nodes, `a'` performs at least $2m$ rotations, while the offline execution that does nothing performs $0$. No bound $2m \le C \cdot 0 + D\,n$ holds for all $m$, so `a'` is not `DynamicallyOptimal`.
 
 ::: caveat Not claimed for splay
-Neither `DynamicallyOptimal` nor `TotallyDynamicallyOptimal` is proved for any algorithm in the library. The dynamic optimality conjecture is open. The theorems below and in [Chapter 7](bounds.html) are conditional: *if* an algorithm satisfies the property, *then* some consequence follows.
+Neither `DynamicallyOptimal` nor `TotallyDynamicallyOptimal` is proved for any algorithm in the library. The dynamic optimality conjecture is open. The theorems that mention it, such as the pointer-machine transfer of [Section 6.5](pointer.html#running-an-online-algorithm-on-the-pointer-machine), are conditional: *if* an algorithm satisfies the property, *then* some consequence follows. [Chapter 11](wilber.html) proves Wilber's lower bound on the offline optimum, and [Chapter 19](tango.html) uses it to show that Tango trees are $O(\log \log n)$-competitive, the best ratio known.
 :::
-
-## Running an online algorithm on the pointer machine
-
-[Chapter 5](pointer.html) shows that a rotation execution with $R$ rotations and $m$ requests can be simulated by a pointer execution whose cost $C$ and final deferred suffix $d$ satisfy $C + 32d \le 32R + 17m$. The lazy simulation behind this bound reorders rotations and postpones those that the current request does not need. That is an offline construction: it takes a whole execution as input. This section shows that the simulation can also be run *online*: each pointer step depends only on the past, the current request and a simulation state. Every online rotation-model algorithm therefore yields an online pointer algorithm with constant overhead.
-
-The simulator maintains two trees:
-
-@decl RotationBST.Pointer.Lazy.Online.State RotationBST.Pointer.Lazy.Online.initial
-
-`virtual` is the tree that the rotation-model algorithm believes it has. `current` is the tree actually present in the pointer machine. The `pending` rotations that the pointer machine has not yet performed separate them, and `certificate` proves this (`Rotations current virtual pending`). Initially both trees are the input tree and nothing is pending. The state contains no future requests.
-
-One step of the simulation is specified as a relation:
-
-@decl RotationBST.Pointer.Lazy.Online.Transition
-
-Given state `s` and request `x`, a result `(s', c)` is a valid transition when:
-
-1. the pointer machine serves `x` from `s.current`, ending at `s'.current` and paying `c` ([[RotationBST.Pointer.Serves]], which includes the unit request charge);
-2. the new virtual tree is exactly what the algorithm's own step produces from the old virtual tree, so the algorithm runs unmodified on its own view; and
-3. an amortized bound holds with potential $32 \cdot{}$`pending`: the actual cost plus the new potential is at most $32$ times the old pending work plus the algorithm's rotations, plus $17$.
-
-Every valid request admits such a transition. This is the per-request form of the lazy simulation of [Chapter 5](pointer.html):
-
-@decl RotationBST.Pointer.Lazy.Online.advance_exists
-
-The simulator *chooses* one transition:
-
-@decl RotationBST.Pointer.Lazy.Online.advance RotationBST.Pointer.Lazy.Online.run
-
-`advance` picks a transition with `Classical.choose`, so it is `noncomputable`. It is a mathematical function of `(a, past, s, x)`, not an executable program. An invalid request leaves the state unchanged at cost $0$; it is never reached by the theorems below, which assume validity. `run` threads the state through the sequence and appends each request to the history, exactly like [[RotationBST.Algorithm.runFrom]].
-
-::: caveat Uncharged planning
-Choosing the pointer instructions requires knowing a valid transition, and finding one involves the lazy-simulation construction on the current pending rotations. As in the rotation model, this planning is not charged. The cost bound counts pointer instructions and requests only. The library's README states this explicitly.
-:::
-
-The main theorem, from the initial state:
-
-@decl RotationBST.Pointer.Lazy.Online.Results.simulation
-
-The three conjuncts say:
-
-1. **Legality.** The chosen instructions form a pointer execution serving `xs` from `t`, with final pointer tree `(run …).1.current` and cost `(run …).2`.
-2. **Agreement up to the deferred suffix.** The final pointer tree reaches the final tree of the rotation-model algorithm by exactly `pending` rotations. The two executions end in the same place, except for work that has been postponed and not yet paid for.
-3. **Cost.** Pointer cost plus $32$ times the pending suffix is at most $32R + 17m$, where $R$ is the algorithm's rotation count. In particular the pointer cost alone is $O(R + m) = O(T)$, with constants independent of $n$.
-
-Causality is visible in the types (`advance` never receives the future), and the library also states it as a theorem:
-
-@decl RotationBST.Pointer.Lazy.Online.Results.prefix_composition
-
-Running on `xs ++ ys` is the same as running on `xs`, then continuing from the resulting state with history `past ++ xs`. The state and cost after the prefix `xs` are therefore the same for every continuation `ys`. Nothing computed for the first requests can depend on later ones, so there is no lookahead.
-
-Finally, the property this transfer was built for:
-
-@decl RotationBST.Pointer.Lazy.Online.Results.dynamicOptimality
-
-If an algorithm is dynamically optimal in the normalized rotation model, then its causal pointer implementation competes, with uniform constants, against **every offline pointer execution** `Pointer.Execution t xs u k`. Both sides of this comparison are in the pointer model. The proof composes three bounds: an offline pointer execution of cost $k$ yields a rotation execution of total cost at most $3k$ ([[RotationBST.Pointer.Results.to_rotations]]); total dynamic optimality bounds the algorithm by that execution; and `simulation` bounds the pointer cost by the algorithm's rotation-model cost. The resulting constants are $(96C, 32D)$.
-
-::: check
-Conventional dynamic optimality is a statement about pointer-model algorithms competing with pointer-model optima. This theorem says that a proof of `TotallyDynamicallyOptimal` for any rotation-model algorithm would give exactly that: an online pointer algorithm that is dynamically optimal in the conventional sense. The hypothesis is the total-cost notion. The rotation-only `DynamicallyOptimal` is stronger, and is never needed.
-:::
-
-The working-set transfer [[RotationBST.Pointer.Lazy.Online.Results.workingSet]] has the same shape. It is stated in [Chapter 7](bounds.html#transfer-to-the-pointer-machine), after the working-set bound is defined.

@@ -1,8 +1,8 @@
 # The pointer machine
 
-The root-access model of [Chapter 3](accesses.html) lets an access rotate anywhere in the tree and charges only for rotations. The standard BST model of the literature (Wilber; Demaine, Harmon, Iacono, Kane and Pătraşcu) is more operational. A single pointer starts at the root for each request. It moves along edges and rotates the node it points to over its parent. Every move and every rotation costs one unit, and the pointer must visit the requested key. This chapter defines that machine in Lean and proves that the two models agree up to constant factors in total cost.
+The root-access model of [Chapter 3](accesses.html) lets an access rotate anywhere in the tree and charges only for rotations. The standard BST model of the literature (Wilber; Demaine, Harmon, Iacono, Kane and Pătraşcu) is more operational. A single pointer starts at the root for each request. It moves along edges and rotates the node it points to over its parent. Every move and every rotation costs one unit, and the pointer must visit the requested key. This chapter defines that machine in Lean and proves that the two models agree up to constant factors in total cost, offline for executions and online for algorithms.
 
-The definitions are in `Models/Pointer/Machine/Abstract.lean` and the simulation theorems in `Models/Pointer/Abstract.lean`. The last section walks through the readable interface of the constant-factor ("lazy") simulation.
+The definitions are in `Models/Pointer/Machine/Abstract.lean` and the simulation theorems in `Models/Pointer/Abstract.lean`. The later sections walk through the readable interface of the constant-factor ("lazy") simulation, and then run it online.
 
 ## Configurations
 
@@ -61,7 +61,7 @@ Each button is one `Pointer.Step` constructor, enabled exactly when its pattern 
 ::: check
 - `Serves` existentially quantifies the visit, so it describes all legal searches. An algorithm in this model is any way of choosing them.
 - In the classical model the pointer may also be "reset" between accesses at no cost. Here the reset is implicit, because each `Serves` starts at `⟨s, []⟩`.
-- The cost of moving and the cost of rotating are the same. Rotation-only costs, as in Part I, are not this model.
+- The cost of moving and the cost of rotating are the same. Rotation-only costs, as in [Chapter 3](accesses.html), are not this model.
 :::
 
 ## The two models agree
@@ -138,7 +138,7 @@ The selected rotations only rearrange this top region. Every subtree hanging off
 
 @decl RotationBST.Pointer.Lazy.Skeleton RotationBST.Pointer.Lazy.Skeleton.tree RotationBST.Pointer.Lazy.Skeleton.size RotationBST.Pointer.Lazy.Skeleton.fringe RotationBST.Pointer.Lazy.Skeleton.vine
 
-A skeleton is a tree whose leaves are *holes*, each holding an entire untouched `Tree`. `tree` fills the holes in. `size` counts only the region's own nodes, so a hole contributes $0$ however large its subtree is. `fringe` lists the hole subtrees in inorder; a region with $k$ nodes has $k+1$ of them. `vine` builds the canonical right spine whose left children are the fringe subtrees, in order, with the last one at the bottom on the right.
+A skeleton is a tree whose leaves are *holes*, each holding an entire untouched `Tree`. The same type reappears in [Chapter 7](regions.html) as the *rooted region* touched by one request, the unit of cost in the region model. `tree` fills the holes in. `size` counts only the region's own nodes, so a hole contributes $0$ however large its subtree is. `fringe` lists the hole subtrees in inorder; a region with $k$ nodes has $k+1$ of them. `vine` builds the canonical right spine whose left children are the fringe subtrees, in order, with the last one at the bottom on the right.
 
 @decl RotationBST.Pointer.Lazy.Results.reshape
 
@@ -146,4 +146,66 @@ Two regions with the same fringe, in the same order, can be transformed into one
 
 ### Putting it together
 
-For one access with $r$ selected rotations, the region has at most $2r+1$ nodes. Reshaping it costs at most $16(2r+1) = 32r + 16$ instructions, and the request unit gives $32r + 17$. The requested key ends at the root, where the cursor is, so the visit is free. The unselected rotations become pending. They are prepended to the next access, where they are selected or postponed again, and each rotation is charged once, when it is finally executed or left in the final suffix. Summing over the execution gives $C + 32d \le 32R + 17m$. The README describes the same argument in prose. [Chapter 6](online.html) shows how the library turns this into an *online* transformer that uses only the past and the current request.
+For one access with $r$ selected rotations, the region has at most $2r+1$ nodes. Reshaping it costs at most $16(2r+1) = 32r + 16$ instructions, and the request unit gives $32r + 17$. The requested key ends at the root, where the cursor is, so the visit is free. The unselected rotations become pending. They are prepended to the next access, where they are selected or postponed again, and each rotation is charged once, when it is finally executed or left in the final suffix. Summing over the execution gives $C + 32d \le 32R + 17m$. The README describes the same argument in prose. The last section shows how the library turns this into an *online* transformer that uses only the past and the current request.
+
+## Running an online algorithm on the pointer machine
+
+The lazy simulation above reorders rotations and postpones those that the current request does not need. As stated, it is an offline construction: it takes a whole execution as input. This section shows that it can also be run *online*, for the [online algorithms](online.html#online-algorithms) of [Chapter 5](online.html): each pointer step depends only on the past, the current request and a simulation state. Every online rotation-model algorithm therefore yields an online pointer algorithm with constant overhead.
+
+The simulator maintains two trees:
+
+@decl RotationBST.Pointer.Lazy.Online.State RotationBST.Pointer.Lazy.Online.initial
+
+`virtual` is the tree that the rotation-model algorithm believes it has. `current` is the tree actually present in the pointer machine. The `pending` rotations that the pointer machine has not yet performed separate them, and `certificate` proves this (`Rotations current virtual pending`). Initially both trees are the input tree and nothing is pending. The state contains no future requests.
+
+One step of the simulation is specified as a relation:
+
+@decl RotationBST.Pointer.Lazy.Online.Transition
+
+Given state `s` and request `x`, a result `(s', c)` is a valid transition when:
+
+1. the pointer machine serves `x` from `s.current`, ending at `s'.current` and paying `c` ([[RotationBST.Pointer.Serves]], which includes the unit request charge);
+2. the new virtual tree is exactly what the algorithm's own step produces from the old virtual tree, so the algorithm runs unmodified on its own view; and
+3. an amortized bound holds with potential $32 \cdot{}$`pending`: the actual cost plus the new potential is at most $32$ times the old pending work plus the algorithm's rotations, plus $17$.
+
+Every valid request admits such a transition. This is the per-request form of the lazy simulation above:
+
+@decl RotationBST.Pointer.Lazy.Online.advance_exists
+
+The simulator *chooses* one transition:
+
+@decl RotationBST.Pointer.Lazy.Online.advance RotationBST.Pointer.Lazy.Online.run
+
+`advance` picks a transition with `Classical.choose`, so it is `noncomputable`. It is a mathematical function of `(a, past, s, x)`, not an executable program. An invalid request leaves the state unchanged at cost $0$; it is never reached by the theorems below, which assume validity. `run` threads the state through the sequence and appends each request to the history, exactly like [[RotationBST.Algorithm.runFrom]].
+
+::: caveat Uncharged planning
+Choosing the pointer instructions requires knowing a valid transition, and finding one involves the lazy-simulation construction on the current pending rotations. As in the rotation model, this planning is not charged. The cost bound counts pointer instructions and requests only. The library's README states this explicitly.
+:::
+
+The main theorem, from the initial state:
+
+@decl RotationBST.Pointer.Lazy.Online.Results.simulation
+
+The three conjuncts say:
+
+1. **Legality.** The chosen instructions form a pointer execution serving `xs` from `t`, with final pointer tree `(run …).1.current` and cost `(run …).2`.
+2. **Agreement up to the deferred suffix.** The final pointer tree reaches the final tree of the rotation-model algorithm by exactly `pending` rotations. The two executions end in the same place, except for work that has been postponed and not yet paid for.
+3. **Cost.** Pointer cost plus $32$ times the pending suffix is at most $32R + 17m$, where $R$ is the algorithm's rotation count. In particular the pointer cost alone is $O(R + m) = O(T)$, with constants independent of $n$.
+
+Causality is visible in the types (`advance` never receives the future), and the library also states it as a theorem:
+
+@decl RotationBST.Pointer.Lazy.Online.Results.prefix_composition
+
+Running on `xs ++ ys` is the same as running on `xs`, then continuing from the resulting state with history `past ++ xs`. The state and cost after the prefix `xs` are therefore the same for every continuation `ys`. Nothing computed for the first requests can depend on later ones, so there is no lookahead.
+
+Finally, the property this transfer was built for:
+
+@decl RotationBST.Pointer.Lazy.Online.Results.dynamicOptimality
+
+If an algorithm is dynamically optimal in the normalized rotation model, then its causal pointer implementation competes, with uniform constants, against **every offline pointer execution** `Pointer.Execution t xs u k`. Both sides of this comparison are in the pointer model. The proof composes three bounds: an offline pointer execution of cost $k$ yields a rotation execution of total cost at most $3k$ ([[RotationBST.Pointer.Results.to_rotations]]); total dynamic optimality bounds the algorithm by that execution; and `simulation` bounds the pointer cost by the algorithm's rotation-model cost. The resulting constants are $(96C, 32D)$.
+
+::: check
+Conventional dynamic optimality is a statement about pointer-model algorithms competing with pointer-model optima. This theorem says that a proof of `TotallyDynamicallyOptimal` for any rotation-model algorithm would give exactly that: an online pointer algorithm that is dynamically optimal in the conventional sense. The hypothesis is the total-cost notion. The rotation-only `DynamicallyOptimal` is stronger, and is never needed.
+:::
+
+The working-set transfer [[RotationBST.Pointer.Lazy.Online.Results.workingSet]] has the same shape. It is stated in [Chapter 10](bounds.html#transfer-to-the-pointer-machine), after the working-set bound is defined.

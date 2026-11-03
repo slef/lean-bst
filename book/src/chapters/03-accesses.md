@@ -36,11 +36,7 @@ Every existing key can be brought to the root, and only existing keys can:
 
 @stmt RotationBST.access_exists_iff
 
-The bound `k < t.size` is the depth of $x$ in the worst case. The proof is constructive: the library's move-to-root baseline rotates $x$ over each of its ancestors in turn, deepest first. It is an ordinary executable function, not part of any statement:
-
-@decl RotationBST.moveToRoot
-
-The recursive call exposes $x$ at the root of the subtree that contains it, and one more rotation (`Rotate.right` or `Rotate.left`, applied inside the parent) lifts it one level. Move-to-root is a different algorithm from splaying ([Chapter 8](splay.html)), and the library's tests check that the two differ.
+The bound `k < t.size` is the depth of $x$ in the worst case. The proof is constructive. It runs [[RotationBST.moveToRoot|moveToRoot]], which rotates $x$ over each of its ancestors in turn, deepest first, and so uses exactly as many rotations as $x$ has ancestors. The statement mentions only the model; move-to-root appears in its proof alone. [Chapter 12](move-to-root.html) presents it as an algorithm, and explains why it is a good witness but a poor strategy.
 
 Lifting `access_exists_iff` to sequences gives the exact executability condition. Sizes never change, so a sequence can be served exactly when every requested rank is below the initial size:
 

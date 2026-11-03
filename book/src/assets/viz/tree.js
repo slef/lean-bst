@@ -112,6 +112,22 @@ export function run(t, x) {
   return [splayAt(c.focus[0], c.focus[1], c.context), c.context.length];
 }
 
+/** moveToRoot (Algorithms/MoveToRoot/Algorithm/Abstract): rotate x up one level at a time. */
+export function moveToRoot(t, x) {
+  if (t === null) return [null, 0];
+  const [l, r] = t;
+  const ls = size(l);
+  if (x < ls) {
+    const [u, k] = moveToRoot(l, x);
+    if (u === null) return [t, 0];
+    return [node(u[0], node(u[1], r)), k + 1];
+  }
+  if (x === ls) return [t, 0];
+  const [u, k] = moveToRoot(r, x - ls - 1);
+  if (u === null) return [t, 0];
+  return [node(node(l, u[0]), u[1]), k + 1];
+}
+
 /** Splay.algorithm.runFrom, specialised: final tree and total rotations. */
 export function runSequence(t, xs) {
   let k = 0;

@@ -1,6 +1,6 @@
 # Putting the keys back
 
-Part I worked entirely with shapes, where a node's key is its inorder rank. This chapter proves that nothing was lost. A shape on $n$ nodes is the same thing as a BST on any fixed list of $n$ keys. Rotations, root accesses and whole executions on shapes are exactly the corresponding operations on labelled trees, with the same costs. The local "left smaller, right larger" invariant is equivalent to the inorder formulation used throughout. Finally, the shape type is Mathlib's `BinaryTree Unit` under another name.
+The first three chapters worked entirely with shapes, where a node's key is its inorder rank. This chapter proves that nothing was lost. A shape on $n$ nodes is the same thing as a BST on any fixed list of $n$ keys. Rotations, root accesses and whole executions on shapes are exactly the corresponding operations on labelled trees, with the same costs. The local "left smaller, right larger" invariant is equivalent to the inorder formulation used throughout. Finally, the shape type is Mathlib's `BinaryTree Unit` under another name.
 
 All theorems here are in `Models/Labelled/Abstract.lean`, `Models/Labelled/Ordering/Abstract.lean` and `Models/Labelled/Mathlib/Abstract.lean`. Their statements mention only the model definitions of [Chapter 1](shapes.html) and [Chapter 2](rotations.html), the labelled counterparts introduced next, and three small definitions in this chapter.
 
@@ -8,7 +8,7 @@ All theorems here are in `Models/Labelled/Abstract.lean`, `Models/Labelled/Order
 
 ### Labelled rotations, accesses and executions
 
-`Models/Rotation/Abstract.lean` defines the labelled versions of the three relations of Part I, transcribed constructor by constructor. They are the textbook notions, stated for keys of an arbitrary type `α`.
+`Models/Rotation/Abstract.lean` defines the labelled versions of the three relations of Chapters 2 and 3, transcribed constructor by constructor. They are the textbook notions, stated for keys of an arbitrary type `α`.
 
 @decl RotationBST.LabelledTree.Rotate
 
@@ -46,7 +46,7 @@ Two labelled trees with the same shape and the same inorder list are equal. The 
 
 @decl RotationBST.Representation.rotations_iff RotationBST.Representation.access_iff
 
-`rotations_iff` lifts the correspondence to traces *with the same count `k`*, so costs are preserved exactly, not up to a constant. `access_iff` is the statement Part I relied on: accessing implicit rank `x` in a shape is exactly accessing the explicit key `x` in its labelling by `0, …, size − 1`, with the same final tree and the same number of rotations. It is stated with offset `0`, because the requested rank is an absolute position in the whole tree.
+`rotations_iff` lifts the correspondence to traces *with the same count `k`*, so costs are preserved exactly, not up to a constant. `access_iff` is the statement the rotation model relies on: accessing implicit rank `x` in a shape is exactly accessing the explicit key `x` in its labelling by `0, …, size − 1`, with the same final tree and the same number of rotations. It is stated with offset `0`, because the requested rank is an absolute position in the whole tree.
 
 The figure runs the shape model with the ranks displayed as words. Each rotation is a shape rotation, and the inorder list in the panel never changes.
 
@@ -101,7 +101,7 @@ This translates rank requests into key requests. Accessing rank `x` in the shape
 The same for whole request sequences. Requests are elements of `Fin keys.length`, indices into the key list, so every request is valid by construction. The shape execution serves their values as ranks (`xs.map Fin.val`), and the labelled execution serves the corresponding keys (`xs.map keys.get`, where `keys.get i` is the `i`-th key). Both endpoints must carry the list `keys` (`hs`, `ht`). The two executions then have the same endpoints, up to erasing labels, and exactly the same cost `k`.
 
 ::: note Consequence
-Any theorem about request sequences over ranks, such as the splay bounds of Part IV, transfers to BSTs over any set of distinct keys with no loss: rename the keys to their ranks, apply the theorem, and translate back with `execution_on_keys_iff`.
+Any theorem about request sequences over ranks, such as the splay bounds of [Chapter 14](analysis.html), transfers to BSTs over any set of distinct keys with no loss: rename the keys to their ranks, apply the theorem, and translate back with `execution_on_keys_iff`.
 :::
 
 ## Mathlib's binary trees

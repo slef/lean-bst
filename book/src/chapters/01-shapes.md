@@ -62,4 +62,4 @@ Three things should hold, and [Chapter 4](keys.html) proves each of them:
 Together these say that `erase` and `labelFrom 0` are inverse bijections between $n$-node shapes and BSTs on the keys $0, \dots, n-1$.
 :::
 
-The rest of Part I works only with `Tree`. Accesses are stated in terms of ranks, as in "bring the node of rank $x$ to the root", and labelled trees return in Part II to show that nothing was lost.
+The next two chapters work only with `Tree`. Accesses are stated in terms of ranks, as in "bring the node of rank $x$ to the root", and labelled trees return in [Chapter 4](keys.html) to show that nothing was lost.
