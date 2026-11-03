@@ -10,9 +10,8 @@ splits every subtree into a left region (the node and its left subtree) and a
 right region; the quantity counts how often consecutive requests inside a
 subtree alternate between the two regions, summed over all subtrees.
 
-The lower-bound theorems are in `Bounds/Interleave/Abstract`. The `Tango`
-namespace is historical: Tango's own vocabulary is in
-`Algorithms/Tango/Definitions/Abstract`. -/
+The lower-bound theorems are in `Bounds/Interleave/Abstract`; Tango's own
+vocabulary is in `Algorithms/Tango/Definitions/Abstract`. -/
 namespace RotationBST.Wilber
 
 /-- The reference-tree convention of Demaine–Harmon–Iacono–Pătraşcu:

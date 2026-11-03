@@ -3,6 +3,7 @@ module
 public import RotationBST.Models.Region.View.Rotations
 public import RotationBST.Structures.Treap.Execution
 public import RotationBST.Models.Rotation.Connectivity.Proofs
+public import RotationBST.Models.Pointer.Lazy.Simulation
 
 @[expose] public section
 namespace RotationBST.Geometric
@@ -30,5 +31,13 @@ theorem offline_from_initial (s : Tree) (xs : List Nat) (E : Offline s.size xs) 
       refine ⟨u, _, .cons ⟨resets.append access.1, access.2⟩ tail, ?_⟩
       simp only [List.length_cons] at *
       omega
+
+/-- The same from a prescribed initial tree on the pointer machine: reset, then
+the rotation execution, simulated lazily. -/
+theorem pointer_from_initial (s : Tree) (xs : List Nat) (E : Offline s.size xs) :
+    ∃ t cost, Pointer.Execution s xs t cost ∧ cost ≤ 64 * s.size + 3168 * E.points.card := by
+  obtain ⟨t, rotations, execution, bound⟩ := offline_from_initial s xs E
+  obtain ⟨u, c, d, pointer, _, simulated⟩ := Pointer.Lazy.execution_to_pointer execution
+  exact ⟨u, c, pointer, by omega⟩
 
 end RotationBST.Geometric

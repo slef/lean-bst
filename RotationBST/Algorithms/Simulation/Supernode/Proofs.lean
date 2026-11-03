@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Algorithms.Simulation.Supernode.Defs
 public import RotationBST.Algorithms.Simulation.LastTouch.Proofs
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric

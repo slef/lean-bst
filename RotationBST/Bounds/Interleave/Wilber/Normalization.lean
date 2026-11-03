@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Bounds.Interleave.Wilber.Abstract
 import Mathlib.Tactic.SplitIfs
+public import RotationBST.Bounds.Interleave.Wilber.Defs
 
 @[expose] public section
 namespace RotationBST.Wilber

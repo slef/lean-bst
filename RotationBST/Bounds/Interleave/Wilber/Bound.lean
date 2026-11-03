@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Bounds.Interleave.Wilber.Potential
 public import RotationBST.Models.Equivalence.Exact
+public import RotationBST.Bounds.Interleave.Wilber.Defs
 
 @[expose] public section
 namespace RotationBST.Wilber

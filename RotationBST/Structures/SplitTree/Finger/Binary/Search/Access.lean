@@ -1,7 +1,7 @@
 module
 
 public import RotationBST.Structures.SplitTree.Finger.Binary.Search.Rank
-public import RotationBST.Bounds.StaticTree.Comparison
+public import RotationBST.Algorithms.Splay.Pointer
 
 @[expose] public section
 namespace RotationBST.Geometric.Split.Multiway.Finger
@@ -16,8 +16,8 @@ theorem binaryView_access {h : Nat} {t : Multiway} (valid : Balanced h t)
       (Splay.run (binaryView t).tree rank).2 ≤ 5 * Nat.log2 (rank + 1) + 6 := by
   have within : rank < (binaryView t).tree.size := by rwa [binaryView_size]
   refine ⟨(Splay.run_correct _ rank within).1, ?_⟩
-  have rotations : (Splay.run (binaryView t).tree rank).2 ≤ StaticTree.depth (binaryView t).tree rank := by
-    rw [← StaticTree.locate_depth]
+  have rotations : (Splay.run (binaryView t).tree rank).2 ≤ Tree.depth (binaryView t).tree rank := by
+    rw [← Splay.locate_depth]
     unfold Splay.run
     cases focus : (Splay.locate (binaryView t).tree rank).focus <;> simp [focus]
   exact Nat.le_trans rotations (binaryView_depth valid rank existsKey)

@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Initialize.Proofs
 public import RotationBST.Algorithms.Simulation.Supernode.Layer.Update
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode

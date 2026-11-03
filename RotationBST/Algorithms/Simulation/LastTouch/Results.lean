@@ -2,6 +2,7 @@ module
 
 import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.LastTouch.Proofs
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.LastTouch.Results
@@ -25,4 +26,4 @@ end RotationBST.Geometric.Online.LastTouch.Results
 #guard_msgs in
 #check_bst_abstract RotationBST.Geometric.Online.LastTouch.Results allowing [
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Region.View.Abstract,
-  RotationBST.Algorithms.Simulation.LastTouch.Defs]
+  RotationBST.Algorithms.Simulation.LastTouch.Defs, RotationBST.Models.Region.View.Defs]

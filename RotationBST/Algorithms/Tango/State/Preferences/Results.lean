@@ -56,4 +56,4 @@ end RotationBST.Tango.State.Preferences.Results
   RotationBST.Models.Region.Abstract, RotationBST.Algorithms.Tango.Auxiliary.Definitions.Abstract,
   RotationBST.Models.Pointer.Lazy.Skeleton.Abstract, RotationBST.Models.Pointer.Traces,
   RotationBST.Models.Pointer.Machine.Abstract, RotationBST.Algorithms.Splay.Algorithm.Abstract,
-  RotationBST.Algorithms.Splay.Potential.Abstract]
+  RotationBST.Algorithms.Splay.Potential.Abstract, RotationBST.Models.Region.Defs, RotationBST.Bounds.Interleave.Wilber.Defs, RotationBST.Algorithms.Tango.State.Abstract]

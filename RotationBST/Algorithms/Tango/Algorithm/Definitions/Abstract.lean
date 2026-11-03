@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Algorithms.Tango.State.Nesting.Defs
+public import RotationBST.Algorithms.Tango.State.Abstract
 public import RotationBST.Algorithms.Tango.Preferences.Updates.Abstract
 
 @[expose] public section

@@ -4,7 +4,8 @@ public import RotationBST.Structures.SplitTree.Multiway.Partition.Cost.Compositi
 
 @[expose] public section
 namespace RotationBST.Geometric.Split.Multiway.Partition
-open Join StaticTree
+open Join
+open RotationBST.Tree (depth)
 
 theorem cutAux_cost (fuel : Nat) {h : Nat} {t : Multiway} (valid : Balanced h t)
     (enough : t.size < fuel) (rank : Nat) (existsKey : rank < t.size) :

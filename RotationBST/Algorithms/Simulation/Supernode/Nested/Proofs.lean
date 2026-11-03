@@ -4,6 +4,7 @@ public import RotationBST.Algorithms.Simulation.Supernode.Nested.Defs
 public import RotationBST.Algorithms.Simulation.Supernode.Layer.Proofs
 public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Holes
 public import RotationBST.Structures.SplitTree.Finger.TwoEnded.Proofs
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode

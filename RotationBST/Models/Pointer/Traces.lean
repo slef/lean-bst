@@ -8,8 +8,6 @@ namespace RotationBST.Pointer
 
 variable {a b c : Config} {k m : Nat}
 
-def Config.under (c : Config) (ds : List Frame) : Config := ⟨c.focus, c.context ++ ds⟩
-
 theorem Step.under (h : Step a b) (ds : List Frame) : Step (a.under ds) (b.under ds) := by
   cases h <;> simp only [Config.under, List.cons_append]
   · exact .downLeft

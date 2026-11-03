@@ -5,6 +5,7 @@ public import RotationBST.Models.Region.Heapify
 public import RotationBST.Structures.Treap.Restore
 public import RotationBST.Models.Geometric.Offline.Proofs
 public import RotationBST.Models.Region.View.Abstract
+public import RotationBST.Models.Region.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric

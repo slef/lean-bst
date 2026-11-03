@@ -31,7 +31,7 @@ theorem finger_minimum (t : Multiway) (nonempty : t ≠ .nil) :
 /-- Ordinary BST search in the minimum finger has logarithmic rank-distance cost. -/
 theorem finger_search_depth {h : Nat} {t : Multiway} (valid : Multiway.Balanced h t)
     (rank : Nat) (existsKey : rank < t.size) :
-    StaticTree.depth (Multiway.Finger.binaryView t).tree rank ≤ 5 * Nat.log2 (rank + 1) + 6 :=
+    Tree.depth (Multiway.Finger.binaryView t).tree rank ≤ 5 * Nat.log2 (rank + 1) + 6 :=
   Multiway.Finger.Binary.Results.search_depth valid rank existsKey
 
 /-- A concrete splay realizes the same bound in rotations. -/
@@ -67,9 +67,8 @@ end RotationBST.Geometric.Split.Results
 /-- info: abstract audit passed for `RotationBST.Geometric.Split.Results`: 7 root declarations -/
 #guard_msgs in
 #check_bst_abstract RotationBST.Geometric.Split.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract,
-  RotationBST.Models.Pointer.Model, RotationBST.Models.Pointer.Machine.Abstract,
-  RotationBST.Bounds.StaticTree.Definitions.Abstract, RotationBST.Algorithms.Splay.Algorithm.Abstract,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract, RotationBST.Models.Pointer.Machine.Abstract,
+  RotationBST.Algorithms.Splay.Algorithm.Abstract,
   RotationBST.Structures.SplitTree.Multiway.Abstract, RotationBST.Structures.SplitTree.Multiway.Context.Abstract,
   RotationBST.Structures.SplitTree.Finger.Abstract, RotationBST.Structures.SplitTree.Finger.Binary.Abstract,
   RotationBST.Structures.SplitTree.Accounting.Abstract]

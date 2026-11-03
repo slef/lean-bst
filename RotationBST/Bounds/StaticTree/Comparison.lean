@@ -7,6 +7,7 @@ public import RotationBST.Algorithms.Splay.Pointer
 @[expose] public section
 
 namespace RotationBST.StaticTree
+open RotationBST.Tree (depth)
 
 theorem length_le_cost (t : Tree) (xs : List Nat) : xs.length ≤ cost t xs := by
   induction xs with
@@ -34,22 +35,11 @@ theorem entropy_le_cost (t : Tree) (xs : List Nat) (valid : ∀ x ∈ xs, x < t.
   unfold Bounds.staticCost
   linarith
 
-theorem locate_depth (t : Tree) (x : Nat) : (Splay.locate t x).context.length = depth t x := by
-  induction t generalizing x with
-  | nil => rfl
-  | node l r il ir =>
-      simp only [Splay.locate, depth]
-      split
-      · simp only [List.length_append, List.length_singleton, il]
-      · split
-        · rfl
-        · simp only [List.length_append, List.length_singleton, ir]
-
 /-- The fixed-tree search cost is realized exactly by downward pointer moves. -/
 theorem serves (t : Tree) (x : Nat) (valid : x < t.size) :
     Pointer.Serves t t x (depth t x + 1) := by
   have ht := Splay.locate_trace t x valid
-  rw [locate_depth] at ht
+  rw [Splay.locate_depth] at ht
   have hc := Splay.locate_correct t x valid
   exact ⟨Splay.locate t x, Splay.locate t x, depth t x, 0,
     ht, hc.2.1, .refl, hc.1, by omega⟩

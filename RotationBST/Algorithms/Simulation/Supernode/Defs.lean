@@ -3,6 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.LastTouch.Defs
 public import Mathlib.Data.Finset.Lattice.Fold
 public import Mathlib.Order.Interval.Finset.Nat
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric

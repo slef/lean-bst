@@ -5,6 +5,7 @@ public import RotationBST.Models.Region.View.History
 public import RotationBST.Algorithms.GreedyASS.Sweep
 
 public import RotationBST.Algorithms.GreedyASS.Algorithm.Abstract
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric

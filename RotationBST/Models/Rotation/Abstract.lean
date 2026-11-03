@@ -18,6 +18,15 @@ def Tree.size : Tree → Nat
   | .nil => 0
   | .node l r => l.size + 1 + r.size
 
+/-- Number of edges on the search path to rank `x`. The empty case only makes
+the function total; statements about searches require existing ranks. -/
+def Tree.depth : Tree → Nat → Nat
+  | .nil, _ => 0
+  | .node l r, x =>
+      if x < l.size then depth l x + 1
+      else if x = l.size then 0
+      else depth r (x - l.size - 1) + 1
+
 /-- One rotation, at any depth. -/
 inductive Rotate : Tree → Tree → Prop where
   | right {a b c : Tree} : Rotate (.node (.node a b) c) (.node a (.node b c))

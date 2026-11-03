@@ -1,7 +1,8 @@
 module
 
-public import RotationBST.Bounds.Interleave.Transition.Abstract
+public import RotationBST.Bounds.Interleave.Transition.Defs
 public import RotationBST.Models.Region.Bounds
+public import RotationBST.Structures.Treap.Abstract
 
 @[expose] public section
 namespace RotationBST.Wilber

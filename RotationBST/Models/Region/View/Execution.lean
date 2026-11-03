@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Models.Region.View.Preservation
 public import RotationBST.Models.Geometric.Offline.Proofs
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric

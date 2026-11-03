@@ -5,6 +5,7 @@ public import RotationBST.Models.Region.View.History
 public import RotationBST.Models.Region.Holes
 public import RotationBST.Models.Region.Fringe
 public import RotationBST.Structures.Treap.Projection
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric

@@ -2,6 +2,7 @@ module
 
 import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Layer.Update
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode.Layer.Results
@@ -63,4 +64,4 @@ end RotationBST.Geometric.Online.Supernode.Layer.Results
   RotationBST.Models.Region.Abstract, RotationBST.Models.Region.View.Abstract,
   RotationBST.Algorithms.Simulation.Supernode.Defs,
   RotationBST.Algorithms.Simulation.Supernode.Embedding.Defs,
-  RotationBST.Algorithms.Simulation.Supernode.Layer.Defs]
+  RotationBST.Algorithms.Simulation.Supernode.Layer.Defs, RotationBST.Models.Region.View.Defs, RotationBST.Models.Region.Defs]

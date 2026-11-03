@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Models.Region.View.Abstract
 public import RotationBST.Models.Region.Bounds
+public import RotationBST.Structures.Treap.Abstract
 
 @[expose] public section
 namespace RotationBST.Geometric.Region

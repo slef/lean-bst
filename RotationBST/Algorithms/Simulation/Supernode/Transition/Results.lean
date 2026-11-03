@@ -80,4 +80,4 @@ end RotationBST.Geometric.Online.Supernode.Transition.Results
   RotationBST.Algorithms.Simulation.Supernode.Extraction.Defs,
   RotationBST.Algorithms.Simulation.Supernode.Rebuild.Defs,
   RotationBST.Algorithms.Simulation.Supernode.Accounting.Defs,
-  RotationBST.Algorithms.Simulation.Supernode.Transition.Defs]
+  RotationBST.Algorithms.Simulation.Supernode.Transition.Defs, RotationBST.Models.Region.View.Defs, RotationBST.Models.Region.Defs]

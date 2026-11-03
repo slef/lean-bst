@@ -4,6 +4,7 @@ import RotationBST.Audit.Check
 public import RotationBST.Algorithms.Simulation.Supernode.Nested.Initial
 public import RotationBST.Algorithms.Simulation.Supernode.Nested.Promotion
 public import RotationBST.Algorithms.Simulation.Supernode.Nested.Retention
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode.Nested.Results
@@ -98,4 +99,4 @@ end RotationBST.Geometric.Online.Supernode.Nested.Results
   RotationBST.Algorithms.Simulation.Supernode.Embedding.Defs,
   RotationBST.Algorithms.Simulation.Supernode.Layer.Defs,
   RotationBST.Algorithms.Simulation.Supernode.Defs,
-  RotationBST.Algorithms.Simulation.Supernode.Nested.Defs]
+  RotationBST.Algorithms.Simulation.Supernode.Nested.Defs, RotationBST.Models.Region.View.Defs, RotationBST.Models.Region.Defs]

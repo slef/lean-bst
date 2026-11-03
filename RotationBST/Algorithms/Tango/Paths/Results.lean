@@ -25,5 +25,4 @@ end RotationBST.Tango.Results
 #guard_msgs in
 #check_bst_abstract RotationBST.Tango.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract,
-  RotationBST.Bounds.Interleave.Wilber.Abstract, RotationBST.Algorithms.Tango.Paths.Abstract,
-  RotationBST.Bounds.Interleave.Transition.Abstract]
+  RotationBST.Bounds.Interleave.Wilber.Abstract, RotationBST.Algorithms.Tango.Paths.Abstract, RotationBST.Bounds.Interleave.Wilber.Defs, RotationBST.Bounds.Interleave.Transition.Defs]

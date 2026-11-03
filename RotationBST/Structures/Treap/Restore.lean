@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Models.Region.Bounds
 public import RotationBST.Structures.Treap.Interval
+public import RotationBST.Models.Region.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Region

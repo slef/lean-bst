@@ -41,6 +41,12 @@ theorem ass_to_pointers {n : Nat} {xs : List Nat} (E : Offline n xs) :
     ∃ s t cost, s.size = n ∧ Pointer.Execution s xs t cost ∧ cost ≤ 33 * E.points.card :=
   offline_to_pointer E
 
+/-- The pointer machine from a prescribed initial tree: a linear initialization
+term, as for rotations. No final shape is prescribed. -/
+theorem ass_to_pointers_from (s : Tree) (xs : List Nat) (E : Offline s.size xs) :
+    ∃ t cost, Pointer.Execution s xs t cost ∧ cost ≤ 64 * s.size + 3168 * E.points.card :=
+  pointer_from_initial s xs E
+
 /-- Online: every online geometric algorithm has one causal BST policy, valid
 from all initial shapes, with constant rotation cost per added point and a
 linear initialization allowance. The policy is fixed before the request sequence. -/
@@ -52,13 +58,12 @@ theorem online_bst (n : Nat) (A : OnlineAlgorithm n) :
 
 end RotationBST.Geometric.Equivalence.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Equivalence.Results`: 6 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Equivalence.Results`: 7 root declarations -/
 #guard_msgs in
 #check_bst_abstract RotationBST.Geometric.Equivalence.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract,
   RotationBST.Models.Pointer.Machine.Abstract,
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Geometric.Online.Abstract,
   RotationBST.Models.Geometric.Offline.Abstract, RotationBST.Models.Region.View.Abstract,
-  RotationBST.Structures.Treap.Abstract, RotationBST.Models.Region.Abstract,
-  RotationBST.Models.Pointer.Lazy.Skeleton.Abstract, RotationBST.Models.Pointer.Traces,
-  RotationBST.Models.Pointer.Model]
+  RotationBST.Models.Region.Abstract,
+  RotationBST.Models.Pointer.Lazy.Skeleton.Abstract]

@@ -1,6 +1,7 @@
 module
 
 public import RotationBST.Algorithms.Simulation.Supernode.Assembly.Keys
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode

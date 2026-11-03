@@ -4,7 +4,7 @@ public import RotationBST.Structures.SplitTree.Finger.Binary.Search.Height
 
 @[expose] public section
 namespace RotationBST.Geometric.Split.Multiway.Finger
-open StaticTree
+open RotationBST.Tree (depth)
 
 /-- Search in a minimum-finger comparison tree depends on the rank distance,
 not the total size. Appending an arbitrary right remainder preserves this bound. -/

@@ -3,6 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Layer.Proofs
 public import RotationBST.Structures.Treap.Projection
 public import RotationBST.Models.Region.Holes
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode

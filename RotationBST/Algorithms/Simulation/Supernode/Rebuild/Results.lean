@@ -72,4 +72,4 @@ end RotationBST.Geometric.Online.Supernode.Rebuild.Results
   RotationBST.Algorithms.Simulation.Supernode.Ranks.Defs,
   RotationBST.Structures.SplitTree.Finger.TwoEnded.Select.Defs,
   RotationBST.Algorithms.Simulation.Supernode.Assembly.Defs,
-  RotationBST.Algorithms.Simulation.Supernode.Rebuild.Defs]
+  RotationBST.Algorithms.Simulation.Supernode.Rebuild.Defs, RotationBST.Models.Region.View.Defs, RotationBST.Models.Region.Defs]

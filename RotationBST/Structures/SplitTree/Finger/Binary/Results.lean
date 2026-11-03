@@ -21,7 +21,7 @@ theorem minimum (t : Multiway) (nonempty : t ≠ .nil) :
 /-- Ordinary BST search in the minimum finger has logarithmic rank-distance cost. -/
 theorem search_depth {h : Nat} {t : Multiway} (valid : Balanced h t)
     (rank : Nat) (existsKey : rank < t.size) :
-    StaticTree.depth (binaryView t).tree rank ≤ 5 * Nat.log2 (rank + 1) + 6 :=
+    Tree.depth (binaryView t).tree rank ≤ 5 * Nat.log2 (rank + 1) + 6 :=
   binaryView_depth valid rank existsKey
 
 /-- A concrete splay realizes the same bound in rotations. Its resulting shape

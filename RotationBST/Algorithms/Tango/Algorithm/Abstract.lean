@@ -46,18 +46,32 @@ theorem balanced_competitive (n : Nat) (p : Policy (balanced n))
         (14 * Real.logb 2 (Nat.log2 n + 1) + 4) * n :=
   p.balanced_competitive_bound n size comparator
 
+/-- **Tango trees are `O(log log n)`-competitive.** Some online BST algorithm,
+fixed before any request is known, serves every request sequence from every
+initial tree on `n` keys at total cost (one per request plus rotations) within
+`O(log log n)` times the cost of any offline execution from the same tree, plus
+`O(n log log n)` for initialization. It is Tango: a `Policy` run from the
+balanced reference tree, after rotating the initial tree into it. -/
+theorem exists_competitive (n : Nat) :
+    ∃ A : Algorithm, ∀ {start finish : Tree} {xs : List Nat} {offline : Nat},
+      start.size = n → Execution start xs finish offline →
+        (A.totalCost start xs : ℝ) ≤
+          (56 * Real.logb 2 (Nat.log2 n + 1) + 16) * (offline + xs.length : Nat) +
+            (14 * Real.logb 2 (Nat.log2 n + 1) + 6) * n :=
+  Tango.exists_online_bound n
+
 end RotationBST.Tango.Algorithm.Results
 
-/-- info: abstract audit passed for `RotationBST.Tango.Algorithm.Results`: 5 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Tango.Algorithm.Results`: 6 root declarations -/
 #guard_msgs in
 #check_bst_abstract RotationBST.Tango.Algorithm.Results allowing [
-  RotationBST.Models.Rotation.Abstract, RotationBST.Algorithms.Tango.Algorithm.Definitions.Abstract,
+  RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract,
+  RotationBST.Algorithms.Tango.Algorithm.Definitions.Abstract,
   RotationBST.Algorithms.Tango.Reference.Abstract,
-  RotationBST.Algorithms.Tango.State.Defs, RotationBST.Algorithms.Tango.State.Nesting.Defs,
-  RotationBST.Algorithms.Tango.State.Canonical.Defs, RotationBST.Algorithms.Tango.Preferences.Updates.Abstract,
+  RotationBST.Algorithms.Tango.State.Abstract, RotationBST.Algorithms.Tango.Preferences.Updates.Abstract,
   RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract, RotationBST.Algorithms.Tango.Paths.Abstract,
-  RotationBST.Bounds.Interleave.Wilber.Abstract, RotationBST.Bounds.Interleave.Transition.Abstract,
+  RotationBST.Bounds.Interleave.Wilber.Abstract,
   RotationBST.Models.Region.Abstract, RotationBST.Algorithms.Tango.Auxiliary.Definitions.Abstract,
-  RotationBST.Models.Pointer.Lazy.Skeleton.Abstract, RotationBST.Models.Pointer.Traces,
+  RotationBST.Models.Pointer.Lazy.Skeleton.Abstract,
   RotationBST.Models.Pointer.Machine.Abstract, RotationBST.Algorithms.Splay.Algorithm.Abstract,
   RotationBST.Algorithms.Splay.Potential.Abstract]

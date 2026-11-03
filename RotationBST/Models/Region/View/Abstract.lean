@@ -5,14 +5,6 @@ public import RotationBST.Models.Region.Abstract
 @[expose] public section
 namespace RotationBST.Geometric
 
-/-- Latest touch in the recorded history; bottom means not yet touched. -/
-def lastTouch (P : Finset Point) (key : Nat) : WithBot Nat :=
-  ((P.filter fun p => p.1 = key).image Prod.snd).max
-
-/-- The current tree is a max-heap of latest touches. -/
-def HistoryHeap (P : Finset Point) (t : Tree) : Prop :=
-  Heap (fun key => OrderDual.toDual (lastTouch P key)) t 0
-
 /-- One search in the rooted-subtree version of the BST model. The active
 region contains the requested key, and the inorder fringe is unchanged. -/
 structure RegionStep (s t : Tree) (request : Nat) where

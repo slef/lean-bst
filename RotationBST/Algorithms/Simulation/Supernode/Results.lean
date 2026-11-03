@@ -40,4 +40,4 @@ end RotationBST.Geometric.Online.LastTouch.Supernode.Results
 #check_bst_abstract RotationBST.Geometric.Online.LastTouch.Supernode.Results allowing [
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Region.View.Abstract,
   RotationBST.Algorithms.Simulation.LastTouch.Defs,
-  RotationBST.Algorithms.Simulation.Supernode.Defs]
+  RotationBST.Algorithms.Simulation.Supernode.Defs, RotationBST.Models.Region.View.Defs]

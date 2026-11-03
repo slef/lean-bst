@@ -101,4 +101,16 @@ theorem runFrom_pointer (past : List Nat) (t : Tree) (xs : List Nat)
         omega
       · exact Pointer.Execution.cons ht hu
 
+/-- The zipper search descends exactly the rank's depth. -/
+theorem locate_depth (t : Tree) (x : Nat) : (locate t x).context.length = t.depth x := by
+  induction t generalizing x with
+  | nil => rfl
+  | node l r il ir =>
+      simp only [locate, Tree.depth]
+      split
+      · simp only [List.length_append, List.length_singleton, il]
+      · split
+        · rfl
+        · simp only [List.length_append, List.length_singleton, ir]
+
 end RotationBST.Splay

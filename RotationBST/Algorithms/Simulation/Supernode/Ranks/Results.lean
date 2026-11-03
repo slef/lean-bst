@@ -68,4 +68,4 @@ end RotationBST.Geometric.Online.Supernode.Ranks.Results
   RotationBST.Algorithms.Simulation.Supernode.Ranks.Defs,
   RotationBST.Models.Geometric.Definitions.Abstract, RotationBST.Models.Region.View.Abstract,
   RotationBST.Algorithms.Simulation.LastTouch.Defs,
-  RotationBST.Algorithms.Simulation.Supernode.Defs]
+  RotationBST.Algorithms.Simulation.Supernode.Defs, RotationBST.Models.Region.View.Defs, RotationBST.Models.Region.Defs]

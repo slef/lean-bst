@@ -1,6 +1,7 @@
 module
 
 public import RotationBST.Models.Region.View.Abstract
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric

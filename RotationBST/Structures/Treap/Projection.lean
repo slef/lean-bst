@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Models.Region.Basic
 public import RotationBST.Structures.Treap.Priorities
+public import RotationBST.Models.Region.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric

@@ -1,11 +1,10 @@
 module
 
 public import RotationBST.Structures.SplitTree.Finger.Binary.Bounds
-public import RotationBST.Bounds.StaticTree.Definitions.Abstract
 
 @[expose] public section
 namespace RotationBST.Geometric.Split.Multiway.Finger
-open StaticTree
+open RotationBST.Tree (depth)
 
 theorem depth_node_bound {l r : Tree} {bound : Nat}
     (left : ∀ x, depth l x ≤ bound) (right : ∀ x, depth r x ≤ bound) (x : Nat) :

@@ -3,6 +3,7 @@ module
 public import RotationBST.Algorithms.Simulation.Supernode.Layer.Defs
 public import RotationBST.Algorithms.Simulation.Supernode.Proofs
 public import RotationBST.Algorithms.Simulation.Supernode.Embedding.Regions
+public import RotationBST.Models.Region.View.Defs
 
 @[expose] public section
 namespace RotationBST.Geometric.Online.Supernode

@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Algorithms.Tango.State.Canonical.Defs
+public import RotationBST.Algorithms.Tango.State.Abstract
 public import RotationBST.Algorithms.Tango.State.Initial
 
 @[expose] public section

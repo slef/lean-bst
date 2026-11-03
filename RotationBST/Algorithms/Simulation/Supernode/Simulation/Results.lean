@@ -84,4 +84,4 @@ end RotationBST.Geometric.Online.Supernode.Simulation.Results
   RotationBST.Algorithms.Simulation.Supernode.Accounting.Defs,
   RotationBST.Algorithms.Simulation.Supernode.Transition.Defs,
   RotationBST.Models.Geometric.Online.Abstract,
-  RotationBST.Algorithms.Simulation.Supernode.Simulation.Defs]
+  RotationBST.Algorithms.Simulation.Supernode.Simulation.Defs, RotationBST.Models.Region.View.Defs, RotationBST.Models.Region.Defs]

@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Bounds.Interleave.Wilber.Cut
 public import RotationBST.Bounds.Interleave.Transition.Distinct
+public import RotationBST.Bounds.Interleave.Wilber.Defs
 
 @[expose] public section
 namespace RotationBST.Wilber

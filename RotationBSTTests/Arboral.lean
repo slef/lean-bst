@@ -7,6 +7,7 @@ import RotationBST.Algorithms.Tango.Abstract
 import RotationBST.Algorithms.Simulation.Abstract
 import RotationBST.Bounds.Interleave.Abstract
 import RotationBST.Structures.SplitTree.Abstract
+import RotationBST.Models.Region.View.Defs
 
 open RotationBST RotationBST.Geometric
 
@@ -44,9 +45,9 @@ example : Tango.height (Tango.perfect 3) = 3 := by decide
 example (s : Tree) (xs : List Nat) (valid : ∀ x ∈ xs, x < s.size) :
     ∃ t r, RotationBST.Execution s xs t r ∧ xs.length + r ≤
       2 * s.size + 99 * rowCost greedySweep 0 ∅ xs := by
-  obtain ⟨E, _, hc⟩ := Geometric.Results.online_solution (Geometric.GreedyASS.Results.greedyASS s.size) xs valid
+  obtain ⟨E, _, hc⟩ := Geometric.Results.online_solution (Geometric.greedyASS s.size) xs valid
   obtain ⟨t, r, execution, cost⟩ := Geometric.Equivalence.Results.ass_to_rotations s xs E
-  exact ⟨t, r, execution, by simpa only [hc, Geometric.GreedyASS.Results.greedyASS] using cost⟩
+  exact ⟨t, r, execution, by simpa only [hc, Geometric.greedyASS] using cost⟩
 
 -- Exact cardinality, including the zero-request and unused-key cases.
 example (n : Nat) : ∃ s t, s.size = n ∧ Geometric.RegionExecution s [] t 0 := by
@@ -743,13 +744,13 @@ private theorem balanced : Multiway.Balanced 3 seven :=
   .two (.two (.two .nil .nil) (.two .nil .nil)) (.two (.two .nil .nil) (.two .nil .nil))
 
 -- Searches may leave the comparison spine to enter a retained subtree.
-example : StaticTree.depth (binaryView seven).tree 0 = 0 := by decide
-example : StaticTree.depth (binaryView seven).tree 2 = 3 := by decide
-example : StaticTree.depth (binaryView seven).tree 6 = 4 := by decide
+example : Tree.depth (binaryView seven).tree 0 = 0 := by decide
+example : Tree.depth (binaryView seven).tree 2 = 3 := by decide
+example : Tree.depth (binaryView seven).tree 6 = 4 := by decide
 example : (Splay.run (binaryView seven).tree 2).2 = 3 := by decide
 example : Access (binaryView seven).tree (Splay.run (binaryView seven).tree 2).1 2 3 :=
   (Binary.Results.access balanced 2 (by decide)).1
-example : StaticTree.depth (binaryView seven).tree 2 ≤ 5 * Nat.log2 3 + 6 :=
+example : Tree.depth (binaryView seven).tree 2 ≤ 5 * Nat.log2 3 + 6 :=
   Binary.Results.search_depth balanced 2 (by decide)
 
 end FingerBinarySearch
@@ -1054,8 +1055,8 @@ example : maximumCost (.three .nil .nil .nil) = 1 := by decide
 example : (maximumView (.three .nil .nil .nil)).tree = .node (.node .nil .nil) .nil := by decide
 example : (TwoEnded.make 3 seven).2 = 2 := by decide
 -- Both endpoints are immediately below the same root, without switching views.
-example : StaticTree.depth (TwoEnded.make 3 seven).1.tree 0 = 1 := by decide
-example : StaticTree.depth (TwoEnded.make 3 seven).1.tree 6 = 1 := by decide
+example : Tree.depth (TwoEnded.make 3 seven).1.tree 0 = 1 := by decide
+example : Tree.depth (TwoEnded.make 3 seven).1.tree 6 = 1 := by decide
 example : (TwoEnded.make 3 seven).1.Valid :=
   (TwoEnded.Results.construction balanced (by intro h; cases h)).1
 example (rank : Fin 7) :

@@ -6,6 +6,7 @@ public import RotationBST.Bounds.Implications.WeightedEntropy
 @[expose] public section
 
 namespace RotationBST.StaticTree
+open RotationBST.Tree (depth)
 
 /-- A prefix code with two bits per comparison/termination step. -/
 noncomputable def weight (t : Tree) (x : Nat) : ℝ := ((4 : ℝ) ^ (depth t x + 1))⁻¹

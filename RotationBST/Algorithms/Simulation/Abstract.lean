@@ -8,7 +8,9 @@ public import RotationBST.Algorithms.Simulation.AbstractBridge
 /-! The causal geometric-to-BST simulation (Demaine, Harmon, Iacono, Kane, and
 Pătraşcu, 2009, made online). The policy is existential: the proof constructs
 it from last-touch supernodes represented by shared split trees, and the
-statements below mention only the models. The constants are not claimed sharp. -/
+statements below mention only the models. The constants are not claimed sharp.
+The version with one policy for every initial tree is the online equivalence
+`Geometric.Equivalence.Results.online_bst`. -/
 namespace RotationBST.Geometric.Simulation.Results
 
 /-- Fix the initial BST and an online geometric algorithm. A single BST
@@ -18,14 +20,6 @@ theorem online_simulation (tree : Tree) (A : OnlineAlgorithm tree.size) :
     ∃ algorithm : Algorithm, ∀ xs : List Nat, (∀ x ∈ xs, x < tree.size) →
       algorithm.cost tree xs ≤ 6018 * rowCost A.step 0 ∅ xs + 6016 * tree.size :=
   Online.Supernode.online_policy tree A
-
-/-- A single policy works for all initial trees of the given size and all
-valid sequences. The additive initialization term is paid only once. -/
-theorem uniform_simulation (n : Nat) (A : OnlineAlgorithm n) :
-    ∃ algorithm : Algorithm, ∀ tree : Tree, tree.size = n →
-      ∀ xs : List Nat, (∀ x ∈ xs, x < n) →
-        algorithm.cost tree xs ≤ 6018 * rowCost A.step 0 ∅ xs + 6018 * n :=
-  Online.Supernode.uniform_online_policy n A
 
 /-- Conventional normalized cost includes one charge for every request. -/
 theorem normalized_simulation (n : Nat) (A : OnlineAlgorithm n) :
@@ -48,7 +42,7 @@ theorem pointer_simulation (n : Nat) (A : OnlineAlgorithm n) :
 
 end RotationBST.Geometric.Simulation.Results
 
-/-- info: abstract audit passed for `RotationBST.Geometric.Simulation.Results`: 4 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Geometric.Simulation.Results`: 3 root declarations -/
 #guard_msgs in
 #check_bst_abstract RotationBST.Geometric.Simulation.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract,

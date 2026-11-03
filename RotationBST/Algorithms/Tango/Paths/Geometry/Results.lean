@@ -30,4 +30,4 @@ end RotationBST.Tango.Paths.Results
 #check_bst_abstract RotationBST.Tango.Paths.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Bounds.Interleave.Definitions.Abstract, RotationBST.Algorithms.Tango.Definitions.Abstract,
   RotationBST.Algorithms.Tango.Paths.Abstract, RotationBST.Algorithms.Tango.Paths.Geometry.Defs,
-  RotationBST.Bounds.Interleave.Wilber.Abstract, RotationBST.Bounds.Interleave.Transition.Abstract]
+  RotationBST.Bounds.Interleave.Wilber.Abstract, RotationBST.Bounds.Interleave.Wilber.Defs, RotationBST.Bounds.Interleave.Transition.Defs]
