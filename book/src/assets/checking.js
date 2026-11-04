@@ -11,7 +11,8 @@
   try { selected = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch { /* ignore */ }
 
   const params = new URLSearchParams(location.search);
-  if (params.get('select')) selected.add(params.get('select'));
+  // A link to one result's reading list selects that result alone.
+  if (params.get('select')) selected = new Set([params.get('select')]);
 
   function save() {
     localStorage.setItem(KEY, JSON.stringify([...selected]));
@@ -51,6 +52,8 @@
     document.body.classList.toggle('checking', active);
     document.body.classList.toggle('check-focus', active && localStorage.getItem(FOCUS) === '1');
     document.querySelectorAll('.claim-toggle').forEach((box) => { box.checked = selected.has(box.dataset.claim); });
+    // "only this one" is useful as soon as some other result is selected.
+    document.querySelectorAll('.claim-only').forEach((b) => { b.hidden = ![...selected].some((id) => id !== b.dataset.claim); });
     document.querySelectorAll('.headline, .claim-row').forEach((el) => el.classList.toggle('selected', selected.has(el.dataset.claim ?? el.id.replace(/^claim-/, ''))));
 
     // Declarations on this page.
@@ -110,6 +113,7 @@
 
   // A small bar at the bottom of every page while results are selected.
   let bar = null;
+  let whichOpen = false;
   function renderBar(needed, steps) {
     if (!selected.size) { bar?.remove(); bar = null; return; }
     if (!bar) {
@@ -119,6 +123,7 @@
       bar.setAttribute('aria-label', 'Checking a result');
       document.body.append(bar);
       bar.addEventListener('click', onBarClick);
+      bar.addEventListener('toggle', (e) => { if (e.target.matches('.cb-which')) whichOpen = e.target.open; }, true);
       bar.addEventListener('change', (e) => {
         if (e.target.matches('.check-focus-toggle')) {
           localStorage.setItem(FOCUS, e.target.checked ? '1' : '0');
@@ -129,8 +134,14 @@
     const titles = [...selected].map(claimTitle);
     const onPage = steps.filter(({ d }) => split(d.href)[0] === here).length;
     const internal = [...needed.keys()].filter((n) => !data.decls[n]?.href).length;
-    const label = titles.length === 1 ? titles[0] : `${titles.length} results`;
-    bar.innerHTML = `<span class="cb-what">Checking <strong>${label}</strong></span>`
+    // With several results, the label opens a list to remove one or keep one alone.
+    const which = titles.length === 1 ? `<strong>${titles[0]}</strong>`
+      : `<details class="cb-which"${whichOpen ? ' open' : ''}><summary><strong>${titles.length} results</strong></summary><ul>`
+        + [...selected].map((id) => `<li><span class="cb-title">${claimTitle(id)}</span>`
+          + `<button type="button" class="claim-only" data-claim="${esc(id)}" title="Deselect every other result">only</button>`
+          + `<button type="button" class="cb-remove" data-claim="${esc(id)}" title="Deselect this result">✕</button></li>`).join('')
+        + '</ul></details>';
+    bar.innerHTML = `<span class="cb-what">Checking ${which}</span>`
       + `<span class="cb-count">${steps.length} to read${internal ? ` (+${internal} internal)` : ''} · ${onPage} on this page</span>`
       + `<span class="cb-nav"><button type="button" class="cb-prev" title="Previous definition to read">‹</button>`
       + `<button type="button" class="cb-next" title="Next definition to read">›</button></span>`
@@ -247,6 +258,10 @@
   });
   document.addEventListener('click', (e) => {
     if (e.target.closest('.claims-clear')) { selected.clear(); save(); }
+    const only = e.target.closest('.claim-only');
+    if (only) { selected = new Set([only.dataset.claim]); whichOpen = false; save(); }
+    const remove = e.target.closest('.cb-remove');
+    if (remove) { selected.delete(remove.dataset.claim); save(); }
     if (e.target.closest('.claims-key')) { for (const c of data?.claims ?? []) if (c.key) selected.add(c.id); save(); }
   });
   window.addEventListener('storage', (e) => {

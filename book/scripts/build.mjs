@@ -479,6 +479,12 @@ function claimCounts(claim) {
     + (internal ? `, ${internal} more in internal modules` : '');
 }
 
+// Shown by checking.js while other results are selected: narrows the
+// selection to this result alone.
+function onlyButton(claim) {
+  return `<button type="button" class="claim-only" data-claim="${claim.id}" hidden title="Deselect every other result">only this one</button>`;
+}
+
 function renderHeadline(page, claim) {
   const where = currentWhere;
   const statement = md.render(claim.body, { nested: true });
@@ -490,6 +496,7 @@ function renderHeadline(page, claim) {
     + `<div class="headline-statement">${statement}</div>`
     + `<details class="headline-lean"><summary>The Lean statement${claim.roots.length > 1 ? 's' : ''}</summary><div class="decl-group">${lean}</div></details>`
     + `<div class="headline-check"><label><input type="checkbox" class="claim-toggle" data-claim="${claim.id}"> Highlight what I need to read to check this</label>`
+    + onlyButton(claim)
     + `<span class="headline-count">${claimCounts(claim)} · <a href="checking.html?select=${claim.id}">reading list</a></span></div>`
     + `</section>\n`;
 }
@@ -499,8 +506,9 @@ function renderClaims(page) {
     const ch = claim.chapter;
     const where = `${ch.number ? `Chapter ${ch.number}` : ch.title}`;
     return `<li class="claim-row${claim.key ? ' key-result' : ''}" id="claim-${claim.id}">`
-      + `<label><input type="checkbox" class="claim-toggle" data-claim="${claim.id}">`
+      + `<div class="claim-head"><label><input type="checkbox" class="claim-toggle" data-claim="${claim.id}">`
       + `<span class="claim-title">${claim.key ? '<span class="headline-star" aria-hidden="true">★</span> ' : ''}${md.renderInline(claim.title)}</span></label>`
+      + `${onlyButton(claim)}</div>`
       + `<span class="claim-meta"><a href="${ch.href}#claim-${claim.id}">${escapeHtml(where)}</a>${claim.source ? ` · ${md.renderInline(claim.source)}` : ''} · ${claimCounts(claim)}</span>`
       + `<details class="claim-statement"><summary>Statement</summary>${md.render(claim.body, { nested: true }).replace(/href="#/g, `href="${ch.href}#`)}</details></li>`;
   });

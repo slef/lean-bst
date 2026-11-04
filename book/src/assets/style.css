@@ -442,6 +442,14 @@ code.module { font-size: .75rem; color: var(--fg-faint); background: transparent
 .claim-row { border: 1px solid var(--rule); border-radius: 8px; padding: .7rem 1rem; margin: .6rem 0; }
 .claim-row.key-result { border-left: 3px solid var(--target); }
 .claim-row.selected { background: color-mix(in srgb, var(--target-soft) 45%, var(--bg)); }
+.claim-head { display: flex; align-items: baseline; gap: .5rem; }
+.claim-head label { flex: 1; }
+.claim-only {
+  font-family: var(--sans); font-size: .75rem; border: 1px solid var(--rule); background: var(--bg-soft);
+  color: var(--fg-soft); border-radius: 6px; padding: .1rem .5rem; cursor: pointer; white-space: nowrap;
+}
+.claim-only:hover { color: var(--target); border-color: var(--target); }
+.claim-only[hidden] { display: none; }
 .claim-row label { display: flex; gap: .55rem; align-items: baseline; cursor: pointer; font-family: var(--sans); font-weight: 600; }
 .claim-meta { display: block; margin: .15rem 0 0 1.6rem; font-family: var(--sans); font-size: .8rem; color: var(--fg-faint); }
 .claim-statement { margin-left: 1.6rem; font-size: .95rem; }
@@ -488,6 +496,19 @@ body.check-focus .headline figure.decl { opacity: 1; }
   background: var(--bg); box-shadow: 0 6px 24px rgba(0, 0, 0, .14); font-family: var(--sans); font-size: .84rem;
 }
 .check-bar .cb-what strong { color: var(--target); }
+.check-bar .cb-which { display: inline-block; position: relative; }
+.check-bar .cb-which summary { cursor: pointer; list-style: none; }
+.check-bar .cb-which summary::-webkit-details-marker { display: none; }
+.check-bar .cb-which summary::after { content: ' ▴'; color: var(--target); font-size: .75rem; }
+.check-bar .cb-which ul {
+  position: absolute; bottom: calc(100% + 12px); left: -1rem; margin: 0; padding: .4rem 0; list-style: none;
+  min-width: 24rem; max-width: min(32rem, calc(100vw - 24px)); max-height: 60vh; overflow-y: auto;
+  background: var(--bg); border: 1px solid color-mix(in srgb, var(--target) 45%, var(--rule)); border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .14);
+}
+.check-bar .cb-which li { display: flex; align-items: center; gap: .4rem; padding: .25rem .5rem .25rem .9rem; }
+.check-bar .cb-which .cb-title { flex: 1; }
+.check-bar .cb-which .cb-remove { background: transparent; border-color: transparent; color: var(--fg-faint); padding: .1rem .4rem; }
 .check-bar .cb-count { color: var(--fg-faint); }
 .check-bar .cb-nav button { font-size: 1rem; line-height: 1; padding: .15rem .55rem; }
 .check-bar .cb-focus { color: var(--fg-soft); cursor: pointer; }

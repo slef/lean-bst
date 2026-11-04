@@ -17,7 +17,7 @@ The axioms behind each proof are listed in [Appendix A](audit.html). All of them
 
 ## How to use it
 
-Every chapter that proves something opens with a box stating its main result, in English and in Lean. Results marked ★ are *key results*: the ones that the formalized papers announce in their abstracts or introductions. Select one or several results below, or tick the box in a chapter's main-result box. The selection then follows you through the book:
+Every chapter that proves something opens with a box stating its main result, in English and in Lean. Results marked ★ are *key results*: the ones that the formalized papers announce in their abstracts or introductions. Select one or several results below, or tick the box in a chapter's main-result box. To narrow the selection down to a single result, use its **only this one** button, or open the list of selected results in the bar at the bottom of the page. The selection then follows you through the book:
 
 - the sidebar shows, for each chapter, how many definitions you need from it;
 - on each page, those definitions are outlined and tagged **needed**;
