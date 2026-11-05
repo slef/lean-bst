@@ -6,7 +6,8 @@ with keys represented by their zero-based inorder ranks. The library includes:
 - correspondence with labelled BSTs and the conventional pointer model;
 - executable bottom-up splaying, its working-set bound, and further classical results;
 - arborally satisfied sets, offline BST equivalence, GreedyASS, and a causal online geometric-to-BST simulation;
-- an executable Tango-style policy with an `O(log log n)` competitive bound.
+- an executable Tango-style policy with an `O(log log n)` competitive bound;
+- lazy-finger characterizations and separations, an exact optimizer, and GreedyASS weighted dynamic-finger bounds.
 
 The public mathematical interface is in `Abstract.lean` files. The development
 is kernel-checked locally; it has not been submitted to or reviewed by
@@ -61,10 +62,12 @@ is local to this repository; upstream abstract registration is separate work.
 | Bounds | Working set ⇒ static optimality ⇒ static finger | [Implications](RotationBST/Bounds/Implications/Abstract.lean) |
 | Bounds | Fixed-tree benchmark and entropy lower bound | [Static tree](RotationBST/Bounds/StaticTree/Abstract.lean) |
 | Bounds | Wilber's interleave lower bound | [Interleave](RotationBST/Bounds/Interleave/Abstract.lean), [definition](RotationBST/Bounds/Interleave/Definitions/Abstract.lean) |
+| Bounds | Lazy finger, weighted characterization, separations | [Lazy finger](RotationBST/Bounds/LazyFinger/Abstract.lean), [entropy obstruction](RotationBST/Bounds/ConditionalEntropy/Abstract.lean) |
 | Bounds | Request charges versus rotation charges | [Normalization](RotationBST/Bounds/Normalization/Abstract.lean) |
 | Algorithms | Move-to-root baseline | [Algorithm](RotationBST/Algorithms/MoveToRoot/Algorithm/Abstract.lean), [correctness](RotationBST/Algorithms/MoveToRoot/Abstract.lean) |
 | Algorithms | Splay: algorithm and results | [Algorithm](RotationBST/Algorithms/Splay/Algorithm/Abstract.lean), [overview](RotationBST/Algorithms/Splay/Abstract.lean) |
-| Algorithms | GreedyASS | [Algorithm](RotationBST/Algorithms/GreedyASS/Algorithm/Abstract.lean), [results](RotationBST/Algorithms/GreedyASS/Abstract.lean) |
+| Algorithms | GreedyASS | [Algorithm](RotationBST/Algorithms/GreedyASS/Algorithm/Abstract.lean), [legality](RotationBST/Algorithms/GreedyASS/Abstract.lean), [finger bounds](RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
+| Algorithms | Optimal static lazy-finger tree; multiple-tree searches | [Optimizer](RotationBST/Algorithms/OptimalLazyFinger/Work/Abstract.lean), [space/query tradeoff](RotationBST/Algorithms/MultipleTrees/Abstract.lean) |
 | Algorithms | Causal geometric-to-BST simulation | [Simulation](RotationBST/Algorithms/Simulation/Abstract.lean) |
 | Algorithms | Tango: executable policy and competitive bounds | [Policy](RotationBST/Algorithms/Tango/Algorithm/Executable/Abstract.lean), [bounds](RotationBST/Algorithms/Tango/Algorithm/Abstract.lean) |
 | Structures | Next-touch treaps; multiway finger and split trees | [Treap](RotationBST/Structures/Treap/Abstract.lean), [split trees](RotationBST/Structures/SplitTree/Abstract.lean) |
@@ -203,6 +206,34 @@ rebuilds its exposed keys. A nested potential pays for splitting, rebuilding,
 root visits, and deferred restoration across all rows. These constants are not
 claimed to be sharp. Neither splay nor GreedyASS is proved dynamically optimal.
 
+## Lazy finger and weighted dynamic finger
+
+The [lazy-finger interface](RotationBST/Bounds/LazyFinger/Abstract.lean)
+relates movement in a fixed BST to the weighted dynamic-finger bound. It includes
+both directions of the characterization, explicit initialization costs, strict
+separations from root-finger and dynamic BST search, and a conditional-entropy
+obstruction. The [paper-to-theorem map](docs/organization.md#finger-bound-results-for-the-book)
+covers all nine numbered results of *The Power and Limitations of Static Binary Search Trees with Lazy Finger*.
+
+The [exact optimizer](RotationBST/Algorithms/OptimalLazyFinger/Work/Abstract.lean)
+constructs an optimal static tree with annotated RAM work at most
+`4m + 64(n + 1)³`. The [multiple-tree structure](RotationBST/Algorithms/MultipleTrees/Abstract.lean)
+provides a space/query tradeoff in an explicit linked-pointer model;
+its query bound excludes preprocessing.
+
+The [GreedyASS performance interface](RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean)
+proves geometric row cost at most `120 LF + 15n` and `480 WF + 15n`, where
+`LF` and `WF` are the optimal lazy-finger and weighted-finger benchmarks.
+It also supplies causal BST and pointer realizations with explicit constants.
+Each policy is chosen before the request sequence and comparison weights.
+These cover Theorems 3.1, 4.1–4.2 and Corollary 1 of *Weighted Dynamic Finger
+in Binary Search Trees*. Theorem 4.3 is outside this batch.
+
+Finger costs include a unit per request. The initial predecessor and root-start
+conventions are distinguished, and the optimum over positive weights is an
+infimum, without an attainment assumption. These normalization details and the
+limits of each cost model are part of the checked statements.
+
 ## Tango
 
 The headline [`exists_competitive`](RotationBST/Algorithms/Tango/Algorithm/Abstract.lean)
@@ -274,6 +305,8 @@ The PDF is written to `docs/build/main.pdf` and published as a CI artifact.
 
 ## References and provenance
 
+- Bose, Douïeb, Iacono, and Langerman, [*The Power and Limitations of Static Binary Search Trees with Lazy Finger*](https://arxiv.org/abs/1304.6897).
+- Iacono and Langerman, [*Weighted Dynamic Finger in Binary Search Trees*](https://arxiv.org/abs/1810.01785).
 - Sleator and Tarjan, [*Self-Adjusting Binary Search Trees*](https://www.cs.cmu.edu/~sleator/papers/self-adjusting.pdf), JACM, 1985.
 - Derryberry, [*Adaptive Binary Search Trees*](https://www.cs.cmu.edu/~jonderry/thesis.pdf), 2009; model comparisons.
 - Kakimura and Terai, [*A Refined Analysis of the Sequential Access Theorem for Splay Trees*](https://arxiv.org/abs/2609.19746), 2026; the scanning proof uses their ghost-marking and right-spine-potential approach, with a looser constant.

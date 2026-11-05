@@ -27,9 +27,15 @@ theorem workingSet_competes (a : Algorithm) (workingSet : HasWorkingSetBound a) 
         (D : ℝ) * t.size * (1 + (t.size.log2 : ℝ)) :=
   (workingSet.staticOptimality a).fixedTree a
 
+/-- Conversely, some fixed tree achieves normalized frequency entropy with
+constant one. Unobserved keys are retained and empty sequences are included. -/
+theorem entropy_upper_bound (n : Nat) (xs : List Nat) (valid : ∀ x ∈ xs, x < n) :
+    ∃ t : Tree, t.size = n ∧ (StaticTree.cost t xs : ℝ) ≤ Bounds.staticCost n xs :=
+  entropy_tree n xs valid
+
 end RotationBST.StaticTree.Results
 
-/-- info: abstract audit passed for `RotationBST.StaticTree.Results`: 3 root declarations -/
+/-- info: abstract audit passed for `RotationBST.StaticTree.Results`: 4 root declarations -/
 #guard_msgs in
 #check_bst_abstract RotationBST.StaticTree.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract, RotationBST.Bounds.WorkingSet.Abstract,

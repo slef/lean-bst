@@ -7,7 +7,7 @@ import Mathlib.Data.Set.Finite.Lemmas
 namespace RotationBST.Geometric
 
 /-- Every finite inorder interval admits a treap, with arbitrary ties. -/
-theorem heap_exists (priority : Nat → WithTop Nat) (n lo : Nat) :
+theorem heap_exists {α : Type} [LinearOrder α] (priority : Nat → α) (n lo : Nat) :
     ∃ t : Tree, t.size = n ∧ Heap priority t lo := by
   classical
   induction n using Nat.strong_induction_on generalizing lo with

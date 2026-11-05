@@ -74,18 +74,26 @@ RotationBST/
     Implications/   working set => static optimality => static finger
     StaticTree/     fixed-tree benchmark and the entropy lower bound
     Interleave/     Wilber's interleave quantity and lower bound
+    LazyFinger/     fixed-tree distances, weighted characterization, separations
+    WeightedFinger/ weighted dynamic-finger benchmark
+    ConditionalEntropy/ transition entropy and its obstruction
     Normalization/  request charges versus rotation charges
   Algorithms/       Part III: algorithms, definitions then bounds
     MoveToRoot/
     Splay/          algorithm, potential, access lemma, nine ST85 theorems,
                     updates, conditional splay, scanning, pointer version
-    GreedyASS/      the geometric greedy sweep
+    GreedyASS/      geometric sweep, potential analysis, lazy/weighted-finger bounds
+    OptimalLazyFinger/ exact dynamic program and annotated cubic work
+    MultipleTrees/  static linked searches with a space/query tradeoff
     Simulation/     causal geometric-to-BST simulation (last-touch supernodes)
     Tango/          preferred paths, preference changes, auxiliary trees,
                     marked-tree state machine, executable policy, O(log log n)
   Structures/       Appendix: supporting structures
     Treap/          next-touch treaps for the offline construction
     SplitTree/      multiway finger trees and split hierarchies
+    FingerHand/     multifinger representation supporting lazy-finger simulation
+    PrefixSum/      interval sums for the optimal-tree dynamic program
+    WeightedSearch/ search trees used by the multiple-tree structure
 ```
 
 Cross-part imports are allowed in one direction only: `Models` imports nothing
@@ -279,3 +287,60 @@ Each change below was checked by a full build with `--wfail`.
 - Proof internals follow the `Defs.lean` / `Results.lean` / proof-file taxonomy
   and may be nested as deeply as convenient; only `Abstract.lean` files are
   shown to readers.
+
+
+## Finger-bound results for the book
+
+The finger-bound integration follows the existing four parts. General benchmarks,
+characterizations, separations, and the conditional-entropy obstruction belong in
+`Bounds`. The optimal-tree construction, multiple-tree search structure, and
+GreedyASS guarantees belong in `Algorithms`. Their linked-search model belongs
+in `Models`; prefix sums, weighted search trees, and multifinger representations
+belong in `Structures`. Proofs use the current `Tree.depth` and geometric
+algorithm interfaces.
+
+A useful chapter progression is: fixed-tree distance → weighted characterization
+→ separations and entropy obstruction → optimal static trees → GreedyASS's
+weighted bound. The following names are the checked entry points, all under
+`RotationBST`. Each linked abstract gives the exact hypotheses and conventions.
+
+| Lazy Finger paper result | Checked entry point |
+|---|---|
+| Theorem 1: randomized weighted tree | [`LazyFinger.Random.Results.weighted_charge`](../RotationBST/Bounds/LazyFinger/Random/Abstract.lean) |
+| Corollary 2: tree from weights | [`LazyFinger.Results.tree_for_weights`](../RotationBST/Bounds/LazyFinger/Abstract.lean) |
+| Lemma 3: weights from a tree | [`LazyFinger.Results.tree_weights_two_sided`](../RotationBST/Bounds/LazyFinger/Abstract.lean) |
+| Corollary 4: reverse comparison | [`LazyFinger.Results.tree_weights`](../RotationBST/Bounds/LazyFinger/Abstract.lean) |
+| Theorem 5: characterization | [`LazyFinger.Results.characterization_from`, `characterization_root`, `characterization_long_sequence`](../RotationBST/Bounds/LazyFinger/Abstract.lean) |
+| Theorem 6: comparison and strict separations | [`LazyFinger.Results.optimal_root_finger`](../RotationBST/Bounds/LazyFinger/Abstract.lean), [`LazyFinger.Dynamic.Results.optimal`](../RotationBST/Bounds/LazyFinger/Dynamic/Abstract.lean), [`LazyFinger.Sequential.Results.family`](../RotationBST/Bounds/LazyFinger/Sequential/Abstract.lean), [`LazyFinger.Separation.Results.family`](../RotationBST/Bounds/LazyFinger/Separation/Abstract.lean) |
+| Lemma 7: conditional-entropy obstruction | [`ConditionalEntropy.Results.obstruction`](../RotationBST/Bounds/ConditionalEntropy/Abstract.lean) |
+| Theorem 8: exact optimizer and cubic work | [`OptimalLazyFinger.Work.Results.root_start`](../RotationBST/Algorithms/OptimalLazyFinger/Work/Abstract.lean) |
+| Theorem 9: space/query tradeoff | [`MultipleTrees.Results.sequence`](../RotationBST/Algorithms/MultipleTrees/Abstract.lean) |
+| Section 1.4: simultaneous consequences | [`LazyFinger.Consequences.Results.simultaneous`](../RotationBST/Bounds/LazyFinger/Consequences/Abstract.lean) |
+| Section 7: polynomial-space consequence | [`MultipleTrees.Results.polynomial_space`](../RotationBST/Algorithms/MultipleTrees/Abstract.lean) |
+
+These are normalized counterparts of the [paper](https://arxiv.org/abs/1304.6897),
+with a unit charge per request. Fixed-predecessor and root-start costs have
+separate statements. The weight optimum is an infimum; the static-tree optimum
+is attained. Conditional information is normalized as `m(1 + H)` so that empty
+sequences, deterministic transitions, and capacity one are handled. The
+optimizer's time theorem concerns its explicit annotated RAM model, not Lean
+runtime. Multiple-tree query bounds exclude construction time and use the
+empirical transition matrix only for preprocessing.
+
+| Weighted Dynamic Finger paper result | Checked entry point |
+|---|---|
+| Theorem 3.1: leaf-oriented lazy-finger bound | [`Geometric.GreedyASS.Potential.Amortized.Results`](../RotationBST/Algorithms/GreedyASS/Potential/Amortized/Abstract.lean) |
+| Theorem 4.1: ordinary lazy-finger bound | [`Geometric.GreedyASS.Performance.Results.lazy_tree`, `lazy_optimal`](../RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
+| Theorem 4.2: weighted dynamic finger | [`Geometric.GreedyASS.Performance.Results.weighted`, `weighted_optimal`](../RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
+| Corollary 1: dynamic finger | [`Geometric.GreedyASS.Performance.Results.dynamic`](../RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
+| BST and pointer realizations | [`Geometric.GreedyASS.Performance.Results.bst`, `pointer`, `bst_weighted`, `bst_dynamic`, `pointer_weighted`](../RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
+
+For this [paper](https://arxiv.org/abs/1810.01785), startup is an explicit linear
+term. The realization statements choose one causal policy before the initial
+tree, requests, and benchmark. They do not claim global dynamic optimality.
+
+This batch excludes ComboBST, deamortization, Weighted Dynamic Finger Theorem
+4.3, Lazy Finger's unnumbered periodic-rebuilding analysis, and its concluding
+conjecture. Those unfinished developments do not prevent using the results
+above in the book. Existing book chapters and interactive figures are preserved;
+the theorem map supplies the entry points for expanding them.

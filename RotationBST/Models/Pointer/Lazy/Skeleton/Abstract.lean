@@ -26,6 +26,21 @@ def fringe : Skeleton → List Tree
   | .hole t => [t]
   | .node l r => l.fringe ++ r.fringe
 
+/-- Substitute a connected region for the first or last inorder hole. -/
+def fillMin : Skeleton → Skeleton → Skeleton
+  | .hole _, t => t
+  | .node l r, t => .node (l.fillMin t) r
+
+def fillMax : Skeleton → Skeleton → Skeleton
+  | .hole _, t => t
+  | .node l r, t => .node l (r.fillMax t)
+
+/-- A zipper path as an active skeleton, keeping each off-path subtree opaque. -/
+def under : Skeleton → List Pointer.Frame → Skeleton
+  | s, [] => s
+  | s, .left r :: cs => (Skeleton.node s (.hole r)).under cs
+  | s, .right l :: cs => (Skeleton.node (.hole l) s).under cs
+
 /-- The canonical right vine with these fringe subtrees in inorder. -/
 def vine : List Tree → Tree
   | [] => .nil

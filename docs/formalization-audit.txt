@@ -78,7 +78,40 @@ not merely against build success. Paths are relative to the repository root.
    This is a checked local basis for upstream work, not an upstream submission,
    registration, review, or claim of current upstream API compatibility.
 
-Validation for this audit
+8. Lazy-finger results
+   Evidence: Bounds/LazyFinger/{Abstract.lean,Random/Abstract.lean,
+   Dynamic/Abstract.lean,Sequential/Abstract.lean,Separation/Abstract.lean,
+   Consequences/Abstract.lean}; Bounds/ConditionalEntropy/Abstract.lean;
+   Algorithms/OptimalLazyFinger/Work/Abstract.lean;
+   Algorithms/MultipleTrees/Abstract.lean.
+   All nine numbered results of arXiv:1304.6897 have checked counterparts;
+   docs/organization.md maps their exact public entry points. Costs include
+   one unit per request, and root versus specified-predecessor initialization
+   is explicit. The optimizer has annotated work <= 4m + 64(n + 1)^3.
+   Multiple-tree query bounds exclude preprocessing. The unnumbered periodic
+   rebuilding analysis and concluding conjecture are not claimed.
+
+9. GreedyASS finger bounds
+   Evidence: Algorithms/GreedyASS/Potential/Amortized/Abstract.lean and
+   Algorithms/GreedyASS/Performance/Abstract.lean.
+   arXiv:1810.01785 Theorems 3.1, 4.1, 4.2 and Corollary 1: the geometric
+   sweep satisfies leaf-oriented and ordinary lazy-finger bounds, the
+   weighted dynamic-finger bound, and its unweighted corollary. Geometric
+   row cost <= 120 * optimal lazy finger + 15n, or <= 480 * optimal weighted
+   finger + 15n. The weight optimum is an infimum. Causal BST and pointer
+   realizations choose their policy before initial trees, sequences, and
+   comparison weights. Theorem 4.3 and global dynamic optimality are excluded.
+   ComboBST and deamortization remain outside this integration batch.
+
+Validation of the finger-bound integration
+   lake build --wfail: passed (8266 jobs), including whole-library axiom audit
+   and 24 added regression modules.
+   scripts/check_imports.py: passed (941 reachable library modules).
+   git diff --check and staged whitespace check: passed.
+   docs/extract_snippets.py: passed; existing snippets unchanged.
+   Interactive book: extraction and build passed; all 18 JavaScript tests passed.
+
+Historical validation before the finger-bound integration
    lake build --wfail: passed (5285 jobs).
    scripts/check_imports.py: passed (560 reachable library modules).
    git diff --check: passed.

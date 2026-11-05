@@ -5,6 +5,32 @@ public import RotationBSTTests.AbstractBoundary
 public import RotationBSTTests.Axioms
 public import RotationBSTTests.Arboral
 
+-- Lazy Finger and GreedyASS paper regressions.
+public import RotationBSTTests.ConditionalEntropy
+public import RotationBSTTests.DynamicLazyFinger
+public import RotationBSTTests.GreedyAccessedPotential
+public import RotationBSTTests.GreedyAmortized
+public import RotationBSTTests.GreedyBarrier
+public import RotationBSTTests.GreedyColorCounts
+public import RotationBSTTests.GreedyGreenAccess
+public import RotationBSTTests.GreedyItems
+public import RotationBSTTests.GreedyPerformance
+public import RotationBSTTests.GreedyPhaseOne
+public import RotationBSTTests.GreedyPhaseTwo
+public import RotationBSTTests.GreedyPotential
+public import RotationBSTTests.GreedyReference
+public import RotationBSTTests.GreedyReferenceDistance
+public import RotationBSTTests.GreedyReferenceTransitions
+public import RotationBSTTests.GreedySnapshotCorners
+public import RotationBSTTests.GreedyUnaccessedPotential
+public import RotationBSTTests.GreedyVirgin
+public import RotationBSTTests.GreedyVirginTransitions
+public import RotationBSTTests.LazyFingerConsequences
+public import RotationBSTTests.LazyFingerSeparation
+public import RotationBSTTests.LazyFingerWeights
+public import RotationBSTTests.MultipleTrees
+public import RotationBSTTests.OptimalLazyFinger
+
 @[expose] public section
 
 namespace RotationBST.Tests
