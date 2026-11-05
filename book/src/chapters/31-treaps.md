@@ -1,8 +1,10 @@
-# Next-touch treaps
+# Treaps
 
 [Chapter 9](equivalence.html) states that every arborally satisfied point set can be executed by a binary search tree that touches exactly one node per point. The proof, due to Demaine, Harmon, Iacono, Kane and Pătraşcu (2009), is a data structure: a treap whose priorities are the times at which keys will next be touched. The converse, that the touched nodes of any rooted-region execution form an arborally satisfied set, rests on the mirror-image invariant, a heap of the times at which keys were last touched. This chapter presents the definitions these two arguments are built from, and how the proofs use them.
 
 Together the two arguments prove the exact form of the equivalence, with no constant factors at all: a point set and a BST execution in the rooted-region model of [Chapter 7](regions.html) cost the same.
+
+The last two sections leave the geometric setting. They state the classical facts about treaps for arbitrary distinct priorities, and define the *random* treaps that Lazy Finger Theorem 1 uses in [Chapter 14](lazy-finger.html).
 
 ```headline treap-regions
 title: Arborally satisfied sets are exactly rooted-region executions
@@ -17,7 +19,7 @@ For every $n$, every request sequence $X = x_0, x_1, \dots$ and every number $c$
 The initial tree is not fixed: the construction chooses it, and it needs the whole sequence in advance. In Lean, the point sets are [[Geometric.Offline]] solutions and the executions are [[RegionExecution]]s.
 ```
 
-None of the definitions here appears in a theorem statement of the reading interface. They live in `Structures/Treap/Abstract.lean`, `Models/Region/Abstract.lean` and `Models/Region/View/Abstract.lean`, and they are shown so that the proofs of [[Geometric.Equivalence.Results.ass_iff_region_execution]] and [[Geometric.Equivalence.Results.ass_to_pointers]] can be followed in the source. The regions and region executions they manipulate were defined in [Chapter 7](regions.html), and points, rows and arboral satisfaction in [Chapter 8](geometry.html).
+Apart from [[Geometric.Heap]], which the general treap facts at the end of the chapter use, none of the definitions of the next five sections appears in a theorem statement of the reading interface. They live in `Structures/Treap/Abstract.lean`, `Models/Region/Abstract.lean` and `Models/Region/View/Abstract.lean`, and they are shown so that the proofs of [[Geometric.Equivalence.Results.ass_iff_region_execution]] and [[Geometric.Equivalence.Results.ass_to_pointers]] can be followed in the source. The regions and region executions they manipulate were defined in [Chapter 7](regions.html), and points, rows and arboral satisfaction in [Chapter 8](geometry.html).
 
 ## Treaps on ranks
 
@@ -30,7 +32,7 @@ A *treap* (Seidel and Aragon, 1989; the same objects are Vuillemin's Cartesian t
 ::: check
 - The priority type `α` only needs `≤`. The library uses it with `WithTop Nat` for next touches and with the order dual of `WithBot Nat` for last touches, below.
 - There is no tie-breaking rule. With equal priorities several shapes satisfy `Heap`, and every statement that uses it holds for all of them. The construction needs this freedom: once a key is never touched again its priority is `⊤`, and many keys share it.
-- Every interval has a treap. The library proves it (in `Structures/Treap/Existence.lean`) by the textbook recursion: put a key of minimum priority at the root and recurse on both sides.
+- Every interval has a treap. The library proves it, for priorities in a linear order, by the textbook recursion: put a key of minimum priority at the root and recurse on both sides. The statement is [[Geometric.TreapOrder.Results.exists_tree]], below.
 :::
 
 ## Priorities from the future
@@ -93,3 +95,70 @@ The two invariants describe the same trees in the treap construction. Before row
 ## Where these definitions sit
 
 The treap construction is the only offline argument of the geometric chapters. Its priorities come from the future of the point set, so it converts a whole solution, never a request at a time. The online direction, in [Chapter 17](simulation.html), cannot know next touches and replaces the treap by last-touch supernodes stored in the split trees of [Chapter 21](split-trees.html).
+
+## Treaps for arbitrary priorities
+
+Everything so far used treaps for one kind of priority, the next touches. Three classical facts hold for priorities in any linear order. They are stated in `Structures/Treap/Order/Abstract.lean` and are used by the random treaps of the next section. All three read a tree on the ranks `lo, lo+1, …, lo + n - 1`, as [[Geometric.Heap]] does.
+
+**Theorem (existence).** For every priority function into a linear order, every interval of $n$ ranks has a treap of size $n$. Ties are allowed.
+
+@decl RotationBST.Geometric.TreapOrder.Results.exists_tree
+
+The proof is the recursion of the first section: a key of minimum priority is the root, and both sides are built recursively. The priorities can be anything, not only next-touch times.
+
+**Theorem (uniqueness).** If the priorities are distinct on the interval, two treaps of the same size on it are the same tree.
+
+@decl RotationBST.Geometric.TreapOrder.Results.unique_shape
+
+Distinctness is needed only on the interval, `Set.InjOn priority (Set.Ico lo (lo + t.size))`. Keys outside it may share priorities.
+
+**Theorem (ancestors are interval minima).** Let the priorities be distinct on the interval, and let $a$ and $x$ be two of its ranks. Then $a$ lies on the search path to $x$ exactly when $a$ has the smallest priority among all ranks between $a$ and $x$, inclusive.
+
+@decl RotationBST.Geometric.TreapOrder.Results.ancestor_minimum
+
+The search path ([[Tree.searchPath]]) runs from the root to $x$ and includes both. So "on the search path to $x$" means "an ancestor of $x$, or $x$ itself", and for $a = x$ both sides hold trivially. The proof follows the root, which has the minimum priority of the whole interval. If the root is $a$, both sides hold. If the root is $x \ne a$, or lies strictly between $a$ and $x$, both sides fail: $a$ is not on the path, and the root is a rank of the interval with a smaller priority than $a$. Otherwise $a$ and $x$ lie in the same subtree, and the induction continues there. This is a deterministic identity, with no probability in it. It turns every ancestor event of a treap into an event about which key of an interval has the smallest priority.
+
+## Random treaps
+
+Lazy Finger Theorem 1 (Bose, Douïeb, Iacono and Langerman, 2013) gives, for any positive weights, a randomized static tree in which, for every pair of keys $x, y$, the expected cost of moving the lazy finger from $x$ to $y$ is within a constant factor of the weighted dynamic-finger charge of the pair. The library states it as [[LazyFinger.Random.Results.weighted_charge]] in [Chapter 14](lazy-finger.html). The random tree is a treap with random priorities, and this section defines the probability space. It lives in `Structures/Treap/Random/Definitions/Abstract.lean` and contains no measure theory: it is a finite weighted average over orders of the keys.
+
+A random order replaces random priorities. The key listed first gets the smallest priority and becomes the root of the treap, and so on down the list.
+
+@decl RotationBST.Treap.Random.IsOrder
+
+`IsOrder s xs` says that `xs` lists every key of the finite set `s` exactly once.
+
+@decl RotationBST.Treap.Random.average
+
+`average w s f` is the expected value of `f xs` when the order `xs` of `s` is drawn as follows. The first key is chosen from `s` with probability proportional to its weight, $w(x)/\sum_{k \in s} w(k)$. The rest of the order is drawn in the same way from the remaining keys. Written out, the order $x_1, \dots, x_m$ has probability
+
+$$
+\prod_{i=1}^{m} \frac{w(x_i)}{w(x_i) + w(x_{i+1}) + \dots + w(x_m)} ,
+$$
+
+which is sampling without replacement proportional to weight (the Plackett–Luce distribution). With equal weights every order has probability $1/m!$. Equivalently, though the library never uses this, one may give the keys independent exponential priorities with rates $w(x)$ and sort them increasingly.
+
+To read a random treap off an order, use the position in the list as the priority, `xs.idxOf`. On a genuine order these positions are distinct (`order_idxOf_injective`), so by [[Geometric.TreapOrder.Results.unique_shape]] the order determines the treap. If `T xs` is a treap for `xs.idxOf`, then `average w s (fun xs => g (T xs))` is the expectation of `g` over the random treap.
+
+::: check
+- The definition is total. The empty set gives `f []`, and nothing in the definition requires positive weights. With nonpositive weights it is not an expectation. With total weight $0$, Lean's division by zero gives $0$ for every term. The probability statements all assume `0 < w x` on the set.
+- Under that hypothesis the proof files establish what an expectation should satisfy. The total probability is one (`average_const`), and the average is linear (`average_add`, `average_mul`, `average_sum`). It depends only on the values of `f` on genuine orders (`average_congr`, `average_mono`).
+- `exists_order_le_average` is the finite probabilistic method: some genuine order makes `f` at most its average. This turns the randomized tree into a deterministic one.
+:::
+
+@decl RotationBST.Treap.Random.firstIn RotationBST.Treap.Random.firstProbability
+
+`firstIn s xs` is the first key of `s` in the list `xs`, that is, the key of `s` with the smallest priority, or `none` if `xs` contains no key of `s`. `firstProbability w u s a` is the probability that `a` comes first among `s` when the whole universe `u` is ordered at random. The basic lemma is `firstProbability_eq` (in `Random/Minimum.lean`):
+
+> If the weights are positive on `u`, `s ⊆ u` and `a ∈ s`, then `firstProbability w u s a` $= w(a) / \sum_{k \in s} w(k)$.
+
+The keys outside `s` do not bias which key of `s` comes first. Combined with [[Geometric.TreapOrder.Results.ancestor_minimum]], this gives the ancestor probabilities of a random treap. Let $W[i, j]$ be the total weight of the ranks between $i$ and $j$ inclusive:
+
+- $a$ lies on the search path to $x$ with probability $w(a) / W[\min(a, x), \max(a, x)]$ (`exists_random_treap`, in `Random/Tree.lean`);
+- $a$ lies on the search paths to both $x$ and $y$ with probability $w(a) / W[\min(a, x, y), \max(a, x, y)]$ (`common_ancestor_probability`).
+
+The lazy-finger distance between $x$ and $y$ counts the ancestors of $x$ and of $y$ that are not common ancestors. Summing these probabilities over $a$ gives the exact expected distance [[LazyFinger.Random.Results.expected_distance]], and bounding the sums gives [[LazyFinger.Random.Results.weighted_charge]]. Both are in [Chapter 14](lazy-finger.html).
+
+::: caveat What the statements say about the trees
+The two theorems of [Chapter 14](lazy-finger.html) assert that *some* family of trees `T : List Nat → Tree`, each of size $n$, has the stated average. They do not say that `T xs` is a treap. The treap is the witness built in the proof, by `exists_random_treap`. Their statements depend on this chapter only through `average`, the distribution over orders.
+:::

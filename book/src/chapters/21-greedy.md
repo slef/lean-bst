@@ -104,3 +104,5 @@ GreedyASS produces points, not rotations. [Chapter 17](simulation.html) turns an
 ::: note Known results
 Fox (2011) proved that GreedyASS satisfies an access lemma analogous to that of splay trees, which gives it the logarithmic amortized bound. Many further adaptive properties have since been established for it. None of these are formalized in the library.
 :::
+
+One family of adaptive bounds for GreedyASS is formalized, however. [Chapter 23](greedy-finger.html) to [Chapter 26](greedy-amortized.html) prove the theorems of Iacono and Langerman (2016): on every sequence, the number of points GreedyASS adds is at most a constant times the cost of the best static tree searched with a lazy finger, plus $O(n)$. Equivalently, it has the weighted dynamic finger property, and in particular the dynamic finger property. Through the simulation, the same bounds hold for an online BST algorithm.

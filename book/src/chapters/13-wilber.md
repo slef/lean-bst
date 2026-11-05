@@ -134,6 +134,6 @@ Switch the figure above to *preferred paths* to preview them. Each node prefers 
 
 ::: caveat What is not formalized
 - **Only the first bound.** Wilber's second lower bound, sometimes called the funnel bound, is not formalized. Neither are the later geometric lower bounds, such as the independent-rectangle bound of Demaine, Harmon, Iacono, Kane and Pătraşcu (2009).
-- **No dynamic finger.** Among the upper-bound benchmarks of Part II, the dynamic finger bound (Cole et al., 2000) is not formalized either.
+- **Dynamic finger for splay trees.** The dynamic finger bound of Cole et al. (2000) is not formalized for splay trees. It is proved for GreedyASS ([Chapter 23](greedy-finger.html)), as a corollary of the weighted dynamic finger bound.
 - **No compute time.** Like everything else in the library, the bound counts BST operations only, not the time needed to compute anything.
 :::

@@ -342,5 +342,8 @@ tree, requests, and benchmark. They do not claim global dynamic optimality.
 This batch excludes ComboBST, deamortization, Weighted Dynamic Finger Theorem
 4.3, Lazy Finger's unnumbered periodic-rebuilding analysis, and its concluding
 conjecture. Those unfinished developments do not prevent using the results
-above in the book. Existing book chapters and interactive figures are preserved;
-the theorem map supplies the entry points for expanding them.
+above in the book, which covers them in chapters 10–11 (multi-finger and
+linked-search models), 14–16 (lazy finger, its place among the bounds, and the
+conditional-entropy obstruction), 23–26 (GreedyASS's finger bounds and their
+proof), 29–30 (the optimizer and multiple trees) and 33–35 (prefix sums,
+weighted search trees, BST deques, tendons and finger hands).

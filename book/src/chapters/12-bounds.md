@@ -115,6 +115,14 @@ Each request costs $1 + \log_2(|x - f| + 1)$, where `Nat.dist x f` is $|x - f|$ 
 The quantifier order matters. The constants $C, D$ come first, and then the bound holds for every finger `f < t.size`. A single algorithm with fixed constants competes with **every** finger simultaneously, as in the paper. The algorithm itself never learns `f`.
 :::
 
+## Dynamic finger
+
+The dynamic finger bound replaces the fixed finger by the *previous* request: a request is cheap when it is close in rank to the one before it. The library defines the benchmark as a sequence function:
+
+@decl RotationBST.Bounds.dynamicFingerCostFrom
+
+`dynamicFingerCostFrom p xs` charges each request $x_i$ the amount $1 + \log_2(|x_i - x_{i-1}| + 1)$, with a real base-two logarithm, where $x_0 = p$ is an explicitly supplied predecessor of the first request. The unit makes an immediately repeated request cost $1$, as in every other benchmark of this chapter. The bound was proved for splay trees by Cole, Mishra, Schmidt and Siegel (2000); that proof is not in the library, and there is no `Has…Bound` property for this benchmark. The library proves it instead for GreedyASS ([Chapter 23](greedy-finger.html)), and for the optimal lazy-finger tree ([Chapter 15](lazy-finger-hierarchy.html)), where it is the unit-weight case of the weighted dynamic finger bound of [Chapter 14](lazy-finger.html).
+
 ## The unified charge
 
 Sleator and Tarjan's Theorem 5 combines the three localities: each access is charged the *smallest* of its three logarithmic costs. The library defines this benchmark in `Bounds/Unified/Abstract.lean`, next to the others, so that the bound is a property of a sequence and not of splaying:
@@ -157,6 +165,14 @@ Entropy is a lower bound on the cost of every fixed tree, up to a factor of $3$.
 
 The proof is the prefix-code argument. Give key $x$ the weight $4^{-(\mathrm{depth}(x)+1)}$, two bits for each comparison step, including the final one. These weights sum to at most $1$ in every shape. Gibbs' inequality bounds the entropy by $\sum_x q_x \log_2(1/w_x) = 2 \cdot \mathtt{cost}$, so $\mathtt{staticCost} \le m + 2\,\mathtt{cost} \le 3\,\mathtt{cost}$.
 
+The bound is tight up to that factor: some fixed tree achieves the entropy bound itself.
+
+**Theorem (entropy upper bound).** For every $n$ and every sequence `xs` of requests less than $n$, there is a tree `t` on $n$ keys with $\mathtt{cost}(t, xs) \le \mathtt{staticCost}(n, xs)$.
+
+@decl RotationBST.StaticTree.Results.entropy_upper_bound
+
+The constant is one, and there is no additive term. The tree has all $n$ keys, including those never requested, and the statement includes $n = 0$ and the empty sequence, where both sides are $0$. Combined with the lower bound, the best fixed tree for `xs` costs between $\tfrac13\,\mathtt{staticCost}$ and $\mathtt{staticCost}$, which is the classical statement that optimal static trees cost $\Theta(m + \sum_x q_x \log_2(m/q_x))$.
+
 Consequently, a working-set algorithm competes with every fixed BST.
 
 **Theorem (working set beats every fixed tree).** If an algorithm has the working-set bound, then there are constants $C, D$ such that, for every initial tree `t`, every tree `u` of the same size and every valid sequence `xs`, the algorithm's total cost from `t` is at most $C \cdot \mathtt{StaticTree.cost}(u, xs) + D\,n(1 + \lfloor\log_2 n\rfloor)$.
@@ -195,5 +211,5 @@ The left-hand side is the cost of the online pointer implementation of `a`, incl
 
 ## What is not formalized
 
-Two well-known benchmarks are absent. The **dynamic finger** bound (Cole, Mishra, Schmidt and Siegel, 2000) charges each access $\log_2$ of the rank distance to the *previous* request. It is stronger than static finger, and splay trees satisfy it, but its proof is long and is not in the library. **Iacono's unified bound** replaces the fixed finger by the distance to recently accessed keys; it is open whether splay trees satisfy it. Both are mentioned here only to place the formalized bounds. The lower-bound side of Part II is [Chapter 11](wilber.html).
+Two well-known results are absent. The **dynamic finger** theorem for splay trees (Cole, Mishra, Schmidt and Siegel, 2000) is not in the library: its proof is long. The benchmark itself is defined above, and other structures are proved to meet it. **Iacono's unified bound** replaces the fixed finger by the distance to recently accessed keys; it is open whether splay trees satisfy it. Both are mentioned here only to place the formalized bounds. The lower-bound side of Part II is [Chapter 11](wilber.html).
 
