@@ -32,6 +32,40 @@ $$m + \sum_x q_x \log_2 \frac{m}{q_x} \;\le\; 3\,\Bigl(m + \sum_j \mathrm{depth}
 In Lean, the left side is [[RotationBST.Bounds.staticCost]] and the right side is [[RotationBST.StaticTree.cost]].
 ```
 
+## A map of the bounds
+
+This chapter defines the classical benchmarks, and Part II and later chapters add more. The figure collects every relation between them that the library proves. Each benchmark is a function of the request sequence $X$ of length $m$ on $n$ keys:
+
+- $\mathrm{IB}$, Wilber's interleave quantity for a reference tree, [[RotationBST.Wilber.interleave]] ([Chapter 13](wilber.html));
+- $\mathrm{OPT}$, the least cost of an [[RotationBST.Execution]] serving $X$, the offline optimum of [Chapter 5](online.html) (the pointer-machine optimum is the same up to constant factors, by [Chapter 9](equivalence.html));
+- $m(1+H)$, the conditional-entropy benchmark [[ConditionalEntropy.cost]] ([Chapter 16](conditional-entropy.html));
+- $\mathrm{LF}^*$, the cost of the best static tree searched with a lazy finger, [[LazyFinger.optimalCost]] ([Chapter 14](lazy-finger.html));
+- $\mathrm{WDF}^*$, the best weighted dynamic finger bound, [[WeightedFinger.optimalCostFrom]] ([Chapter 14](lazy-finger.html));
+- $\mathrm{RF}^*$, the cost of the best static tree searched from the root, the minimum of [[StaticTree.cost]] over trees;
+- $\mathrm{SO}$, the entropy bound [[Bounds.staticCost]]; $\mathrm{WS}$, the working-set sum [[workingSetSum]]; $\mathrm{SF}$, the static finger sum [[Bounds.fingerCost]]; and $\mathrm{DF}$, the dynamic finger sum [[Bounds.dynamicFingerCostFrom]].
+
+An arrow $A \to B$ means that a cost bound in terms of $A$ implies one in terms of $B$. For most arrows this is an inequality $A \le c\,B + O(n)$ between the benchmarks themselves. The two arrows out of $\mathrm{WS}$ and $\mathrm{SO}$ are instead implications between properties of algorithms, with the startup allowance $D\,n(1 + \lfloor\log_2 n\rfloor)$ of this chapter. The violet tags name algorithms that meet a bound; they link to the chapters that prove it.
+
+@viz boundsmap {}
+
+| Relation | What is proved | Lean |
+|---|---|---|
+| $\mathrm{IB} \to \mathrm{OPT}$ | Every execution with $r$ rotations has $\mathrm{IB} \le 4r + 2m$, for every reference tree. | [[Wilber.Results.rotation_lower_bound\|rotation_lower_bound]] |
+| $\mathrm{OPT} \to \mathrm{LF}^*$, strict | From every initial tree, some pointer execution costs at most $464\,\mathrm{LF}^* + 16n$. Some families have $\mathrm{OPT} = o(\mathrm{LF}^*)$. | [[LazyFinger.Dynamic.Results.optimal\|Dynamic.optimal]], [[LazyFinger.Separation.Results.family\|Separation.family]] |
+| $\mathrm{OPT} \not\to m(1+H)$ | No execution bound $C\,m(1+H) + a(n)$ holds, whatever $C$ and $a$. | [[ConditionalEntropy.Results.obstruction\|obstruction]] |
+| $\mathrm{LF}^* \leftrightarrow \mathrm{WDF}^*$ | $\mathrm{LF}^* + n \le 4(\mathrm{WDF}^* + n)$ and $\mathrm{WDF}^* + n \le 4(\mathrm{LF}^* + n)$. | [[LazyFinger.Results.characterization\|characterization]] |
+| $\mathrm{LF}^* \to \mathrm{RF}^*$, strict | $\mathrm{LF}^* \le 2\,\mathrm{RF}_t$ for every tree $t$. Some families have $\mathrm{LF}^* = o(\mathrm{RF}^*)$. | [[LazyFinger.Results.optimal_root_finger\|optimal_root_finger]], [[LazyFinger.Sequential.Results.family\|Sequential.family]] |
+| $\mathrm{LF}^* \to \mathrm{DF}$ | $\mathrm{LF}^* \le n + 4\,\mathrm{DF}$, from any start key. | [[LazyFinger.Consequences.Results.dynamic_finger\|dynamic_finger]] |
+| $\mathrm{RF}^* \leftrightarrow \mathrm{SO}$ | $\mathrm{SO} \le 3\,\mathrm{RF}_t$ for every tree $t$, and $\mathrm{RF}_t \le \mathrm{SO}$ for some $t$. | [[StaticTree.Results.entropy_lower_bound\|entropy_lower_bound]], [[StaticTree.Results.entropy_upper_bound\|entropy_upper_bound]] |
+| $\mathrm{WS} \to \mathrm{SO}$ | The working-set property implies static optimality. | [[Bounds.workingSet_implies_staticOptimality\|workingSet_implies_staticOptimality]] |
+| $\mathrm{SO} \to \mathrm{SF}$ | Static optimality implies the static finger property, for every finger. | [[Bounds.staticOptimality_implies_staticFinger\|staticOptimality_implies_staticFinger]] |
+
+Some composite relations are also stated directly, as inequalities between benchmarks: $\mathrm{LF}^* \le 2\,\mathrm{SO}$ and $\mathrm{LF}^* \le 6\,\mathrm{SF}$ ([[LazyFinger.Consequences.Results.static_optimality]], [[LazyFinger.Consequences.Results.static_finger]]), and a working-set algorithm competes with every fixed tree ([[StaticTree.Results.workingSet_competes]]).
+
+The map shows only what is proved. Algorithms give further relations: splaying is a BST algorithm with the working-set bound, so $\mathrm{OPT}$ is at most a constant times $\mathrm{WS}$ plus startup; but the library states this only as a property of splaying, not as an arrow between benchmarks. Several classical facts are not formalized at all. Dynamic finger implies static finger, and the working-set and dynamic finger bounds are incomparable. Neither is in the library, so $\mathrm{DF}$ and $\mathrm{WS}$ have no arrows between them or towards $\mathrm{SF}$. The unified charge of [Section 12.5](bounds.html#the-unified-charge) is absent from the map for the same reason.
+
+## Conventions
+
 All logarithms are base 2. The sequence functions use `Nat.log2` (the floor of $\log_2$, with `Nat.log2 0 = 0`) where the original definitions are natural-number valued, and `Real.logb 2` (with $\log 0 = 0$) where they are real-valued. Every property has the same shape:
 
 $$\exists\, C, D \in \mathbb N.\ \forall t, xs \text{ valid}.\quad \mathrm{cost}(a, t, xs) \;\le\; C \cdot f(xs) \;+\; D \cdot n\,(1 + \lfloor \log_2 n \rfloor),$$
