@@ -12,7 +12,7 @@ one unit per request, and an explicit startup term.
 ## 1. Dynamic finger implies static finger
 
 **Source.** Classical. Shown as the dashed arrow DF → SF in the map of the
-bounds (book chapter "Adaptive bounds", section "A map of the bounds").
+bounds (the introduction to Part II of the book, section "A map of the bounds").
 
 **Statement.** For every finger `f`, start key `p` and sequence `xs`, the dynamic
 finger sum is at most twice the static finger sum plus a start term:
@@ -50,9 +50,10 @@ next to `Definitions/`). The property and the implication in
 `staticOptimality_implies_staticFinger`.
 
 **Book.** In `book/src/assets/viz/boundsmap.js`, drop `todo: true` from the two
-`DF → SF` edges and give them `thms`. In `book/src/chapters/12-bounds.md`, show
-the new declarations with `@decl`, link them in the relations table, and update
-the "Dynamic finger" and "What is not formalized" sections.
+`DF → SF` edges and give them `thms`. In `book/src/chapters/bounds/bounds.md`, show
+the new declarations with `@decl` and update the "Dynamic finger" and "What is
+not formalized" sections. In `book/src/chapters/bounds/part-bounds.md`, link
+them in the relations table.
 
 ## 2. Splay trees are O(log log n · log² log log n)-competitive
 
@@ -85,14 +86,15 @@ This is a large project: read the paper first and plan the lemmas before
 starting.
 
 **Book.** In `book/src/assets/viz/boundsmap.js`, drop `todo: true` from the
-`splay → OPT` edge and give it `thms`. In `book/src/chapters/12-bounds.md`,
-update the algorithms table and the "What is not formalized" section, and add a
-headline result to the splay analysis chapter (`19-analysis.md`) or a new
-chapter after it.
+`splay → OPT` edge and give it `thms`. Update the algorithms table in
+`book/src/chapters/bounds/part-bounds.md`, the "What is not formalized" section
+of `bounds/bounds.md`, and the overview `algorithms/splay-trees.md`. Add a
+headline result to the splay analysis section (`algorithms/analysis.md`) or a
+new section after it (an entry under `splay-trees` in `book/src/book.json`).
 
 ## 3. Tango as one online algorithm with linear startup
 
-**Source.** Book chapter "Tango with linear startup" (`book/src/chapters/30-tango-linear.md`). Its headline combines two library theorems by hand; no single theorem states the result.
+**Source.** Book chapter "Tango with linear startup" (`book/src/chapters/algorithms/tango-linear.md`). Its headline combines two library theorems by hand; no single theorem states the result.
 
 **Statement.** Compose `Tango.BottomUp.Results.balanced_policy` with `Tango.Algorithm.Rotation.Results.rotation_algorithm`. The first gives `run + m ≤ 42n + (70L + 20)(R + m)`. The second gives `totalCost ≤ m + run + 2n`. Together:
 
@@ -108,4 +110,4 @@ theorem RotationBST.Tango.Algorithm.Results.exists_competitive_linear (n : Nat) 
 
 **Where.** `Algorithms/Tango/Algorithm/BottomUp/Abstract.lean`, or `Algorithms/Tango/Algorithm/Abstract.lean` next to `exists_competitive`.
 
-**Book.** In `30-tango-linear.md`, replace the hand composition in the `tango-linear` headline with the new theorem. In `52-audit.md`, drop the bullet on Tango's linear startup.
+**Book.** In `algorithms/tango-linear.md`, replace the hand composition in the `tango-linear` headline with the new theorem. In `appendices/audit.md` and the overview `algorithms/tango-trees.md`, drop the remarks on Tango's linear startup being composed by hand.

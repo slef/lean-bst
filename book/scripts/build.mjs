@@ -70,10 +70,49 @@ function docsUrl(name) {
 // ---------------------------------------------------------------------------
 // Pass 1: find where each declaration is displayed.
 
-const chapters = config.chapters.map((ch, i) => {
-  const text = readFileSync(join(srcDir, 'chapters', ch.file), 'utf8');
-  return { ...ch, index: i, text, href: ch.slug === 'index' ? 'index.html' : `${ch.slug}.html` };
-});
+// book.json nests pages: front matter, parts (each with an introduction page
+// and chapters, a chapter possibly with sub-pages), then appendices. Numbers
+// are assigned here: chapters 1, 2, … across parts, sub-pages N.1, N.2, …,
+// appendices A, B, …. A chapter with sub-pages is a short overview page whose
+// own headings are not numbered.
+const chapters = [];
+{
+  const add = (entry, extra) => {
+    const ch = { ...entry, ...extra, index: chapters.length };
+    delete ch.chapters;
+    ch.text = readFileSync(join(srcDir, 'chapters', ch.file), 'utf8');
+    ch.href = ch.slug === 'index' ? 'index.html' : `${ch.slug}.html`;
+    chapters.push(ch);
+    return ch;
+  };
+  let number = 0;
+  for (const f of config.front) add(f, { kind: 'front' });
+  for (const p of config.parts) {
+    const part = add(p, { kind: 'part', partLabel: p.label, title: p.title });
+    for (const c of p.chapters) {
+      const ch = add(c, { kind: 'chapter', number: String(++number), part });
+      ch.children = (c.children ?? []).map((k, i) => add(k, { kind: 'sub', number: `${number}.${i + 1}`, parent: ch, part }));
+    }
+  }
+  config.appendices.forEach((a, i) => add(a, { kind: 'appendix', appendix: String.fromCharCode(65 + i) }));
+}
+// "Chapter 12", "Section 12.3", "Part II" or "Appendix A".
+function pageLabel(ch) {
+  if (ch.kind === 'sub') return `Section ${ch.number}`;
+  if (ch.kind === 'chapter') return `Chapter ${ch.number}`;
+  if (ch.kind === 'part') return `Part ${ch.partLabel}`;
+  if (ch.kind === 'appendix') return `Appendix ${ch.appendix}`;
+  return null;
+}
+// {{ref:slug}} and {{num:slug}} in a chapter's source become the label or the
+// number of that page, also inside code blocks, so diagrams never go stale.
+for (const ch of chapters) {
+  ch.text = ch.text.replace(/\{\{(ref|num):([\w-]+)\}\}/g, (whole, what, slug) => {
+    const t = chapters.find((c) => c.slug === slug);
+    if (!t) { fail(`${ch.file}: unknown page ${slug} in ${whole}`); return whole; }
+    return what === 'ref' ? pageLabel(t) : (t.number ?? t.appendix ?? t.partLabel);
+  });
+}
 
 const home = new Map(); // constant -> {chapter, id}
 const displayed = []; // [{name, chapter}]
@@ -504,7 +543,7 @@ function renderHeadline(page, claim) {
 function renderClaims(page) {
   const rows = claims.map((claim) => {
     const ch = claim.chapter;
-    const where = `${ch.number ? `Chapter ${ch.number}` : ch.title}`;
+    const where = pageLabel(ch) ?? ch.title;
     return `<li class="claim-row${claim.key ? ' key-result' : ''}" id="claim-${claim.id}">`
       + `<div class="claim-head"><label><input type="checkbox" class="claim-toggle" data-claim="${claim.id}">`
       + `<span class="claim-title">${claim.key ? '<span class="headline-star" aria-hidden="true">★</span> ' : ''}${md.renderInline(claim.title)}</span></label>`
@@ -555,7 +594,7 @@ md.core.ruler.push('sections', (state) => {
     used.add(id);
     t.attrSet('id', id);
     let number = '';
-    if (page.chapter.number && (level === 2 || level === 3)) {
+    if (page.chapter.number && !page.chapter.children?.length && (level === 2 || level === 3)) {
       if (level === 2) { counters[0]++; counters[1] = 0; number = `${page.chapter.number}.${counters[0]}`; }
       else { counters[1]++; number = `${page.chapter.number}.${counters[0]}.${counters[1]}`; }
     }
@@ -567,10 +606,11 @@ const defaultHeadingOpen = md.renderer.rules.heading_open ?? ((tokens, idx, opts
 md.renderer.rules.heading_open = (tokens, idx, opts, env, self) => {
   const t = tokens[idx];
   let html = defaultHeadingOpen(tokens, idx, opts, env, self);
-  if (t.tag === 'h1' && currentPage.chapter.number) {
-    html += `<span class="chapnum">Chapter ${currentPage.chapter.number}</span>`;
-  } else if (t.tag === 'h1' && currentPage.chapter.appendix) {
-    html += `<span class="chapnum">Appendix ${currentPage.chapter.appendix}</span>`;
+  const ch = currentPage.chapter;
+  if (t.tag === 'h1' && ch.kind === 'sub') {
+    html += `<span class="chapnum"><a href="${ch.parent.href}">Chapter ${ch.parent.number} · ${escapeHtml(ch.parent.title)}</a> · Section ${ch.number}</span>`;
+  } else if (t.tag === 'h1' && pageLabel(ch)) {
+    html += `<span class="chapnum">${pageLabel(ch)}</span>`;
   }
   if (t.tag === 'h2' && t.meta?.id) {
     currentPage.section = { id: t.meta.id, number: t.meta.number, title: tokens[idx + 1].children.filter((c) => c.type === 'text' || c.type === 'code_inline').map((c) => c.content).join('') };
@@ -641,18 +681,35 @@ function renderAudit(page) {
 // Page template
 
 function sidebar(page) {
-  const items = chapters.map((ch) => {
-    const active = ch === page.chapter;
+  const here = page.chapter;
+  const sections = () => (page.toc?.length
+    ? '<ol class="toc-sections">' + page.toc.filter((t) => t.level === 2)
+      .map((t) => `<li><a href="#${t.id}">${t.number ? `<span class="toc-num">${t.number}</span>` : ''}${t.html}</a></li>`).join('') + '</ol>'
+    : '');
+  const item = (ch) => {
+    const active = ch === here;
     const label = ch.number ?? ch.appendix;
     const num = label ? `<span class="toc-num">${label}</span>` : '';
-    let sub = '';
-    if (active && page.toc?.length) {
-      sub = '<ol class="toc-sections">' + page.toc.filter((t) => t.level === 2)
-        .map((t) => `<li><a href="#${t.id}">${t.number ? `<span class="toc-num">${t.number}</span>` : ''}${t.html}</a></li>`).join('') + '</ol>';
+    const kids = ch.children ?? [];
+    const open = active || kids.includes(here);
+    // A collapsed chapter lists its sub-pages for the reading-list badges.
+    const sub = kids.length && !open ? ` data-sub="${kids.map((k) => k.href).join(' ')}"` : '';
+    let inner = active ? sections() : '';
+    if (kids.length && open) inner += `<ol class="toc-sub">${kids.map(item).join('')}</ol>`;
+    const cls = [active ? 'active' : '', kids.length ? (open ? 'has-sub open' : 'has-sub') : ''].filter(Boolean).join(' ');
+    return `<li${cls ? ` class="${cls}"` : ''}><a class="toc-page" href="${ch.href}"${sub}>${num}${escapeHtml(ch.title)}</a>${inner}</li>`;
+  };
+  const items = [];
+  for (const ch of chapters) {
+    if (ch.kind === 'sub') continue;
+    if (ch.kind === 'part') {
+      const active = ch === here;
+      items.push(`<li class="toc-part${active ? ' active' : ''}"><a class="toc-page" href="${ch.href}">${escapeHtml(`${ch.partLabel} · ${ch.title}`)}</a>${active ? sections() : ''}</li>`);
+      continue;
     }
-    const part = ch.part ? `<li class="toc-part">${escapeHtml(ch.part)}</li>` : '';
-    return `${part}<li class="${active ? 'active' : ''}"><a href="${ch.href}">${num}${escapeHtml(ch.title)}</a>${sub}</li>`;
-  });
+    if (ch.kind === 'appendix' && ch.appendix === 'A') items.push('<li class="toc-part"><span>Appendices</span></li>');
+    items.push(item(ch));
+  }
   return `<nav class="sidebar" aria-label="Chapters"><ol class="toc">${items.join('')}</ol>`
     + `<div class="sidebar-foot">${provenance()}</div></nav>`;
 }
@@ -728,17 +785,21 @@ for (const ch of chapters) {
 // Cross-references whose text is "Chapter N", "Section N.M" or "Appendix X" are
 // renumbered from their target, so reordering chapters never leaves stale numbers.
 for (const [href, entry] of rendered) {
-  const body = entry.body.replace(/<a href="([\w-]+\.html)?(?:#([^"]*))?">(Chapter|Section|Appendix) [\w.]+<\/a>/g,
+  const body = entry.body.replace(/<a href="([\w-]+\.html)?(?:#([^"]*))?">(Chapter|Section|Appendix|Part) [\w.]+<\/a>/g,
     (whole, file, anchor, word) => {
       const target = file ?? href;
       const ch = chapters.find((c) => c.href === target);
       if (!ch) return whole;
       let label = null;
-      if (word === 'Chapter' && ch.number) label = `Chapter ${ch.number}`;
-      if (word === 'Appendix' && ch.appendix) label = `Appendix ${ch.appendix}`;
+      // A link to a page is labelled by what the page is: a sub-page is a
+      // section, whatever word the source used.
+      if ((word === 'Chapter' || word === 'Section') && !(word === 'Section' && anchor) && (ch.kind === 'chapter' || ch.kind === 'sub')) label = pageLabel(ch);
+      if (word === 'Appendix' && ch.appendix) label = pageLabel(ch);
+      if (word === 'Part' && ch.kind === 'part') label = pageLabel(ch);
       if (word === 'Section' && anchor) {
         const n = sectionNumbers.get(target)?.get(decodeURIComponent(anchor));
         if (n) label = `Section ${n}`;
+        else if (ch.kind === 'sub') label = pageLabel(ch); // an anchor that is not a heading
       }
       if (!label) { fail(`${href}: cannot number cross-reference ${JSON.stringify(whole)}`); return whole; }
       return whole.replace(/>[^<]*<\/a>$/, `>${label}</a>`);
@@ -784,7 +845,7 @@ for (const [href, entry] of rendered) {
         .sort().map((n) => ({ s: n, href: docsUrl(n) })),
     };
   });
-  const chapterList = chapters.map((ch) => ({ href: ch.href, number: ch.number ?? ch.appendix ?? null, title: ch.title }));
+  const chapterList = chapters.map((ch) => ({ href: ch.href, number: ch.number ?? ch.appendix ?? null, label: pageLabel(ch), title: ch.title }));
   writeFileSync(join(distDir, 'assets', 'claims.json'), JSON.stringify({ claims: out, decls: declInfo, chapters: chapterList }));
 }
 

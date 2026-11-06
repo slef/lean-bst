@@ -1,0 +1,7 @@
+# Tango trees
+
+No online BST algorithm is known to be dynamically optimal. Tango trees, of Demaine, Harmon, Iacono and Pătraşcu (2004), were the first online BST proved to be $O(\log\log n)$-competitive. They fix a balanced reference tree on the keys and follow its *preferred paths*: each reference node prefers the side of its subtree where the latest request in that subtree fell. The number of preference changes is Wilber's interleave quantity, a lower bound on every execution ([Chapter 15](wilber.html)), and a Tango tree pays $O(\log\log n)$ per change.
+
+- [Section 20.1](preferred-paths.html) proves the counting identity: preference changes are the interleave quantity, plus at most $n$ first settings.
+- [Section 20.2](tango.html) builds the BST. It stores each preferred path as an auxiliary tree inside one binary search tree, defines the online policy, and proves that its cost is within a factor $O(\log\log n)$ of every offline execution from the same initial tree, plus a startup term of order $n\log\log n$.
+- [Section 20.3](tango-linear.html) applies the preference updates of each request from the bottom of the search path upward, which brings the startup term down to $O(n)$. [Chapter 25](combined-finger.html) needs this version. The section's headline composes two library theorems by hand; a single theorem stating it is in the library's [roadmap](https://github.com/slef/lean-bst/blob/main/ROADMAP.md).

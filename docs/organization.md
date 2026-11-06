@@ -346,14 +346,16 @@ periodic-rebuilding analysis and concluding conjecture remain outside these
 batches. Existing book chapters and interactive figures are preserved; the
 theorem maps supply the entry points for expanding them.
 
-The book covers the first batch in chapters 10–11 (multi-finger and
-linked-search models), 14–16 (lazy finger, its place among the bounds, and the
-conditional-entropy obstruction), 23–26 (GreedyASS's finger bounds and their
-proof), 29–30 (the optimizer and multiple trees) and 33–35 (prefix sums,
-weighted search trees, BST deques, tendons and finger hands). The later batches
-are in chapters 12 (replays, detours and depth invariants), 30 (Tango with linear
-startup), 33–36 (ComboBST), 37 (deamortization), 38 (Theorem 4.3), 44–49
-(pop-tarts and heavy paths) and 50–51 (tree buffers and snapshots).
+The book covers the first batch in chapters 9–10 (multi-finger and
+linked-search models), 13, 14 and 16 (lazy finger, its place among the bounds,
+and the conditional-entropy obstruction), sections 19.3–19.6 (GreedyASS's finger
+bounds and their proof), chapters 21–22 (the optimizer and multiple trees), 28
+(prefix sums and weighted search trees) and 29 (BST deques, tendons and finger
+hands). The later batches are in section 20.3 (Tango with linear startup) and
+chapters 23 (ComboBST), 24 (deamortization), 25 (Theorem 4.3), 30 (replays,
+detours and depth invariants), 31–32 (pop-tarts and heavy paths) and 33 (tree
+buffers and snapshots). The numbering is assigned by the book build from
+`book/src/book.json`; chapter files are named by slug, not by number.
 
 
 ## Deamortization results for the book

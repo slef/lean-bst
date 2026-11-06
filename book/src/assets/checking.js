@@ -89,12 +89,17 @@
     const perChapter = new Map();
     for (const { d } of steps) perChapter.set(d.ch, (perChapter.get(d.ch) ?? 0) + 1);
     for (const c of data.claims) if (selected.has(c.id)) perChapter.set(`root${c.chapter}`, true);
-    document.querySelectorAll('.toc > li > a').forEach((a) => {
+    document.querySelectorAll('.toc a.toc-page').forEach((a) => {
       a.querySelector('.check-count')?.remove();
       a.parentElement.classList.remove('needed');
-      const index = data.chapters.findIndex((ch) => ch.href === a.getAttribute('href'));
-      const count = perChapter.get(index);
-      const root = perChapter.get(`root${index}`);
+      // A collapsed chapter also counts what its sub-pages hold.
+      const hrefs = [a.getAttribute('href'), ...(a.dataset.sub ? a.dataset.sub.split(' ') : [])];
+      let count = 0, root = false;
+      for (const href of hrefs) {
+        const index = data.chapters.findIndex((ch) => ch.href === href);
+        count += perChapter.get(index) ?? 0;
+        root ||= !!perChapter.get(`root${index}`);
+      }
       if (!count && !root) return;
       a.parentElement.classList.add('needed');
       const badge = document.createElement('span');
@@ -215,7 +220,7 @@
       if (d.ch !== lastCh) {
         if (lastCh !== null) html += '</ul>';
         const ch = data.chapters[d.ch];
-        html += `<h4 class="rl-chapter"><a href="${esc(ch.href)}">${ch.number ? `Chapter ${esc(ch.number)} · ` : ''}${esc(ch.title)}</a></h4><ul class="rl-decls">`;
+        html += `<h4 class="rl-chapter"><a href="${esc(ch.href)}">${ch.label ? `${esc(ch.label)} · ` : ''}${esc(ch.title)}</a></h4><ul class="rl-decls">`;
         lastCh = d.ch;
         lastSec = null;
       }

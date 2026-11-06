@@ -116,7 +116,7 @@ a:hover { text-decoration-thickness: 2px; }
   font-family: var(--sans); font-size: .875rem; line-height: 1.45;
 }
 .book-title { display: block; font-weight: 600; font-size: 1rem; color: var(--fg); text-decoration: none; margin-bottom: 1.1rem; }
-.toc, .toc-sections { list-style: none; margin: 0; padding: 0; }
+.toc, .toc-sections, .toc-sub { list-style: none; margin: 0; padding: 0; }
 .toc > li { margin: .1rem 0; }
 .toc a { display: flex; gap: .5rem; color: var(--fg-soft); text-decoration: none; padding: .28rem .5rem; border-radius: 6px; }
 .toc a:hover { background: var(--bg-soft); color: var(--fg); }
@@ -126,7 +126,18 @@ a:hover { text-decoration-thickness: 2px; }
 .toc-sections { margin: .2rem 0 .5rem 1.1rem; border-left: 1px solid var(--rule); }
 .toc-sections a { padding: .18rem .5rem; font-size: .82rem; }
 .toc-sections .toc-num { min-width: 2.2rem; }
-.toc-part { margin: 1.1rem 0 .3rem .5rem; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-faint); font-weight: 600; }
+.toc-part { margin: 1.1rem 0 .3rem; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-faint); font-weight: 600; }
+.toc-part > a, .toc-part > span { display: block; padding: .28rem .5rem; color: var(--fg-faint); }
+.toc-part > a:hover { color: var(--fg); }
+.toc li.toc-part.active > a { font-weight: 700; }
+.toc-part .toc-sections { text-transform: none; letter-spacing: 0; font-weight: 400; font-size: .875rem; }
+.toc-sub { margin: .15rem 0 .4rem 1.1rem; border-left: 1px solid var(--rule); }
+.toc-sub a { padding: .22rem .5rem; font-size: .84rem; }
+.toc-sub .toc-num { min-width: 2.2rem; }
+.toc-sub .toc-sections .toc-num { min-width: 3rem; }
+.toc li.has-sub:not(.open) > a::after { content: '›'; margin-left: auto; color: var(--fg-faint); }
+h1 .chapnum a { color: inherit; text-decoration: none; }
+h1 .chapnum a:hover { color: var(--accent); }
 .sidebar-foot { margin-top: 2rem; font-size: .75rem; color: var(--fg-faint); }
 .sidebar-foot code { font-size: .72rem; }
 
@@ -554,6 +565,8 @@ details.claim-statement summary { cursor: pointer; font-family: var(--sans); fon
 .bm-edge.todo .bm-label { fill: var(--fg-faint); font-style: italic; }
 .bm-edge.alg.hot .bm-line, .bm-edge.todo.hot .bm-line { stroke: var(--accent); stroke-width: 2.5; }
 .bm-edge.alg.hot .bm-label, .bm-edge.todo.hot .bm-label { fill: var(--accent); }
+.mm-band { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 3 4; }
+.mm-band-label { font-family: var(--sans); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; fill: var(--fg-faint); }
 .bm-caption { font-family: var(--sans); font-size: .86rem; min-height: 3.2em; line-height: 1.45; }
 .bm-caption .bm-thm { color: var(--fg-faint); }
 .bm-caption code { font-size: .78rem; }

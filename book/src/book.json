@@ -7,61 +7,153 @@
     "\\Rot": "\\mathrm{R}",
     "\\lg": "\\log_2"
   },
-  "chapters": [
-    { "slug": "index", "file": "00-preface.md", "title": "Preface" },
-    { "slug": "checking", "file": "00-checking.md", "title": "Checking a result" },
-    { "slug": "shapes", "file": "01-shapes.md", "title": "Trees without keys", "number": 1, "part": "I · Models" },
-    { "slug": "rotations", "file": "02-rotations.md", "title": "Rotations", "number": 2 },
-    { "slug": "accesses", "file": "03-accesses.md", "title": "Accesses and executions", "number": 3 },
-    { "slug": "keys", "file": "04-keys.md", "title": "Putting the keys back", "number": 4 },
-    { "slug": "online", "file": "05-online.md", "title": "Online algorithms and cost", "number": 5 },
-    { "slug": "pointer", "file": "06-pointer.md", "title": "The pointer machine", "number": 6 },
-    { "slug": "regions", "file": "07-regions.md", "title": "Touched regions", "number": 7 },
-    { "slug": "geometry", "file": "08-geometry.md", "title": "The geometric view", "number": 8 },
-    { "slug": "equivalence", "file": "09-equivalence.md", "title": "How the models agree", "number": 9 },
-    { "slug": "fingers", "file": "10-fingers.md", "title": "Many fingers", "number": 10 },
-    { "slug": "linked-search", "file": "11-linked-search.md", "title": "Linked searches", "number": 11 },
-    { "slug": "replay", "file": "12-replay.md", "title": "Replays, mirrors and detours", "number": 12 },
-    { "slug": "bounds", "file": "13-bounds.md", "title": "Adaptive bounds", "number": 13, "part": "II · Bounds" },
-    { "slug": "wilber", "file": "14-wilber.md", "title": "Wilber's interleave bound", "number": 14 },
-    { "slug": "lazy-finger", "file": "15-lazy-finger.md", "title": "The lazy finger", "number": 15 },
-    { "slug": "lazy-finger-hierarchy", "file": "16-lazy-finger-hierarchy.md", "title": "Where lazy finger stands", "number": 16 },
-    { "slug": "conditional-entropy", "file": "17-conditional-entropy.md", "title": "Conditional entropy", "number": 17 },
-    { "slug": "move-to-root", "file": "18-move-to-root.md", "title": "Move-to-root", "number": 18, "part": "III · Algorithms" },
-    { "slug": "splay", "file": "19-splay.md", "title": "Splaying", "number": 19 },
-    { "slug": "analysis", "file": "20-analysis.md", "title": "The amortized analysis", "number": 20 },
-    { "slug": "beyond", "file": "21-beyond.md", "title": "Beyond single accesses", "number": 21 },
-    { "slug": "greedy", "file": "22-greedy.md", "title": "GreedyASS", "number": 22 },
-    { "slug": "simulation", "file": "23-simulation.md", "title": "From points back to trees", "number": 23 },
-    { "slug": "greedy-finger", "file": "24-greedy-finger.md", "title": "GreedyASS and the finger bounds", "number": 24 },
-    { "slug": "reference-forest", "file": "25-reference-forest.md", "title": "The reference forest", "number": 25 },
-    { "slug": "greedy-potential", "file": "26-greedy-potential.md", "title": "Items, colors and potential", "number": 26 },
-    { "slug": "greedy-amortized", "file": "27-greedy-amortized.md", "title": "Paying for each row", "number": 27 },
-    { "slug": "preferred-paths", "file": "28-preferred-paths.md", "title": "Preferred paths", "number": 28 },
-    { "slug": "tango", "file": "29-tango.md", "title": "Tango trees", "number": 29 },
-    { "slug": "tango-linear", "file": "30-tango-linear.md", "title": "Tango with linear startup", "number": 30 },
-    { "slug": "optimal-lazy-finger", "file": "31-optimal-lazy-finger.md", "title": "The optimal lazy-finger tree", "number": 31 },
-    { "slug": "multiple-trees", "file": "32-multiple-trees.md", "title": "Multiple trees", "number": 32 },
-    { "slug": "combining", "file": "33-combining.md", "title": "Combining search trees", "number": 33 },
-    { "slug": "combo-workers", "file": "34-combo-workers.md", "title": "Interruptible workers", "number": 34 },
-    { "slug": "combo-rounds", "file": "35-combo-rounds.md", "title": "Alternating rounds", "number": 35 },
-    { "slug": "combo-online", "file": "36-combo-online.md", "title": "One online execution", "number": 36 },
-    { "slug": "deamortization", "file": "37-deamortization.md", "title": "Deamortization", "number": 37 },
-    { "slug": "combined-finger", "file": "38-combined-finger.md", "title": "All the finger bounds at once", "number": 38 },
-    { "slug": "treaps", "file": "39-treaps.md", "title": "Treaps", "number": 39, "part": "IV · Structures" },
-    { "slug": "split-trees", "file": "40-split-trees.md", "title": "Split trees", "number": 40 },
-    { "slug": "prefix-sums", "file": "41-prefix-sums.md", "title": "Prefix sums and weighted search trees", "number": 41 },
-    { "slug": "bst-deques", "file": "42-bst-deques.md", "title": "BST deques and tendons", "number": 42 },
-    { "slug": "finger-hands", "file": "43-finger-hands.md", "title": "Finger hands", "number": 43 },
-    { "slug": "pop-tarts", "file": "44-pop-tarts.md", "title": "Pop-tarts", "number": 44 },
-    { "slug": "chocolate", "file": "45-chocolate.md", "title": "Chocolate pop-tarts", "number": 45 },
-    { "slug": "heavy-paths", "file": "46-heavy-paths.md", "title": "Heavy paths", "number": 46 },
-    { "slug": "recursive-heavy-paths", "file": "47-recursive-heavy-paths.md", "title": "Recursive heavy paths", "number": 47 },
-    { "slug": "heavy-path-fingers", "file": "48-heavy-path-fingers.md", "title": "Fingers on heavy paths", "number": 48 },
-    { "slug": "finger-histories", "file": "49-finger-histories.md", "title": "Finger histories and simulation", "number": 49 },
-    { "slug": "tree-buffers", "file": "50-tree-buffers.md", "title": "Tree buffers", "number": 50 },
-    { "slug": "snapshots", "file": "51-snapshots.md", "title": "Snapshots", "number": 51 },
-    { "slug": "audit", "file": "52-audit.md", "title": "What Lean checks", "part": "Appendices", "appendix": "A" },
-    { "slug": "declarations", "file": "53-declarations.md", "title": "Index of declarations", "appendix": "B" }
+  "front": [
+    { "slug": "index", "file": "front/preface.md", "title": "Preface" },
+    { "slug": "checking", "file": "front/checking.md", "title": "Checking a result" }
+  ],
+  "parts": [
+    {
+      "label": "I",
+      "title": "Models",
+      "slug": "part-models",
+      "file": "models/part-models.md",
+      "chapters": [
+        { "slug": "shapes", "file": "models/shapes.md", "title": "Trees without keys" },
+        { "slug": "rotations", "file": "models/rotations.md", "title": "Rotations" },
+        { "slug": "accesses", "file": "models/accesses.md", "title": "Accesses and executions" },
+        { "slug": "keys", "file": "models/keys.md", "title": "Putting the keys back" },
+        { "slug": "online", "file": "models/online.md", "title": "Online algorithms and cost" },
+        { "slug": "pointer", "file": "models/pointer.md", "title": "The pointer machine" },
+        { "slug": "regions", "file": "models/regions.md", "title": "Touched regions" },
+        { "slug": "geometry", "file": "models/geometry.md", "title": "The geometric view" },
+        { "slug": "fingers", "file": "models/fingers.md", "title": "Many fingers" },
+        { "slug": "linked-search", "file": "models/linked-search.md", "title": "Linked searches" },
+        { "slug": "equivalence", "file": "models/equivalence.md", "title": "How the models agree" }
+      ]
+    },
+    {
+      "label": "II",
+      "title": "Bounds",
+      "slug": "part-bounds",
+      "file": "bounds/part-bounds.md",
+      "chapters": [
+        { "slug": "bounds", "file": "bounds/bounds.md", "title": "Adaptive bounds" },
+        { "slug": "lazy-finger", "file": "bounds/lazy-finger.md", "title": "The lazy and the (weighted) dynamic finger" },
+        { "slug": "lazy-finger-hierarchy", "file": "bounds/lazy-finger-hierarchy.md", "title": "Where lazy finger stands" },
+        { "slug": "wilber", "file": "bounds/wilber.md", "title": "Wilber's interleave bound" },
+        { "slug": "conditional-entropy", "file": "bounds/conditional-entropy.md", "title": "Conditional entropy" }
+      ]
+    },
+    {
+      "label": "III",
+      "title": "Algorithms",
+      "slug": "part-algorithms",
+      "file": "algorithms/part-algorithms.md",
+      "chapters": [
+        { "slug": "move-to-root", "file": "algorithms/move-to-root.md", "title": "Move-to-root" },
+        {
+          "slug": "splay-trees",
+          "file": "algorithms/splay-trees.md",
+          "title": "Splay trees",
+          "children": [
+            { "slug": "splay", "file": "algorithms/splay.md", "title": "Splaying" },
+            { "slug": "analysis", "file": "algorithms/analysis.md", "title": "The amortized analysis" },
+            { "slug": "beyond", "file": "algorithms/beyond.md", "title": "Beyond single accesses" }
+          ]
+        },
+        {
+          "slug": "greedy-ass",
+          "file": "algorithms/greedy-ass.md",
+          "title": "GreedyASS",
+          "children": [
+            { "slug": "greedy", "file": "algorithms/greedy.md", "title": "The greedy sweep" },
+            { "slug": "simulation", "file": "algorithms/simulation.md", "title": "From points back to trees" },
+            { "slug": "greedy-finger", "file": "algorithms/greedy-finger.md", "title": "GreedyASS and the finger bounds" },
+            { "slug": "reference-forest", "file": "algorithms/reference-forest.md", "title": "The reference forest" },
+            { "slug": "greedy-potential", "file": "algorithms/greedy-potential.md", "title": "Items, colors and potential" },
+            { "slug": "greedy-amortized", "file": "algorithms/greedy-amortized.md", "title": "Paying for each row" }
+          ]
+        },
+        {
+          "slug": "tango-trees",
+          "file": "algorithms/tango-trees.md",
+          "title": "Tango trees",
+          "children": [
+            { "slug": "preferred-paths", "file": "algorithms/preferred-paths.md", "title": "Preferred paths" },
+            { "slug": "tango", "file": "algorithms/tango.md", "title": "The Tango BST" },
+            { "slug": "tango-linear", "file": "algorithms/tango-linear.md", "title": "Tango with linear startup" }
+          ]
+        },
+        { "slug": "optimal-lazy-finger", "file": "algorithms/optimal-lazy-finger.md", "title": "The optimal lazy-finger tree" },
+        { "slug": "multiple-trees", "file": "algorithms/multiple-trees.md", "title": "Multiple trees" },
+        {
+          "slug": "combination",
+          "file": "algorithms/combination.md",
+          "title": "Combining search trees",
+          "children": [
+            { "slug": "combining", "file": "algorithms/combining.md", "title": "The combination theorem" },
+            { "slug": "combo-workers", "file": "algorithms/combo-workers.md", "title": "Interruptible workers" },
+            { "slug": "combo-rounds", "file": "algorithms/combo-rounds.md", "title": "Alternating rounds" },
+            { "slug": "combo-online", "file": "algorithms/combo-online.md", "title": "One online execution" }
+          ]
+        },
+        { "slug": "deamortization", "file": "algorithms/deamortization.md", "title": "Deamortization" },
+        { "slug": "combined-finger", "file": "algorithms/combined-finger.md", "title": "All the finger bounds at once" }
+      ]
+    },
+    {
+      "label": "IV",
+      "title": "Structures",
+      "slug": "part-structures",
+      "file": "structures/part-structures.md",
+      "chapters": [
+        { "slug": "treaps", "file": "structures/treaps.md", "title": "Treaps" },
+        { "slug": "split-trees", "file": "structures/split-trees.md", "title": "Split trees" },
+        { "slug": "prefix-sums", "file": "structures/prefix-sums.md", "title": "Prefix sums and weighted search trees" },
+        {
+          "slug": "finger-simulation",
+          "file": "structures/finger-simulation.md",
+          "title": "Simulating fingers",
+          "children": [
+            { "slug": "bst-deques", "file": "structures/bst-deques.md", "title": "BST deques and tendons" },
+            { "slug": "finger-hands", "file": "structures/finger-hands.md", "title": "Finger hands" }
+          ]
+        },
+        { "slug": "replay", "file": "structures/replay.md", "title": "Replays, mirrors and detours" },
+        {
+          "slug": "poptarts",
+          "file": "structures/poptarts.md",
+          "title": "Pop-tarts",
+          "children": [
+            { "slug": "pop-tarts", "file": "structures/pop-tarts.md", "title": "Vanilla and Cherry pop-tarts" },
+            { "slug": "chocolate", "file": "structures/chocolate.md", "title": "Chocolate pop-tarts" }
+          ]
+        },
+        {
+          "slug": "heavy-path-simulation",
+          "file": "structures/heavy-path-simulation.md",
+          "title": "Heavy paths",
+          "children": [
+            { "slug": "heavy-paths", "file": "structures/heavy-paths.md", "title": "One heavy path" },
+            { "slug": "recursive-heavy-paths", "file": "structures/recursive-heavy-paths.md", "title": "Recursive heavy paths" },
+            { "slug": "heavy-path-fingers", "file": "structures/heavy-path-fingers.md", "title": "Fingers on heavy paths" },
+            { "slug": "finger-histories", "file": "structures/finger-histories.md", "title": "Finger histories and simulation" }
+          ]
+        },
+        {
+          "slug": "tree-state",
+          "file": "structures/tree-state.md",
+          "title": "Saving trees in their nodes",
+          "children": [
+            { "slug": "tree-buffers", "file": "structures/tree-buffers.md", "title": "Tree buffers" },
+            { "slug": "snapshots", "file": "structures/snapshots.md", "title": "Snapshots" }
+          ]
+        }
+      ]
+    }
+  ],
+  "appendices": [
+    { "slug": "audit", "file": "appendices/audit.md", "title": "What Lean checks" },
+    { "slug": "declarations", "file": "appendices/declarations.md", "title": "Index of declarations" }
   ]
 }

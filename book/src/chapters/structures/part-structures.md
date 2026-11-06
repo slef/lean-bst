@@ -1,0 +1,16 @@
+# Structures
+
+Part IV holds the data structures that the algorithms and proofs of the book are built from. None of them is a BST algorithm in its own right. Each is a way of storing something inside a binary search tree, or next to it, with a stated cost. Most of them appear only inside proofs. Where a chapter or section is not needed to check any headline result, a note at its start says so and says what it is for.
+
+| Chapter | Structure | What it provides | Used by |
+|---|---|---|---|
+| {{num:treaps}} | [Treaps](treaps.html) | Point sets executed as BSTs, and BSTs recorded as point sets, at exactly one node per point; random treaps for given weights | [Chapter 11](equivalence.html), [Chapter 13](lazy-finger.html) |
+| {{num:split-trees}} | [Split trees](split-trees.html) | Groups of keys that can be split off a few at a time, paid for by the smaller side | [Section 19.2](simulation.html) |
+| {{num:prefix-sums}} | [Prefix sums and weighted search trees](prefix-sums.html) | Rectangle sums in four reads; static trees with entropy depth | [Chapter 21](optimal-lazy-finger.html), [Chapter 22](multiple-trees.html) |
+| {{num:finger-simulation}} | [Simulating fingers](finger-simulation.html) | BST deques, tendons and finger hands: several fingers simulated by the single root cursor | [Chapter 14](lazy-finger-hierarchy.html), [Chapter 23](combination.html) |
+| {{num:replay}} | [Replays, mirrors and detours](replay.html) | Pointer computations as data: recorded and replayed instruction streams, detours, mirror images, depths along a computation, fields in the nodes | [Chapter 23](combination.html), [Chapter 24](deamortization.html), [Chapter 25](combined-finger.html), and the three chapters after it |
+| {{num:poptarts}} | [Pop-tarts](poptarts.html) | BSTs that implement a stack of weighted leaves, with constant amortized and logarithmic worst-case cost, and weight-balanced depth | [Chapter 32](heavy-path-simulation.html) |
+| {{num:heavy-path-simulation}} | [Heavy paths](heavy-path-simulation.html) | A source tree stored along its heavy paths, so that every key keeps weight-balanced depth while a finger moves and rotates | [Chapter 24](deamortization.html) |
+| {{num:tree-state}} | [Saving trees in their nodes](tree-state.html) | Tree buffers and snapshots: a tree saved into its own nodes and restored in linear time | [Chapter 23](combination.html) |
+
+The first three chapters serve the classical results of Parts I to III: the equivalence of the geometric view with BST executions, the online simulation behind GreedyASS, and the two static structures built from a request sequence. The last five serve the transformations at the end of [Part III](part-algorithms.html). The deamortization of [Chapter 24](deamortization.html) keeps the tree of its source algorithm at logarithmic depth with pop-tarts along heavy paths. The combination of [Chapter 23](combination.html) runs two algorithms on one tree with two fingers, simulated by one, and restores the initial tree between rounds from a copy saved in the nodes. [Chapter 30](replay.html) collects the tools that both use to treat pointer computations as data.
