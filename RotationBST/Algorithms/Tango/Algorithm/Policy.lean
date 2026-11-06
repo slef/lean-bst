@@ -52,4 +52,17 @@ theorem Policy.run_spec {reference : Tree} (p : Policy reference) (xs : List Nat
     change ((p.run xs).2 : ℝ) + (p.run xs).1.potential - 0 ≤ _ at bound
     linarith
 
+/-- Every computed policy composes fragments at their returned marked state,
+with the exact extended history and additive rotation count. -/
+theorem Policy.runFrom_append {reference : Tree} (p : Policy reference)
+    (past : List Nat) (s : MarkedTree) (xs ys : List Nat) :
+    p.runFrom past s (xs ++ ys) =
+      let first := p.runFrom past s xs
+      let rest := p.runFrom (past ++ xs) first.1 ys
+      (rest.1, first.2 + rest.2) := by
+  induction xs generalizing past s with
+  | nil => simp [runFrom]
+  | cons x xs ih =>
+    simp [runFrom, ih, List.append_assoc, Nat.add_assoc]
+
 end RotationBST.Tango

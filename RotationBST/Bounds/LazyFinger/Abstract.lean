@@ -139,9 +139,26 @@ theorem tree_weights_two_sided (t : Tree) :
         WeightedFinger.costFrom w p xs ≤ 3 * (costFrom t p xs : ℝ)) :=
   exists_two_sided_weights t
 
+theorem costFrom_append (t : Tree) (p : Nat) (xs ys : List Nat) :
+    costFrom t p (xs ++ ys) = costFrom t p xs + costFrom t (xs.getLastD p) ys :=
+  RotationBST.LazyFinger.costFrom_append t p xs ys
+
+theorem cost_le_append (t : Tree) (xs ys : List Nat) : cost t xs ≤ cost t (xs ++ ys) :=
+  RotationBST.LazyFinger.cost_le_append t xs ys
+
+theorem cost_take_mono (t : Tree) (xs : List Nat) (lo hi : Nat) (ordered : lo ≤ hi) :
+    cost t (xs.take lo) ≤ cost t (xs.take hi) :=
+  RotationBST.LazyFinger.cost_take_mono t xs lo hi ordered
+
+theorem cost_segment (t : Tree) (xs : List Nat) (lo hi : Nat) (ordered : lo ≤ hi)
+    (valid : ∀ x ∈ xs, x < t.size) :
+    cost t ((xs.drop lo).take (hi - lo)) ≤
+      cost t (xs.take hi) - cost t (xs.take lo) + t.size :=
+  RotationBST.LazyFinger.cost_segment t xs lo hi ordered valid
+
 end RotationBST.LazyFinger.Results
 
-/-- info: abstract audit passed for `RotationBST.LazyFinger.Results`: 22 root declarations -/
+/-- info: abstract audit passed for `RotationBST.LazyFinger.Results`: 26 root declarations -/
 #guard_msgs in
 #check_bst_abstract RotationBST.LazyFinger.Results allowing [
   RotationBST.Models.Rotation.Abstract,

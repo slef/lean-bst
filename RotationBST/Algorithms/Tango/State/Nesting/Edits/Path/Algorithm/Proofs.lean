@@ -51,4 +51,36 @@ theorem unmarkInPath_spec (s : MarkedTree) (fs : List Frame) (unmarked : ∀ g �
   rw [total, ← unmark_path_merge fs unmarked f child] at bound
   exact bound
 
+/-- Avoid a boundary splay for an empty reference child while preserving
+the same nesting and amortized guarantee as the general join compiler. -/
+theorem unmarkKnownInPath_spec (s : MarkedTree) (fs : List Frame)
+    (unmarked : ∀ g ∈ fs, g.marked = false) (f : Frame) (child : MarkedTree)
+    (same : s.nesting = (plug ((f.setMark true) :: fs) child).nesting) :
+    (s.unmarkKnownInPath fs f child).1.nesting = (plug ((f.setMark false) :: fs) child).nesting ∧
+      Rotations s.tree (s.unmarkKnownInPath fs f child).1.tree (s.unmarkKnownInPath fs f child).2 ∧
+      ((s.unmarkKnownInPath fs f child).2 : ℝ) + (s.unmarkKnownInPath fs f child).1.potential - s.potential ≤
+        if child = .nil then 0 else 8 * Real.logb 2 (plug ((f.setMark false) :: fs) child).region.size + 2 := by
+  by_cases empty : child = .nil
+  · subst child
+    obtain ⟨source, target⟩ := edge_nesting fs unmarked f .nil
+    have equal : (plug ((f.setMark true) :: fs) .nil).nesting =
+        (plug ((f.setMark false) :: fs) .nil).nesting := by rw [source, target]; rfl
+    simp only [unmarkKnownInPath, ite_true]
+    exact ⟨same.trans equal, .refl, by simp⟩
+  · simpa only [unmarkKnownInPath, ite_eq_right empty] using unmarkInPath_spec s fs unmarked f child same
+
+theorem unmarkKnownInPath_bound (s : MarkedTree) (fs : List Frame)
+    (unmarked : ∀ g ∈ fs, g.marked = false) (f : Frame) (child : MarkedTree)
+    (same : s.nesting = (plug ((f.setMark true) :: fs) child).nesting) :
+    (s.unmarkKnownInPath fs f child).1.nesting = (plug ((f.setMark false) :: fs) child).nesting ∧
+      Rotations s.tree (s.unmarkKnownInPath fs f child).1.tree (s.unmarkKnownInPath fs f child).2 ∧
+      ((s.unmarkKnownInPath fs f child).2 : ℝ) + (s.unmarkKnownInPath fs f child).1.potential - s.potential ≤
+        8 * Real.logb 2 (plug ((f.setMark false) :: fs) child).region.size + 2 := by
+  obtain ⟨nested, rotations, bound⟩ := unmarkKnownInPath_spec s fs unmarked f child same
+  refine ⟨nested, rotations, ?_⟩
+  split at bound
+  · have positive := Bounds.logb_nat_nonneg (plug ((f.setMark false) :: fs) child).region.size
+    linarith
+  · exact bound
+
 end RotationBST.Tango.MarkedTree

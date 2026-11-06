@@ -52,6 +52,11 @@ public import RotationBST.Algorithms.Tango.Abstract
 public import RotationBST.Algorithms.OptimalLazyFinger.Work.Abstract
 public import RotationBST.Algorithms.MultipleTrees.Abstract
 public import RotationBST.Algorithms.GreedyASS.Performance.Abstract
+public import RotationBST.Algorithms.GreedyASS.Combination.Deamortized.Abstract
+public import RotationBST.Algorithms.Tango.Algorithm.BottomUp.Abstract
+public import RotationBST.Algorithms.Tango.Algorithm.Initialization.Abstract
+public import RotationBST.Algorithms.Tango.Preferences.Initialization.Abstract
+public import RotationBST.Algorithms.Tango.Combination.Abstract
 
 public import RotationBST.Algorithms.GreedyASS.Barrier.Abstract
 public import RotationBST.Algorithms.GreedyASS.Items.Abstract

@@ -332,6 +332,7 @@ empirical transition matrix only for preprocessing.
 | Theorem 3.1: leaf-oriented lazy-finger bound | [`Geometric.GreedyASS.Potential.Amortized.Results`](../RotationBST/Algorithms/GreedyASS/Potential/Amortized/Abstract.lean) |
 | Theorem 4.1: ordinary lazy-finger bound | [`Geometric.GreedyASS.Performance.Results.lazy_tree`, `lazy_optimal`](../RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
 | Theorem 4.2: weighted dynamic finger | [`Geometric.GreedyASS.Performance.Results.weighted`, `weighted_optimal`](../RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
+| Theorem 4.3: combined weighted-finger, competitive, and worst-case bounds | [`Geometric.GreedyASS.Combination.Deamortized.Results.combined`](../RotationBST/Algorithms/GreedyASS/Combination/Deamortized/Abstract.lean) (see the combined-result section below) |
 | Corollary 1: dynamic finger | [`Geometric.GreedyASS.Performance.Results.dynamic`](../RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
 | BST and pointer realizations | [`Geometric.GreedyASS.Performance.Results.bst`, `pointer`, `bst_weighted`, `bst_dynamic`, `pointer_weighted`](../RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
 
@@ -339,11 +340,11 @@ For this [paper](https://arxiv.org/abs/1810.01785), startup is an explicit linea
 term. The realization statements choose one causal policy before the initial
 tree, requests, and benchmark. They do not claim global dynamic optimality.
 
-The finger-bound batch excludes ComboBST, deamortization, Weighted Dynamic Finger Theorem
-4.3, Lazy Finger's unnumbered periodic-rebuilding analysis, and its concluding
-conjecture. Those unfinished developments do not prevent using the results
-above in the book. Existing book chapters and interactive figures are preserved;
-the theorem map supplies the entry points for expanding them.
+The first finger-bound batch was followed by the ComboBST, deamortization, and
+combined Theorem 4.3 integrations described below. Lazy Finger's unnumbered
+periodic-rebuilding analysis and concluding conjecture remain outside these
+batches. Existing book chapters and interactive figures are preserved; the
+theorem maps supply the entry points for expanding them.
 
 
 ## Deamortization results for the book
@@ -491,3 +492,65 @@ rotations during scans, snapshot inversion, and heterogeneous three-member
 families. Family tests check original versus restarted charge indices, windows
 after nonempty prefixes, exact cost splitting, and differing best comparators
 on different windows. The existing multifinger regressions remain in the build.
+
+
+## Combined weighted-finger result for the book
+
+The four topics now form a connected chapter sequence: lazy-finger/weight
+characterization → GreedyASS's weighted bound → Tango with linear startup →
+ComboBST's minimum guarantee → logarithmic worst-case deamortization.
+The endpoint is the normalized abstract BST-operation counterpart of
+[Weighted Dynamic Finger, Theorem 4.3](https://arxiv.org/abs/1810.01785).
+All names below are under `RotationBST`.
+
+| Book topic | Checked entry point |
+|---|---|
+| Original-sequence lazy-finger and interleave charges, including segment stability | [`Combo.Charges.Results`](../RotationBST/Algorithms/Combination/Charges/Abstract.lean) |
+| One GreedyASS worker for all fixed reference trees | [`Geometric.GreedyASS.Combination.Results.greedy_worker`](../RotationBST/Algorithms/GreedyASS/Combination/Abstract.lean) |
+| Balanced reference's linear initialization credit | [`Tango.Initialization.Local.Results.balanced_localAllowance`](../RotationBST/Algorithms/Tango/Preferences/Initialization/Local/Abstract.lean) |
+| Executable bottom-up updates and a linear-startup competitive policy | [`Tango.BottomUp.Results.balanced_policy`](../RotationBST/Algorithms/Tango/Algorithm/BottomUp/Abstract.lean) |
+| Tango worker satisfying the combination hypotheses | [`Tango.Combination.Results.linear_balanced_worker`](../RotationBST/Algorithms/Tango/Combination/Abstract.lean) |
+| One combined online policy | [`Geometric.GreedyASS.Combination.Results.policy_exists`](../RotationBST/Algorithms/GreedyASS/Combination/Abstract.lean) |
+| Same deamortized run compared with any positive weights | [`Geometric.GreedyASS.Combination.Deamortized.Results.weights_competitive`](../RotationBST/Algorithms/GreedyASS/Combination/Deamortized/Abstract.lean) |
+| Complete Theorem 4.3 counterpart | [`Geometric.GreedyASS.Combination.Deamortized.Results.combined`](../RotationBST/Algorithms/GreedyASS/Combination/Deamortized/Abstract.lean) |
+
+For a nonempty saved tree with `n` keys, `combined` chooses one policy and one
+causal program before the request sequence, initial finger, weights, or offline
+comparator. Every valid sequence has an actual served stream with exactly one
+response cost per request. The costs sum to `m + instructions.length`;
+setup costs at most `16n`, and every response costs less than
+`251 + 195 log₂(n)`. The setup-inclusive total has the form
+
+```
+O(n + min(WF, (m + R) * (1 + log₂(1 + floor(log₂ n)))))
+```
+
+Here `WF` is the infimum of the normalized weighted-finger cost over positive
+weights, from any specified valid predecessor. `R` is the rotation cost of
+any offline execution of the same requests on any initial tree of size `n`.
+The theorem gives explicit constants for this display and includes the empty
+sequence. `Deamortized` records legal setup, replay correctness, actual visits,
+and causality of emitted instruction and response-cost prefixes.
+
+The new mathematical ingredient is Tango's linear startup proof. Updating
+preferences from the bottom of a search path upward charges first settings
+to local subtree credit, with at most one additional ancestor-attachment
+charge per request. A balanced reference has at most `42n` local credit.
+The replay adapter produces a well-behaved Tango worker with `2816n` startup;
+the common GreedyASS/Tango allowance is `46225920n`. These are explicit,
+unoptimized witnesses. Both source contracts are proved, not assumed inputs
+to the final theorem.
+
+The integration preserves the existing top-down Tango policy and its public
+interfaces. A first setting toward an empty child now skips a redundant splay;
+its correctness and zero cost are proved. Five added regression modules cover
+original versus restarted window charges, empty and singleton universes,
+actual bottom-up rotations, exact continuation states, nonperfect balanced
+trees, and a single chosen combined program serving multiple sequences.
+The ancestor-attachment regression demonstrates why local credit alone is
+insufficient.
+
+This chapter concerns abstract BST operations. It does not establish bounds on
+finite-word storage or private computation, the full real-world clauses of
+ComboBST/deamortization, or dynamic optimality. Those remaining developments
+are separate from this complete abstract-model result.

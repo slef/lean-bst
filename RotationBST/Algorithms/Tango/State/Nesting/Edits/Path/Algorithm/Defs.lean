@@ -19,6 +19,12 @@ def markInPath (s : MarkedTree) (fs : List Context.Frame) (f : Context.Frame) (c
 def unmarkInPath (s : MarkedTree) (fs : List Context.Frame) (f : Context.Frame) : MarkedTree × Nat :=
   s.mergeAt (Context.before (f :: fs)).length
 
+/-- When the reference child is known, joining an empty fringe is a no-op.
+Its mark is immaterial to component nesting, so no boundary splay is needed. -/
+def unmarkKnownInPath (s : MarkedTree) (fs : List Context.Frame) (f : Context.Frame)
+    (child : MarkedTree) : MarkedTree × Nat :=
+  if child = .nil then (s, 0) else s.unmarkInPath fs f
+
 /-- Switch a reference preference within one component: cut the old preferred
 child, then merge the new one. `left` names the old preference. -/
 def switchInPath (s : MarkedTree) (fs : List Context.Frame) (l r : MarkedTree) (left : Bool) :

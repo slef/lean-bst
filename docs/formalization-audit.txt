@@ -147,6 +147,40 @@ not merely against build success. Paths are relative to the repository root.
    that arbitrary supplied BST implementations satisfy those hypotheses.
    docs/organization.md maps the exact statements and construction stages.
 
+12. Combined weighted finger with linear startup and worst-case responses
+   Evidence: Algorithms/GreedyASS/Combination/Deamortized/Abstract.lean,
+   Algorithms/Tango/Algorithm/BottomUp/Abstract.lean, and
+   Algorithms/Tango/Combination/Abstract.lean.
+   The normalized abstract BST counterpart of arXiv:1810.01785 Theorem 4.3
+   chooses one causal program before all valid sequences and comparators.
+   It provides actual served streams, one cost per request, exact instruction
+   accounting, setup <= 16n, each response < 251 + 195 log2(n), and a total
+   O(n + min(weighted-finger optimum, (requests + offline rotations) loglog n))
+   with the explicit small-universe-safe logarithm in the theorem statement.
+   The weight optimum is an infimum from any valid specified predecessor.
+   Comparators may start from any same-size tree. Empty sequences are valid.
+   Bottom-up Tango preference updates prove the previously missing linear
+   startup: balanced local credit <= 42n, actual replay-worker overhead 2816n,
+   common combination allowance 46225920n. First updates retain at most one
+   ancestor-attachment charge per request. No source-bound certificate is
+   assumed in the final construction. Finite-word storage/private computation
+   and the remaining four-paper applications are not claimed.
+   Public names and existing book chapters are preserved. docs/organization.md
+   gives the complete chapter progression and the exact checked entry points.
+
+Validation of the combined weighted-finger integration
+   lake build --wfail: passed (9442 jobs), including the whole-library axiom
+   audit and five added regression modules. No proof placeholders or new axioms.
+   scripts/check_imports.py: passed (1490 reachable library modules).
+   docs/extract_snippets.py: passed; existing snippets unchanged.
+   Interactive book: extraction (8035 constants, no missing exports) and
+   rendering passed; all 18 JavaScript tests passed, with none skipped.
+   Complete combined theorem, bottom-up policy, linear Tango worker, and
+   balanced startup-credit signatures are present in the extracted book data;
+   their axiom dependencies are only propext, Classical.choice, and Quot.sound.
+   Existing namespaces, public interfaces, and book chapters are preserved.
+   git diff --check and staged whitespace check: passed.
+
 Validation of the ComboBST integration
    lake build --wfail: passed (9320 jobs), including the whole-library axiom
    audit and 11 added regression modules.

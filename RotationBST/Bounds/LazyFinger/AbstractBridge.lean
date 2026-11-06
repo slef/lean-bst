@@ -5,3 +5,4 @@ public import RotationBST.Bounds.LazyFinger.AncestorDistance
 public import RotationBST.Bounds.LazyFinger.Random.Weighted
 public import RotationBST.Bounds.LazyFinger.Characterization
 public import RotationBST.Bounds.LazyFinger.WeightLower
+public import RotationBST.Bounds.LazyFinger.Prefixes

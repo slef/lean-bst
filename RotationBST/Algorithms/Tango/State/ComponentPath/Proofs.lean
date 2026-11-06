@@ -6,6 +6,18 @@ public import RotationBST.Algorithms.Tango.State.Nesting.ExecutableReplacement
 @[expose] public section
 namespace RotationBST.Tango.MarkedTree
 
+/-- Context reconstruction does not introduce rotations when the component
+edit reports none, including an absent fringe slot. -/
+theorem editAt_zero_cost (path : List Nat) (s : MarkedTree) (edit : MarkedTree → MarkedTree × Nat)
+    (zero : ∀ actual, (edit actual).2 = 0) : (s.editAt path edit).2 = 0 := by
+  induction path generalizing s with
+  | nil => exact zero s
+  | cons i rest ih =>
+    simp only [editAt, Context.editFringe]
+    split
+    · rfl
+    · exact ih _
+
 private theorem componentAt_nil (path : List Nat) (child : MarkedTree)
     (found : MarkedTree.nil.componentAt path = some child) : child = .nil := by
   induction path with

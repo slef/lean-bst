@@ -29,21 +29,21 @@ theorem setMarksInPath_spec (s : MarkedTree) (fs : List Frame)
   · exact ⟨same, .refl, by simpa [setMarksInPath] using noOp⟩
   · exact ⟨same, .refl, by simpa [setMarksInPath] using noOp⟩
   · exact switchInPath_spec s fs unmarked l r false H same beforeBound afterBound
-  · obtain ⟨nested, rotations, bound⟩ := unmarkInPath_spec s fs unmarked (.right l true true) r same
+  · obtain ⟨nested, rotations, bound⟩ := unmarkKnownInPath_bound s fs unmarked (.right l true true) r same
     refine ⟨nested, rotations, ?_⟩
     have mono := Splay.Updates.log_nat_mono afterBound
     have positive := Bounds.logb_nat_nonneg H
     simp only [Context.Frame.setMark, Context.Frame.fill, Bool.not_false, plug] at bound mono
-    change ((s.unmarkInPath fs (.right l true true)).2 : ℝ) +
-      (s.unmarkInPath fs (.right l true true)).1.potential - s.potential ≤ _
+    change ((s.unmarkKnownInPath fs (.right l true true) r).2 : ℝ) +
+      (s.unmarkKnownInPath fs (.right l true true) r).1.potential - s.potential ≤ _
     linarith
-  · obtain ⟨nested, rotations, bound⟩ := unmarkInPath_spec s fs unmarked (.left r true true) l same
+  · obtain ⟨nested, rotations, bound⟩ := unmarkKnownInPath_bound s fs unmarked (.left r true true) l same
     refine ⟨nested, rotations, ?_⟩
     have mono := Splay.Updates.log_nat_mono afterBound
     have positive := Bounds.logb_nat_nonneg H
     simp only [Context.Frame.setMark, Context.Frame.fill, Bool.not_true, plug] at bound mono
-    change ((s.unmarkInPath fs (.left r true true)).2 : ℝ) +
-      (s.unmarkInPath fs (.left r true true)).1.potential - s.potential ≤ _
+    change ((s.unmarkKnownInPath fs (.left r true true) l).2 : ℝ) +
+      (s.unmarkKnownInPath fs (.left r true true) l).1.potential - s.potential ≤ _
     linarith
 
 end RotationBST.Tango.MarkedTree

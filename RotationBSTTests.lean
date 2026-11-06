@@ -1,5 +1,11 @@
 module
 
+import RotationBSTTests.TangoBottomUp
+import RotationBSTTests.UniformCombination
+import RotationBSTTests.CombinationCharges
+import RotationBSTTests.TangoInitialization
+import RotationBSTTests.TangoCombination
+
 public import RotationBST
 public import RotationBSTTests.AbstractBoundary
 public import RotationBSTTests.Axioms

@@ -14,8 +14,8 @@ def setMarksInPath (s : MarkedTree) (fs : List Context.Frame) (l r : MarkedTree)
     (cl cr next : Bool) : MarkedTree × Nat :=
   if cl == !next && cr == next then (s, 0)
   else if cl && cr then
-    if next then s.unmarkInPath fs (.left r true true)
-    else s.unmarkInPath fs (.right l true true)
+    if next then s.unmarkKnownInPath fs (.left r true true) l
+    else s.unmarkKnownInPath fs (.right l true true) r
   else s.switchInPath fs l r (!cl)
 
 /-- Compile one reference-key preference update into rotations of the actual
