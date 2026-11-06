@@ -339,8 +339,72 @@ For this [paper](https://arxiv.org/abs/1810.01785), startup is an explicit linea
 term. The realization statements choose one causal policy before the initial
 tree, requests, and benchmark. They do not claim global dynamic optimality.
 
-This batch excludes ComboBST, deamortization, Weighted Dynamic Finger Theorem
+The finger-bound batch excludes ComboBST, deamortization, Weighted Dynamic Finger Theorem
 4.3, Lazy Finger's unnumbered periodic-rebuilding analysis, and its concluding
 conjecture. Those unfinished developments do not prevent using the results
 above in the book. Existing book chapters and interactive figures are preserved;
 the theorem map supplies the entry points for expanding them.
+
+
+## Deamortization results for the book
+
+The second integration adds the abstract transformation and its Splay applications
+from [De-amortizing Binary Search Trees](https://arxiv.org/abs/1111.1665).
+The chapter can now follow a complete chain: weighted stacks → heavy paths →
+bounded-depth simulation → scheduled responses → adaptive Splay bounds.
+The transformation and its algorithm interfaces belong in `Algorithms`;
+pop-tarts and heavy-path representations belong in `Structures`. The labelled
+cursor, replay, and pointer-detour lemmas remain in `Models`. Depth continues
+to use the existing `Tree.depth` interface.
+
+Start with `Deamortization.Algorithm.Results.implementation_exists`. For any
+certified online rotation algorithm and nonempty saved tree, it constructs one
+`Implementation` before any request sequence or comparison bound is selected.
+Its `correct` field provides actual key visits, legal single-finger replay,
+response costs, and the worst-case guarantee. Its `causal` field certifies that
+extending the requests preserves both the emitted instruction and cost prefixes.
+The following entry points are all under `RotationBST`.
+
+| Book topic | Checked entry point |
+|---|---|
+| Weighted stacks and local pointer operations | [`PopTart.Chocolate.Results`](../RotationBST/Structures/PopTart/Chocolate/Abstract.lean) |
+| Simulation with bounded intermediate depth | [`Deamortization.Weighted.Results.simulation`, `transform`](../RotationBST/Algorithms/Deamortization/Weighted/Abstract.lean) |
+| Serving a request while retaining pending source work | [`Deamortization.Window.Results.serve`](../RotationBST/Algorithms/Deamortization/Window/Abstract.lean) |
+| Scheduled response costs and prefix causality | [`Deamortization.Scheduler.Results.run_spec`, `run_served`, `run_prefix`](../RotationBST/Algorithms/Deamortization/Scheduler/Abstract.lean) |
+| Abstract transformation, including sequence-dependent offline sources | [`Deamortization.Finger.Results.deamortize`](../RotationBST/Algorithms/Deamortization/Finger/Abstract.lean) |
+| Online rotation-algorithm instance of Theorem 6 | [`Deamortization.Algorithm.Results.implementation_exists`](../RotationBST/Algorithms/Deamortization/Algorithm/Abstract.lean) and [`Algorithm.Implementation`](../RotationBST/Algorithms/Deamortization/Algorithm/Definitions/Abstract.lean) |
+| Startup-inclusive cost and transfer of source bounds | [`Deamortization.Algorithm.Results.total_bound`, `transfer`](../RotationBST/Algorithms/Deamortization/Algorithm/Abstract.lean) |
+| Conditional preservation of dynamic optimality | [`Deamortization.Algorithm.Results.dynamic_optimal`](../RotationBST/Algorithms/Deamortization/Algorithm/Abstract.lean) |
+| One deamortized Splay program | [`Splay.Deamortization.Results.implementation_exists`](../RotationBST/Algorithms/Splay/Deamortization/Abstract.lean) |
+| Scanning, balance, and working set | [`Splay.Deamortization.Results.scanning`, `balance`, `working_set`](../RotationBST/Algorithms/Splay/Deamortization/Abstract.lean) |
+| Static comparisons with coverage | [`Splay.Deamortization.Results.static_optimality`, `static_finger`](../RotationBST/Algorithms/Splay/Deamortization/Abstract.lean) |
+| Static comparisons allowing unused keys | [`Splay.Deamortization.Results.static_optimality_general`, `static_finger_general`](../RotationBST/Algorithms/Splay/Deamortization/Abstract.lean) |
+
+For `n` keys, setup costs at most `16n` pointer operations. Responses cost
+at most `79360` times the source's normalized cost (`requests + rotations`),
+and each response costs less than `251 + 195 log₂(n)`. Setup is separate from
+the response list and is included by `total_bound`. These constants are
+explicit witnesses, not optimized estimates. The scan theorem bounds the
+complete setup-plus-scan cost by `1111056n`.
+
+Every Splay comparison applies to the same implementation and completed run.
+The sharper static-tree and static-finger bounds require that the sequence
+access every key. The general entropy and static-finger versions remove that
+coverage premise and retain an `n(1 + floor(log₂ n))` startup term. The
+working-set theorem also states its startup term explicitly. Nonempty initial
+trees and in-range requests are hypotheses, not implicit conventions.
+
+This is the abstract BST-operation result of Theorem 6. It does not establish
+Theorem 7's bounds on private computation, auxiliary storage, or execution on
+a finite-word pointer machine. The source theorems for Cole's Splay dynamic
+finger bound, key-independent optimality, and multi-splay applications are
+also still outstanding. The conditional dynamic-optimality theorem does not
+assert that Splay, or any other supplied algorithm, is dynamically optimal.
+The finite-word controllers and unfinished arrival machinery stay on the
+formalization worktree; they are not required to use this chapter's results.
+
+The integration includes 23 existing regression modules. They cover weighted
+stack operations, heavy-path updates, interruption depths, replay, scheduling,
+empty-input accounting, repeated singleton requests, causal prefixes, and a
+single Splay scan compared simultaneously with all static trees and fingers.
+The whole-library axiom audit remains part of the default build.

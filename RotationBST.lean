@@ -16,6 +16,7 @@ public import RotationBST.Models.Equivalence.Abstract
 
 public import RotationBST.Models.Labelled.Search.Abstract
 public import RotationBST.Models.LinkedSearch.Abstract
+public import RotationBST.Models.Pointer.Detour.Abstract
 
 -- Part II: bounds and their relations.
 public import RotationBST.Bounds.WorkingSet.Abstract
@@ -37,6 +38,7 @@ public import RotationBST.Bounds.ConditionalEntropy.Abstract
 public import RotationBST.Bounds.Interleave.BitReversal.Abstract
 public import RotationBST.Bounds.LazyFinger.Edges.Abstract
 public import RotationBST.Bounds.LazyFinger.Neighborhood.Abstract
+public import RotationBST.Bounds.StaticTree.Trace.Abstract
 
 -- Part III: algorithms.
 public import RotationBST.Algorithms.MoveToRoot.Abstract
@@ -63,12 +65,41 @@ public import RotationBST.Algorithms.GreedyASS.Reference.Distance.Abstract
 public import RotationBST.Algorithms.GreedyASS.Reference.Transitions.Abstract
 public import RotationBST.Algorithms.GreedyASS.Virgin.Abstract
 public import RotationBST.Algorithms.OptimalLazyFinger.Abstract
+public import RotationBST.Algorithms.Deamortization.Window.Abstract
+public import RotationBST.Algorithms.Deamortization.Scheduler.Abstract
+public import RotationBST.Algorithms.Deamortization.Weighted.Abstract
+public import RotationBST.Algorithms.Deamortization.Finger.Abstract
+public import RotationBST.Algorithms.Deamortization.Algorithm.Abstract
+public import RotationBST.Algorithms.Splay.Deamortization.Abstract
 
 -- Appendix: supporting structures.
 public import RotationBST.Structures.Treap.Abstract
 public import RotationBST.Structures.SplitTree.Abstract
 
 public import RotationBST.Structures.PrefixSum.Abstract
+public import RotationBST.Structures.PopTart.Abstract
+public import RotationBST.Structures.PopTart.Vanilla.Abstract
+public import RotationBST.Structures.PopTart.Cherry.Abstract
+public import RotationBST.Structures.PopTart.Chocolate.Abstract
+public import RotationBST.Structures.PopTart.Chocolate.Interruption.Abstract
+public import RotationBST.Structures.PopTart.Located.Abstract
+public import RotationBST.Structures.HeavyPath.Abstract
+public import RotationBST.Structures.HeavyPath.Paired.Abstract
+public import RotationBST.Structures.HeavyPath.Paired.Exposure.Abstract
+public import RotationBST.Structures.HeavyPath.Recursive.Abstract
+public import RotationBST.Structures.HeavyPath.Recursive.Exposure.Abstract
+public import RotationBST.Structures.HeavyPath.Recursive.History.Abstract
+public import RotationBST.Structures.HeavyPath.Recursive.History.Interruption.Abstract
+public import RotationBST.Structures.HeavyPath.Finger.Abstract
+public import RotationBST.Structures.HeavyPath.Finger.Transfer.Abstract
+public import RotationBST.Structures.HeavyPath.Finger.Transfer.Exposure.Abstract
+public import RotationBST.Structures.HeavyPath.Finger.Transfer.History.Abstract
+public import RotationBST.Structures.HeavyPath.Finger.History.Abstract
+public import RotationBST.Structures.HeavyPath.Finger.History.Down.Abstract
+public import RotationBST.Structures.HeavyPath.Finger.History.Up.Abstract
+public import RotationBST.Structures.HeavyPath.Finger.History.Rotation.Abstract
+public import RotationBST.Structures.HeavyPath.Finger.History.Simulation.Interruption.Abstract
+public import RotationBST.Structures.HeavyPath.Finger.History.Simulation.Requests.Abstract
 
 @[expose] public section
 

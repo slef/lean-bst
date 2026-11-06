@@ -399,7 +399,10 @@ def vectors : Json := Id.run do
 end BookExport
 
 -- Print signatures as a reader inside the library namespace would see them.
+-- The full-library export processes thousands of declarations in one command.
+-- Give that batch its own finite budget without changing proof-checking limits.
 open BookExport RotationBST in
+set_option maxHeartbeats 2000000 in
 run_meta do
   let some namesPath ← IO.getEnv "BOOK_NAMES" | throwError "BOOK_NAMES is not set"
   let some outPath ← IO.getEnv "BOOK_OUT" | throwError "BOOK_OUT is not set"

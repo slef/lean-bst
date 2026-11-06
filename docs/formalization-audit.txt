@@ -1,4 +1,4 @@
-Formalization scope audit — 2026-11-02
+Formalization scope audit — 2026-11-06
 
 This audit checks the requested results against exported Lean statements,
 not merely against build success. Paths are relative to the repository root.
@@ -102,6 +102,41 @@ not merely against build success. Paths are relative to the repository root.
    realizations choose their policy before initial trees, sequences, and
    comparison weights. Theorem 4.3 and global dynamic optimality are excluded.
    ComboBST and deamortization remain outside this integration batch.
+
+10. Abstract deamortization and Splay applications
+   Evidence: Algorithms/Deamortization/{Weighted,Finger,Algorithm}/Abstract.lean,
+   Algorithms/Deamortization/Algorithm/Definitions/Abstract.lean, and
+   Algorithms/Splay/Deamortization/Abstract.lean.
+   The online rotation-model instance of arXiv:1111.1665 Theorem 6 constructs
+   one causal physical program before all sequences and comparison bounds.
+   Its Implementation.correct certifies actual request visits, legal replay,
+   response count, exact normalized costs, total responses <= 79360 times
+   source total cost, and each response < 251 + 195*log2(n). Setup is a separate
+   pointer trace of cost <= 16n; total_bound includes it. Source costs include
+   a unit per request. The source algorithm and nonempty saved tree are fixed;
+   each request must be in range. transfer and dynamic_optimal preserve source
+   bounds and conditional normalized dynamic optimality for that same program.
+   Splay applications include scanning (setup-inclusive cost <= 1111056n),
+   balance, working set, static-tree optimality and static finger. The sharper
+   static comparisons require coverage; general entropy/finger variants allow
+   unused keys and charge n*(1+floor(log2 n)) startup. Theorem 7's private
+   computation/storage guarantees, Cole dynamic finger, key-independent
+   optimality and multi-splay source instances are not claimed. The constructive
+   stack/heavy-path and abstract scheduler proofs are included; the development
+   branch's finite-word service/arrival controllers are outside this batch.
+   docs/organization.md gives a chapter progression and exact theorem map.
+
+Validation of the abstract-deamortization integration
+   lake build --wfail: passed (8968 jobs), including the whole-library axiom
+   audit and 23 added regression modules.
+   scripts/check_imports.py: passed (1269 reachable library modules).
+   docs/extract_snippets.py: passed; existing snippets unchanged.
+   The book exporter has a command-local finite heartbeat allowance for the
+   larger declaration batch; library proof-checking limits are unchanged.
+   Interactive book: extraction (6884 constants) and rendering passed; all
+   18 JavaScript tests passed, with none skipped. The new public theorem
+   interfaces are present in the extracted data.
+   git diff --check and staged whitespace check: passed.
 
 Validation of the finger-bound integration
    lake build --wfail: passed (8266 jobs), including whole-library axiom audit

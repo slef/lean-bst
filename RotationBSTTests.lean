@@ -31,6 +31,31 @@ public import RotationBSTTests.LazyFingerWeights
 public import RotationBSTTests.MultipleTrees
 public import RotationBSTTests.OptimalLazyFinger
 
+-- Abstract deamortization, representation, and Splay regressions.
+public import RotationBSTTests.DeamortizedSplay
+public import RotationBSTTests.PopTart
+public import RotationBSTTests.CherryPopTart
+public import RotationBSTTests.CherryWeighted
+public import RotationBSTTests.ChocolatePopTart
+public import RotationBSTTests.ChocolateDepth
+public import RotationBSTTests.TraceDepth
+public import RotationBSTTests.PointerDetour
+public import RotationBSTTests.DeamortizationScheduler
+public import RotationBSTTests.ChocolatePop
+public import RotationBSTTests.HeavyPath
+public import RotationBSTTests.PairedHeavyPath
+public import RotationBSTTests.RecursiveHeavyPath
+public import RotationBSTTests.LocatedPopTart
+public import RotationBSTTests.HeavyPathDepthStep
+public import RotationBSTTests.HeavyPathDepth
+public import RotationBSTTests.HeavyPathExposure
+public import RotationBSTTests.RecursiveHistory
+public import RotationBSTTests.FingerSimulation
+public import RotationBSTTests.FingerRequests
+public import RotationBSTTests.FingerHeavyPath
+public import RotationBSTTests.FingerTransfer
+public import RotationBSTTests.FingerRecursiveTransfer
+
 @[expose] public section
 
 namespace RotationBST.Tests
