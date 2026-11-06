@@ -408,3 +408,86 @@ stack operations, heavy-path updates, interruption depths, replay, scheduling,
 empty-input accounting, repeated singleton requests, causal prefixes, and a
 single Splay scan compared simultaneously with all static trees and fingers.
 The whole-library axiom audit remains part of the default build.
+
+
+## ComboBST results for the book
+
+The combination integration adds the abstract online and interval guarantees
+from [Combining Binary Search Trees](https://arxiv.org/abs/1304.7604), together
+with fixed finite-family composition. A chapter can develop the construction
+in this order: interruptible source workers → snapshot save and restore →
+alternating bounded rounds → charging closed rounds → one online pointer
+execution → actual-window bounds → finite families.
+
+`Algorithms/Combination` contains the controller, amortized analysis, source
+refinement, online policy, and family construction. `Structures/TreeBuffer`
+contains scan accounting, snapshot recording, streaming restoration, and
+shared-node storage. These use the existing multifinger-to-pointer simulation
+and preserve its per-request visits. All theorem names below are under
+`RotationBST`; the exact hypotheses are in the linked public interfaces.
+
+| Book topic | Checked entry point |
+|---|---|
+| Well-behaved charges and contiguous segments | [`Combo.Analysis.WellBehaved`](../RotationBST/Algorithms/Combination/Analysis/Definitions/Abstract.lean) |
+| Interruptible attempts and round switching | [`Combo.Controller.Results`](../RotationBST/Algorithms/Combination/Controller/Abstract.lean) |
+| Completed-round certificates | [`Combo.Rounds.Certificates.Results`](../RotationBST/Algorithms/Combination/Rounds/Certificates/Abstract.lean) |
+| Minimum charge and window analysis | [`Combo.Analysis.Results.minimum_bound`, `executed_window`](../RotationBST/Algorithms/Combination/Analysis/Abstract.lean) |
+| Scan progress and rotation-inclusive cost | [`TreeBuffer.Scan.Results.finish`, `total`](../RotationBST/Structures/TreeBuffer/Scan/Abstract.lean) |
+| Shape-preserving snapshot save | [`TreeBuffer.Snapshot.Recording.Results.save`](../RotationBST/Structures/TreeBuffer/Snapshot/Recording/Abstract.lean) |
+| Streaming snapshot load | [`TreeBuffer.Snapshot.Streaming.Results.load`](../RotationBST/Structures/TreeBuffer/Snapshot/Streaming/Abstract.lean) |
+| Source instructions on shared nodes | [`Combo.Refinement.Results`](../RotationBST/Algorithms/Combination/Refinement/Abstract.lean) |
+| One online policy and full-prefix comparison | [`Combo.Online.Results.prefix_policy`, `execute_append`](../RotationBST/Algorithms/Combination/Online/Abstract.lean) |
+| Theorem 3's abstract actual-window guarantee | [`Combo.Online.Results.window_policy`, `executed_window`](../RotationBST/Algorithms/Combination/Online/Abstract.lean) |
+| Independent source state types | [`Combo.Worker.Pair.Results`](../RotationBST/Algorithms/Combination/Worker/Pair/Abstract.lean) |
+| Fixed finite-family worker | [`Combo.Family.Results.minimum_policy`](../RotationBST/Algorithms/Combination/Family/Abstract.lean) |
+| Finite-family physical policy and actual windows | [`Combo.Family.Physical.Results.finite_policy`, `window_minimum`](../RotationBST/Algorithms/Combination/Family/Physical/Abstract.lean) |
+
+The two-source theorem assumes a common nonempty initial tree, a valid physical
+interpretation and request-service contract, and well-behaved nonnegative
+amortized charges. The common overhead `F` must satisfy `n ≤ F`. Well-behavedness
+includes the single-request bound at every reachable boundary, a complete-run
+upper bound, and stability of the standalone contiguous segment relative to
+its charges in the original sequence. These are operational hypotheses on the
+input workers; arbitrary BST algorithms do not receive them automatically.
+
+A policy is chosen before the future requests or comparison window. For a
+window `[lo, hi)`, `executed_window` splits the actual run into its prefix,
+middle, and suffix with exact state and cost composition. The middle is a
+legal pointer execution between the trees returned by the prefix and middle.
+Its charge comparison uses the indices and history from the original request
+sequence. It does not rerun the algorithm from the saved tree at `lo`.
+
+With constants `C₀,C₁` from `WellBehaved`, `window_policy` bounds that cost by
+
+```
+8384 * (C₁ + 58) *
+  (2 * C₀² * min(original left window charge, original right window charge)
+   + (2 * C₀ * C₁ + 73) * F).
+```
+
+Preparation is paid once on the first request and is absorbed into the stated
+overhead; empty input and empty continuations cost zero. `prefix_policy` gives
+a sharper whole-prefix formula. Both statements concern the chosen physical
+execution, including its pointer operations and actual request visits.
+
+For a fixed nonempty family of size `k`, the balanced construction uses depth
+`d = ceil(log₂ k)`. `Family.Guarantees` retains every original comparator for
+one output worker. `chargeScale` and `overheadScale` give explicit recurrences
+for its constants. The physical wrapper supplies the corresponding prefix and
+actual-window minimum bounds. The input workers can have different state types;
+padding unused leaves repeats inputs. At worker depth zero a singleton family
+retains its original constants. The physical wrapper has its own cost factor.
+
+This integration supplies abstract BST-operation counterparts. It does not
+claim the real-world storage clauses of Theorems 3 and 5, the sharper `O(k)`
+family-size overhead, or Corollary 4's complete collection of concrete source
+bounds. Classical policy selection and replay logs are allowed by the abstract
+model. The finite-word implementation and the remaining source applications
+stay on the formalization worktree.
+
+Eleven added regression modules exercise exhausted attempts, exact-budget
+completion, switching and restoration, closed-round charges, interleaved
+rotations during scans, snapshot inversion, and heterogeneous three-member
+families. Family tests check original versus restarted charge indices, windows
+after nonempty prefixes, exact cost splitting, and differing best comparators
+on different windows. The existing multifinger regressions remain in the build.

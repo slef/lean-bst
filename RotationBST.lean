@@ -17,6 +17,8 @@ public import RotationBST.Models.Equivalence.Abstract
 public import RotationBST.Models.Labelled.Search.Abstract
 public import RotationBST.Models.LinkedSearch.Abstract
 public import RotationBST.Models.Pointer.Detour.Abstract
+public import RotationBST.Models.Multifinger.Program.Replay.Abstract
+public import RotationBST.Models.Pointer.Walk.Abstract
 
 -- Part II: bounds and their relations.
 public import RotationBST.Bounds.WorkingSet.Abstract
@@ -71,6 +73,17 @@ public import RotationBST.Algorithms.Deamortization.Weighted.Abstract
 public import RotationBST.Algorithms.Deamortization.Finger.Abstract
 public import RotationBST.Algorithms.Deamortization.Algorithm.Abstract
 public import RotationBST.Algorithms.Splay.Deamortization.Abstract
+public import RotationBST.Algorithms.Combination.Analysis.Abstract
+public import RotationBST.Algorithms.Combination.Controller.Abstract
+public import RotationBST.Algorithms.Combination.Family.Abstract
+public import RotationBST.Algorithms.Combination.Family.Physical.Abstract
+public import RotationBST.Algorithms.Combination.Online.Abstract
+public import RotationBST.Algorithms.Combination.Online.Replay.Abstract
+public import RotationBST.Algorithms.Combination.Refinement.Abstract
+public import RotationBST.Algorithms.Combination.Rounds.Abstract
+public import RotationBST.Algorithms.Combination.Rounds.Certificates.Abstract
+public import RotationBST.Algorithms.Combination.Worker.Abstract
+public import RotationBST.Algorithms.Combination.Worker.Pair.Abstract
 
 -- Appendix: supporting structures.
 public import RotationBST.Structures.Treap.Abstract
@@ -100,6 +113,11 @@ public import RotationBST.Structures.HeavyPath.Finger.History.Up.Abstract
 public import RotationBST.Structures.HeavyPath.Finger.History.Rotation.Abstract
 public import RotationBST.Structures.HeavyPath.Finger.History.Simulation.Interruption.Abstract
 public import RotationBST.Structures.HeavyPath.Finger.History.Simulation.Requests.Abstract
+public import RotationBST.Structures.TreeBuffer.Cells.Abstract
+public import RotationBST.Structures.TreeBuffer.Scan.Abstract
+public import RotationBST.Structures.TreeBuffer.Snapshot.Abstract
+public import RotationBST.Structures.TreeBuffer.Snapshot.Recording.Abstract
+public import RotationBST.Structures.TreeBuffer.Snapshot.Streaming.Abstract
 
 @[expose] public section
 

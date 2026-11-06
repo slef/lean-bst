@@ -56,6 +56,19 @@ public import RotationBSTTests.FingerHeavyPath
 public import RotationBSTTests.FingerTransfer
 public import RotationBSTTests.FingerRecursiveTransfer
 
+-- ComboBST controller, snapshots, and finite-family regressions.
+public import RotationBSTTests.WorkerPair
+public import RotationBSTTests.ComboAnalysis
+public import RotationBSTTests.ComboController
+public import RotationBSTTests.ComboRounds
+public import RotationBSTTests.ComboWorker
+public import RotationBSTTests.ComboRefinement
+public import RotationBSTTests.ComboCertificates
+public import RotationBSTTests.TreeBuffer
+public import RotationBSTTests.Snapshot
+public import RotationBSTTests.StreamingSnapshot
+public import RotationBSTTests.RecordingSnapshot
+
 @[expose] public section
 
 namespace RotationBST.Tests

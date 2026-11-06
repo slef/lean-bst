@@ -126,6 +126,38 @@ not merely against build success. Paths are relative to the repository root.
    branch's finite-word service/arrival controllers are outside this batch.
    docs/organization.md gives a chapter progression and exact theorem map.
 
+11. ComboBST online combination and actual execution windows
+   Evidence: Algorithms/Combination/{Analysis,Online,Family,Family/Physical}/
+   Abstract.lean, and Structures/TreeBuffer/{Scan,Snapshot/Recording,
+   Snapshot/Streaming}/Abstract.lean.
+   The abstract counterpart of arXiv:1304.7604 Theorem 3 chooses one online
+   policy before all request sequences and comparison windows. Every window
+   continues at the actual returned prefix tree; the three phase costs add to
+   the complete cost exactly. The minimum comparison uses original-sequence
+   charges and includes overhead F >= n. WellBehaved requires nonnegative
+   charges, a single-access bound at every reachable request boundary, a
+   complete-run upper bound, and contiguous-segment stability. Snapshot
+   preparation is charged on the first request; empty input costs zero.
+   Fixed finite-family composition preserves every comparator, allows
+   different source state types, and uses depth ceil(log2 k). Its explicit
+   charge/overhead recurrences and final physical wrapper give both prefix
+   and actual-window bounds. They do not establish the sharper O(k) family
+   dependence. Real-world storage/scalar-time clauses and Corollary 4's full
+   source instantiations remain open. The generic contracts do not assert
+   that arbitrary supplied BST implementations satisfy those hypotheses.
+   docs/organization.md maps the exact statements and construction stages.
+
+Validation of the ComboBST integration
+   lake build --wfail: passed (9320 jobs), including the whole-library axiom
+   audit and 11 added regression modules.
+   scripts/check_imports.py: passed (1434 reachable library modules).
+   docs/extract_snippets.py: passed; existing snippets unchanged.
+   Interactive book: extraction (7720 constants) and rendering passed; all
+   18 JavaScript tests passed, with none skipped. The new public combination
+   and snapshot interfaces are present in the extracted data.
+   Existing library sources are unchanged; new dependencies use Tree.depth.
+   git diff --check and staged whitespace check: passed.
+
 Validation of the abstract-deamortization integration
    lake build --wfail: passed (8968 jobs), including the whole-library axiom
    audit and 23 added regression modules.
