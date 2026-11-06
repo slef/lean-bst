@@ -351,7 +351,9 @@ linked-search models), 14–16 (lazy finger, its place among the bounds, and the
 conditional-entropy obstruction), 23–26 (GreedyASS's finger bounds and their
 proof), 29–30 (the optimizer and multiple trees) and 33–35 (prefix sums,
 weighted search trees, BST deques, tendons and finger hands). The later batches
-are not in the book yet.
+are in chapters 12 (replays, detours and depth invariants), 30 (Tango with linear
+startup), 33–36 (ComboBST), 37 (deamortization), 38 (Theorem 4.3), 44–49
+(pop-tarts and heavy paths) and 50–51 (tree buffers and snapshots).
 
 
 ## Deamortization results for the book

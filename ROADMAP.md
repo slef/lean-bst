@@ -89,3 +89,23 @@ starting.
 update the algorithms table and the "What is not formalized" section, and add a
 headline result to the splay analysis chapter (`19-analysis.md`) or a new
 chapter after it.
+
+## 3. Tango as one online algorithm with linear startup
+
+**Source.** Book chapter "Tango with linear startup" (`book/src/chapters/30-tango-linear.md`). Its headline combines two library theorems by hand; no single theorem states the result.
+
+**Statement.** Compose `Tango.BottomUp.Results.balanced_policy` with `Tango.Algorithm.Rotation.Results.rotation_algorithm`. The first gives `run + m ≤ 42n + (70L + 20)(R + m)`. The second gives `totalCost ≤ m + run + 2n`. Together:
+
+```lean
+theorem RotationBST.Tango.Algorithm.Results.exists_competitive_linear (n : Nat) :
+    ∃ A : Algorithm, ∀ {start finish : Tree} {xs : List Nat} {offline : Nat},
+      start.size = n → Execution start xs finish offline →
+        (A.totalCost start xs : ℝ) ≤
+          (70 * Real.logb 2 (Nat.log2 n + 1) + 20) * (offline + xs.length : Nat) + 44 * n
+```
+
+**Proof idea.** The two bounds compose directly. `rotation_algorithm`'s algorithm agrees with the policy on runs from the reference tree. From any other tree it pays at most `2n` extra to reach the reference.
+
+**Where.** `Algorithms/Tango/Algorithm/BottomUp/Abstract.lean`, or `Algorithms/Tango/Algorithm/Abstract.lean` next to `exists_competitive`.
+
+**Book.** In `30-tango-linear.md`, replace the hand composition in the `tango-linear` headline with the new theorem. In `52-audit.md`, drop the bullet on Tango's linear startup.

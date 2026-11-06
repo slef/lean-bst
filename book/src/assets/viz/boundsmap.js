@@ -82,8 +82,9 @@ const MAPS = {
       { id: 'tango', label: 'Tango trees', x: 215, y: 62, href: 'tango.html' },
       { id: 'multi', label: 'Multiple trees', sub: 'not a BST', x: 660, y: 50, href: 'multiple-trees.html' },
       { id: 'splay', label: 'Splay trees', x: 120, y: 160, href: 'analysis.html' },
-      { id: 'greedy', label: 'GreedyASS', x: 680, y: 258, href: 'greedy-finger.html' },
-      { id: 'dp', label: 'Optimal tree (DP)', sub: 'static, offline', x: 680, y: 326, href: 'optimal-lazy-finger.html' },
+      { id: 'combined', label: 'Combined BST', sub: 'Theorem 4.3', x: 640, y: 222, href: 'combined-finger.html' },
+      { id: 'greedy', label: 'GreedyASS', x: 690, y: 284, href: 'greedy-finger.html' },
+      { id: 'dp', label: 'Optimal tree (DP)', sub: 'static, offline', x: 690, y: 342, href: 'optimal-lazy-finger.html' },
     ],
     edges: [
       { from: 'IB', to: 'OPT', text: TEXT.wilber, thms: T.wilber },
@@ -103,6 +104,12 @@ const MAPS = {
       { from: 'splay', to: 'WS', kind: 'alg',
         text: 'Splaying, from any initial tree, makes at most 10·WS + 6n(1 + log n) rotations: the working-set theorem of Sleator and Tarjan.',
         thms: ['Splay.Results.workingSet'] },
+      { from: 'combined', to: 'OPT', kind: 'alg', label: 'O(log log n)', lab: [556, 199, 'start'],
+        text: 'One causal program, GreedyASS and Tango combined by ComboBST and then deamortized, costs O(n + min(WDF*, (m + R)·log log n)) for every offline execution with R rotations, with O(log n) worst-case cost per request.',
+        thms: ['Geometric.GreedyASS.Combination.Deamortized.Results.combined'] },
+      { from: 'combined', to: 'LF', kind: 'alg',
+        text: 'The same program costs O(n + WDF*) for the best positive weights, from any start key, so it also meets LF*.',
+        thms: ['Geometric.GreedyASS.Combination.Deamortized.Results.combined'] },
       { from: 'greedy', to: 'LF', kind: 'alg',
         text: 'Some online BST algorithm, simulating GreedyASS, costs at most 722280·LF* + 96303n, and at most 2889120·WDF* + 96303n from every start key.',
         thms: ['Geometric.GreedyASS.Performance.Results.bst'] },
@@ -319,8 +326,11 @@ export default function mount(root, cfg = {}) {
       function metText() {
         if (!map.algs.length) return '';
         const fmt = (e) => `${byId[e.from].label}${e.label ? ` (within ${e.label})` : ''}`;
-        const now = metBy.filter((e) => !e.todo && upProved.has(e.to));
-        const later = metBy.filter((e) => !now.includes(e) && !now.some((f) => f.from === e.from));
+        // One entry per algorithm, keeping its best ratio (an unlabelled arrow is constant).
+        const best = (es) => [...new Map(es.map((e) => [e.from, e])).keys()]
+          .map((id) => es.filter((e) => e.from === id).sort((x, y) => !!x.label - !!y.label)[0]);
+        const now = best(metBy.filter((e) => !e.todo && upProved.has(e.to)));
+        const later = best(metBy.filter((e) => !now.some((f) => f.from === e.from)));
         const a = now.length ? ` Met by: <strong>${esc(now.map(fmt).join(', '))}</strong>` : ' No algorithm in this map is proved to meet it';
         return `${a}${later.length ? `; once formalized, also by <strong>${esc(later.map(fmt).join(', '))}</strong>` : ''}.`;
       }

@@ -213,6 +213,6 @@ Summing over the requests ([[Amortized.Results.stream]]), the potential telescop
 
 ::: caveat Compared with the paper
 - **Formalized.** Theorem 3.1, Theorem 4.1, Theorem 4.2 and Corollary 1, each with explicit constants, in the geometric model and as BST and pointer-machine executions.
-- **Not formalized.** Theorem 4.3, which combines the weighted bound with $O(\log\log n)$-competitiveness and $O(\log n)$ worst-case time per search; the ComboBST structure behind it; and the deamortization.
+- **Formalized later in the book.** Theorem 4.3, which combines the weighted bound with $O(\log\log n)$-competitiveness and $O(\log n)$ worst-case time per search, is the subject of [Chapter 38](combined-finger.html). It needs Tango with a linear startup term ([Chapter 30](tango-linear.html)), the ComboBST combination ([Chapters 33–36](combining.html)) and the deamortization ([Chapter 37](deamortization.html)); the result is an abstract BST-operation counterpart, without the paper's storage clauses.
 - **Normalizations.** The unit per request, the explicit first finger, the explicit linear startup and the infimum over weightings are described in [Section 23.1](#conventions). The constants are explicit and not optimized.
 :::

@@ -219,3 +219,5 @@ With the balanced reference tree, the $2n$ rotations of the reset raise the addi
 @decl RotationBST.Tango.Algorithm.Results.exists_competitive
 
 This is the result stated at the top of the chapter. The comparator now starts from the same tree as the algorithm, as in the definition of competitiveness ([[RotationBST.TotallyDynamicallyOptimal]], [Chapter 5](online.html#dynamic-optimality)), except that the factor is $O(\log\log n)$ instead of a constant. The statement mentions only the rotation model and the online algorithms of Part I. The proof is in `Algorithms/Tango/Algorithm/Online.lean`; the reset wrapper is in `Models/Online/Reset.lean`.
+
+The startup term $(14L + 6)\,n$ is $O(n \log\log n)$. [Chapter 30](tango-linear.html) brings it down to $O(n)$ by updating preferences from the bottom of the search path upwards. That linear startup is what the combined bound of Iacono and Langerman needs ([Chapter 38](combined-finger.html)).

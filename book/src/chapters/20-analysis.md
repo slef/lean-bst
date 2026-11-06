@@ -197,3 +197,7 @@ The figure runs the transcription of splay on a request sequence and plots its c
 ::: exercise Constants versus behaviour
 Switch to **Balance** with **sequential scans**. The measured cost stays far below $m(2 + 3\log_2 n)$, because sequential access is linear ([Chapter 10](beyond.html)). Then try **one key repeated** under **Working set**: after the first access the key stays at the root, each request costs $0$ rotations, and the bound grows by $10$ per request. The theorems give worst-case guarantees with generous constants, not estimates of typical cost.
 :::
+
+::: note Worst-case time per access
+All the bounds of this chapter are amortized: a single access can cost $\Theta(n)$ rotations. [Chapter 37](deamortization.html) builds one deamortized splay program that keeps the scanning, balance, working-set, static-optimality and static-finger bounds up to constant factors, and serves every access in $O(\log n)$ time in the worst case.
+:::
