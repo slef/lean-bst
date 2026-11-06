@@ -292,6 +292,9 @@ The [interactive textbook](book/README.md) has its own extraction, build, and te
 instructions. Its source is in `book/`; the Lean abstracts remain authoritative
 when checking theorem scope.
 
+Results that the book mentions but the library does not prove yet are listed in
+[ROADMAP.md](ROADMAP.md).
+
 The [PDF source](docs/main.texlish) includes tree diagrams and extracted Lean
 snippets. With `texlish@0.2.0`, `latexmk`, and the TeX packages listed in the
 [documentation workflow](.github/workflows/docs.yml) installed, run:

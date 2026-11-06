@@ -16,7 +16,7 @@ The constants do not depend on the size of the tree. In both directions the fina
 In Lean, rotation-model executions are [[RotationBST.Execution]], pointer executions are [[RotationBST.Pointer.Execution]], and [[RotationBST.Rotations]]` u t q` says that `q` rotations turn `u` into `t`.
 ```
 
-The definitions are in `Models/Pointer/Machine/Abstract.lean` and the simulation theorems in `Models/Pointer/Abstract.lean`. The later sections walk through the readable interface of the constant-factor ("lazy") simulation, and then run it online.
+The definitions are in `Models/Pointer/Machine/Abstract.lean` and the simulation theorems in `Models/Pointer/Abstract.lean`. The later sections walk through the readable interface of the constant-factor ("lazy") simulation, and then run it online. The last section collects facts about cursors and regions that later chapters use.
 
 ## Configurations
 
@@ -173,9 +173,17 @@ A skeleton is a tree whose leaves are *holes*, each holding an entire untouched 
 
 The bound does not depend on the sizes of the fringe subtrees. The proof flattens both regions into the common vine, using at most $4k$ instructions each, and runs the second flattening backwards. Reversing a pointer trace costs at most three instructions per instruction, since undoing a rotation requires stepping to the demoted node. In total this is $4k + 3 \cdot 4k = 16k$.
 
+A whole tree is a region whose holes are all empty, so any two shapes of the same size are a cheap pointer trace apart.
+
+**Theorem (reshaping a whole tree).** If `s` and `t` have the same size, a pointer trace of at most $16 \cdot |s|$ instructions turns `s` into `t`, from root to root.
+
+@decl RotationBST.Pointer.Results.reshape
+
+This is the startup term of several later comparisons. A dynamic BST that wants to imitate a static tree `t`, but starts from an arbitrary tree `s`, first rebuilds `s` into `t` at this cost, as in [[LazyFinger.Dynamic.Results.reference]] of [Chapter 15](lazy-finger-hierarchy.html).
+
 ### Putting it together
 
-For one access with $r$ selected rotations, the region has at most $2r+1$ nodes. Reshaping it costs at most $16(2r+1) = 32r + 16$ instructions, and the request unit gives $32r + 17$. The requested key ends at the root, where the cursor is, so the visit is free. The unselected rotations become pending. They are prepended to the next access, where they are selected or postponed again, and each rotation is charged once, when it is finally executed or left in the final suffix. Summing over the execution gives $C + 32d \le 32R + 17m$. The README describes the same argument in prose. The last section shows how the library turns this into an *online* transformer that uses only the past and the current request.
+For one access with $r$ selected rotations, the region has at most $2r+1$ nodes. Reshaping it costs at most $16(2r+1) = 32r + 16$ instructions, and the request unit gives $32r + 17$. The requested key ends at the root, where the cursor is, so the visit is free. The unselected rotations become pending. They are prepended to the next access, where they are selected or postponed again, and each rotation is charged once, when it is finally executed or left in the final suffix. Summing over the execution gives $C + 32d \le 32R + 17m$. The README describes the same argument in prose. The next section shows how the library turns this into an *online* transformer that uses only the past and the current request.
 
 ## Running an online algorithm on the pointer machine
 
@@ -244,3 +252,43 @@ Conventional dynamic optimality is a statement about pointer-model algorithms co
 :::
 
 The working-set transfer [[RotationBST.Pointer.Lazy.Online.Results.workingSet]] has the same shape. It is stated in [Chapter 10](bounds.html#transfer-to-the-pointer-machine), after the working-set bound is defined.
+
+## Cursors and regions for later chapters
+
+The definitions and theorems of this section are not needed for the simulations above. Later chapters use the pointer machine in ways that the root-restarting searches of `Serves` do not cover: with cursors that persist between requests, with navigation on a fixed tree, and with regions assembled from smaller pieces. They are collected here, next to the machine.
+
+### Cursors on a fixed tree
+
+A configuration stores the focused subtree and the whole path to the root. All of it is determined by the tree and the rank under the cursor.
+
+**Theorem (a rank determines the cursor).** Two configurations of the same tree whose cursors are on the same rank are equal.
+
+@decl RotationBST.Pointer.Results.cursor_unique
+
+So a cursor can be stored as a rank. The multi-finger model of [Chapter 10](fingers.html) does exactly that: its state is a tree and one rank per finger, and this theorem makes each finger's configuration, and hence the effect of each instruction, well defined.
+
+Some arguments only walk, without rotating. The library separates the four moves from the rotations:
+
+@decl RotationBST.Pointer.Move RotationBST.Pointer.Walk
+
+A `Move` is one of the instructions `downLeft`, `downRight`, `upLeft`, `upRight` of [[Pointer.Step]], with the same patterns, and `Walk a b k` is a sequence of `k` moves. Since no rotation occurs, a walk stays in one tree, and every walk is a [[Pointer.Trace]] with the same count. Walks are what a static tree with a lazy finger performs. In [Chapter 15](lazy-finger-hierarchy.html), [[LazyFinger.Dynamic.Results.readonly]] realizes the lazy-finger distance between two ranks by a walk of exactly that length, [[LazyFinger.Dynamic.Results.shortest]] shows that no walk is shorter, and [[LazyFinger.Dynamic.Results.toward]] takes one `Move` along a shortest route.
+
+A cursor cannot get far in few instructions, even when it may rotate.
+
+**Theorem (few reachable keys).** From a fixed configuration, at most $7^r$ distinct ranks can be under the cursor after at most $r$ instructions.
+
+@decl RotationBST.Pointer.Results.reachable_keys
+
+The proof is a counting argument. Write each trace as a word over seven symbols, one per instruction and a padding symbol, padded to length exactly $r$. The decoder runs the word from the fixed configuration with [[Multifinger.perform]] ([Chapter 10](fingers.html)), so the word determines the endpoint, and different endpoint ranks need different words. The configuration must be fixed before the ranks are chosen; the bound is uniform in the tree. [Chapter 15](lazy-finger-hierarchy.html) uses it to bound the number of keys within lazy-finger distance $r$ of a key by $7^r$, the counting step of the separation between lazy finger and dynamic BSTs.
+
+### Assembling regions
+
+The structures of [Chapter 34](bst-deques.html), BST deques and tendons, describe the part of a tree they occupy as a [[Pointer.Lazy.Skeleton]] and change it with the reshaping theorem above. They build these skeletons from smaller ones with three operations.
+
+@decl RotationBST.Pointer.Lazy.Skeleton.fillMin RotationBST.Pointer.Lazy.Skeleton.fillMax
+
+`s.fillMin t` replaces the first hole of `s`, in inorder, by the whole skeleton `t`, and `s.fillMax t` replaces the last hole. The subtree that the replaced hole held is discarded, so the operation is meant for a hole whose content `t` takes over. The active nodes of both skeletons stay active, so the sizes add, and the fringe of the result is the fringe of `t` followed by the rest of `s`'s fringe, or the mirror image for `fillMax`. A tendon's region is built this way: the region of one deque, with its last hole filled by the region of another deque, whose first hole holds the subtree at the tendon's bottom endpoint.
+
+@decl RotationBST.Pointer.Lazy.Skeleton.under
+
+`s.under cs` places the skeleton `s` at the position described by the context `cs`, nearest ancestor first as in [[Pointer.plug]]. Every ancestor on the path becomes an active node, and every subtree hanging off the path becomes a hole. It is the skeleton analogue of [[Pointer.Config.under]]: its tree is `plug cs s.tree`, and its size is the size of `s` plus the length of the path. A short path from the root, together with a few nodes below it, thus becomes a small region, and the reshaping theorem rearranges it at a cost proportional to the path length, independent of the subtrees hanging off it. Tendons use this to move one subtree across the short boundary path of a deque with a constant number of instructions.

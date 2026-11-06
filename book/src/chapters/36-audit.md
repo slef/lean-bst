@@ -25,13 +25,16 @@ A formal library rests on a short chain of trust. This appendix spells out each 
 These limits are stated in the library's README and in the chapters, and are collected here for reference.
 
 - No algorithm is proved dynamically optimal ([Chapter 5](online.html#dynamic-optimality)), neither splaying nor GreedyASS. The theorem about GreedyASS is that each row is the unique minimum *local* completion ([Chapter 16](greedy.html)), not that the whole execution is near-optimal. The pointer-machine transfer theorems are conditional.
-- The unified theorem is the 1985 fixed-finger version, not Iacono's unified bound. The dynamic finger bound is not formalized ([Chapter 10](bounds.html#what-is-not-formalized)).
+- The unified theorem is the 1985 fixed-finger version, not Iacono's unified bound. The dynamic finger bound is proved for GreedyASS, not for splay trees ([Chapter 10](bounds.html#what-is-not-formalized)).
 - Of Wilber's two lower bounds, only the first, the interleave bound, is formalized ([Chapter 11](wilber.html)).
 - Tango's auxiliary trees are splay trees rather than the red-black trees of the original paper, so its bound is amortized over the sequence ([Chapter 19](tango.html)).
 - The constants of the geometric simulation (6018, 192593, …) and of the geometric equivalences are explicit but not sharp ([Chapter 17](simulation.html)).
 - Updates take ranks as input. Computing the rank of a new comparison key, and a pointer machine with node allocation, are not formalized ([Chapter 15](beyond.html#updates)).
 - The long-splay theorem bounds restructuring only, not search cost ([Chapter 15](beyond.html#long-splays)).
 - Costs count abstract BST operations. The evaluation time of the Lean functions (which recompute subtree sizes) is not modelled, and the causal pointer transformer's planning is uncharged ([Section 6.6](pointer.html#running-an-online-algorithm-on-the-pointer-machine)). The same holds for the planning of the geometric simulation and of Tango.
+- The GreedyASS finger bounds cover Theorems 3.1, 4.1, 4.2 and Corollary 1 of Iacono and Langerman. Theorem 4.3, ComboBST and deamortization are not formalized. The BST and pointer-machine forms state that *some* online algorithm meets the bound; that it is the simulation of GreedyASS is visible in the proof, not in the statement ([Chapter 23](greedy-finger.html)).
+- Of the lazy-finger paper, the nine numbered results are formalized, but not the unnumbered periodic-rebuilding analysis or the concluding conjecture. The conditional-entropy obstruction is stated for every BST execution in the pointer model; the lazy-finger form follows by combining it with the simulation of [Chapter 15](lazy-finger-hierarchy.html), a step done in the text, not in Lean ([Chapter 16](conditional-entropy.html)).
+- The optimizer's cubic work bound is stated in an annotated cost model whose charges are written by hand next to the code, not measured ([Chapter 29](optimal-lazy-finger.html)). The query bound of the multiple-tree structure excludes preprocessing, which reads the whole sequence ([Chapter 30](multiple-trees.html)).
 - Constants are explicit but generous. For instance, the scanning bound is $14n$, not the sharper $5.5n$ of Kakimura and Terai.
 
 ## Theorems of the reading interface
