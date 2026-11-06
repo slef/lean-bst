@@ -539,10 +539,21 @@ details.claim-statement summary { cursor: pointer; font-family: var(--sans); fon
 .bm-cross { fill: var(--bad) !important; font-size: 16px; font-weight: 700; }
 .bm-head { fill: var(--fg-soft); }
 .bm-head.hot { fill: var(--accent); }
-.bm-leader { stroke: var(--fg-faint); stroke-dasharray: 2 3; }
-.bm-tag rect { fill: var(--violet-soft); stroke: var(--violet); stroke-width: 1; }
-.bm-tag text { fill: var(--violet); font-size: 11px; font-weight: 600; }
-.bm-tag:hover rect { stroke-width: 2; }
+.bm-head.todo { fill: var(--fg-faint); }
+.bm-head.alg { fill: var(--violet); }
+.bm-split { stroke: var(--fg-faint); stroke-width: 1; }
+.bm-node .bm-eq { font-size: 13px; font-weight: 700; fill: var(--fg-soft); paint-order: stroke; stroke: var(--bg-soft); stroke-width: 5px; }
+.bm-node.alg rect { fill: var(--violet-soft); stroke: var(--violet); stroke-width: 1.2; }
+.bm-node.alg .bm-alg { fill: var(--violet); font-size: 12.5px; font-weight: 700; }
+.bm-node.alg .bm-name { font-size: 10.5px; }
+.bm-node.alg.focus rect { fill: var(--violet-soft); stroke: var(--violet); stroke-width: 2.4; }
+.bm-node.down.todo rect { fill: var(--bg-soft); stroke: var(--good); stroke-dasharray: 4 3; }
+.bm-edge.alg .bm-line { stroke: var(--violet); stroke-width: 1.4; }
+.bm-edge.alg .bm-label { fill: var(--violet); font-weight: 600; }
+.bm-edge.todo .bm-line { stroke: var(--fg-faint); stroke-dasharray: 6 4; }
+.bm-edge.todo .bm-label { fill: var(--fg-faint); font-style: italic; }
+.bm-edge.alg.hot .bm-line, .bm-edge.todo.hot .bm-line { stroke: var(--accent); stroke-width: 2.5; }
+.bm-edge.alg.hot .bm-label, .bm-edge.todo.hot .bm-label { fill: var(--accent); }
 .bm-caption { font-family: var(--sans); font-size: .86rem; min-height: 3.2em; line-height: 1.45; }
 .bm-caption .bm-thm { color: var(--fg-faint); }
 .bm-caption code { font-size: .78rem; }
