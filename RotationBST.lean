@@ -25,6 +25,8 @@ public import RotationBST.Bounds.WorkingSet.Abstract
 public import RotationBST.Bounds.Abstract
 public import RotationBST.Bounds.Unified.Abstract
 public import RotationBST.Bounds.Implications.Abstract
+public import RotationBST.Bounds.DynamicFinger.Abstract
+public import RotationBST.Bounds.Logarithmic.Abstract
 public import RotationBST.Bounds.StaticTree.Abstract
 public import RotationBST.Bounds.Interleave.Abstract
 public import RotationBST.Bounds.Normalization.Abstract
@@ -41,6 +43,9 @@ public import RotationBST.Bounds.Interleave.BitReversal.Abstract
 public import RotationBST.Bounds.LazyFinger.Edges.Abstract
 public import RotationBST.Bounds.LazyFinger.Neighborhood.Abstract
 public import RotationBST.Bounds.StaticTree.Trace.Abstract
+
+-- Classical search trees (Part III of the book).
+public import RotationBST.Classical.Static.Abstract
 
 -- Part III: algorithms.
 public import RotationBST.Algorithms.MoveToRoot.Abstract

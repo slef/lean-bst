@@ -17,6 +17,21 @@ at the end are hard results, to be done last or not at all.
 
 ## 1. Dynamic finger implies static finger
 
+**Status.** Formalized (branch `formalize-finger-baseline`, 2026-11-09); the
+book update below is pending. Checked names, all under `RotationBST`:
+
+| Statement | Declaration | File |
+|---|---|---|
+| `DF(p, xs) ≤ 2·SF(f, xs) + log₂(d(p, f) + 1)` | `Bounds.dynamicFinger_le_fingerCost` | `Bounds/DynamicFinger/Abstract.lean` |
+| `DF(f, xs) ≤ 2·SF(f, xs)` | `Bounds.dynamicFinger_le_fingerCost_self` | `Bounds/DynamicFinger/Abstract.lean` |
+| the property, for every start key `p < n` | `HasDynamicFingerBound` | `Bounds/DynamicFinger/Definitions/Abstract.lean` |
+| DF ⇒ SF, constants `(C, D) ↦ (2C, D)` | `Bounds.dynamicFinger_implies_staticFinger` | `Bounds/Implications/Abstract.lean` |
+
+The statements are exactly the targets below. No algorithm in the library has
+`HasDynamicFingerBound` yet: GreedyASS's `bst_dynamic` gives one algorithm per
+universe size `n`, not one for all sizes, so it does not instantiate the
+property; the implication is about the properties only.
+
 **Source.** Classical. Shown as the dashed arrow DF → SF in the map of the
 bounds (the introduction to Part II of the book, section "A map of the bounds").
 
@@ -119,6 +134,35 @@ theorem RotationBST.Tango.Algorithm.Results.exists_competitive_linear (n : Nat) 
 **Book.** In `algorithms/tango-linear.md`, replace the hand composition in the `tango-linear` headline with the new theorem. In `appendices/audit.md` and the overview `algorithms/tango-trees.md`, drop the remarks on Tango's linear startup being composed by hand.
 
 ## 4. Perfect trees and the logarithmic baseline
+
+**Status.** Formalized (branch `formalize-finger-baseline`, 2026-11-09); the
+book update below is pending. The statements differ from the targets below in
+three ways: the tree is `Classical.Static.balanced`, a copy of `Tango.balanced`
+(`Classical` may not import `Algorithms`; the two definitions are textually
+identical); the finger inequality is named `fingerCost_le_log` and uses the
+new baseline `Bounds.logCost n xs = m(1 + log₂ n)`; and there are two extra
+results. Checked names, all under `RotationBST`:
+
+| Statement | Declaration | File |
+|---|---|---|
+| the balanced tree on `n` keys | `Classical.Static.balanced` | `Classical/Static/Definitions/Abstract.lean` |
+| it has `n` keys | `Classical.Static.Results.balanced_size` | `Classical/Static/Abstract.lean` |
+| depth ≤ `⌊log₂ n⌋` | `Classical.Static.Results.balanced_depth` | same |
+| every nonempty tree has a key at depth ≥ `⌊log₂ n⌋` | `Classical.Static.Results.exists_deep` | same |
+| static cost ≤ `m(⌊log₂ n⌋ + 1)` | `Classical.Static.Results.balanced_cost` | same |
+| static cost ≤ `logCost n xs` (reals) | `Classical.Static.Results.balanced_cost_le_logCost` | same |
+| every static tree pays `m(⌊log₂ n⌋ + 1)` on `m` repeats of a deep key | `Classical.Static.Results.exists_expensive` | same |
+| the baseline `m(1 + log₂ n)` | `Bounds.logCost` | `Bounds/Logarithmic/Abstract.lean` |
+| the property "O(1 + log n) amortized per request" | `HasLogarithmicBound` | same |
+| `SF(f, xs) ≤ logCost n xs` for `f < n` | `Bounds.fingerCost_le_log` | `Bounds/Implications/Abstract.lean` |
+| SF ⇒ logarithmic, same constants | `Bounds.staticFinger_implies_logarithmic` | same |
+
+For the figure: `SF → BAL` is `Bounds.fingerCost_le_log` (and the property
+version `staticFinger_implies_logarithmic`), and `B.BAL` can take the `def`
+`Bounds.logCost`. The perfect tree reaches the baseline
+(`balanced_cost_le_logCost`), but that is a static tree, not an online
+algorithm; the `balanced → BAL` edge still waits on entry 7 or 8 or a
+relabelled bubble, as the book instructions below say.
 
 **Source.** Classical. Shown as the box `m(1 + log n)` at the bottom of the
 map of the bounds, with a dashed arrow `SF → m(1 + log n)` and the "Balanced

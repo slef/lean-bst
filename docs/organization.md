@@ -74,14 +74,19 @@ RotationBST/
     WorkingSet/     working-set numbers and property
     Abstract.lean   frequency entropy, static optimality, static finger
     Unified/        the 1985 fixed-finger unified charge
-    Implications/   working set => static optimality => static finger
+    Implications/   working set => static optimality => static finger,
+                    dynamic finger => static finger => logarithmic
+    DynamicFinger/  dynamic-finger sum and property; DF <= 2 SF + start term
+    Logarithmic/    the baseline m(1 + log n) and its property
     StaticTree/     fixed-tree benchmark and the entropy lower bound
     Interleave/     Wilber's interleave quantity and lower bound
     LazyFinger/     fixed-tree distances, weighted characterization, separations
     WeightedFinger/ weighted dynamic-finger benchmark
     ConditionalEntropy/ transition entropy and its obstruction
     Normalization/  request charges versus rotation charges
-  Classical/        Part III (planned): static, rank-balanced, weight-balanced, random trees
+  Classical/        Part III: classical, non-adaptive trees
+    Static/         the balanced tree, its depth and cost; deep keys in every tree
+                    (rank-balanced, weight-balanced, random trees: planned)
   Algorithms/       Part IV: adaptive algorithms, definitions then bounds
     MoveToRoot/
     Splay/          algorithm, potential, access lemma, nine ST85 theorems,
@@ -576,3 +581,41 @@ This chapter concerns abstract BST operations. It does not establish bounds on
 finite-word storage or private computation, the full real-world clauses of
 ComboBST/deamortization, or dynamic optimality. Those remaining developments
 are separate from this complete abstract-model result.
+
+## Dynamic finger, perfect trees and the logarithmic baseline
+
+ROADMAP entries 1 and 4 (branch `formalize-finger-baseline`, 2026-11-09).
+The first files of `Classical/`; the book chapters are not updated yet.
+
+| Result | Checked entry point |
+|---|---|
+| DF ≤ 2·SF + start term | [`Bounds.dynamicFinger_le_fingerCost`, `dynamicFinger_le_fingerCost_self`](../RotationBST/Bounds/DynamicFinger/Abstract.lean) |
+| DF property ⇒ SF property | [`Bounds.dynamicFinger_implies_staticFinger`](../RotationBST/Bounds/Implications/Abstract.lean) |
+| SF ≤ m(1 + log n), SF property ⇒ logarithmic property | [`Bounds.fingerCost_le_log`, `staticFinger_implies_logarithmic`](../RotationBST/Bounds/Implications/Abstract.lean) |
+| Balanced tree: size, depth ≤ ⌊log₂ n⌋, cost | [`Classical.Static.Results.balanced_size`, `balanced_depth`, `balanced_cost`, `balanced_cost_le_logCost`](../RotationBST/Classical/Static/Abstract.lean) |
+| Every static tree: a key at depth ≥ ⌊log₂ n⌋, a sequence costing m(⌊log₂ n⌋ + 1) | [`Classical.Static.Results.exists_deep`, `exists_expensive`](../RotationBST/Classical/Static/Abstract.lean) |
+
+New definitions: `HasDynamicFingerBound` in
+`Bounds/DynamicFinger/Definitions/Abstract.lean` (which now imports
+`Models/Online/Abstract`), `Bounds.logCost` and `HasLogarithmicBound` in
+`Bounds/Logarithmic/Abstract.lean`, and `Classical.Static.balanced` in
+`Classical/Static/Definitions/Abstract.lean`.
+
+Choices made:
+
+- `HasDynamicFingerBound` quantifies over every start key `p < n`. Changing
+  `p` moves the sum by at most `1 + log₂ n`, which the startup term absorbs, so
+  "for some `p`" or "`p` = root" would give an equivalent property.
+- `Classical.Static.balanced` duplicates `Tango.balanced` because `Classical`
+  may not import `Algorithms`. A later cleanup could define Tango's reference
+  tree as the classical one (Tango may import `Classical`, which is below it).
+- The baseline uses the real logarithm, `m(1 + log₂ n)`, like the other
+  sequence costs; the tree statements use `⌊log₂ n⌋` (`Nat.log2`), which is
+  what depth counts. `balanced_cost_le_logCost` connects the two.
+- `HasStaticFingerBound.logarithmic` keeps the constants: the finger is put at
+  rank 0, and the empty tree is handled separately (only the empty sequence is
+  valid there).
+
+Regression examples: `RotationBSTTests/FingerBaseline.lean` (the balanced tree
+on 6, 7 and 8 keys, depths, a path, concrete costs, and the chain
+DF ⇒ SF ⇒ logarithmic).

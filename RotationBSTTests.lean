@@ -10,6 +10,7 @@ public import RotationBST
 public import RotationBSTTests.AbstractBoundary
 public import RotationBSTTests.Axioms
 public import RotationBSTTests.Arboral
+public import RotationBSTTests.FingerBaseline
 
 -- Lazy Finger and GreedyASS paper regressions.
 public import RotationBSTTests.ConditionalEntropy

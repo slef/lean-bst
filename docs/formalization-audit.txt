@@ -168,6 +168,24 @@ not merely against build success. Paths are relative to the repository root.
    Public names and existing book chapters are preserved. docs/organization.md
    gives the complete chapter progression and the exact checked entry points.
 
+13. Dynamic finger, perfect trees and the logarithmic baseline (ROADMAP 1, 4)
+   Evidence: Bounds/DynamicFinger/Abstract.lean, Bounds/Logarithmic/Abstract.lean,
+   Bounds/Implications/Abstract.lean, Classical/Static/Abstract.lean.
+   DF(p, xs) <= 2 SF(f, xs) + log2(d(p, f) + 1) for every f, p and xs, with
+   one unit per request in both sums; no hypothesis on f or p. The properties
+   satisfy DF => SF (constants 2C, D) and SF => logarithmic (same constants).
+   The balanced tree has every key at depth <= floor(log2 n) and static cost
+   <= m(floor(log2 n) + 1); every nonempty tree has a key at depth
+   >= floor(log2 n), so m repeats of it cost at least m(floor(log2 n) + 1).
+   Not claimed: any algorithm with the dynamic-finger property, worst-case
+   (rather than total) bounds, and the balanced -> BAL figure edge, which
+   concerns online algorithms.
+
+Validation of ROADMAP entries 1 and 4
+   lake build --wfail: passed (9462 jobs), including the whole-library axiom
+   audit and one added regression module (FingerBaseline).
+   scripts/check_imports.py: passed (1499 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.
