@@ -1,12 +1,12 @@
 # Move-to-root
 
-The simplest self-adjusting rule comes first. **Move-to-root** (Allen and Munro, 1978) serves a request by finding $x$ and then rotating it over its parent, again and again, until it is the root. Recently requested keys stay near the top, which is the intuition behind every self-adjusting tree. Under independent random requests, Allen and Munro showed that its expected cost is within a constant factor of the optimal static tree. In the worst case it is poor: a sequential scan costs $\Theta(n)$ rotations per request, forever. Splaying ([Chapter 13](splay.html)) repairs exactly this defect by rotating in pairs.
+The simplest self-adjusting rule comes first. **Move-to-root** [@allen1978] serves a request by finding $x$ and then rotating it over its parent, again and again, until it is the root. Recently requested keys stay near the top, which is the intuition behind every self-adjusting tree. Under independent random requests, Allen and Munro showed that its expected cost is within a constant factor of the optimal static tree. In the worst case it is poor: a sequential scan costs $\Theta(n)$ rotations per request, forever. Splaying ([Chapter 13](splay.html)) repairs exactly this defect by rotating in pairs.
 
 What the library proves about move-to-root is that it is correct: it really performs an access in the rotation model, and it reports its rotation count truthfully. It proves no amortized bound, in either direction. The poor behaviour on scans is shown at the end of the chapter as a measurement.
 
 ```headline move-to-root
 title: Move-to-root performs a legal access with fewer than $n$ rotations
-source: Allen and Munro, *Self-organizing binary search trees* (1978)
+source: @allen1978
 theorems: MoveToRoot.Results.correct
 
 Let $t$ be any binary search tree on $n$ keys and $x$ any of its keys. Move-to-root returns a tree $u$ and a count $k$ such that $k$ rotations turn $t$ into $u$, the key $x$ is the root of $u$, and $k < n$.

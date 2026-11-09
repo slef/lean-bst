@@ -2,6 +2,9 @@
 // A → B means that an execution (or an online algorithm) in model A gives one
 // in model B serving the same requests, at the cost written on the arrow.
 //
+// Dashed boxes and arrows (`todo`) are models and simulations that are not
+// formalized yet; they point to the roadmap.
+//
 // As in the map of the bounds, theorem links are not hard-coded: the figure
 // borrows the href of a link to each declaration found elsewhere on the page
 // (the table under it), so the book build checks them.
@@ -33,6 +36,8 @@ const NODES = [
     text: 'The rotation model on trees that store arbitrary ordered keys.' },
   { id: 'REG', x: 760, y: 350, sym: 'Touched regions', name: 'touched nodes', href: 'regions.html',
     text: 'Each request touches a rooted subtree containing the requested key and rearranges it; the cost is the number of touched nodes.' },
+  { id: 'DIC', x: 430, y: 350, sym: 'Insertions, deletions', name: 'm + search + R', href: 'dictionary.html', todo: true,
+    text: 'Dictionaries: insertions and deletions by rank, each charged its search path plus its rotations, with balance data in the nodes. Only the splay-tree version is formalized.' },
   { id: 'ONP', x: 100, y: 490, sym: 'Online pointer', name: 'algorithms', href: 'pointer.html#running-an-online-algorithm-on-the-pointer-machine',
     text: 'Online algorithms on the pointer machine: each response depends only on the requests so far.' },
   { id: 'ONR', x: 430, y: 490, sym: 'Online rotation', name: 'algorithms', href: 'online.html',
@@ -62,6 +67,8 @@ const EDGES = [
     text: 'Labelled executions and executions on shapes correspond exactly, with the same number of rotations.' },
   { from: 'REG', to: 'ASS', both: true, label: 'equal', lab: [770, 294, 'start'], thms: ['Geometric.Equivalence.Results.ass_iff_region_execution'],
     text: 'A point set is arborally satisfied exactly when it is the touch set of a region execution from a suitable initial tree, at the same cost.' },
+  { from: 'ROT', to: 'DIC', todo: true, label: 'accesses only: ≤ 2(m + R)', lab: [255, 350, 'middle'], thms: [],
+    text: 'A rotation execution is a dictionary execution without insertions or deletions. Its search paths cost at most m + R in total, because each rotation raises the requested key by at most one level.' },
   { from: 'ONR', to: 'ONP', label: 'K + 32d ≤ 32R + 17m', lab: [265, 480, 'middle'], thms: ['Pointer.Lazy.Online.Results.simulation'],
     text: 'Every online rotation algorithm runs online on the pointer machine, from any initial tree, with the same bound as offline.' },
   { from: 'ONG', to: 'ONR', label: 'R ≤ 6018(points + n)', lab: [595, 480, 'middle'], thms: ['Geometric.Equivalence.Results.online_bst'],
@@ -85,15 +92,17 @@ function clip(n, tx, ty) {
   return [n.x + dx * k, n.y + dy * k];
 }
 
-export default function mount(root) {
+export default function mount(root, cfg = {}) {
+  const roadmap = cfg.roadmap || null;
+  const pending = ` <em>Not formalized yet</em>${roadmap ? `; see the <a href="${esc(roadmap)}">roadmap</a>` : ''}.`;
   const ui = frame(root, {
     title: 'How the models relate',
-    help: 'An arrow A → B means that an execution in model A gives one in model B serving the same requests, at the cost written on it: m requests, R rotations, K pointer instructions plus requests, |E| points, n keys. A double arrow is an exact correspondence. Hover over a model or an arrow for details; click to open its chapter or theorem.',
+    help: 'An arrow A → B means that an execution in model A gives one in model B serving the same requests, at the cost written on it: m requests, R rotations, K pointer instructions plus requests, |E| points, n keys. A double arrow is an exact correspondence. Dashed grey boxes and arrows are not formalized yet. Hover over a model or an arrow for details; click to open its chapter or theorem.',
   });
   const byId = Object.fromEntries(NODES.map((n) => [n.id, n]));
   const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, class: 'bounds-map', role: 'img', 'aria-label': 'How the models relate' }, ui.stage);
   const defs = s('defs', {}, svg);
-  for (const [id, cls] of [['head', 'bm-head'], ['hot', 'bm-head hot']]) {
+  for (const [id, cls] of [['head', 'bm-head'], ['hot', 'bm-head hot'], ['todo', 'bm-head todo']]) {
     const m = s('marker', { id: `mm-${id}`, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, defs);
     s('path', { d: 'M0,0 L10,5 L0,10 z', class: cls }, m);
   }
@@ -118,9 +127,10 @@ export default function mount(root) {
       const len = Math.hypot(x2 - x1, y2 - y1), ox = -(y2 - y1) / len * e.off, oy = (x2 - x1) / len * e.off;
       x1 += ox; x2 += ox; y1 += oy; y2 += oy;
     }
-    const g = s('g', { class: 'bm-edge imp', tabindex: 0 }, svg);
+    const head = e.todo ? 'url(#mm-todo)' : 'url(#mm-head)';
+    const g = s('g', { class: `bm-edge imp${e.todo ? ' todo' : ''}`, tabindex: 0 }, svg);
     s('line', { x1, y1, x2, y2, class: 'bm-hit' }, g);
-    const line = s('line', { x1, y1, x2, y2, class: 'bm-line', 'marker-end': 'url(#mm-head)' }, g);
+    const line = s('line', { x1, y1, x2, y2, class: 'bm-line', 'marker-end': head }, g);
     if (e.both) line.setAttribute('marker-start', 'url(#mm-head)');
     const [tx, ty, anchor] = e.lab;
     s('text', { x: tx, y: ty, class: 'bm-label', 'text-anchor': anchor }, g).textContent = e.label;
@@ -130,20 +140,23 @@ export default function mount(root) {
       line.setAttribute('marker-end', 'url(#mm-hot)');
       if (e.both) line.setAttribute('marker-start', 'url(#mm-hot)');
       const rel = e.both ? '↔' : '→';
-      const thms = e.thms.length ? ` <span class="bm-thm">${link(e.thms)}</span>` : '';
+      const thms = e.todo ? pending : e.thms.length ? ` <span class="bm-thm">${link(e.thms)}</span>` : '';
       caption.innerHTML = `<strong>${esc(a.sym)} ${rel} ${esc(b.sym)}: ${esc(e.label)}.</strong> ${esc(e.text)}${thms}`;
       for (const [id, el] of nodeEls) el.classList.toggle('dim', id !== e.from && id !== e.to);
       for (const o of edgeEls) o.g.classList.toggle('dim', o.e !== e);
     };
     g.addEventListener('mouseenter', show);
     g.addEventListener('focus', show);
-    g.addEventListener('click', () => { const href = e.thms.length && hrefFor(e.thms[0]); if (href) location.href = href; });
-    edgeEls.push({ e, g, line });
+    g.addEventListener('click', () => {
+      const href = e.todo ? roadmap : e.thms.length && hrefFor(e.thms[0]);
+      if (href) location.href = href;
+    });
+    edgeEls.push({ e, g, line, head });
   }
 
   const nodeEls = new Map();
   for (const n of NODES) {
-    const g = s('g', { class: `bm-node${n.alone ? ' lower' : ''}`, tabindex: 0 }, svg);
+    const g = s('g', { class: `bm-node${n.alone || n.todo ? ' lower' : ''}${n.todo ? ' todo-model' : ''}`, tabindex: 0 }, svg);
     s('rect', { x: n.x - BW / 2, y: n.y - BH / 2, width: BW, height: BH, rx: 8 }, g);
     s('text', { x: n.x, y: n.y - 3, class: 'bm-sym', 'text-anchor': 'middle' }, g).textContent = n.sym;
     s('text', { x: n.x, y: n.y + 15, class: 'bm-name', 'text-anchor': 'middle' }, g).textContent = n.name;
@@ -161,7 +174,7 @@ export default function mount(root) {
         const dir = e.both ? '↔' : e.from === n.id ? '→' : '←';
         return `${dir} ${esc(other.sym)} (${esc(e.label)})`;
       });
-      caption.innerHTML = `<strong>${esc(n.sym)}.</strong> ${esc(n.text)}${out.length ? ` Relations: ${out.join('; ')}.` : ''} <a href="${esc(n.href)}">Open its chapter.</a>`;
+      caption.innerHTML = `<strong>${esc(n.sym)}.</strong> ${esc(n.text)}${n.todo ? pending : ''}${out.length ? ` Relations: ${out.join('; ')}.` : ''} <a href="${esc(n.href)}">Open its chapter.</a>`;
     };
     g.addEventListener('mouseenter', show);
     g.addEventListener('focus', show);
@@ -172,9 +185,9 @@ export default function mount(root) {
 
   function clear() {
     for (const el of nodeEls.values()) el.classList.remove('focus', 'dim');
-    for (const { e, g, line } of edgeEls) {
+    for (const { e, g, line, head } of edgeEls) {
       g.classList.remove('hot', 'dim');
-      line.setAttribute('marker-end', 'url(#mm-head)');
+      line.setAttribute('marker-end', head);
       if (e.both) line.setAttribute('marker-start', 'url(#mm-head)');
     }
   }

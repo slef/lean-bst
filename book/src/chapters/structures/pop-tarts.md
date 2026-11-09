@@ -1,6 +1,6 @@
 # Vanilla and Cherry pop-tarts
 
-The deamortization of Bose, Collette, Fagerberg and Langerman ([Chapter 37](deamortization.html)) stores every heavy path of the simulated tree as two stacks, and each stack is itself a binary search tree. Section 2 of their paper calls such a BST a *pop-tart*. Nodes are pushed in decreasing key order: the new node arrives as the parent of the current root, with the old stack as its right subtree and a leaf as its left subtree. A pop removes the root, whose left child is a leaf. Between operations the structure may rebalance with finger moves and rotations, and it must end with the finger back at the root.
+The deamortization of Bose, Collette, Fagerberg and Langerman [-@bose2012], in [Chapter 37](deamortization.html), stores every heavy path of the simulated tree as two stacks, and each stack is itself a binary search tree. Section 2 of their paper calls such a BST a *pop-tart*. Nodes are pushed in decreasing key order: the new node arrives as the parent of the current root, with the old stack as its right subtree and a leaf as its left subtree. A pop removes the root, whose left child is a leaf. Between operations the structure may rebalance with finger moves and rotations, and it must end with the finger back at the root.
 
 Leaves carry weights. In the paper's terms, a pop-tart is *good* if push and pop take $O(1)$ amortized and $O(\log n)$ worst-case time, and *crazy good* if moreover every leaf of weight $w$ has depth $O(\log W/w)$, where $W$ is the total weight of the leaves. The paper describes three pop-tarts. *Vanilla* never rebalances; it is crazy good when each new leaf outweighs the rest of the stack. *Cherry* is a 2-4 tree laid out along the right spine; it is crazy good for unit weights, and for weights that only increase. *Chocolate* adds frozen *icing* layers, built as Vanilla stacks, and is crazy good for arbitrary weights. Chocolate is the one the deamortization uses. It is the subject of [Chapter 45](chocolate.html).
 
@@ -8,7 +8,7 @@ This section covers the common vocabulary, Vanilla and Cherry, and two variants 
 
 ```headline pop-tarts-vanilla
 title: Vanilla pop-tarts are crazy good when pushed weights dominate
-source: Bose, Collette, Fagerberg and Langerman, *De-amortizing binary search trees* (2012)
+source: @bose2012
 theorems: PopTart.Vanilla.Results.push_valid PopTart.Vanilla.Results.pop_valid PopTart.Vanilla.Results.operation PopTart.Vanilla.Results.depth_log
 
 A Vanilla pop-tart is a right spine whose left children are its weighted leaves, and whose last right child is the leaf of the initial empty stack. It is *valid* if the bottom leaf has nonnegative weight and every pushed leaf has weight at least the total weight of the leaves below it on the spine. Pushing a leaf of weight $w \ge W$ onto a valid stack of total weight $W$ gives a valid stack, and popping a valid stack gives a valid stack. Each push and pop is realized by a pointer trace of **zero** instructions, root to root, under any context. In a valid stack of total weight $W$, a leaf of weight $w > 0$ at depth $d$ satisfies
@@ -20,7 +20,7 @@ This is Lemma 1 of the paper, with its constant. Depth counts edges from the roo
 
 ```headline pop-tarts-cherry
 title: Cherry pop-tarts are good, and crazy good under increasing weights
-source: Bose, Collette, Fagerberg and Langerman, *De-amortizing binary search trees* (2012)
+source: @bose2012
 theorems: PopTart.Cherry.Results.empty_sequence PopTart.Cherry.Results.worst_case PopTart.Cherry.Results.depth_log PopTart.Cherry.Results.key_depth PopTart.Cherry.Results.weighted_sequence
 
 Start a Cherry pop-tart from the empty stack, and apply any sequence of $n$ pushes and pops of single leaves. Then every operation is realized by a pointer trace, root to root, and the total number of instructions is at most $10n$. A stack with $L$ leaves has every leaf at depth at most $4\log_2 L$. Its next push costs at most $10\log_2 L$ instructions, and its next pop at most $6\log_2 L$. In an ordinary pop-tart, whose leaves are empty, with $n$ nodes, every node has depth less than $4\log_2(n+1)$. This is Lemma 2 of the paper, with explicit constants.

@@ -1,12 +1,12 @@
 # Snapshots
 
-The combined search tree of [Chapter 33](combining.html) runs two online BST algorithms in alternating rounds. Each round starts from the same initial tree $T$: when a round runs out of budget, the structure transforms whatever tree it has back into $T$, and the other algorithm takes over. A BST cannot keep a second copy of $T$ on the side. Demaine, Iacono, Langerman and Özkan therefore store $T$ *inside the tree itself*, in the $O(\log n)$ bits of augmented data that every node may carry. Their *tree state buffer* (TSB, Section 3 of the paper) supports two operations. `SaveState()` records the current tree in the buffer, and `LoadState()` transforms the current tree, whatever it is, into the recorded one. The encoding is simple. Run a linear-time algorithm that rotates the tree into a path, and record its operations. To load, rotate the current tree into the same path, then undo the recorded operations. Lemma 10 of the paper says that both operations take $O(n)$ steps.
+The combined search tree of [Chapter 33](combining.html) runs two online BST algorithms in alternating rounds. Each round starts from the same initial tree $T$: when a round runs out of budget, the structure transforms whatever tree it has back into $T$, and the other algorithm takes over. A BST cannot keep a second copy of $T$ on the side. Demaine, Iacono, Langerman and Özkan [-@demaine2013] therefore store $T$ *inside the tree itself*, in the $O(\log n)$ bits of augmented data that every node may carry. Their *tree state buffer* (TSB, Section 3 of the paper) supports two operations. `SaveState()` records the current tree in the buffer, and `LoadState()` transforms the current tree, whatever it is, into the recorded one. The encoding is simple. Run a linear-time algorithm that rotates the tree into a path, and record its operations. To load, rotate the current tree into the same path, then undo the recorded operations. Lemma 10 of the paper says that both operations take $O(n)$ steps.
 
 This section formalizes the tree state buffer on the cells and scans of [Chapter 50](tree-buffers.html), with explicit constants and with a payload of twelve bits per node.
 
 ```headline snapshots-save-load
 title: A tree can be saved into its own nodes and restored, in linear time
-source: Demaine, Iacono, Langerman and Özkan, *Combining binary search trees* (2013)
+source: @demaine2013
 theorems: RotationBST.TreeBuffer.Snapshot.Recording.Results.save RotationBST.TreeBuffer.Snapshot.Streaming.Results.load
 
 Consider a tree with $n$ nodes and one data cell per node, indexed by inorder rank, as in the buffers of [Chapter 50](tree-buffers.html). Two fingers share the tree: a *tree finger* that moves and rotates, and a *buffer finger* that walks from cell to cell and reads or writes the cell under it.

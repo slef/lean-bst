@@ -1,12 +1,12 @@
 # All the finger bounds at once
 
-Part III has produced two online BSTs whose guarantees do not compare. GreedyASS ([Chapter 24](greedy-finger.html)) is within a constant factor of the best weighted dynamic finger bound, with a linear startup term, but no competitive ratio better than $O(\log n)$ is known for it. Tango ([Chapter 29](tango.html)) is $O(\log\log n)$-competitive with the offline optimum, but its bound is relative to the optimum only, and it is not known to have the finger bounds. Neither guarantee implies the other. Iacono and Langerman end their paper with Theorem 4.3, which takes the best of both. They combine the two algorithms with the ComboBST construction of Demaine, Iacono, Langerman and Özkan ([Chapter 33](combining.html)), so that one BST costs at most a constant times the *minimum* of the two bounds, plus $O(n)$. They then apply the deamortization of Bose, Collette, Fagerberg and Langerman ([Chapter 37](deamortization.html)), so that every search also costs $O(\log n)$ in the worst case.
+Part IV has produced two online BSTs whose guarantees do not compare. GreedyASS ([Chapter 24](greedy-finger.html)) is within a constant factor of the best weighted dynamic finger bound, with a linear startup term, but no competitive ratio better than $O(\log n)$ is known for it. Tango ([Chapter 29](tango.html)) is $O(\log\log n)$-competitive with the offline optimum, but its bound is relative to the optimum only, and it is not known to have the finger bounds. Neither guarantee implies the other. Iacono and Langerman [-@iacono2016] end their paper with Theorem 4.3, which takes the best of both. They combine the two algorithms with the ComboBST construction of Demaine, Iacono, Langerman and Özkan ([Chapter 33](combining.html)), so that one BST costs at most a constant times the *minimum* of the two bounds, plus $O(n)$. They then apply the deamortization of Bose, Collette, Fagerberg and Langerman ([Chapter 37](deamortization.html)), so that every search also costs $O(\log n)$ in the worst case.
 
 The paper gives this theorem in two lines, citing the other two papers. The library proves it. This chapter assembles the proof from the pieces built in the preceding chapters, and states the result with its explicit constants.
 
 ```headline combined-finger
 title: One BST has the weighted dynamic finger bound, is $O(\log\log n)$-competitive, and costs $O(\log n)$ per search
-source: Iacono and Langerman, *Weighted dynamic finger in binary search trees* (2016)
+source: @iacono2016
 key: yes
 theorems: Geometric.GreedyASS.Combination.Deamortized.Results.combined
 skip: Geometric.GreedyASS.Combination.Policy | The combined policy is an existential witness. The theorem states its bounds directly about the deamortized program `d`, whose meaning (setup trace, served stream, response costs, causality) does not depend on what the policy is. The policy's ComboBST machinery is explained in the chapter but need not be read to check the claim.
@@ -31,7 +31,7 @@ Here $\mathrm{WF}^*(p, X)$ is [[WeightedFinger.optimalCostFrom]], the infimum ov
 
 ```headline combined-finger-weights
 title: The same program, against every weighting
-source: Iacono and Langerman, *Weighted dynamic finger in binary search trees* (2016)
+source: @iacono2016
 theorems: Geometric.GreedyASS.Combination.Results.policy_exists Geometric.GreedyASS.Combination.Deamortized.Results.policy_exists Geometric.GreedyASS.Combination.Deamortized.Results.weights_competitive
 skip: Geometric.GreedyASS.Combination.Policy | The combined policy is only required to exist. The bound is stated directly about the deamortized program `d`, whose meaning (setup trace, served stream, response costs, causality) does not depend on what the policy is.
 skip: Geometric.GreedyASS.Combination.Policy.cost | Used only in one conjunct of the `correct` field of `Deamortized`, which compares the program's costs with the policy's ComboBST execution. That conjunct only adds information about the witness, and the bound is stated without it.

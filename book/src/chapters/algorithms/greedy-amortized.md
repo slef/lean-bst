@@ -1,12 +1,12 @@
 # Paying for each row
 
-This section completes the proof of Theorem 3.1 of Iacono and Langerman (2016). The theorem says that GreedyASS ([Chapter 21](greedy.html)) serves every request sequence about as fast as a fixed *leaf-oriented* reference tree whose search starts where the previous search ended. [Chapter 24](reference-forest.html) built the reference forest, and [Chapter 25](greedy-potential.html) built the potential: item potentials of four colors, plus a virgin potential on the roots of the forest. What remains is the accounting. For each row that GreedyASS adds, the number of points plus the change in potential is at most $24$ times the reference distance between the two searches, plus $24$, plus a one-time charge for keys never accessed before. Adding these bounds over the rows gives the theorem.
+This section completes the proof of Theorem 3.1 of Iacono and Langerman [-@iacono2016]. The theorem says that GreedyASS ([Chapter 21](greedy.html)) serves every request sequence about as fast as a fixed *leaf-oriented* reference tree whose search starts where the previous search ended. [Chapter 24](reference-forest.html) built the reference forest, and [Chapter 25](greedy-potential.html) built the potential: item potentials of four colors, plus a virgin potential on the roots of the forest. What remains is the accounting. For each row that GreedyASS adds, the number of points plus the change in potential is at most $24$ times the reference distance between the two searches, plus $24$, plus a one-time charge for keys never accessed before. Adding these bounds over the rows gives the theorem.
 
 The theorem is the base of [Chapter 23](greedy-finger.html). Its consequences there, the ordinary lazy-finger bound, the weighted dynamic finger bound and the dynamic finger bound (Theorems 4.1 and 4.2 and Corollary 1), all follow from it.
 
 ```headline greedy-leaf-finger
 title: GreedyASS is within a constant factor of every leaf-oriented lazy finger
-source: Iacono and Langerman, *Weighted dynamic finger in binary search trees* (2016)
+source: @iacono2016
 theorems: Geometric.GreedyASS.Potential.Amortized.Results.cost Geometric.GreedyASS.Potential.Amortized.Results.bst Geometric.GreedyASS.Potential.Amortized.Results.pointer
 skip: Geometric.instDecidableVisible | A decidability instance, together with the one for rectangles it uses, only lets Lean compute the filter in `greedySweep`. Any two instances for the same proposition agree, so they cannot change which keys the sweep keeps.
 

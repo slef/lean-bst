@@ -1,6 +1,6 @@
 # Touched regions
 
-The rotation model of [Chapter 3](accesses.html) counts rotations, and the pointer machine of [Chapter 6](pointer.html) counts cursor moves and rotations. A third accounting is standard in the work on dynamic optimality since Demaine, Harmon, Iacono, Kane and Pătraşcu (2009). It forgets how a search restructures and counts only *which nodes it touches*.
+The rotation model of [Chapter 3](accesses.html) counts rotations, and the pointer machine of [Chapter 6](pointer.html) counts cursor moves and rotations. A third accounting is standard in the work on dynamic optimality since Demaine, Harmon, Iacono, Kane and Pătraşcu [-@demaine2009]. It forgets how a search restructures and counts only *which nodes it touches*.
 
 Serving a request touches a set of nodes that contains the requested key and forms a connected subtree containing the root. The algorithm may then rearrange the touched nodes into any shape, as long as every untouched subtree hangs back in its inorder slot. The cost is the number of touched nodes. A pointer search that visits $k$ nodes is such a step, since the cursor only travels along edges from the root and only rotates nodes it has visited. Conversely, any rearrangement of $k$ touched nodes can be performed by a pointer machine with $O(k)$ instructions. The models therefore agree up to constant factors, and [Chapter 9](equivalence.html) proves it.
 

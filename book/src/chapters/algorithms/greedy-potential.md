@@ -1,6 +1,6 @@
 # Items, colors and potential
 
-Iacono and Langerman prove their Theorem 3.1 with a potential function. GreedyASS runs on its own, and a lazy finger moves in a fixed leaf-oriented reference tree $T$ alongside it. The potential is chosen so that every point GreedyASS adds is paid for, up to a constant, by a drop in the potential or by the finger's movement. This section defines that potential and proves its local properties. [Chapter 26](greedy-amortized.html) does the bookkeeping, request by request, and concludes the theorem.
+Iacono and Langerman [-@iacono2016] prove their Theorem 3.1 with a potential function. GreedyASS runs on its own, and a lazy finger moves in a fixed leaf-oriented reference tree $T$ alongside it. The potential is chosen so that every point GreedyASS adds is paid for, up to a constant, by a drop in the potential or by the finger's movement. This section defines that potential and proves its local properties. [Chapter 26](greedy-amortized.html) does the bookkeeping, request by request, and concludes the theorem.
 
 The potential has two parts, both read off a snapshot of the execution.
 
@@ -17,7 +17,7 @@ Two results here stand out as milestones of the proof. The first is a geometric 
 
 ```headline greedy-potential-old-roots
 title: Each GreedyASS row touches at most two old roots
-source: Iacono and Langerman, *Weighted dynamic finger in binary search trees* (2016)
+source: @iacono2016
 theorems: Geometric.GreedyASS.Virgin.Results.count Geometric.GreedyASS.Virgin.Results.decrease
 skip: Geometric.instDecidableVisible | A decidability instance, together with the one for rectangles it uses, only lets Lean compute the filter in `greedySweep`. Any two instances for the same proposition agree, so they cannot change which keys the sweep keeps.
 

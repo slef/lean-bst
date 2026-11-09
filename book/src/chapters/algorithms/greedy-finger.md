@@ -1,14 +1,14 @@
 # GreedyASS and the finger bounds
 
-A static BST searched with a *lazy finger* starts each search where the previous one ended, instead of at the root ([Chapter 14](lazy-finger.html)). Its cost on a request sequence is the total length of the walks between consecutive requests, and the best static tree for a given sequence is a strong benchmark. It is at least as good as the best root-finger tree, up to a factor two, and it adapts to locality as well. Bose, Douïeb, Iacono and Langerman showed that it is equivalent, up to constant factors, to a *weighted dynamic finger* bound: assign each key $k$ a positive weight $w_k$, and charge a move from $x$ to $y$ the logarithm of the total weight between them, divided by the smaller weight of the two endpoints.
+A static BST searched with a *lazy finger* starts each search where the previous one ended, instead of at the root ([Chapter 14](lazy-finger.html)). Its cost on a request sequence is the total length of the walks between consecutive requests, and the best static tree for a given sequence is a strong benchmark. It is at least as good as the best root-finger tree, up to a factor two, and it adapts to locality as well. Bose, Douïeb, Iacono and Langerman [-@bose2016] showed that it is equivalent, up to constant factors, to a *weighted dynamic finger* bound: assign each key $k$ a positive weight $w_k$, and charge a move from $x$ to $y$ the logarithm of the total weight between them, divided by the smaller weight of the two endpoints.
 
-Iacono and Langerman (2016) proved that GreedyASS ([Chapter 21](greedy.html)) meets this benchmark. On every sequence it costs at most a constant times the cost of the best lazy-finger tree for that sequence, plus $O(n)$. This is a "static optimality" theorem with respect to a much stronger static benchmark, and it implies the dynamic finger bound by taking all weights equal. Since GreedyASS is an online BST algorithm through the simulation of [Chapter 22](simulation.html), the bounds hold for an online BST. The library formalizes the paper's Theorem 3.1, its leaf-oriented core, and the consequences Theorem 4.1, Theorem 4.2 and Corollary 1. This section states those consequences. Theorem 3.1 is the subject of [Chapter 26](greedy-amortized.html), and [Chapter 24](reference-forest.html) and [Chapter 25](greedy-potential.html) prepare it.
+Iacono and Langerman [-@iacono2016] proved that GreedyASS ([Chapter 21](greedy.html)) meets this benchmark. On every sequence it costs at most a constant times the cost of the best lazy-finger tree for that sequence, plus $O(n)$. This is a "static optimality" theorem with respect to a much stronger static benchmark, and it implies the dynamic finger bound by taking all weights equal. Since GreedyASS is an online BST algorithm through the simulation of [Chapter 22](simulation.html), the bounds hold for an online BST. The library formalizes the paper's Theorem 3.1, its leaf-oriented core, and the consequences Theorem 4.1, Theorem 4.2 and Corollary 1. This section states those consequences. Theorem 3.1 is the subject of [Chapter 26](greedy-amortized.html), and [Chapter 24](reference-forest.html) and [Chapter 25](greedy-potential.html) prepare it.
 
 In all three results below, $n$ is the number of keys, $X = x_1, \dots, x_m$ is a sequence of keys in $\{0, \dots, n-1\}$, and $P_G(X)$ is the number of points that GreedyASS adds on $X$, starting from an empty history: its geometric cost, one unit per point, which includes one point per request.
 
 ```headline greedy-lazy-finger
 title: GreedyASS is competitive with the best lazy-finger tree
-source: Iacono and Langerman, *Weighted dynamic finger in binary search trees* (2016)
+source: @iacono2016
 key: yes
 theorems: Geometric.GreedyASS.Performance.Results.lazy_optimal Geometric.GreedyASS.Performance.Results.bst
 skip: Geometric.instDecidableVisible | A decidability instance, together with the one for rectangles it uses, only lets Lean compute the filter in `greedySweep`. Any two instances for the same proposition agree, so they cannot change which keys the sweep keeps.
@@ -26,7 +26,7 @@ In Lean, $P_G(X)$ is [[Geometric.rowCost]]` greedySweep 0 ∅ X` for the sweep [
 
 ```headline greedy-weighted-finger
 title: GreedyASS has the weighted dynamic finger property
-source: Iacono and Langerman, *Weighted dynamic finger in binary search trees* (2016)
+source: @iacono2016
 key: yes
 theorems: Geometric.GreedyASS.Performance.Results.weighted_optimal Geometric.GreedyASS.Performance.Results.weighted Geometric.GreedyASS.Performance.Results.bst_weighted
 skip: Geometric.instDecidableVisible | A decidability instance, together with the one for rectangles it uses, only lets Lean compute the filter in `greedySweep`. Any two instances for the same proposition agree, so they cannot change which keys the sweep keeps.
@@ -48,7 +48,7 @@ The weights appear only in the bound: neither GreedyASS nor the BST algorithm kn
 
 ```headline greedy-dynamic-finger
 title: GreedyASS has the dynamic finger property
-source: Iacono and Langerman, *Weighted dynamic finger in binary search trees* (2016)
+source: @iacono2016
 key: yes
 theorems: Geometric.GreedyASS.Performance.Results.dynamic Geometric.GreedyASS.Performance.Results.bst_dynamic
 skip: Geometric.instDecidableVisible | A decidability instance, together with the one for rectangles it uses, only lets Lean compute the filter in `greedySweep`. Any two instances for the same proposition agree, so they cannot change which keys the sweep keeps.

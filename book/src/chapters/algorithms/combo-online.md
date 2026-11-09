@@ -2,7 +2,7 @@
 
 [Chapter 34](combo-workers.html) and [Chapter 35](combo-rounds.html) built the logical side of Combo-BST. A **worker** packages the two source algorithms $A_0$ and $A_1$ as interruptible step functions, and the **controller** runs them in alternating bounded rounds, restoring the initial tree whenever it switches. All costs there are counted in *worker units*: one unit per worker step, plus an explicit restore charge per switch. Nothing there is yet a binary search tree.
 
-This section turns the controller into one physical online BST algorithm, and proves its bounds. It is the last step of Theorem 3 of Demaine, Iacono, Langerman and Özkan (2013). There are three ingredients.
+This section turns the controller into one physical online BST algorithm, and proves its bounds. It is the last step of Theorem 3 of Demaine, Iacono, Langerman and Özkan [-@demaine2013]. There are three ingredients.
 
 1. **Refinement onto shared nodes.** Each worker step becomes a bounded number of instructions on a tree buffer with two persistent fingers: finger 0 is the worker's cursor, finger 1 keeps the scan position of the saved snapshot. Restoring the initial tree is a streaming load of that snapshot. This is the paper's Combo-MFBST, a multi-finger BST in the sense of [Chapter 10](fingers.html).
 2. **One finger.** The finger hand of [Chapter 43](finger-hands.html) simulates the two fingers with the single root-restarting cursor of the pointer machine ([Chapter 6](pointer.html)). This is the paper's OneFinger-BST (its Theorem 5), applied to Combo-MFBST.
@@ -12,7 +12,7 @@ The window theorem, `window_policy`, is the formal Theorem 3. Its headline box i
 
 ```headline combo-online-prefix
 title: One fixed online pointer algorithm is within the better of two bounds on every prefix
-source: Demaine, Iacono, Langerman and Özkan, *Combining binary search trees* (2013)
+source: @demaine2013
 theorems: Combo.Online.Results.prefix_policy
 
 Let $T$ be a nonempty tree on $n$ keys, and let a worker present two source algorithms $A_0$ and $A_1$ on $T$, with a causal pointer interpretation in which every access visits its key. Suppose both have well-behaved nonnegative amortized charges $\tau_0, \tau_1$ with constants $C_0, C_1$ and overhead $F \ge n$. Then there is one prepared online policy $p$, fixed before any request is known, such that for every sequence $X$ of keys in $\{0,\dots,n-1\}$, $p$ serves $X$ as a legal pointer-machine execution from $T$, and its total cost, pointer instructions plus one unit per request, is at most

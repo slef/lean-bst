@@ -4,7 +4,7 @@ Splay trees, introduced by Sleator and Tarjan in 1985, are the best-known self-a
 
 ```headline splay-correct
 title: Splaying is a legal BST algorithm
-source: Sleator and Tarjan, *Self-adjusting binary search trees* (1985)
+source: @sleator1985
 theorems: Splay.Results.correct
 
 For every binary search tree $t$ on $n$ keys and every key $x$ of $t$, splaying $x$ is a root access: a sequence of legal rotations that ends with $x$ at the root. The number of rotations is exactly the count the algorithm reports, and it is less than $n$.
@@ -12,7 +12,7 @@ For every binary search tree $t$ on $n$ keys and every key $x$ of $t$, splaying 
 In Lean, the algorithm is [[RotationBST.Splay.run]], which returns the new tree and its rotation count. `correct` concludes an [[RotationBST.Access]], the certified notion of "bring $x$ to the root by rotations, at this cost" from [Chapter 3](accesses.html).
 ```
 
-Bottom-up splaying, as defined in Section 2 of Sleator and Tarjan's paper, searches for the requested node $x$ and then repeats *splaying steps* until $x$ is the root. A step looks at $x$, its parent $p$ and its grandparent $g$:
+Bottom-up splaying, as defined in Section 2 of the splay tree paper [@sleator1985], searches for the requested node $x$ and then repeats *splaying steps* until $x$ is the root. A step looks at $x$, its parent $p$ and its grandparent $g$:
 
 - **zig**: if $p$ is the root, rotate $x$ over $p$;
 - **zig-zig**: if $x$ and $p$ are both left children, or both right children, rotate $p$ over $g$, then $x$ over $p$;

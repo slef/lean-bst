@@ -1,12 +1,12 @@
 # Recursive heavy paths
 
-[Chapter 46](heavy-paths.html) stores one heavy path of a weighted tree as a pair of Chocolate pop-tarts. The endpoint of the path is the root, the path nodes smaller than the endpoint are in the left pop-tart, the larger ones in the right pop-tart, and every subtree hanging off the path is an opaque leaf of one of the two pop-tarts. This section applies the construction recursively: each of those opaque subtrees is itself stored by its own heavy path and its own pair of pop-tarts, and so on down to the leaves. This is the representation of Section 3 of Bose, Collette, Fagerberg and Langerman (2012), drawn in their Figure 4, and it is what gives the deamortized BSTs of [Chapter 37](deamortization.html) their logarithmic depth.
+[Chapter 46](heavy-paths.html) stores one heavy path of a weighted tree as a pair of Chocolate pop-tarts. The endpoint of the path is the root, the path nodes smaller than the endpoint are in the left pop-tart, the larger ones in the right pop-tart, and every subtree hanging off the path is an opaque leaf of one of the two pop-tarts. This section applies the construction recursively: each of those opaque subtrees is itself stored by its own heavy path and its own pair of pop-tarts, and so on down to the leaves. This is the representation of Section 3 of Bose, Collette, Fagerberg and Langerman [-@bose2012], drawn in their Figure 4, and it is what gives the deamortized BSTs of [Chapter 37](deamortization.html) their logarithmic depth.
 
 A Chocolate pop-tart keeps a leaf of weight $w$ at depth $O(\log(M/w))$, where $M$ is the total weight of the pop-tart ([Chapter 45](chocolate.html)). A key is reached by descending into one pop-tart per heavy path on its source path. Each light edge at least halves the weight, and the depths telescope into a single logarithm:
 
 ```headline recursive-heavy-paths-depth
 title: Every key of a recursive heavy-path representation has logarithmic weighted depth
-source: Bose, Collette, Fagerberg and Langerman, *De-amortizing binary search trees* (2012)
+source: @bose2012
 theorems: HeavyPath.Recursive.Results.rebuild_labels HeavyPath.Recursive.Results.rebuild_depth_at HeavyPath.Recursive.Results.rebuild_unit_depth HeavyPath.Recursive.History.Results.layout_depth_at HeavyPath.Recursive.Results.rebuild_initialization
 
 Let $t$ be a labelled tree with $n$ nodes and positive node weights $w$, and let $W$ be its total weight. The canonical recursive representation `rebuild w t` is a tree shape with the same $n$ nodes. If $t$ is ordered, `rebuild w t` has exactly one ordered labelling with the inorder of $t$, so it is a BST on the same keys. Whether or not $t$ is ordered, the node of inorder rank $i$, whose label in $t$ is $x_i$, lies at depth

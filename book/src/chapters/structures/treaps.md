@@ -1,6 +1,6 @@
 # Treaps
 
-[Chapter 9](equivalence.html) states that every arborally satisfied point set can be executed by a binary search tree that touches exactly one node per point. The proof, due to Demaine, Harmon, Iacono, Kane and Pătraşcu (2009), is a data structure: a treap whose priorities are the times at which keys will next be touched. The converse, that the touched nodes of any rooted-region execution form an arborally satisfied set, rests on the mirror-image invariant, a heap of the times at which keys were last touched. This chapter presents the definitions these two arguments are built from, and how the proofs use them.
+[Chapter 9](equivalence.html) states that every arborally satisfied point set can be executed by a binary search tree that touches exactly one node per point. The proof, due to Demaine, Harmon, Iacono, Kane and Pătraşcu [-@demaine2009], is a data structure: a treap whose priorities are the times at which keys will next be touched. The converse, that the touched nodes of any rooted-region execution form an arborally satisfied set, rests on the mirror-image invariant, a heap of the times at which keys were last touched. This chapter presents the definitions these two arguments are built from, and how the proofs use them.
 
 Together the two arguments prove the exact form of the equivalence, with no constant factors at all: a point set and a BST execution in the rooted-region model of [Chapter 7](regions.html) cost the same.
 
@@ -8,7 +8,7 @@ The last two sections leave the geometric setting. They state the classical fact
 
 ```headline treap-regions
 title: Arborally satisfied sets are exactly rooted-region executions
-source: Demaine, Harmon, Iacono, Kane and Pătraşcu, *The geometry of binary search trees* (2009)
+source: @demaine2009
 theorems: Geometric.Equivalence.Results.ass_iff_region_execution
 
 For every $n$, every request sequence $X = x_0, x_1, \dots$ and every number $c$, the following are equivalent:
@@ -23,7 +23,7 @@ Apart from [[Geometric.Heap]], which the general treap facts at the end of the c
 
 ## Treaps on ranks
 
-A *treap* (Seidel and Aragon, 1989; the same objects are Vuillemin's Cartesian trees, 1980) is a binary search tree whose nodes also carry priorities, arranged in heap order: every node has priority at most that of each of its descendants. When priorities are distinct, the treap on a given key set is unique: its root is the key of minimum priority, and its two subtrees are the treaps of the keys on either side. On shapes, where keys are inorder ranks, heap order is a property of a shape and a priority function on ranks:
+A *treap*, introduced by @seidel1996 and the same object as a Cartesian tree [@vuillemin1980], is a binary search tree whose nodes also carry priorities, arranged in heap order: every node has priority at most that of each of its descendants. When priorities are distinct, the treap on a given key set is unique: its root is the key of minimum priority, and its two subtrees are the treaps of the keys on either side. On shapes, where keys are inorder ranks, heap order is a property of a shape and a priority function on ranks:
 
 @decl RotationBST.Geometric.Heap
 
@@ -120,7 +120,7 @@ The search path ([[Tree.searchPath]]) runs from the root to $x$ and includes bot
 
 ## Random treaps
 
-Lazy Finger Theorem 1 (Bose, Douïeb, Iacono and Langerman, 2013) gives, for any positive weights, a randomized static tree in which, for every pair of keys $x, y$, the expected cost of moving the lazy finger from $x$ to $y$ is within a constant factor of the weighted dynamic-finger charge of the pair. The library states it as [[LazyFinger.Random.Results.weighted_charge]] in [Chapter 14](lazy-finger.html). The random tree is a treap with random priorities, and this section defines the probability space. It lives in `Structures/Treap/Random/Definitions/Abstract.lean` and contains no measure theory: it is a finite weighted average over orders of the keys.
+Theorem 1 of the lazy finger paper [@bose2016] gives, for any positive weights, a randomized static tree in which, for every pair of keys $x, y$, the expected cost of moving the lazy finger from $x$ to $y$ is within a constant factor of the weighted dynamic-finger charge of the pair. The library states it as [[LazyFinger.Random.Results.weighted_charge]] in [Chapter 14](lazy-finger.html). The random tree is a treap with random priorities, and this section defines the probability space. It lives in `Structures/Treap/Random/Definitions/Abstract.lean` and contains no measure theory: it is a finite weighted average over orders of the keys.
 
 A random order replaces random priorities. The key listed first gets the smallest priority and becomes the root of the treap, and so on down the list.
 

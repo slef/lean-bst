@@ -1,7 +1,11 @@
-// Page behaviour: hover cards for Lean identifiers, theme, menu, copy, proofs.
+// Page behaviour: hover cards for Lean identifiers and citations, theme, menu,
+// copy, proofs.
 (() => {
   const data = JSON.parse(document.getElementById('lean-hover')?.textContent || '[]');
+  const refs = JSON.parse(document.getElementById('bib-hover')?.textContent || '[]');
   const card = document.querySelector('.hover-card');
+  const home = card?.parentNode;
+  const TARGET = 'a.ref[data-c], a.cite[data-b]';
   let showTimer = null;
   let hideTimer = null;
   let current = null;
@@ -33,26 +37,42 @@
     card.style.top = `${top}px`;
   }
 
+  // A citation card holds the full reference and its links. It is moved
+  // just after the citation, so that Tab reaches its links next.
+  function fillCite(html, el) {
+    card.innerHTML = `<div class="hc-ref">${html}</div>`
+      + `<div class="hc-foot"><span class="hc-kind">reference</span><a href="${el.getAttribute('href')}">→ bibliography</a></div>`;
+    el.after(card);
+  }
+
   function show(el) {
-    const entry = data[Number(el.dataset.c)];
-    if (!entry || !card) return;
+    if (!card) return;
+    const isCite = el.matches('a.cite');
+    const entry = isCite ? refs[Number(el.dataset.b)] : data[Number(el.dataset.c)];
+    if (!entry) return;
     clearTimeout(hideTimer);
     if (current) current.classList.remove('hovered');
     current = el;
     el.classList.add('hovered');
-    fill(entry);
+    card.classList.toggle('cite-card', isCite);
+    if (isCite) fillCite(entry, el);
+    else {
+      if (card.parentNode !== home) home.appendChild(card);
+      fill(entry);
+    }
     place(el);
   }
+  function hideNow() {
+    card.hidden = true;
+    if (current) current.classList.remove('hovered');
+    current = null;
+  }
   function hide() {
-    hideTimer = setTimeout(() => {
-      card.hidden = true;
-      if (current) current.classList.remove('hovered');
-      current = null;
-    }, 180);
+    hideTimer = setTimeout(hideNow, 180);
   }
 
   document.addEventListener('mouseover', (e) => {
-    const el = e.target.closest('a.ref[data-c]');
+    const el = e.target.closest(TARGET);
     if (el) {
       clearTimeout(showTimer);
       showTimer = setTimeout(() => show(el), current ? 0 : 220);
@@ -61,22 +81,39 @@
     }
   });
   document.addEventListener('mouseout', (e) => {
-    if (e.target.closest('a.ref[data-c]') || e.target.closest('.hover-card')) {
+    if (e.target.closest(TARGET) || e.target.closest('.hover-card')) {
       clearTimeout(showTimer);
-      hide();
+      if (!card.contains(document.activeElement)) hide();
     }
   });
   document.addEventListener('focusin', (e) => {
-    const el = e.target.closest('a.ref[data-c]');
+    const el = e.target.closest(TARGET);
     if (el) show(el);
+    else if (e.target.closest('.hover-card')) clearTimeout(hideTimer);
   });
-  document.addEventListener('focusout', (e) => { if (e.target.closest('a.ref[data-c]')) hide(); });
-  window.addEventListener('scroll', () => { if (card && !card.hidden) { card.hidden = true; current?.classList.remove('hovered'); current = null; } }, { passive: true });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && card) card.hidden = true; });
+  document.addEventListener('focusout', (e) => {
+    if (!e.target.closest(TARGET) && !e.target.closest('.hover-card')) return;
+    // Moving focus from a citation into its card keeps the card open.
+    if (e.relatedTarget && (card.contains(e.relatedTarget) || e.relatedTarget === current)) return;
+    hide();
+  });
+  window.addEventListener('scroll', () => {
+    if (!card || card.hidden) return;
+    // A card opened from the keyboard follows its citation; others close.
+    if (current && (current === document.activeElement || card.contains(document.activeElement))) place(current);
+    else hideNow();
+  }, { passive: true });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !card || card.hidden) return;
+    const back = card.contains(document.activeElement) ? current : null;
+    hideNow();
+    back?.focus({ preventScroll: true });
+    if (back) { clearTimeout(showTimer); hideNow(); }
+  });
 
   // Touch: first tap shows the card, second tap follows the link.
   document.addEventListener('touchstart', (e) => {
-    const el = e.target.closest('a.ref[data-c]');
+    const el = e.target.closest(TARGET);
     if (el && current !== el) { e.preventDefault(); show(el); }
   }, { passive: false });
 

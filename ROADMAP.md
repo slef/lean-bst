@@ -9,6 +9,12 @@ The target statements are suggestions. Change the constants or the shape if the
 proof calls for it, but keep the usual conventions: uniform natural constants,
 one unit per request, and an explicit startup term.
 
+Entries 4 to 9 are the classical search trees of Part III of the book, and the
+dictionary model they need. The book follows a textbook approach there: one
+theory with the classical structures as instances, rather than one analysis
+per paper. The Lean development should follow the same plan. The stretch goals
+at the end are hard results, to be done last or not at all.
+
 ## 1. Dynamic finger implies static finger
 
 **Source.** Classical. Shown as the dashed arrow DF → SF in the map of the
@@ -111,3 +117,319 @@ theorem RotationBST.Tango.Algorithm.Results.exists_competitive_linear (n : Nat) 
 **Where.** `Algorithms/Tango/Algorithm/BottomUp/Abstract.lean`, or `Algorithms/Tango/Algorithm/Abstract.lean` next to `exists_competitive`.
 
 **Book.** In `algorithms/tango-linear.md`, replace the hand composition in the `tango-linear` headline with the new theorem. In `appendices/audit.md` and the overview `algorithms/tango-trees.md`, drop the remarks on Tango's linear startup being composed by hand.
+
+## 4. Perfect trees and the logarithmic baseline
+
+**Source.** Classical. Shown as the box `m(1 + log n)` at the bottom of the
+map of the bounds, with a dashed arrow `SF → m(1 + log n)` and the "Balanced
+trees" bubble. Book chapter "Static search trees" (`classical/static-trees.md`,
+section "Perfect trees").
+
+**Statement.** Three small facts about `Tango.balanced` (or a copy moved to the
+new directory) and the static finger sum:
+
+```lean
+theorem RotationBST.Classical.Static.Results.balanced_depth (n x : Nat) (hx : x < n) :
+    (Tango.balanced n).depth x ≤ Nat.log2 n
+
+theorem RotationBST.Classical.Static.Results.exists_deep (t : Tree) (h : 0 < t.size) :
+    ∃ x < t.size, Nat.log2 t.size ≤ t.depth x
+
+theorem RotationBST.Classical.Static.Results.balanced_cost (n : Nat) (xs : List Nat)
+    (valid : ∀ x ∈ xs, x < n) :
+    StaticTree.cost (Tango.balanced n) xs ≤ xs.length * (Nat.log2 n + 1)
+
+theorem RotationBST.Bounds.fingerCost_le_balanced (n f : Nat) (xs : List Nat)
+    (hf : f < n) (valid : ∀ x ∈ xs, x < n) :
+    Bounds.fingerCost f xs ≤ xs.length * (1 + Real.logb 2 n)
+```
+
+**Proof idea.** `balanced` splits `n` keys into `⌈(n-1)/2⌉` and `⌊(n-1)/2⌋`, so
+induction on `n` with `Nat.log2` arithmetic. For `exists_deep`, a tree of
+height `h` has at most `2^(h+1) - 1` keys. For the finger sum, `Nat.dist x f + 1 ≤ n`.
+
+**Where.** `Classical/Static/Abstract.lean` (a new top-level `Classical/`
+directory for Part III of the book), and the finger inequality in
+`Bounds/Implications/`.
+
+**Book.** In `classical/static-trees.md`, replace the "Not yet formalized" box
+of "Perfect trees" with the theorems. In `book/src/assets/viz/boundsmap.js`,
+drop `todo: true` from `SF → BAL` and `balanced → BAL` (the latter only once
+entry 7 or 8 is also done, or relabel the bubble "Perfect tree"), and give
+them `thms`. Give `B.BAL` a `def` if a definition of `m(1 + log n)` is added.
+Update the tables in `classical/part-classical.md` and `bounds/part-bounds.md`.
+
+## 5. Optimal static trees
+
+**Source.** E. N. Gilbert and E. F. Moore, *Variable-length binary encodings*
+(1959); D. E. Knuth, *Optimum binary search trees*, Acta Informatica 1 (1971);
+F. F. Yao, *Efficient dynamic programming using quadrangle inequalities*, STOC
+1980. Book chapter "Static search trees", section "Optimal static trees". The
+Isabelle AFP entry *Optimal Binary Search Trees* (Nipkow and Somogyi, 2018)
+formalizes the same three steps and is a good template.
+
+**Statement.** For key weights `w : List Nat` (gap weights may be added as a
+second list), with `weightedCost w t = ∑ x, w[x] * (t.depth x + 1)`:
+
+```lean
+/-- The cubic recurrence C(i, j) = W(i, j) + min_r (C(i, r-1) + C(r+1, j)). -/
+def RotationBST.Classical.Static.optCost (w : List Nat) : Nat
+def RotationBST.Classical.Static.optTree (w : List Nat) : Tree
+
+theorem optTree_size (w : List Nat) : (optTree w).size = w.length
+theorem optTree_cost (w : List Nat) : weightedCost w (optTree w) = optCost w
+theorem optCost_le (w : List Nat) (t : Tree) (h : t.size = w.length) :
+    optCost w ≤ weightedCost w t
+
+/-- Yao: the quadrangle inequality and monotonicity of the weight function
+imply monotone optimal roots. Stated for an abstract interval weight. -/
+theorem yao_monotone_roots ...
+
+/-- Knuth's O(n²) algorithm computes the same cost, with a step count. -/
+def knuth (w : List Nat) : Nat × Nat     -- (cost, steps)
+theorem knuth_cost (w : List Nat) : (knuth w).1 = optCost w
+theorem knuth_steps (w : List Nat) : (knuth w).2 ≤ 4 * (w.length + 1) ^ 2
+```
+
+and the link to the map of the bounds, with request counts as weights:
+`StaticTree.cost t xs = weightedCost (counts n xs) t`, so `optCost` is `RF*`.
+
+**Where.** `Classical/Static/Optimal/` (an `Abstract.lean`, with the
+quadrangle inequality in its own file).
+
+**Book.** In `classical/static-trees.md`, replace the box in "Optimal static
+trees" with `@decl`s and a headline. In `boundsmap.js`, drop `todo: true` from
+`knuth → RF` and give it `thms`. Update the tables in
+`classical/part-classical.md` and `bounds/part-bounds.md`.
+
+## 6. A dictionary model
+
+**Source.** Book chapter "Insertions and deletions" (`models/dictionary.md`).
+It generalizes `Splay.Updates.Step` and `Splay.Updates.Execution` (book
+section "Beyond single accesses", `algorithms/beyond.md`).
+
+**Statement.** This is a design task more than a proof. Requirements:
+
+- operations by rank, as in `Splay.Updates`: access rank `x`, insert at gap
+  `k ≤ n`, delete rank `x` (split and join optional);
+- cost: one unit, plus one per node of the search path in the tree before
+  the operation, plus one per rotation; rank, colour or size changes counted
+  separately (a second counter);
+- node data of an arbitrary type, through `Models/Labelled/Metadata` or a
+  tree type with a field per node;
+- a `DictionaryAlgorithm` structure (state = tree with data; one step per
+  operation) and an `Execution` over a list of operations;
+- the splay update model as an instance, with a theorem relating the two cost
+  accountings (splay's search path is part of its rotations);
+- the bridge in the models map: a rotation execution is a dictionary
+  execution with accesses only, whose search paths cost at most `m + R`:
+
+```lean
+theorem RotationBST.Dictionary.Results.of_execution {s t : Tree} {xs : List Nat} {k : Nat}
+    (h : Execution s xs t k) :
+    ∃ c, Dictionary.Execution s (xs.map .access) t c ∧ c ≤ 2 * (xs.length + k)
+```
+
+**Where.** `Models/Dictionary/` (an `Abstract.lean` for definitions and the
+bridge). Move the generic parts of `Algorithms/Splay/Updates/` there.
+
+**Book.** Rewrite `models/dictionary.md` around the definitions, and shorten
+the "Updates" section of `algorithms/beyond.md` to the splay instance. In
+`book/src/assets/viz/modelsmap.js`, drop `todo: true` from the `DIC` node and
+the `ROT → DIC` edge, and give the edge `thms`. Update the models table in
+`models/part-models.md`.
+
+## 7. Rank-balanced trees
+
+**Source.** B. Haeupler, S. Sen and R. E. Tarjan, *Rank-balanced trees*, ACM
+TALG 11(4) (2015), for the framework and WAVL trees; G. M. Adelson-Velsky and
+E. M. Landis (1962) for AVL trees; R. Bayer (1972) and L. J. Guibas and
+R. Sedgewick (1978) for red-black trees; R. E. Tarjan, *Updating a balanced
+search tree in O(1) rotations*, IPL 16 (1983). Book chapter "Rank-balanced
+trees" (`classical/rank-balanced.md`). Needs entry 6.
+
+**Statement.** One representation, one rebalancing procedure per rule, three
+rules:
+
+```lean
+/-- A tree with an integer rank in each node; a missing child has rank -1. -/
+def RotationBST.Classical.RankBalanced.RankedTree := ...
+inductive Rule | avl | redBlack | wavl
+def Valid (r : Rule) : RankedTree → Prop
+
+theorem avl_height (t) (h : Valid .avl t) :
+    (t.height : ℝ) < 1.4405 * Real.logb 2 (t.size + 2)
+theorem redBlack_height (t) (h : Valid .redBlack t) :
+    (t.height : ℝ) ≤ 2 * Real.logb 2 (t.size + 1)
+theorem wavl_rank (t) (h : Valid .wavl t) : (t.rank : ℝ) ≤ 2 * Real.logb 2 (t.size + 1)
+theorem wavl_height_insertions ... -- height ≤ log_φ m after m insertions
+
+-- insert and delete preserve Valid r and the inorder; rotation counts:
+theorem avl_insert_rotations  : rotations ≤ 2
+theorem redBlack_insert_rotations : rotations ≤ 2
+theorem redBlack_delete_rotations : rotations ≤ 3
+theorem wavl_update_rotations : rotations ≤ 2
+-- amortized: total rank changes over any sequence of updates from empty ≤ C · #updates
+theorem redBlack_amortized_rank_changes ...
+theorem wavl_amortized_rank_changes ...
+```
+
+**Proof idea.** Heights: the smallest valid tree of each rank, by induction
+(Fibonacci for AVL). Rotation counts: case analysis of bottom-up rebalancing,
+shared across rules. Amortization: the potential functions of Haeupler, Sen
+and Tarjan (count 0,1 / 2,2 nodes).
+
+**Where.** `Classical/RankBalanced/` (definitions and the rebalancing steps in
+`Abstract.lean`, one file per rule).
+
+**Book.** Replace the boxes in `classical/rank-balanced.md` with `@decl`s and
+headlines. Update `classical/part-classical.md` and `bounds/part-bounds.md`
+(the "Balanced trees" row), and the `balanced → BAL` edge of `boundsmap.js`.
+
+## 8. Weight-balanced and scapegoat trees
+
+**Source.** J. Nievergelt and E. M. Reingold, *Binary search trees of bounded
+balance*, SIAM J. Comput. 2(1) (1973); N. Blum and K. Mehlhorn, *On the
+average number of rebalancing operations in weight-balanced trees*, TCS 11
+(1980); A. Andersson, *Improving partial rebuilding by using simple balance
+criteria*, WADS 1989; I. Galperin and R. L. Rivest, *Scapegoat trees*, SODA
+1993; A. C. Day (1976) and Q. F. Stout and B. L. Warren (1986) for rebuilding.
+Book chapter "Weight-balanced trees" (`classical/weight-balanced.md`). Needs
+entry 6. Mathlib's `Ordnode` (Adams' weight-balanced trees) may help with the
+invariant.
+
+**Statement.**
+
+```lean
+/-- Every child's weight (size + 1) is at most β times its parent's. -/
+def RotationBST.Classical.WeightBalanced.Balanced (β : ℝ) : Tree → Prop
+
+theorem height_le (β) (hβ : 1/2 < β ∧ β < 1) (t) (h : Balanced β t) :
+    (t.height : ℝ) ≤ Real.logb (1/β) (t.size + 1)
+
+/-- Rebuilding inside a subtree: an explicit linear procedure (vine and
+compress), returning the balanced tree and at most 2s rotations. -/
+def rebuild (t : Tree) : Tree × Nat
+theorem rebuild_spec (t : Tree) :
+    (rebuild t).1 = Tango.balanced t.size ∧ (rebuild t).2 ≤ 2 * t.size ∧
+      Rotations t (rebuild t).1 (rebuild t).2
+
+-- BB[α], for 2/11 < α ≤ 1 - √2/2: single/double rotations restore balance,
+-- and the total number of rotations over m updates from empty is O(m).
+-- Scapegoat trees: height ≤ log_{1/α} n + 1, and the total cost of m updates
+-- from empty, rebuilding included, is O(m log n).
+```
+
+**Proof idea.** The common lemma: a subtree that is perfectly balanced needs
+`Ω((β - 1/2) s)` updates inside it before it violates `Balanced β`. For
+`rebuild`, `Geometry.reset` already goes through the right spine; make the
+two halves executable and lift them under `inLeft`/`inRight`.
+
+**Where.** `Classical/WeightBalanced/`, with `rebuild` in its own file (it may
+also serve `Models/Rotation/`).
+
+**Book.** Replace the boxes in `classical/weight-balanced.md`. Update
+`classical/part-classical.md`, `bounds/part-bounds.md` and the `balanced → BAL`
+edge of `boundsmap.js`.
+
+## 9. Random search trees
+
+**Source.** T. N. Hibbard, *Some combinatorial properties of certain trees
+with applications to searching and sorting*, JACM 9 (1962); R. Seidel and
+C. R. Aragon, *Randomized search trees*, Algorithmica 16 (1996); J. Vuillemin,
+*A unifying look at data structures*, CACM 23 (1980); C. Martínez and S. Roura,
+*Randomized binary search trees*, JACM 45 (1998); R. E. Tarjan, C. Levy and
+S. Timmel, *Zip trees*, ACM TALG 17(4) (2021). Book chapter "Random search
+trees" (`classical/random-trees.md`). The Isabelle AFP entry *Treaps*
+(Haslbeck, Eberl and Nipkow) and their paper *Verified analysis of random
+binary tree structures* (JAR 2020) cover similar ground.
+
+**Statement.** In three steps, from small to medium:
+
+```lean
+-- (a) Expected depth, a corollary of Treap.Random.common_ancestor_probability
+-- with x = y and uniform weights.
+theorem RotationBST.Treap.Random.Results.expected_depth (n x : Nat) (hx : x < n)
+    (T : List Nat → Tree)
+    (spec : ∀ xs, (T xs).size = n ∧ Geometric.Heap xs.idxOf (T xs) 0) :
+    average (fun _ => 1) (Finset.range n) (fun xs => ((T xs).depth x : ℝ)) =
+      (harmonic (x + 1) : ℝ) + harmonic (n - x) - 2
+
+-- (b) Insertion in a given order without rebalancing builds the treap of the
+-- positions; treap insertion and deletion produce the treap of the new key
+-- set (history independence); expected rotations per update < 2.
+theorem bstInsertAll_treap (order : List Nat) ... :
+    Geometric.Heap order.idxOf (bstInsertAll order) 0
+theorem expected_insert_rotations ... : average ... ≤ 2
+
+-- (c) Randomized BSTs produce the uniform treap distribution after every
+-- operation; zip trees produce the treap of their (rank, key) priorities.
+```
+
+**Where.** (a) in `Structures/Treap/Random/` next to `Common.lean`, stated in a
+new `Classical/Random/Abstract.lean`. (b) and (c) in `Classical/Random/`,
+using the dictionary model of entry 6 for updates.
+
+**Book.** Replace the boxes in `classical/random-trees.md` with `@decl`s and
+headlines. Update `classical/part-classical.md` ("partly formalized"),
+`bounds/part-bounds.md` and the `random → BAL` edge of `boundsmap.js`.
+
+## Stretch goals
+
+Hard results that the book mentions. They are listed so that nothing is
+forgotten. Do them last, or decide later that the book only cites them.
+
+### S1. Rotation distance
+
+**Source.** K. Culik II and D. Wood (1982), `2n - 2`; D. D. Sleator,
+R. E. Tarjan and W. P. Thurston, *Rotation distance, triangulations, and
+hyperbolic geometry*, JAMS 1(3) (1988), `2n - 6` for large `n`, tight for
+large `n`; L. Pournin, *The diameter of associahedra*, Adv. Math. 259 (2014),
+tight for every `n ≥ 11`. Mentioned in the book in `models/accesses.md`
+("Any shape to any shape"), next to the formalized bound `2n`.
+
+**Statement.** Upper bound (elementary): for `n ≥ 11`, any two trees with `n`
+nodes are at most `2n - 6` rotations apart. Lower bound (hard): for every
+`n ≥ 11` there are two trees at distance exactly `2n - 6`.
+
+**Where.** `Models/Rotation/Distance/`.
+
+**Book.** A paragraph and `@decl`s in `models/accesses.md`.
+
+### S2. Height of random search trees
+
+**Source.** L. Devroye, *A note on the height of binary search trees*, JACM
+33(3) (1986); B. Reed, *The height of a random binary search tree*, JACM 50(3)
+(2003). Book chapter "Random search trees", section "Height".
+
+**Statement.** The expected height of a random BST on `n` keys is
+`c ln n - (3c / (2(c - 1))) ln ln n + O(1)` with `c ≈ 4.311` the root of
+`c ln(2e/c) = 1` (Reed), or the weaker first-order form `~ c ln n` (Devroye).
+A useful intermediate target: expected height `O(log n)`, which follows from
+a union bound over the depth tail.
+
+**Where.** `Classical/Random/Height/`.
+
+### S3. Optimal alphabetic trees
+
+**Source.** T. C. Hu and A. C. Tucker, *Optimal computer search trees and
+variable-length alphabetical codes*, SIAM J. Appl. Math. 21(4) (1971);
+A. M. Garsia and M. L. Wachs, *A new algorithm for minimum cost binary trees*,
+SIAM J. Comput. 6(4) (1977). Book chapter "Static search trees", section
+"Further results".
+
+**Statement.** With weights only on the gaps (all searches unsuccessful), the
+Hu–Tucker or Garsia–Wachs algorithm computes an optimal tree in `O(n log n)`
+time. The correctness proofs are notoriously delicate. Decide first whether
+the book needs more than a citation.
+
+### S4. Move-to-root under independent requests
+
+**Source.** B. Allen and I. Munro, *Self-organizing binary search trees*, JACM
+25(4) (1978). Book chapter "Move-to-root" (`algorithms/move-to-root.md`).
+
+**Statement.** When requests are independent and identically distributed,
+the expected cost of move-to-root in the stationary regime is within a
+constant factor of the optimal static tree for the same distribution (take
+the exact constant from the paper). Needs a probability model for infinite request sequences,
+which the library does not have.

@@ -1,0 +1,2119 @@
+{
+  "description": "Works cited by the book. Schema: see book/README.md (Bibliography). Every DOI and arXiv id was checked against Crossref, DBLP or arxiv.org.",
+  "entries": [
+    {
+      "key": "adams1993",
+      "type": "article",
+      "authors": [
+        "Stephen Adams"
+      ],
+      "title": "Efficient sets—a balancing act",
+      "venue": "Journal of Functional Programming",
+      "volume": "3",
+      "number": "4",
+      "pages": "553–561",
+      "year": 1993,
+      "doi": "10.1017/S0956796800000885"
+    },
+    {
+      "key": "adelson1962",
+      "type": "article",
+      "authors": [
+        "G. M. Adel'son-Vel'skiĭ",
+        "E. M. Landis"
+      ],
+      "title": "An algorithm for the organization of information",
+      "venue": "Soviet Mathematics Doklady",
+      "volume": "3",
+      "pages": "1259–1263",
+      "year": 1962,
+      "note": "English translation of Doklady Akademii Nauk SSSR 146:263–266, 1962."
+    },
+    {
+      "key": "aladhami2024",
+      "type": "preprint",
+      "authors": [
+        "Khaleel Al-Adhami",
+        "Dev Chheda"
+      ],
+      "title": "Theoretical insights and an experimental comparison of tango trees and multi-splay trees",
+      "year": 2024,
+      "arxiv": "2405.18825"
+    },
+    {
+      "key": "albers2002",
+      "type": "article",
+      "authors": [
+        "Susanne Albers",
+        "Marek Karpinski"
+      ],
+      "title": "Randomized splay trees: theoretical and experimental results",
+      "venue": "Information Processing Letters",
+      "volume": "81",
+      "number": "4",
+      "pages": "213–221",
+      "year": 2002,
+      "doi": "10.1016/S0020-0190(01)00230-7"
+    },
+    {
+      "key": "allen1978",
+      "type": "article",
+      "authors": [
+        "Brian Allen",
+        "Ian Munro"
+      ],
+      "title": "Self-organizing binary search trees",
+      "venue": "Journal of the ACM",
+      "volume": "25",
+      "number": "4",
+      "pages": "526–535",
+      "year": 1978,
+      "doi": "10.1145/322092.322094",
+      "versions": [
+        {
+          "label": "Preliminary version",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 17th Annual IEEE Symposium on Foundations of Computer Science (FOCS)",
+          "pages": "166–172",
+          "year": 1976,
+          "doi": "10.1109/SFCS.1976.26"
+        }
+      ]
+    },
+    {
+      "key": "andersson1989",
+      "type": "inproceedings",
+      "authors": [
+        "Arne Andersson"
+      ],
+      "title": "Improving partial rebuilding by using simple balance criteria",
+      "venue": "Algorithms and Data Structures, Workshop (WADS 1989)",
+      "pages": "393–402",
+      "year": 1989,
+      "doi": "10.1007/3-540-51542-9_33"
+    },
+    {
+      "key": "andersson1993",
+      "type": "inproceedings",
+      "authors": [
+        "Arne Andersson"
+      ],
+      "title": "Balanced search trees made simple",
+      "venue": "Algorithms and Data Structures, Third Workshop (WADS 1993)",
+      "pages": "60–71",
+      "year": 1993,
+      "doi": "10.1007/3-540-57155-8_236"
+    },
+    {
+      "key": "badoiu2007",
+      "type": "article",
+      "authors": [
+        "Mihai Bădoiu",
+        "Richard Cole",
+        "Erik D. Demaine",
+        "John Iacono"
+      ],
+      "title": "A unified access bound on comparison-based dynamic dictionaries",
+      "venue": "Theoretical Computer Science",
+      "volume": "382",
+      "number": "2",
+      "pages": "86–96",
+      "year": 2007,
+      "doi": "10.1016/j.tcs.2007.03.002"
+    },
+    {
+      "key": "bayer1972",
+      "type": "article",
+      "authors": [
+        "Rudolf Bayer",
+        "Edward M. McCreight"
+      ],
+      "title": "Organization and maintenance of large ordered indexes",
+      "venue": "Acta Informatica",
+      "volume": "1",
+      "number": "3",
+      "pages": "173–189",
+      "year": 1972,
+      "doi": "10.1007/BF00288683"
+    },
+    {
+      "key": "bayer1972symmetric",
+      "type": "article",
+      "authors": [
+        "Rudolf Bayer"
+      ],
+      "title": "Symmetric binary B-trees: data structure and maintenance algorithms",
+      "venue": "Acta Informatica",
+      "volume": "1",
+      "number": "4",
+      "pages": "290–306",
+      "year": 1972,
+      "doi": "10.1007/BF00289509"
+    },
+    {
+      "key": "bent1985",
+      "type": "article",
+      "authors": [
+        "Samuel W. Bent",
+        "Daniel D. Sleator",
+        "Robert E. Tarjan"
+      ],
+      "title": "Biased search trees",
+      "venue": "SIAM Journal on Computing",
+      "volume": "14",
+      "number": "3",
+      "pages": "545–568",
+      "year": 1985,
+      "doi": "10.1137/0214041"
+    },
+    {
+      "key": "berendsohn2022",
+      "type": "inproceedings",
+      "authors": [
+        "Benjamin Aram Berendsohn",
+        "László Kozma"
+      ],
+      "title": "Splay trees on trees",
+      "venue": "Proceedings of the 33rd Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "1875–1900",
+      "year": 2022,
+      "doi": "10.1137/1.9781611977073.75",
+      "arxiv": "2010.00931"
+    },
+    {
+      "key": "berendsohn2024",
+      "type": "inproceedings",
+      "authors": [
+        "Benjamin Aram Berendsohn",
+        "László Kozma",
+        "Michal Opler"
+      ],
+      "title": "Optimization with pattern-avoiding input",
+      "venue": "Proceedings of the 56th Annual ACM Symposium on Theory of Computing (STOC)",
+      "pages": "671–682",
+      "year": 2024,
+      "doi": "10.1145/3618260.3649631",
+      "arxiv": "2310.04236"
+    },
+    {
+      "key": "blelloch2023",
+      "type": "inproceedings",
+      "authors": [
+        "Guy E. Blelloch",
+        "Magdalen Dobson"
+      ],
+      "title": "The geometry of tree-based sorting",
+      "venue": "50th International Colloquium on Automata, Languages, and Programming (ICALP 2023)",
+      "volume": "LIPIcs 261",
+      "pages": "26:1–26:19",
+      "year": 2023,
+      "doi": "10.4230/LIPIcs.ICALP.2023.26",
+      "arxiv": "2110.11836"
+    },
+    {
+      "key": "blum1980",
+      "type": "article",
+      "authors": [
+        "Norbert Blum",
+        "Kurt Mehlhorn"
+      ],
+      "title": "On the average number of rebalancing operations in weight-balanced trees",
+      "venue": "Theoretical Computer Science",
+      "volume": "11",
+      "number": "3",
+      "pages": "303–320",
+      "year": 1980,
+      "doi": "10.1016/0304-3975(80)90018-3"
+    },
+    {
+      "key": "blum2003",
+      "type": "article",
+      "authors": [
+        "Avrim Blum",
+        "Shuchi Chawla",
+        "Adam Kalai"
+      ],
+      "title": "Static optimality and dynamic search-optimality in lists and trees",
+      "venue": "Algorithmica",
+      "volume": "36",
+      "number": "3",
+      "pages": "249–260",
+      "year": 2003,
+      "doi": "10.1007/s00453-003-1015-8"
+    },
+    {
+      "key": "bose2008",
+      "type": "inproceedings",
+      "authors": [
+        "Prosenjit Bose",
+        "Karim Douïeb",
+        "Stefan Langerman"
+      ],
+      "title": "Dynamic optimality for skip lists and B-trees",
+      "venue": "Proceedings of the 19th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "year": 2008
+    },
+    {
+      "key": "bose2010",
+      "type": "inproceedings",
+      "authors": [
+        "Prosenjit Bose",
+        "Karim Douïeb",
+        "Vida Dujmović",
+        "Rolf Fagerberg"
+      ],
+      "title": "An O(log log n)-competitive binary search tree with optimal worst-case access times",
+      "venue": "Algorithm Theory – SWAT 2010, 12th Scandinavian Symposium and Workshops on Algorithm Theory",
+      "pages": "38–49",
+      "year": 2010,
+      "doi": "10.1007/978-3-642-13731-0_5",
+      "arxiv": "1003.0139"
+    },
+    {
+      "key": "bose2012",
+      "type": "inproceedings",
+      "authors": [
+        "Prosenjit Bose",
+        "Sébastien Collette",
+        "Rolf Fagerberg",
+        "Stefan Langerman"
+      ],
+      "title": "De-amortizing binary search trees",
+      "venue": "Automata, Languages, and Programming, 39th International Colloquium (ICALP 2012)",
+      "pages": "121–132",
+      "year": 2012,
+      "doi": "10.1007/978-3-642-31594-7_11",
+      "arxiv": "1111.1665"
+    },
+    {
+      "key": "bose2012layered",
+      "type": "article",
+      "authors": [
+        "Prosenjit Bose",
+        "Karim Douïeb",
+        "Vida Dujmović",
+        "John Howat"
+      ],
+      "title": "Layered working-set trees",
+      "venue": "Algorithmica",
+      "volume": "63",
+      "number": "1–2",
+      "pages": "476–489",
+      "year": 2012,
+      "doi": "10.1007/s00453-011-9542-1",
+      "arxiv": "0907.2071",
+      "versions": [
+        {
+          "label": "Conference version",
+          "type": "inproceedings",
+          "venue": "LATIN 2010: Theoretical Informatics, 9th Latin American Symposium",
+          "pages": "686–696",
+          "year": 2010,
+          "doi": "10.1007/978-3-642-12200-2_59"
+        }
+      ]
+    },
+    {
+      "key": "bose2013",
+      "type": "incollection",
+      "authors": [
+        "Prosenjit Bose",
+        "John Howat",
+        "Pat Morin"
+      ],
+      "title": "A history of distribution-sensitive data structures",
+      "venue": "Space-Efficient Data Structures, Streams, and Algorithms: Papers in Honor of J. Ian Munro",
+      "pages": "133–149",
+      "year": 2013,
+      "doi": "10.1007/978-3-642-40273-9_10"
+    },
+    {
+      "key": "bose2016",
+      "type": "article",
+      "authors": [
+        "Prosenjit Bose",
+        "Karim Douïeb",
+        "John Iacono",
+        "Stefan Langerman"
+      ],
+      "title": "The power and limitations of static binary search trees with lazy finger",
+      "venue": "Algorithmica",
+      "volume": "76",
+      "number": "4",
+      "pages": "1264–1275",
+      "year": 2016,
+      "doi": "10.1007/s00453-016-0224-x",
+      "arxiv": "1304.6897",
+      "versions": [
+        {
+          "label": "Conference version",
+          "type": "inproceedings",
+          "venue": "Algorithms and Computation, 25th International Symposium (ISAAC 2014)",
+          "pages": "181–192",
+          "year": 2014,
+          "doi": "10.1007/978-3-319-13075-0_15"
+        }
+      ]
+    },
+    {
+      "key": "bose2023",
+      "type": "article",
+      "authors": [
+        "Prosenjit Bose",
+        "Jean Cardinal",
+        "John Iacono",
+        "Grigorios Koumoutsos",
+        "Stefan Langerman"
+      ],
+      "title": "Competitive online search trees on trees",
+      "venue": "ACM Transactions on Algorithms",
+      "volume": "19",
+      "number": "3",
+      "year": 2023,
+      "doi": "10.1145/3595180",
+      "arxiv": "1908.00848",
+      "versions": [
+        {
+          "label": "Conference version",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 31st Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+          "pages": "1878–1891",
+          "year": 2020,
+          "doi": "10.1137/1.9781611975994.115"
+        }
+      ]
+    },
+    {
+      "key": "brown1980",
+      "type": "article",
+      "authors": [
+        "Mark R. Brown",
+        "Robert E. Tarjan"
+      ],
+      "title": "Design and analysis of a data structure for representing sorted lists",
+      "venue": "SIAM Journal on Computing",
+      "volume": "9",
+      "number": "3",
+      "pages": "594–614",
+      "year": 1980,
+      "doi": "10.1137/0209045"
+    },
+    {
+      "key": "cardinal2018",
+      "type": "article",
+      "authors": [
+        "Jean Cardinal",
+        "Stefan Langerman",
+        "Pablo Pérez-Lantero"
+      ],
+      "title": "On the diameter of tree associahedra",
+      "venue": "The Electronic Journal of Combinatorics",
+      "volume": "25",
+      "number": "4",
+      "year": 2018,
+      "doi": "10.37236/7762",
+      "arxiv": "1803.11427"
+    },
+    {
+      "key": "chalermsook2015deque",
+      "type": "inproceedings",
+      "authors": [
+        "Parinya Chalermsook",
+        "Mayank Goswami",
+        "László Kozma",
+        "Kurt Mehlhorn",
+        "Thatchaphol Saranurak"
+      ],
+      "title": "Greedy is an almost optimal deque",
+      "venue": "Algorithms and Data Structures, 14th International Symposium (WADS 2015)",
+      "pages": "152–165",
+      "year": 2015,
+      "doi": "10.1007/978-3-319-21840-3_13",
+      "arxiv": "1506.08319"
+    },
+    {
+      "key": "chalermsook2015pattern",
+      "type": "inproceedings",
+      "authors": [
+        "Parinya Chalermsook",
+        "Mayank Goswami",
+        "László Kozma",
+        "Kurt Mehlhorn",
+        "Thatchaphol Saranurak"
+      ],
+      "title": "Pattern-avoiding access in binary search trees",
+      "venue": "Proceedings of the 56th Annual IEEE Symposium on Foundations of Computer Science (FOCS)",
+      "pages": "410–423",
+      "year": 2015,
+      "doi": "10.1109/FOCS.2015.32",
+      "arxiv": "1507.06953"
+    },
+    {
+      "key": "chalermsook2015tick",
+      "type": "inproceedings",
+      "authors": [
+        "Parinya Chalermsook",
+        "Mayank Goswami",
+        "László Kozma",
+        "Kurt Mehlhorn",
+        "Thatchaphol Saranurak"
+      ],
+      "title": "Self-adjusting binary search trees: what makes them tick?",
+      "venue": "Algorithms – ESA 2015, 23rd Annual European Symposium",
+      "pages": "300–312",
+      "year": 2015,
+      "doi": "10.1007/978-3-662-48350-3_26",
+      "arxiv": "1503.03105"
+    },
+    {
+      "key": "chalermsook2016landscape",
+      "type": "preprint",
+      "authors": [
+        "Parinya Chalermsook",
+        "Mayank Goswami",
+        "László Kozma",
+        "Kurt Mehlhorn",
+        "Thatchaphol Saranurak"
+      ],
+      "title": "The landscape of bounds for binary search trees",
+      "year": 2016,
+      "arxiv": "1603.04892"
+    },
+    {
+      "key": "chalermsook2018multi",
+      "type": "inproceedings",
+      "authors": [
+        "Parinya Chalermsook",
+        "Mayank Goswami",
+        "László Kozma",
+        "Kurt Mehlhorn",
+        "Thatchaphol Saranurak"
+      ],
+      "title": "Multi-finger binary search trees",
+      "venue": "29th International Symposium on Algorithms and Computation (ISAAC 2018)",
+      "volume": "LIPIcs 123",
+      "pages": "55:1–55:26",
+      "year": 2018,
+      "doi": "10.4230/LIPIcs.ISAAC.2018.55",
+      "arxiv": "1809.01759"
+    },
+    {
+      "key": "chalermsook2023matrix",
+      "type": "inproceedings",
+      "authors": [
+        "Parinya Chalermsook",
+        "Manoj Gupta",
+        "Wanchote Jiamjitrak",
+        "Nidia Obscura Acosta",
+        "Akash Pareek",
+        "Sorrachai Yingchareonthawornchai"
+      ],
+      "title": "Improved pattern-avoidance bounds for greedy BSTs via matrix decomposition",
+      "venue": "Proceedings of the 34th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "509–534",
+      "year": 2023,
+      "doi": "10.1137/1.9781611977554.ch22",
+      "arxiv": "2211.04112"
+    },
+    {
+      "key": "chalermsook2023wilber",
+      "type": "article",
+      "authors": [
+        "Parinya Chalermsook",
+        "Julia Chuzhoy",
+        "Thatchaphol Saranurak"
+      ],
+      "title": "Pinning down the strong Wilber-1 bound for binary search trees",
+      "venue": "Theory of Computing",
+      "volume": "19",
+      "pages": "article 8",
+      "year": 2023,
+      "doi": "10.4086/toc.2023.v019a008",
+      "arxiv": "1912.02900",
+      "versions": [
+        {
+          "label": "Conference version",
+          "type": "inproceedings",
+          "venue": "Approximation, Randomization, and Combinatorial Optimization (APPROX/RANDOM 2020)",
+          "volume": "LIPIcs 176",
+          "pages": "33:1–33:21",
+          "year": 2020,
+          "doi": "10.4230/LIPIcs.APPROX/RANDOM.2020.33"
+        }
+      ]
+    },
+    {
+      "key": "chalermsook2024group",
+      "type": "inproceedings",
+      "authors": [
+        "Parinya Chalermsook",
+        "Manoj Gupta",
+        "Wanchote Jiamjitrak",
+        "Akash Pareek",
+        "Sorrachai Yingchareonthawornchai"
+      ],
+      "title": "The group access bounds for binary search trees",
+      "venue": "51st International Colloquium on Automata, Languages, and Programming (ICALP 2024)",
+      "volume": "LIPIcs 297",
+      "pages": "38:1–38:18",
+      "year": 2024,
+      "doi": "10.4230/LIPIcs.ICALP.2024.38",
+      "arxiv": "2312.15426"
+    },
+    {
+      "key": "chalermsook2024sorting",
+      "type": "inproceedings",
+      "authors": [
+        "Parinya Chalermsook",
+        "Seth Pettie",
+        "Sorrachai Yingchareonthawornchai"
+      ],
+      "title": "Sorting pattern-avoiding permutations via 0-1 matrices forbidding product patterns",
+      "venue": "Proceedings of the 35th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "133–149",
+      "year": 2024,
+      "doi": "10.1137/1.9781611977912.7",
+      "arxiv": "2307.02294"
+    },
+    {
+      "key": "chaudhuri1993",
+      "type": "article",
+      "authors": [
+        "R. Chaudhuri",
+        "H. Höft"
+      ],
+      "title": "Splaying a search tree in preorder takes linear time",
+      "venue": "ACM SIGACT News",
+      "volume": "24",
+      "number": "2",
+      "pages": "88–93",
+      "year": 1993,
+      "doi": "10.1145/156063.156067",
+      "versions": [
+        {
+          "label": "Also published",
+          "type": "article",
+          "venue": "International Journal of Mathematics and Mathematical Sciences",
+          "volume": "14",
+          "number": "3",
+          "pages": "545–551",
+          "year": 1991,
+          "doi": "10.1155/S0161171291000741"
+        }
+      ]
+    },
+    {
+      "key": "chmel2026",
+      "type": "preprint",
+      "authors": [
+        "Petr Chmel",
+        "Bernhard Haeupler",
+        "Richard Hladík",
+        "Michal Koucký",
+        "Antti Roeyskoe",
+        "Václav Rozhoň",
+        "Ondřej Sladký",
+        "Robert E. Tarjan"
+      ],
+      "title": "Splay trees are almost dynamically optimal",
+      "year": 2026,
+      "arxiv": "2607.18498"
+    },
+    {
+      "key": "cleary2009",
+      "type": "article",
+      "authors": [
+        "Sean Cleary",
+        "St. John, Katherine"
+      ],
+      "title": "Rotation distance is fixed-parameter tractable",
+      "venue": "Information Processing Letters",
+      "volume": "109",
+      "number": "16",
+      "pages": "918–922",
+      "year": 2009,
+      "doi": "10.1016/j.ipl.2009.04.023"
+    },
+    {
+      "key": "cole2000proof",
+      "type": "article",
+      "authors": [
+        "Richard Cole"
+      ],
+      "title": "On the dynamic finger conjecture for splay trees. Part II: The proof",
+      "venue": "SIAM Journal on Computing",
+      "volume": "30",
+      "number": "1",
+      "pages": "44–85",
+      "year": 2000,
+      "doi": "10.1137/S009753979732699X",
+      "versions": [
+        {
+          "label": "Preliminary version",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 22nd Annual ACM Symposium on Theory of Computing (STOC)",
+          "pages": "8–17",
+          "year": 1990,
+          "doi": "10.1145/100216.100218"
+        }
+      ]
+    },
+    {
+      "key": "cole2000sorting",
+      "type": "article",
+      "authors": [
+        "Richard Cole",
+        "Bud Mishra",
+        "Jeanette Schmidt",
+        "Alan Siegel"
+      ],
+      "title": "On the dynamic finger conjecture for splay trees. Part I: Splay sorting log n-block sequences",
+      "venue": "SIAM Journal on Computing",
+      "volume": "30",
+      "number": "1",
+      "pages": "1–43",
+      "year": 2000,
+      "doi": "10.1137/S0097539797326988"
+    },
+    {
+      "key": "culik1982",
+      "type": "article",
+      "authors": [
+        "Culik, Karel",
+        "Derick Wood"
+      ],
+      "title": "A note on some tree similarity measures",
+      "venue": "Information Processing Letters",
+      "volume": "15",
+      "number": "1",
+      "pages": "39–42",
+      "year": 1982,
+      "doi": "10.1016/0020-0190(82)90083-7"
+    },
+    {
+      "key": "day1976",
+      "type": "article",
+      "authors": [
+        "A. Colin Day"
+      ],
+      "title": "Balancing a binary tree",
+      "venue": "The Computer Journal",
+      "volume": "19",
+      "number": "4",
+      "pages": "360–361",
+      "year": 1976
+    },
+    {
+      "key": "demaine2007",
+      "type": "article",
+      "authors": [
+        "Erik D. Demaine",
+        "Dion Harmon",
+        "John Iacono",
+        "Mihai Pătraşcu"
+      ],
+      "title": "Dynamic optimality—almost",
+      "venue": "SIAM Journal on Computing",
+      "volume": "37",
+      "number": "1",
+      "pages": "240–251",
+      "year": 2007,
+      "doi": "10.1137/S0097539705447347",
+      "versions": [
+        {
+          "label": "Preliminary version",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 45th Annual IEEE Symposium on Foundations of Computer Science (FOCS)",
+          "pages": "484–490",
+          "year": 2004,
+          "doi": "10.1109/FOCS.2004.23"
+        }
+      ]
+    },
+    {
+      "key": "demaine2009",
+      "type": "inproceedings",
+      "authors": [
+        "Erik D. Demaine",
+        "Dion Harmon",
+        "John Iacono",
+        "Daniel M. Kane",
+        "Mihai Pătraşcu"
+      ],
+      "title": "The geometry of binary search trees",
+      "venue": "Proceedings of the 20th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "496–505",
+      "year": 2009,
+      "doi": "10.1137/1.9781611973068.55"
+    },
+    {
+      "key": "demaine2013",
+      "type": "inproceedings",
+      "authors": [
+        "Erik D. Demaine",
+        "John Iacono",
+        "Stefan Langerman",
+        "Özgür Özkan"
+      ],
+      "title": "Combining binary search trees",
+      "venue": "Automata, Languages, and Programming, 40th International Colloquium (ICALP 2013)",
+      "pages": "388–399",
+      "year": 2013,
+      "doi": "10.1007/978-3-642-39206-1_33",
+      "arxiv": "1304.7604"
+    },
+    {
+      "key": "demaine2021",
+      "type": "article",
+      "authors": [
+        "Erik D. Demaine",
+        "John Iacono",
+        "Grigorios Koumoutsos",
+        "Stefan Langerman"
+      ],
+      "title": "Belga B-trees",
+      "venue": "Theory of Computing Systems",
+      "volume": "65",
+      "number": "3",
+      "pages": "541–558",
+      "year": 2021,
+      "doi": "10.1007/s00224-020-09991-8",
+      "arxiv": "1903.03560",
+      "versions": [
+        {
+          "label": "Conference version",
+          "type": "inproceedings",
+          "venue": "Computer Science – Theory and Applications, 14th International Computer Science Symposium in Russia (CSR 2019)",
+          "pages": "93–105",
+          "year": 2019,
+          "doi": "10.1007/978-3-030-19955-5_9"
+        }
+      ]
+    },
+    {
+      "key": "derryberry2005",
+      "type": "techreport",
+      "authors": [
+        "Jonathan Derryberry",
+        "Daniel D. Sleator",
+        "Chengwen Chris Wang"
+      ],
+      "title": "A lower bound framework for binary search trees with rotations",
+      "venue": "Technical report, School of Computer Science, Carnegie Mellon University",
+      "year": 2005
+    },
+    {
+      "key": "derryberry2009",
+      "type": "phdthesis",
+      "authors": [
+        "Jonathan C. Derryberry"
+      ],
+      "title": "Adaptive binary search trees",
+      "venue": "PhD thesis, Carnegie Mellon University, technical report CMU-CS-09-180",
+      "year": 2009,
+      "url": "https://www.cs.cmu.edu/~jonderry/thesis.pdf"
+    },
+    {
+      "key": "derryberry2009skip",
+      "type": "inproceedings",
+      "authors": [
+        "Jonathan C. Derryberry",
+        "Daniel D. Sleator"
+      ],
+      "title": "Skip-splay: toward achieving the unified bound in the BST model",
+      "venue": "Algorithms and Data Structures, 11th International Symposium (WADS 2009)",
+      "pages": "194–205",
+      "year": 2009,
+      "doi": "10.1007/978-3-642-03367-4_18"
+    },
+    {
+      "key": "devroye1986",
+      "type": "article",
+      "authors": [
+        "Luc Devroye"
+      ],
+      "title": "A note on the height of binary search trees",
+      "venue": "Journal of the ACM",
+      "volume": "33",
+      "number": "3",
+      "pages": "489–498",
+      "year": 1986,
+      "doi": "10.1145/5925.5930"
+    },
+    {
+      "key": "drmota2003",
+      "type": "article",
+      "authors": [
+        "Michael Drmota"
+      ],
+      "title": "An analytic approach to the height of binary search trees II",
+      "venue": "Journal of the ACM",
+      "volume": "50",
+      "number": "3",
+      "pages": "333–374",
+      "year": 2003,
+      "doi": "10.1145/765568.765572"
+    },
+    {
+      "key": "eberl2020",
+      "type": "article",
+      "authors": [
+        "Manuel Eberl",
+        "Max W. Haslbeck",
+        "Tobias Nipkow"
+      ],
+      "title": "Verified analysis of random binary tree structures",
+      "venue": "Journal of Automated Reasoning",
+      "volume": "64",
+      "number": "5",
+      "pages": "879–910",
+      "year": 2020,
+      "doi": "10.1007/s10817-020-09545-0"
+    },
+    {
+      "key": "elmasry2004",
+      "type": "article",
+      "authors": [
+        "Amr Elmasry"
+      ],
+      "title": "On the sequential access theorem and deque conjecture for splay trees",
+      "venue": "Theoretical Computer Science",
+      "volume": "314",
+      "number": "3",
+      "pages": "459–466",
+      "year": 2004,
+      "doi": "10.1016/j.tcs.2004.01.019"
+    },
+    {
+      "key": "fox2011",
+      "type": "inproceedings",
+      "authors": [
+        "Kyle Fox"
+      ],
+      "title": "Upper bounds for maximally greedy binary search trees",
+      "venue": "Algorithms and Data Structures, 12th International Symposium (WADS 2011)",
+      "pages": "411–422",
+      "year": 2011,
+      "doi": "10.1007/978-3-642-22300-6_35"
+    },
+    {
+      "key": "fredman2011",
+      "type": "article",
+      "authors": [
+        "Michael L. Fredman"
+      ],
+      "title": "Generalizing a theorem of Wilber on rotations in binary search trees to encompass unordered binary trees",
+      "venue": "Algorithmica",
+      "volume": "62",
+      "number": "3–4",
+      "pages": "863–878",
+      "year": 2011,
+      "doi": "10.1007/s00453-011-9489-2"
+    },
+    {
+      "key": "galperin1993",
+      "type": "inproceedings",
+      "authors": [
+        "Igal Galperin",
+        "Ronald L. Rivest"
+      ],
+      "title": "Scapegoat trees",
+      "venue": "Proceedings of the 4th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "165–174",
+      "year": 1993,
+      "url": "https://people.csail.mit.edu/rivest/pubs/GR93.pdf"
+    },
+    {
+      "key": "garsia1977",
+      "type": "article",
+      "authors": [
+        "Adriano M. Garsia",
+        "Michelle L. Wachs"
+      ],
+      "title": "A new algorithm for minimum cost binary trees",
+      "venue": "SIAM Journal on Computing",
+      "volume": "6",
+      "number": "4",
+      "pages": "622–642",
+      "year": 1977,
+      "doi": "10.1137/0206045"
+    },
+    {
+      "key": "georgakopoulos2004",
+      "type": "article",
+      "authors": [
+        "George F. Georgakopoulos"
+      ],
+      "title": "Splay trees: a reweighing lemma and a proof of competitiveness vs. dynamic balanced trees",
+      "venue": "Journal of Algorithms",
+      "volume": "51",
+      "number": "1",
+      "pages": "64–76",
+      "year": 2004,
+      "doi": "10.1016/j.jalgor.2003.09.004"
+    },
+    {
+      "key": "georgakopoulos2008",
+      "type": "article",
+      "authors": [
+        "George F. Georgakopoulos"
+      ],
+      "title": "Chain-splay trees, or, how to achieve and prove log log N-competitiveness by splaying",
+      "venue": "Information Processing Letters",
+      "volume": "106",
+      "number": "1",
+      "pages": "37–43",
+      "year": 2008,
+      "doi": "10.1016/j.ipl.2007.10.001"
+    },
+    {
+      "key": "gila2026",
+      "type": "article",
+      "authors": [
+        "Ofek Gila",
+        "Michael T. Goodrich",
+        "Robert E. Tarjan"
+      ],
+      "title": "Zip-zip trees: making zip trees more balanced, biased, compact, or persistent",
+      "venue": "Algorithmica",
+      "volume": "88",
+      "number": "3",
+      "year": 2026,
+      "doi": "10.1007/s00453-025-01364-2",
+      "versions": [
+        {
+          "label": "Conference version",
+          "type": "inproceedings",
+          "venue": "Algorithms and Data Structures, 18th International Symposium (WADS 2023)",
+          "pages": "474–492",
+          "year": 2023,
+          "doi": "10.1007/978-3-031-38906-1_31"
+        }
+      ]
+    },
+    {
+      "key": "gilbert1959",
+      "type": "article",
+      "authors": [
+        "Edgar N. Gilbert",
+        "Edward F. Moore"
+      ],
+      "title": "Variable-length binary encodings",
+      "venue": "Bell System Technical Journal",
+      "volume": "38",
+      "number": "4",
+      "pages": "933–967",
+      "year": 1959,
+      "doi": "10.1002/j.1538-7305.1959.tb01583.x"
+    },
+    {
+      "key": "goyal2011",
+      "type": "preprint",
+      "authors": [
+        "Navin Goyal",
+        "Manoj Gupta"
+      ],
+      "title": "On dynamic optimality for binary search trees",
+      "year": 2011,
+      "arxiv": "1102.4523"
+    },
+    {
+      "key": "goyal2019",
+      "type": "article",
+      "authors": [
+        "Navin Goyal",
+        "Manoj Gupta"
+      ],
+      "title": "Better analysis of GREEDY binary search tree on decomposable sequences",
+      "venue": "Theoretical Computer Science",
+      "volume": "776",
+      "pages": "19–42",
+      "year": 2019,
+      "doi": "10.1016/j.tcs.2018.12.021",
+      "arxiv": "1604.06997"
+    },
+    {
+      "key": "guibas1978",
+      "type": "inproceedings",
+      "authors": [
+        "Leo J. Guibas",
+        "Robert Sedgewick"
+      ],
+      "title": "A dichromatic framework for balanced trees",
+      "venue": "Proceedings of the 19th Annual IEEE Symposium on Foundations of Computer Science (FOCS)",
+      "pages": "8–21",
+      "year": 1978,
+      "doi": "10.1109/SFCS.1978.3"
+    },
+    {
+      "key": "guo2026",
+      "type": "preprint",
+      "authors": [
+        "Yuhao Guo",
+        "Seth Pettie",
+        "Daniel Skora",
+        "Chengzhang Wan"
+      ],
+      "title": "The greedy binary search tree is non-trivially competitive",
+      "year": 2026,
+      "arxiv": "2608.04410"
+    },
+    {
+      "key": "haeupler2015",
+      "type": "article",
+      "authors": [
+        "Bernhard Haeupler",
+        "Siddhartha Sen",
+        "Robert E. Tarjan"
+      ],
+      "title": "Rank-balanced trees",
+      "venue": "ACM Transactions on Algorithms",
+      "volume": "11",
+      "number": "4",
+      "pages": "article 30",
+      "year": 2015,
+      "doi": "10.1145/2689412",
+      "versions": [
+        {
+          "label": "Conference version",
+          "type": "inproceedings",
+          "venue": "Algorithms and Data Structures, 11th International Symposium (WADS 2009)",
+          "pages": "351–362",
+          "year": 2009,
+          "doi": "10.1007/978-3-642-03367-4_31"
+        }
+      ]
+    },
+    {
+      "key": "harel1984",
+      "type": "article",
+      "authors": [
+        "Dov Harel",
+        "Robert E. Tarjan"
+      ],
+      "title": "Fast algorithms for finding nearest common ancestors",
+      "venue": "SIAM Journal on Computing",
+      "volume": "13",
+      "number": "2",
+      "pages": "338–355",
+      "year": 1984,
+      "doi": "10.1137/0213024"
+    },
+    {
+      "key": "harmon2006",
+      "type": "phdthesis",
+      "authors": [
+        "Dion Harmon"
+      ],
+      "title": "New bounds on optimal binary search trees",
+      "venue": "PhD thesis, Massachusetts Institute of Technology",
+      "year": 2006
+    },
+    {
+      "key": "hibbard1962",
+      "type": "article",
+      "authors": [
+        "Thomas N. Hibbard"
+      ],
+      "title": "Some combinatorial properties of certain trees with applications to searching and sorting",
+      "venue": "Journal of the ACM",
+      "volume": "9",
+      "number": "1",
+      "pages": "13–28",
+      "year": 1962,
+      "doi": "10.1145/321105.321108"
+    },
+    {
+      "key": "hoffmann1986",
+      "type": "article",
+      "authors": [
+        "Kurt Hoffmann",
+        "Kurt Mehlhorn",
+        "Pierre Rosenstiehl",
+        "Robert E. Tarjan"
+      ],
+      "title": "Sorting Jordan sequences in linear time using level-linked search trees",
+      "venue": "Information and Control",
+      "volume": "68",
+      "number": "1–3",
+      "pages": "170–184",
+      "year": 1986,
+      "doi": "10.1016/S0019-9958(86)80033-X"
+    },
+    {
+      "key": "howat2013",
+      "type": "preprint",
+      "authors": [
+        "John Howat",
+        "John Iacono",
+        "Pat Morin"
+      ],
+      "title": "The fresh-finger property",
+      "year": 2013,
+      "arxiv": "1302.6914"
+    },
+    {
+      "key": "hu1971",
+      "type": "article",
+      "authors": [
+        "T. C. Hu",
+        "A. C. Tucker"
+      ],
+      "title": "Optimal computer search trees and variable-length alphabetical codes",
+      "venue": "SIAM Journal on Applied Mathematics",
+      "volume": "21",
+      "number": "4",
+      "pages": "514–532",
+      "year": 1971,
+      "doi": "10.1137/0121057"
+    },
+    {
+      "key": "huddleston1982",
+      "type": "article",
+      "authors": [
+        "Scott Huddleston",
+        "Kurt Mehlhorn"
+      ],
+      "title": "A new data structure for representing sorted lists",
+      "venue": "Acta Informatica",
+      "volume": "17",
+      "number": "2",
+      "pages": "157–184",
+      "year": 1982,
+      "doi": "10.1007/BF00288968"
+    },
+    {
+      "key": "iacono2001",
+      "type": "inproceedings",
+      "authors": [
+        "John Iacono"
+      ],
+      "title": "Alternatives to splay trees with O(log n) worst-case access times",
+      "venue": "Proceedings of the 12th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "516–522",
+      "year": 2001
+    },
+    {
+      "key": "iacono2005",
+      "type": "article",
+      "authors": [
+        "John Iacono"
+      ],
+      "title": "Key-independent optimality",
+      "venue": "Algorithmica",
+      "volume": "42",
+      "number": "1",
+      "pages": "3–10",
+      "year": 2005,
+      "doi": "10.1007/s00453-004-1136-8",
+      "versions": [
+        {
+          "label": "Conference version",
+          "type": "inproceedings",
+          "venue": "Algorithms and Computation, 13th International Symposium (ISAAC 2002)",
+          "pages": "25–31",
+          "year": 2002,
+          "doi": "10.1007/3-540-36136-7_3"
+        }
+      ]
+    },
+    {
+      "key": "iacono2005queaps",
+      "type": "article",
+      "authors": [
+        "John Iacono",
+        "Stefan Langerman"
+      ],
+      "title": "Queaps",
+      "venue": "Algorithmica",
+      "volume": "42",
+      "number": "1",
+      "pages": "49–56",
+      "year": 2005,
+      "doi": "10.1007/s00453-004-1139-5"
+    },
+    {
+      "key": "iacono2013",
+      "type": "incollection",
+      "authors": [
+        "John Iacono"
+      ],
+      "title": "In pursuit of the dynamic optimality conjecture",
+      "venue": "Space-Efficient Data Structures, Streams, and Algorithms: Papers in Honor of J. Ian Munro",
+      "pages": "236–250",
+      "year": 2013,
+      "doi": "10.1007/978-3-642-40273-9_16",
+      "arxiv": "1306.0207"
+    },
+    {
+      "key": "iacono2016",
+      "type": "inproceedings",
+      "authors": [
+        "John Iacono",
+        "Stefan Langerman"
+      ],
+      "title": "Weighted dynamic finger in binary search trees",
+      "venue": "Proceedings of the 27th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "672–691",
+      "year": 2016,
+      "doi": "10.1137/1.9781611974331.ch49",
+      "arxiv": "1810.01785"
+    },
+    {
+      "key": "iacono2026",
+      "type": "preprint",
+      "authors": [
+        "John Iacono",
+        "Akash Pareek"
+      ],
+      "title": "Dynamically optimal weight-balanced binary search trees",
+      "year": 2026,
+      "arxiv": "2610.29574"
+    },
+    {
+      "key": "jiang2024",
+      "type": "inproceedings",
+      "authors": [
+        "Shunhua Jiang",
+        "Victor Lecomte",
+        "Omri Weinstein",
+        "Sorrachai Yingchareonthawornchai"
+      ],
+      "title": "Hardness amplification for dynamic binary search trees",
+      "venue": "35th International Symposium on Algorithms and Computation (ISAAC 2024)",
+      "volume": "LIPIcs 322",
+      "pages": "42:1–42:19",
+      "year": 2024,
+      "doi": "10.4230/LIPIcs.ISAAC.2024.42",
+      "arxiv": "2411.14387"
+    },
+    {
+      "key": "kakimura2026",
+      "type": "preprint",
+      "authors": [
+        "Naonori Kakimura",
+        "Yoshihiko Terai"
+      ],
+      "title": "A refined analysis of the sequential access theorem for splay trees",
+      "year": 2026,
+      "arxiv": "2609.19746"
+    },
+    {
+      "key": "knuth1971",
+      "type": "article",
+      "authors": [
+        "Donald E. Knuth"
+      ],
+      "title": "Optimum binary search trees",
+      "venue": "Acta Informatica",
+      "volume": "1",
+      "number": "1",
+      "pages": "14–25",
+      "year": 1971,
+      "doi": "10.1007/BF00264289"
+    },
+    {
+      "key": "knuth1998",
+      "type": "book",
+      "authors": [
+        "Donald E. Knuth"
+      ],
+      "title": "The Art of Computer Programming, Volume 3: Sorting and Searching",
+      "venue": "Second edition",
+      "publisher": "Addison-Wesley",
+      "year": 1998
+    },
+    {
+      "key": "kozma2016",
+      "type": "phdthesis",
+      "authors": [
+        "László Kozma"
+      ],
+      "title": "Binary search trees, rectangles and patterns",
+      "venue": "PhD thesis, Saarland University",
+      "year": 2016,
+      "doi": "10.22028/D291-26671"
+    },
+    {
+      "key": "kozma2016rectangulations",
+      "type": "preprint",
+      "authors": [
+        "László Kozma",
+        "Thatchaphol Saranurak"
+      ],
+      "title": "Binary search trees and rectangulations",
+      "year": 2016,
+      "arxiv": "1603.08151"
+    },
+    {
+      "key": "kozma2020",
+      "type": "article",
+      "authors": [
+        "László Kozma",
+        "Thatchaphol Saranurak"
+      ],
+      "title": "Smooth heaps and a dual view of self-adjusting data structures",
+      "venue": "SIAM Journal on Computing",
+      "volume": "49",
+      "number": "5",
+      "pages": "STOC18-45–STOC18-93",
+      "year": 2020,
+      "doi": "10.1137/18M1195188",
+      "arxiv": "1802.05471",
+      "versions": [
+        {
+          "label": "Conference version",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 50th Annual ACM Symposium on Theory of Computing (STOC)",
+          "pages": "801–814",
+          "year": 2018,
+          "doi": "10.1145/3188745.3188864"
+        }
+      ]
+    },
+    {
+      "key": "kujala2006",
+      "type": "inproceedings",
+      "authors": [
+        "Jussi Kujala",
+        "Tapio Elomaa"
+      ],
+      "title": "Poketree: a dynamically competitive data structure with good worst-case performance",
+      "venue": "Algorithms and Computation, 17th International Symposium (ISAAC 2006)",
+      "pages": "277–288",
+      "year": 2006,
+      "doi": "10.1007/11940128_29"
+    },
+    {
+      "key": "larmore1987",
+      "type": "article",
+      "authors": [
+        "Lawrence L. Larmore"
+      ],
+      "title": "A subquadratic algorithm for constructing approximately optimal binary search trees",
+      "venue": "Journal of Algorithms",
+      "volume": "8",
+      "number": "4",
+      "pages": "579–591",
+      "year": 1987,
+      "doi": "10.1016/0196-6774(87)90052-6"
+    },
+    {
+      "key": "lecomte2020",
+      "type": "inproceedings",
+      "authors": [
+        "Victor Lecomte",
+        "Omri Weinstein"
+      ],
+      "title": "Settling the relationship between Wilber's bounds for dynamic optimality",
+      "venue": "28th Annual European Symposium on Algorithms (ESA 2020)",
+      "volume": "LIPIcs 173",
+      "pages": "68:1–68:21",
+      "year": 2020,
+      "doi": "10.4230/LIPIcs.ESA.2020.68",
+      "arxiv": "1912.02858"
+    },
+    {
+      "key": "leutgeb2021",
+      "type": "inproceedings",
+      "authors": [
+        "Lorenz Leutgeb",
+        "Georg Moser",
+        "Florian Zuleger"
+      ],
+      "title": "ATLAS: automated amortised complexity analysis of self-adjusting data structures",
+      "venue": "Computer Aided Verification, 33rd International Conference (CAV 2021)",
+      "pages": "99–122",
+      "year": 2021,
+      "doi": "10.1007/978-3-030-81688-9_5"
+    },
+    {
+      "key": "levy2019foundation",
+      "type": "preprint",
+      "authors": [
+        "Caleb C. Levy",
+        "Robert E. Tarjan"
+      ],
+      "title": "A foundation for proving splay is dynamically optimal",
+      "year": 2019,
+      "arxiv": "1907.06310"
+    },
+    {
+      "key": "levy2019path",
+      "type": "inproceedings",
+      "authors": [
+        "Caleb C. Levy",
+        "Robert E. Tarjan"
+      ],
+      "title": "A new path from splay to dynamic optimality",
+      "venue": "Proceedings of the 30th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "1311–1330",
+      "year": 2019,
+      "doi": "10.1137/1.9781611975482.80"
+    },
+    {
+      "key": "levy2019preorders",
+      "type": "inproceedings",
+      "authors": [
+        "Caleb C. Levy",
+        "Robert E. Tarjan"
+      ],
+      "title": "Splaying preorders and postorders",
+      "venue": "Algorithms and Data Structures, 16th International Symposium (WADS 2019)",
+      "pages": "510–522",
+      "year": 2019,
+      "doi": "10.1007/978-3-030-24766-9_37",
+      "arxiv": "1907.06309"
+    },
+    {
+      "key": "lin2022",
+      "type": "inproceedings",
+      "authors": [
+        "Honghao Lin",
+        "Tian Luo",
+        "David P. Woodruff"
+      ],
+      "title": "Learning augmented binary search trees",
+      "venue": "Proceedings of the 39th International Conference on Machine Learning (ICML 2022)",
+      "volume": "PMLR 162",
+      "year": 2022,
+      "arxiv": "2206.12110"
+    },
+    {
+      "key": "lucas1987",
+      "type": "article",
+      "authors": [
+        "Joan M. Lucas"
+      ],
+      "title": "The rotation graph of binary trees is Hamiltonian",
+      "venue": "Journal of Algorithms",
+      "volume": "8",
+      "number": "4",
+      "pages": "503–535",
+      "year": 1987,
+      "doi": "10.1016/0196-6774(87)90048-4"
+    },
+    {
+      "key": "lucas1988",
+      "type": "techreport",
+      "authors": [
+        "Joan M. Lucas"
+      ],
+      "title": "Canonical forms for competitive binary search tree algorithms",
+      "venue": "Technical report DCS-TR-250, Department of Computer Science, Rutgers University",
+      "year": 1988
+    },
+    {
+      "key": "lucas1991",
+      "type": "incollection",
+      "authors": [
+        "Joan M. Lucas"
+      ],
+      "title": "On the competitiveness of splay trees: relations to the union-find problem",
+      "venue": "On-Line Algorithms, DIMACS Series in Discrete Mathematics and Theoretical Computer Science 7",
+      "pages": "95–124",
+      "year": 1991,
+      "doi": "10.1090/dimacs/007/08"
+    },
+    {
+      "key": "martinez1998",
+      "type": "article",
+      "authors": [
+        "Conrado Martínez",
+        "Salvador Roura"
+      ],
+      "title": "Randomized binary search trees",
+      "venue": "Journal of the ACM",
+      "volume": "45",
+      "number": "2",
+      "pages": "288–323",
+      "year": 1998,
+      "doi": "10.1145/274787.274812"
+    },
+    {
+      "key": "mehlhorn1975",
+      "type": "article",
+      "authors": [
+        "Kurt Mehlhorn"
+      ],
+      "title": "Nearly optimal binary search trees",
+      "venue": "Acta Informatica",
+      "volume": "5",
+      "number": "4",
+      "pages": "287–295",
+      "year": 1975,
+      "doi": "10.1007/BF00264563"
+    },
+    {
+      "key": "mehlhorn1977",
+      "type": "article",
+      "authors": [
+        "Kurt Mehlhorn"
+      ],
+      "title": "A best possible bound for the weighted path length of binary search trees",
+      "venue": "SIAM Journal on Computing",
+      "volume": "6",
+      "number": "2",
+      "pages": "235–239",
+      "year": 1977,
+      "doi": "10.1137/0206017"
+    },
+    {
+      "key": "mehlhorn1979",
+      "type": "article",
+      "authors": [
+        "Kurt Mehlhorn"
+      ],
+      "title": "Dynamic binary search",
+      "venue": "SIAM Journal on Computing",
+      "volume": "8",
+      "number": "2",
+      "pages": "175–198",
+      "year": 1979,
+      "doi": "10.1137/0208014"
+    },
+    {
+      "key": "mehlhorn1984",
+      "type": "book",
+      "authors": [
+        "Kurt Mehlhorn"
+      ],
+      "title": "Data Structures and Algorithms 1: Sorting and Searching",
+      "venue": "EATCS Monographs on Theoretical Computer Science",
+      "publisher": "Springer",
+      "year": 1984,
+      "doi": "10.1007/978-3-642-69672-5"
+    },
+    {
+      "key": "munro2000",
+      "type": "inproceedings",
+      "authors": [
+        "J. Ian Munro"
+      ],
+      "title": "On the competitiveness of linear search",
+      "venue": "Algorithms – ESA 2000, 8th Annual European Symposium",
+      "pages": "338–345",
+      "year": 2000,
+      "doi": "10.1007/3-540-45253-2_31"
+    },
+    {
+      "key": "nievergelt1973",
+      "type": "article",
+      "authors": [
+        "Jürg Nievergelt",
+        "Edward M. Reingold"
+      ],
+      "title": "Binary search trees of bounded balance",
+      "venue": "SIAM Journal on Computing",
+      "volume": "2",
+      "number": "1",
+      "pages": "33–43",
+      "year": 1973,
+      "doi": "10.1137/0202005",
+      "versions": [
+        {
+          "label": "Preliminary version",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 4th Annual ACM Symposium on Theory of Computing (STOC)",
+          "pages": "137–142",
+          "year": 1972,
+          "doi": "10.1145/800152.804906"
+        }
+      ]
+    },
+    {
+      "key": "nipkow2018",
+      "type": "misc",
+      "authors": [
+        "Tobias Nipkow",
+        "Dániel Somogyi"
+      ],
+      "title": "Optimal binary search trees",
+      "venue": "Archive of Formal Proofs",
+      "year": 2018,
+      "url": "https://isa-afp.org/entries/Optimal_BST.html"
+    },
+    {
+      "key": "nipkow2019",
+      "type": "article",
+      "authors": [
+        "Tobias Nipkow",
+        "Hauke Brinkop"
+      ],
+      "title": "Amortized complexity verified",
+      "venue": "Journal of Automated Reasoning",
+      "volume": "62",
+      "number": "3",
+      "pages": "367–391",
+      "year": 2019,
+      "doi": "10.1007/s10817-018-9459-3",
+      "versions": [
+        {
+          "label": "Conference version (Nipkow)",
+          "type": "inproceedings",
+          "venue": "Interactive Theorem Proving, 6th International Conference (ITP 2015)",
+          "pages": "310–324",
+          "year": 2015,
+          "doi": "10.1007/978-3-319-22102-1_21"
+        }
+      ]
+    },
+    {
+      "key": "olivie1982",
+      "type": "article",
+      "authors": [
+        "H. J. Olivié"
+      ],
+      "title": "A new class of balanced search trees: half-balanced binary search trees",
+      "venue": "RAIRO Informatique Théorique",
+      "volume": "16",
+      "number": "1",
+      "pages": "51–71",
+      "year": 1982,
+      "doi": "10.1051/ita/1982160100511"
+    },
+    {
+      "key": "opler2024",
+      "type": "inproceedings",
+      "authors": [
+        "Michal Opler"
+      ],
+      "title": "An optimal algorithm for sorting pattern-avoiding sequences",
+      "venue": "Proceedings of the 65th Annual IEEE Symposium on Foundations of Computer Science (FOCS)",
+      "pages": "689–699",
+      "year": 2024,
+      "doi": "10.1109/FOCS61266.2024.00049",
+      "arxiv": "2409.07868"
+    },
+    {
+      "key": "overmars1983",
+      "type": "book",
+      "authors": [
+        "Mark H. Overmars"
+      ],
+      "title": "The Design of Dynamic Data Structures",
+      "venue": "Lecture Notes in Computer Science 156, Springer",
+      "year": 1983,
+      "doi": "10.1007/BFb0014927"
+    },
+    {
+      "key": "pareek2024",
+      "type": "preprint",
+      "authors": [
+        "Akash Pareek"
+      ],
+      "title": "Greedy BST on permutation initial tree",
+      "year": 2024,
+      "arxiv": "2407.03666"
+    },
+    {
+      "key": "pettie2008",
+      "type": "inproceedings",
+      "authors": [
+        "Seth Pettie"
+      ],
+      "title": "Splay trees, Davenport-Schinzel sequences, and the deque conjecture",
+      "venue": "Proceedings of the 19th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "1115–1124",
+      "year": 2008,
+      "arxiv": "0707.2160"
+    },
+    {
+      "key": "pettie2010",
+      "type": "inproceedings",
+      "authors": [
+        "Seth Pettie"
+      ],
+      "title": "Applications of forbidden 0-1 matrices to search tree and path compression-based data structures",
+      "venue": "Proceedings of the 21st Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "1457–1467",
+      "year": 2010,
+      "doi": "10.1137/1.9781611973075.118"
+    },
+    {
+      "key": "pittel1984",
+      "type": "article",
+      "authors": [
+        "Boris Pittel"
+      ],
+      "title": "On growing random binary trees",
+      "venue": "Journal of Mathematical Analysis and Applications",
+      "volume": "103",
+      "number": "2",
+      "pages": "461–480",
+      "year": 1984,
+      "doi": "10.1016/0022-247X(84)90141-0"
+    },
+    {
+      "key": "pournin2014",
+      "type": "article",
+      "authors": [
+        "Lionel Pournin"
+      ],
+      "title": "The diameter of associahedra",
+      "venue": "Advances in Mathematics",
+      "volume": "259",
+      "pages": "13–42",
+      "year": 2014,
+      "doi": "10.1016/j.aim.2014.02.035"
+    },
+    {
+      "key": "pugh1990",
+      "type": "article",
+      "authors": [
+        "William Pugh"
+      ],
+      "title": "Skip lists: a probabilistic alternative to balanced trees",
+      "venue": "Communications of the ACM",
+      "volume": "33",
+      "number": "6",
+      "pages": "668–676",
+      "year": 1990,
+      "doi": "10.1145/78973.78977"
+    },
+    {
+      "key": "reed2003",
+      "type": "article",
+      "authors": [
+        "Bruce Reed"
+      ],
+      "title": "The height of a random binary search tree",
+      "venue": "Journal of the ACM",
+      "volume": "50",
+      "number": "3",
+      "pages": "306–332",
+      "year": 2003,
+      "doi": "10.1145/765568.765571"
+    },
+    {
+      "key": "sadeh2023",
+      "type": "inproceedings",
+      "authors": [
+        "Yaniv Sadeh",
+        "Haim Kaplan"
+      ],
+      "title": "Dynamic binary search trees: improved lower bounds for the Greedy-Future algorithm",
+      "venue": "40th International Symposium on Theoretical Aspects of Computer Science (STACS 2023)",
+      "volume": "LIPIcs 254",
+      "pages": "53:1–53:21",
+      "year": 2023,
+      "doi": "10.4230/LIPIcs.STACS.2023.53",
+      "arxiv": "2301.03084"
+    },
+    {
+      "key": "sandlund2020",
+      "type": "inproceedings",
+      "authors": [
+        "Bryce Sandlund",
+        "Sebastian Wild"
+      ],
+      "title": "Lazy search trees",
+      "venue": "Proceedings of the 61st Annual IEEE Symposium on Foundations of Computer Science (FOCS)",
+      "pages": "704–715",
+      "year": 2020,
+      "doi": "10.1109/FOCS46700.2020.00071",
+      "arxiv": "2010.08840"
+    },
+    {
+      "key": "sedgewick2008",
+      "type": "misc",
+      "authors": [
+        "Robert Sedgewick"
+      ],
+      "title": "Left-leaning red-black trees",
+      "venue": "Manuscript, Princeton University",
+      "year": 2008,
+      "url": "https://sedgewick.io/wp-content/themes/sedgewick/papers/2008LLRB.pdf"
+    },
+    {
+      "key": "seidel1996",
+      "type": "article",
+      "authors": [
+        "Raimund Seidel",
+        "Cecilia R. Aragon"
+      ],
+      "title": "Randomized search trees",
+      "venue": "Algorithmica",
+      "volume": "16",
+      "number": "4/5",
+      "pages": "464–497",
+      "year": 1996,
+      "doi": "10.1007/BF01940876",
+      "versions": [
+        {
+          "label": "Preliminary version (Aragon and Seidel)",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 30th Annual IEEE Symposium on Foundations of Computer Science (FOCS)",
+          "pages": "540–545",
+          "year": 1989,
+          "doi": "10.1109/SFCS.1989.63531"
+        }
+      ]
+    },
+    {
+      "key": "sen2016",
+      "type": "article",
+      "authors": [
+        "Siddhartha Sen",
+        "Robert E. Tarjan",
+        "David Hong Kyun Kim"
+      ],
+      "title": "Deletion without rebalancing in binary search trees",
+      "venue": "ACM Transactions on Algorithms",
+      "volume": "12",
+      "number": "4",
+      "pages": "article 57",
+      "year": 2016,
+      "doi": "10.1145/2903142",
+      "versions": [
+        {
+          "label": "Conference version (Sen and Tarjan), “Deletion without rebalancing in balanced binary trees”",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 21st Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+          "pages": "1490–1499",
+          "year": 2010,
+          "doi": "10.1137/1.9781611973075.121"
+        }
+      ]
+    },
+    {
+      "key": "sleator1983",
+      "type": "article",
+      "authors": [
+        "Daniel D. Sleator",
+        "Robert E. Tarjan"
+      ],
+      "title": "A data structure for dynamic trees",
+      "venue": "Journal of Computer and System Sciences",
+      "volume": "26",
+      "number": "3",
+      "pages": "362–391",
+      "year": 1983,
+      "doi": "10.1016/0022-0000(83)90006-5",
+      "versions": [
+        {
+          "label": "Preliminary version",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 13th Annual ACM Symposium on Theory of Computing (STOC)",
+          "pages": "114–122",
+          "year": 1981,
+          "doi": "10.1145/800076.802464"
+        }
+      ]
+    },
+    {
+      "key": "sleator1985",
+      "type": "article",
+      "authors": [
+        "Daniel D. Sleator",
+        "Robert E. Tarjan"
+      ],
+      "title": "Self-adjusting binary search trees",
+      "venue": "Journal of the ACM",
+      "volume": "32",
+      "number": "3",
+      "pages": "652–686",
+      "year": 1985,
+      "doi": "10.1145/3828.3835",
+      "url": "https://www.cs.cmu.edu/~sleator/papers/self-adjusting.pdf",
+      "versions": [
+        {
+          "label": "Preliminary version, “Self-adjusting binary trees”",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 15th Annual ACM Symposium on Theory of Computing (STOC)",
+          "pages": "235–245",
+          "year": 1983,
+          "doi": "10.1145/800061.808752"
+        }
+      ]
+    },
+    {
+      "key": "sleator1988",
+      "type": "article",
+      "authors": [
+        "Daniel D. Sleator",
+        "Robert E. Tarjan",
+        "William P. Thurston"
+      ],
+      "title": "Rotation distance, triangulations, and hyperbolic geometry",
+      "venue": "Journal of the American Mathematical Society",
+      "volume": "1",
+      "number": "3",
+      "pages": "647–681",
+      "year": 1988,
+      "doi": "10.1090/S0894-0347-1988-0928904-4",
+      "versions": [
+        {
+          "label": "Preliminary version",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 18th Annual ACM Symposium on Theory of Computing (STOC)",
+          "pages": "122–135",
+          "year": 1986,
+          "doi": "10.1145/12130.12143"
+        }
+      ]
+    },
+    {
+      "key": "stout1986",
+      "type": "article",
+      "authors": [
+        "Quentin F. Stout",
+        "Bette L. Warren"
+      ],
+      "title": "Tree rebalancing in optimal time and space",
+      "venue": "Communications of the ACM",
+      "volume": "29",
+      "number": "9",
+      "pages": "902–908",
+      "year": 1986,
+      "doi": "10.1145/6592.6599"
+    },
+    {
+      "key": "subramanian1996",
+      "type": "article",
+      "authors": [
+        "Ashok Subramanian"
+      ],
+      "title": "An explanation of splaying",
+      "venue": "Journal of Algorithms",
+      "volume": "20",
+      "number": "3",
+      "pages": "512–525",
+      "year": 1996,
+      "doi": "10.1006/jagm.1996.0025"
+    },
+    {
+      "key": "sundar1992",
+      "type": "article",
+      "authors": [
+        "Rajamani Sundar"
+      ],
+      "title": "On the deque conjecture for the splay algorithm",
+      "venue": "Combinatorica",
+      "volume": "12",
+      "number": "1",
+      "pages": "95–124",
+      "year": 1992,
+      "doi": "10.1007/BF01191208"
+    },
+    {
+      "key": "tarjan1983",
+      "type": "article",
+      "authors": [
+        "Robert E. Tarjan"
+      ],
+      "title": "Updating a balanced search tree in O(1) rotations",
+      "venue": "Information Processing Letters",
+      "volume": "16",
+      "number": "5",
+      "pages": "253–257",
+      "year": 1983,
+      "doi": "10.1016/0020-0190(83)90099-6"
+    },
+    {
+      "key": "tarjan1985",
+      "type": "article",
+      "authors": [
+        "Robert E. Tarjan"
+      ],
+      "title": "Sequential access in splay trees takes linear time",
+      "venue": "Combinatorica",
+      "volume": "5",
+      "number": "4",
+      "pages": "367–378",
+      "year": 1985,
+      "doi": "10.1007/BF02579253"
+    },
+    {
+      "key": "tarjan2021",
+      "type": "article",
+      "authors": [
+        "Robert E. Tarjan",
+        "Caleb C. Levy",
+        "Stephen Timmel"
+      ],
+      "title": "Zip trees",
+      "venue": "ACM Transactions on Algorithms",
+      "volume": "17",
+      "number": "4",
+      "pages": "article 34",
+      "year": 2021,
+      "doi": "10.1145/3476830",
+      "arxiv": "1806.06726",
+      "versions": [
+        {
+          "label": "Conference version",
+          "type": "inproceedings",
+          "venue": "Algorithms and Data Structures, 16th International Symposium (WADS 2019)",
+          "pages": "566–577",
+          "year": 2019,
+          "doi": "10.1007/978-3-030-24766-9_41"
+        }
+      ]
+    },
+    {
+      "key": "vuillemin1980",
+      "type": "article",
+      "authors": [
+        "Jean Vuillemin"
+      ],
+      "title": "A unifying look at data structures",
+      "venue": "Communications of the ACM",
+      "volume": "23",
+      "number": "4",
+      "pages": "229–239",
+      "year": 1980,
+      "doi": "10.1145/358841.358852"
+    },
+    {
+      "key": "wang2006",
+      "type": "inproceedings",
+      "authors": [
+        "Chengwen Chris Wang",
+        "Jonathan Derryberry",
+        "Daniel D. Sleator"
+      ],
+      "title": "O(log log n)-competitive dynamic binary search trees",
+      "venue": "Proceedings of the 17th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "374–383",
+      "year": 2006,
+      "doi": "10.1145/1109557.1109600"
+    },
+    {
+      "key": "wilber1989",
+      "type": "article",
+      "authors": [
+        "Robert Wilber"
+      ],
+      "title": "Lower bounds for accessing binary search trees with rotations",
+      "venue": "SIAM Journal on Computing",
+      "volume": "18",
+      "number": "1",
+      "pages": "56–67",
+      "year": 1989,
+      "doi": "10.1137/0218004",
+      "versions": [
+        {
+          "label": "Preliminary version",
+          "type": "inproceedings",
+          "venue": "Proceedings of the 27th Annual IEEE Symposium on Foundations of Computer Science (FOCS)",
+          "pages": "61–70",
+          "year": 1986,
+          "doi": "10.1109/SFCS.1986.28"
+        }
+      ]
+    },
+    {
+      "key": "yao1980",
+      "type": "inproceedings",
+      "authors": [
+        "F. Frances Yao"
+      ],
+      "title": "Efficient dynamic programming using quadrangle inequalities",
+      "venue": "Proceedings of the 12th Annual ACM Symposium on Theory of Computing (STOC)",
+      "pages": "429–435",
+      "year": 1980,
+      "doi": "10.1145/800141.804691"
+    }
+  ]
+}

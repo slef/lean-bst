@@ -1,12 +1,12 @@
 # Wilber's interleave bound
 
-The bounds of [Chapter 10](bounds.html) are upper-bound benchmarks: explicit functions of the request sequence that a good algorithm should match. To show that an algorithm is *competitive*, one needs the other side as well, a lower bound on what every BST execution must pay. Dynamic optimality compares an algorithm with the offline optimum, and nobody knows how to compute that optimum in closed form. Wilber (1989) gave two lower bounds on it that are explicit functions of the sequence. Fifteen years later, Demaine, Harmon, Iacono and Pătraşcu (2004; journal version 2007) built Tango trees around the first one and obtained the first $O(\log \log n)$-competitive BST.
+The bounds of [Chapter 10](bounds.html) are upper-bound benchmarks: explicit functions of the request sequence that a good algorithm should match. To show that an algorithm is *competitive*, one needs the other side as well, a lower bound on what every BST execution must pay. Dynamic optimality compares an algorithm with the offline optimum, and nobody knows how to compute that optimum in closed form. Wilber [-@wilber1989] gave two lower bounds on it that are explicit functions of the sequence. Fifteen years later, Demaine, Harmon, Iacono and Pătraşcu built Tango trees around the first one [@demaine2007] and obtained the first $O(\log \log n)$-competitive BST.
 
 This chapter defines that first bound, the *interleave bound*. Fix any BST $P$ on the $n$ keys, called the reference tree, and count how often the requests alternate between the left and right side of each of its nodes. Wilber's theorem says that every BST execution pays at least a constant fraction of this count. The chapter states the bound against the three cost models of Part I: arborally satisfied point sets, rotation executions and pointer executions. It then explains the proof, which uses Wilber's transition points.
 
 ```headline wilber
 title: Wilber's interleave bound is a lower bound on every BST execution
-source: Wilber, *Lower bounds for accessing binary search trees with rotations* (1989)
+source: @wilber1989
 key: yes
 theorems: Wilber.Results.rotation_lower_bound
 
@@ -133,7 +133,7 @@ The argument is about intervals of the actual tree, which keeps changing. Its ke
 Switch the figure above to *preferred paths* to preview them. Each node prefers the side of its most recent request, and following preferences from the root down gives the paths that Tango keeps as auxiliary trees.
 
 ::: caveat What is not formalized
-- **Only the first bound.** Wilber's second lower bound, sometimes called the funnel bound, is not formalized. Neither are the later geometric lower bounds, such as the independent-rectangle bound of Demaine, Harmon, Iacono, Kane and Pătraşcu (2009).
-- **Dynamic finger for splay trees.** The dynamic finger bound of Cole et al. (2000) is not formalized for splay trees. It is proved for GreedyASS ([Chapter 23](greedy-finger.html)), as a corollary of the weighted dynamic finger bound.
+- **Only the first bound.** Wilber's second lower bound, sometimes called the funnel bound, is not formalized; it is always at least the first, up to constant factors [@lecomte2020]. Neither are the later geometric lower bounds, such as the independent-rectangle bound of Demaine, Harmon, Iacono, Kane and Pătraşcu [-@demaine2009].
+- **Dynamic finger for splay trees.** The dynamic finger bound of @cole2000sorting and @cole2000proof is not formalized for splay trees. It is proved for GreedyASS ([Chapter 23](greedy-finger.html)), as a corollary of the weighted dynamic finger bound.
 - **No compute time.** Like everything else in the library, the bound counts BST operations only, not the time needed to compute anything.
 :::

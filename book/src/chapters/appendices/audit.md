@@ -38,7 +38,7 @@ These limits are stated in the library's README and in the chapters, and are col
 - ComboBST ([Chapter 23](combination.html)) and the deamortization ([Chapter 37](deamortization.html)) are formalized for abstract BST operations. Not formalized: the storage and private-computation clauses (the paper's Theorems 3 and 5 of *Combining binary search trees* and Theorem 7 of *De-amortizing binary search trees*), the $O(k)$ overhead for families of $k$ structures, and the concrete applications other than Splay, GreedyASS and Tango (Cole's dynamic finger, key-independent optimality, multi-splay trees). The combined policies are chosen with classical choice, and their planning is not charged.
 - The general combination theorem assumes that its two input workers are well-behaved ([Chapter 33](combining.html)); this is an operational hypothesis, proved in the library for the GreedyASS and Tango workers of [Chapter 38](combined-finger.html), not for arbitrary algorithms.
 - Tango's linear-startup bound ([Chapter 30](tango-linear.html)) is stated for the bottom-up policy and for the rotation wrapper separately; their composition into one online algorithm is done in the text.
-- Constants are explicit but generous. For instance, the scanning bound is $14n$, not the sharper $5.5n$ of Kakimura and Terai.
+- Constants are explicit but generous. For instance, the scanning bound is $14n$, not the sharper $5.5n$ of Kakimura and Terai [-@kakimura2026].
 
 ## Theorems of the reading interface
 

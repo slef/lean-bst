@@ -1,6 +1,6 @@
 # Prefix sums and weighted search trees
 
-This chapter collects two small data structures that algorithms of Part III use as building blocks.
+This chapter collects two small data structures that algorithms of [Part IV](part-algorithms.html) use as building blocks.
 
 - **Two-dimensional prefix sums** answer a rectangle-sum query on a fixed matrix with four table reads. The optimal lazy-finger tree of [Chapter 29](optimal-lazy-finger.html) uses them to compute, in constant time, how many request transitions cross the boundary of a key interval.
 - **Weighted search trees** are static BSTs built by recursive weighted-median splitting, in which a key of weight $w_x$ out of a total $W$ has depth at most $\log_2(W/w_x)$. The multiple-tree structure of [Chapter 30](multiple-trees.html) builds each of its local trees this way, from the successor frequencies of one key, mixed with a uniform baseline so that every key also has depth $O(\log n)$.

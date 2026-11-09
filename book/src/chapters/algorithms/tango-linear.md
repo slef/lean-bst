@@ -10,7 +10,7 @@ This section proves that bound. The algorithm is the Tango of [Chapter 29](tango
 
 ```headline tango-linear
 title: Tango with a linear startup term
-source: Demaine, Harmon, Iacono and Pătraşcu, *Dynamic optimality—almost* (2004)
+source: @demaine2007
 key: yes
 theorems: Tango.BottomUp.Results.balanced_policy Tango.Algorithm.Rotation.Results.rotation_algorithm
 
@@ -97,8 +97,8 @@ The attachment case is real. In the tree below, with past requests $4$ and then 
 The request $0$ sets $0$ and then $1$ for the first time. The join at $1$ produces a tree of size $4$ and is charged $8\log_2 4 + 2 = 18$, while the local credits of $0$ and $1$ are only $2 + 10 = 12$. The regression module checks both numbers. This is why a per-request attachment allowance is needed: local credit alone does not suffice.
 
 ::: note Compared with the papers
-- Demaine, Harmon, Iacono and Pătraşcu bound Tango's running time by $O((\mathrm{OPT}(X) + n)(1 + \log\log n))$, with the $n\log\log n$ coming from first settings, as in [Chapter 29](tango.html). The bottom-up order and the local-credit argument are the library's. They change neither the data structure nor the order of magnitude of the competitive ratio.
-- Combining Binary Search Trees (Demaine, Iacono, Langerman and Özkan) treats $O(\log\log n)$-competitiveness as a well-behaved bound with overhead $O(n\log\log n)$, in its Corollary 4. The additive $O(n)$ of Iacono and Langerman's Theorem 4.3 needs the Tango side to have overhead $O(n)$; the paper does not spell this step out. This section supplies it, and [Chapter 38](combined-finger.html) uses it.
+- Demaine, Harmon, Iacono and Pătraşcu [-@demaine2007] bound Tango's running time by $O((\mathrm{OPT}(X) + n)(1 + \log\log n))$, with the $n\log\log n$ coming from first settings, as in [Chapter 29](tango.html). The bottom-up order and the local-credit argument are the library's. They change neither the data structure nor the order of magnitude of the competitive ratio.
+- Combining binary search trees [@demaine2013] treats $O(\log\log n)$-competitiveness as a well-behaved bound with overhead $O(n\log\log n)$, in its Corollary 4. The additive $O(n)$ of Iacono and Langerman's Theorem 4.3 needs the Tango side to have overhead $O(n)$; the paper does not spell this step out. This section supplies it, and [Chapter 38](combined-finger.html) uses it.
 :::
 
 ## Credit on the reference side

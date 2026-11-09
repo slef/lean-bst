@@ -1,6 +1,6 @@
 # Fingers on heavy paths
 
-The deamortization of [Chapter 37](deamortization.html) runs a *source* algorithm inside a tree of logarithmic depth. The source works in the BST model of Bose, Collette, Fagerberg and Langerman: it has one persistent finger, which it moves to a parent or a child, or rotates over its parent, at unit cost per operation. In the library the source finger is a labelled cursor ([[LabelledCursor.Config]], operated by [[LabelledCursor.perform]]; see [Chapter 12](replay.html)). The simulating structure is a pointer machine in the sense of [Chapter 6](pointer.html). Its cursor returns to the root, and every operation of the source must become a short pointer trace from the root back to the root.
+The deamortization of [Chapter 37](deamortization.html) runs a *source* algorithm inside a tree of logarithmic depth. The source works in the BST model of Bose, Collette, Fagerberg and Langerman [-@bose2012]: it has one persistent finger, which it moves to a parent or a child, or rotates over its parent, at unit cost per operation. In the library the source finger is a labelled cursor ([[LabelledCursor.Config]], operated by [[LabelledCursor.perform]]; see [Chapter 12](replay.html)). The simulating structure is a pointer machine in the sense of [Chapter 6](pointer.html). Its cursor returns to the root, and every operation of the source must become a short pointer trace from the root back to the root.
 
 Section 3 of the paper does this with heavy paths stored in pop-tarts. When the source finger is at the root of its tree, every heavy path is a pair of pop-tarts hung below the path's endpoint. That is the representation of [Chapter 46](heavy-paths.html), applied recursively in [Chapter 47](recursive-heavy-paths.html). When the finger $f$ is elsewhere, the paper stores the path from the root $r$ down to $f$ *upside down*, as a second kind of pair of pop-tarts, with $f$ at the physical root (Figure 5 of the paper). This section formalizes that inverted pair. It covers three things:
 
@@ -12,7 +12,7 @@ Section 3 of the paper does this with heavy paths stored in pop-tarts. When the 
 
 ```headline heavy-path-fingers-build
 title: A finger pair built from any cursor has linear setup and logarithmic weighted depth
-source: Bose, Collette, Fagerberg and Langerman, *De-amortizing binary search trees* (2012)
+source: @bose2012
 theorems: HeavyPath.Finger.Results.build_initialization HeavyPath.Finger.Results.build_labels HeavyPath.Finger.Results.build_root_key HeavyPath.Finger.Results.build_depth
 skip: instDecidableEqLabelledTree | The derived decidable-equality instance for labelled trees only decides the test `l = .nil` inside [[HeavyPath.extract]]. Any two instances for the same proposition agree, so it cannot change the extracted path or the built pair.
 

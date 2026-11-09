@@ -12,9 +12,12 @@ organized as a textbook rather than as a list of formalized papers:
 1. **Models** of BST computation and the equivalences between them.
 2. **Bounds** on request sequences, upper and lower, and the implications
    between them, independently of any algorithm.
-3. **Algorithms**, each with its definition followed by the bounds it satisfies
-   and the lower bounds it is subject to.
-4. **Structures**: supporting data structures used by algorithms and proofs.
+3. **Classical search trees** that do not adapt to the requests: static,
+   rank-balanced, weight-balanced and random trees (planned; see entries 4–9 of
+   [ROADMAP.md](../ROADMAP.md)).
+4. **Algorithms** that adapt, each with its definition followed by the bounds it
+   satisfies and the lower bounds it is subject to.
+5. **Structures**: supporting data structures used by algorithms and proofs.
 
 Following [abstractlean](https://github.com/slef/abstractlean) and the
 Complexitylib abstracts it was adapted from, every section separates the
@@ -78,7 +81,8 @@ RotationBST/
     WeightedFinger/ weighted dynamic-finger benchmark
     ConditionalEntropy/ transition entropy and its obstruction
     Normalization/  request charges versus rotation charges
-  Algorithms/       Part III: algorithms, definitions then bounds
+  Classical/        Part III (planned): static, rank-balanced, weight-balanced, random trees
+  Algorithms/       Part IV: adaptive algorithms, definitions then bounds
     MoveToRoot/
     Splay/          algorithm, potential, access lemma, nine ST85 theorems,
                     updates, conditional splay, scanning, pointer version
@@ -98,6 +102,7 @@ RotationBST/
 
 Cross-part imports are allowed in one direction only: `Models` imports nothing
 above it; `Bounds` may import `Models`; `Algorithms` may import both;
+`Classical` may import `Models`, `Bounds` and `Structures/Treap`;
 `Structures` may import `Models` and `Algorithms/Splay`. A statement about a
 model whose proof uses an algorithm (for example, existence of accesses via
 move-to-root) keeps its statement in `Models` and its bridge imports the
@@ -284,6 +289,12 @@ Each change below was checked by a full build with `--wfail`.
   executable definition, `Algorithms/<Name>/<Property>/Abstract.lean` for each
   bound, `Algorithms/<Name>/Abstract.lean` as the overview that the root module
   imports. Lower bounds specific to the algorithm also live there.
+- A classical, non-adaptive search tree (Part III of the book: static,
+  rank-balanced, weight-balanced and random trees): `Classical/<Name>/`, laid
+  out like an algorithm. The dictionary model with insertions and deletions
+  that these trees need goes in `Models/Dictionary/`. Prefer one framework with
+  the classical structures as instances (one rank-balanced framework for AVL,
+  red-black and WAVL trees) over one development per structure.
 - Proof internals follow the `Defs.lean` / `Results.lean` / proof-file taxonomy
   and may be nested as deeply as convenient; only `Abstract.lean` files are
   shown to readers.

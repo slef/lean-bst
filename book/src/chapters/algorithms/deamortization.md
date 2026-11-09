@@ -1,12 +1,12 @@
 # Deamortization
 
-Most of the good BST bounds are amortized. Splaying costs $O(\log n)$ per access on average over a sequence, but a single access can cost $\Theta(n)$. Balanced trees guarantee $O(\log n)$ per access, but none of the adaptive bounds. Bose, Collette, Fagerberg and Langerman (2012) showed that this trade-off is not necessary. Any BST algorithm can be transformed into one that has the same total cost on every sequence, up to a constant factor, and in addition serves every single access with $O(\log n)$ operations. Applied to splay trees, this gives one BST with all of splaying's amortized bounds and logarithmic worst-case accesses.
+Most of the good BST bounds are amortized. Splaying costs $O(\log n)$ per access on average over a sequence, but a single access can cost $\Theta(n)$. Balanced trees guarantee $O(\log n)$ per access, but none of the adaptive bounds. Bose, Collette, Fagerberg and Langerman [-@bose2012] showed that this trade-off is not necessary. Any BST algorithm can be transformed into one that has the same total cost on every sequence, up to a constant factor, and in addition serves every single access with $O(\log n)$ operations. Applied to splay trees, this gives one BST with all of splaying's amortized bounds and logarithmic worst-case accesses.
 
 The library formalizes the abstract BST-operation part of the paper: the counterpart of its Theorem 6 for every online rotation-model algorithm, and its application to splaying. Like the paper's Theorem 6, it counts BST operations only; the private computation and storage that choose them are not bounded ([Section 37.9](#what-is-not-formalized)).
 
 ```headline deamortization
 title: Every online BST algorithm can be deamortized
-source: Bose, Collette, Fagerberg and Langerman, *De-amortizing binary search trees* (2012)
+source: @bose2012
 key: yes
 theorems: Deamortization.Algorithm.Results.implementation_exists Deamortization.Algorithm.Results.total_bound Deamortization.Algorithm.Results.transfer
 
@@ -26,7 +26,7 @@ In Lean, $A$ is an [[RotationBST.Algorithm]] with cost [[RotationBST.Algorithm.t
 
 ```headline splay-deamortized
 title: A deamortized splay tree keeps splaying's bounds
-source: Bose, Collette, Fagerberg and Langerman, *De-amortizing binary search trees* (2012)
+source: @bose2012
 key: yes
 theorems: Splay.Deamortization.Results.implementation_exists Splay.Deamortization.Results.scanning Splay.Deamortization.Results.balance Splay.Deamortization.Results.working_set Splay.Deamortization.Results.static_optimality Splay.Deamortization.Results.static_finger Splay.Deamortization.Results.static_optimality_general Splay.Deamortization.Results.static_finger_general
 
@@ -44,7 +44,7 @@ In Lean, splaying is [[RotationBST.Splay.algorithm]], $T(X)$ is `d.startup + out
 
 The two boxes are all a reader needs to confirm the results. Their statements use the rotation model, the online algorithms of [Chapter 5](online.html), the pointer instructions of [Chapter 6](pointer.html) and [Chapter 10](fingers.html), the replay function of [Chapter 12](replay.html), and the three definitions of [Section 37.2](#physical-programs-and-their-responses). None of the machinery that builds the program appears in them.
 
-The rest of the chapter has two layers. [Section 37.1](#the-plan) is a bird's-eye view of the construction, with its constants. [Section 37.2](#physical-programs-and-their-responses) to [Section 37.4](#deamortized-splay-trees) state the transformation theorem and its splay consequences again, in English and in Lean, with what each hypothesis means. [Section 37.5](#bounded-depth-simulation) to [Section 37.8](#from-rotation-algorithms-to-a-deamortized-program) open the construction: the bounded-depth simulation, the scheduler, and how they are composed. The structures they rely on are built in Part IV. A reader who trusts the construction can skip those sections; a reader who wants to see where each constant comes from should read them. [Section 37.9](#what-is-not-formalized) lists what is not formalized. The definitions are in `Algorithms/Deamortization/{Scheduler,Finger,Algorithm}/Definitions/Abstract.lean`, the theorems in the `Abstract.lean` files of `Algorithms/Deamortization/{Weighted,Window,Scheduler,Finger,Replay,Algorithm}` and `Algorithms/Splay/Deamortization`.
+The rest of the chapter has two layers. [Section 37.1](#the-plan) is a bird's-eye view of the construction, with its constants. [Section 37.2](#physical-programs-and-their-responses) to [Section 37.4](#deamortized-splay-trees) state the transformation theorem and its splay consequences again, in English and in Lean, with what each hypothesis means. [Section 37.5](#bounded-depth-simulation) to [Section 37.8](#from-rotation-algorithms-to-a-deamortized-program) open the construction: the bounded-depth simulation, the scheduler, and how they are composed. The structures they rely on are built in [Part V](part-structures.html). A reader who trusts the construction can skip those sections; a reader who wants to see where each constant comes from should read them. [Section 37.9](#what-is-not-formalized) lists what is not formalized. The definitions are in `Algorithms/Deamortization/{Scheduler,Finger,Algorithm}/Definitions/Abstract.lean`, the theorems in the `Abstract.lean` files of `Algorithms/Deamortization/{Weighted,Window,Scheduler,Finger,Replay,Algorithm}` and `Algorithms/Splay/Deamortization`.
 
 ## The plan
 
@@ -414,7 +414,7 @@ The proof labels the tree by its ranks, reads the planner as a source algorithm 
 The library proves the abstract BST-operation result of Theorem 6, its unit-weight and weighted simulations (Theorem 5), and the Splay bounds above. The following parts of the paper are not formalized.
 
 - **Theorem 7.** The paper's Theorem 7 strengthens Theorem 6 for algorithms with an amortized bound $O(nf(n) + kf(n))$, $f(n) = \Omega(\log n)$: the deamortized algorithm works in the pointer machine model with $O(1)$ words per node and $O(1)$ global variables, and computes each access in time proportional to its BST operations. None of these clauses is formalized: the bounds on private computation, on auxiliary storage (the paper's queue of pending keys, stored in the tree nodes, and its overflow argument), and execution on a finite-word machine. In the library, `program` is an arbitrary function, and the pending work of the scheduler is an unbounded list.
-- **Cole's dynamic finger theorem for splaying.** The paper deamortizes all of splaying's known bounds, including the dynamic finger bound of Cole et al. The library has no proof of the dynamic finger theorem for splay trees, so it does not state it for the deamortized program. (The weighted dynamic finger bound for a different deamortized BST is the subject of [Chapter 38](combined-finger.html).)
-- **Key-independent optimality** of splay trees (Iacono), and therefore its deamortized form, is not formalized.
-- **Multi-splay trees.** The paper's application to multi-splay trees, a deamortized BST that is $O(\log\log n)$-competitive and has the scanning, static optimality, static finger and working-set bounds, is not formalized, since the library has no multi-splay trees. [Chapter 38](combined-finger.html) obtains a deamortized $O(\log\log n)$-competitive BST by a different route, combining GreedyASS with Tango.
+- **Cole's dynamic finger theorem for splaying.** The paper deamortizes all of splaying's known bounds, including the dynamic finger bound of Cole [-@cole2000proof]. The library has no proof of the dynamic finger theorem for splay trees, so it does not state it for the deamortized program. (The weighted dynamic finger bound for a different deamortized BST is the subject of [Chapter 38](combined-finger.html).)
+- **Key-independent optimality** of splay trees [@iacono2005], and therefore its deamortized form, is not formalized.
+- **Multi-splay trees.** The paper's application to multi-splay trees [@wang2006], a deamortized BST that is $O(\log\log n)$-competitive and has the scanning, static optimality, static finger and working-set bounds, is not formalized, since the library has no multi-splay trees. [Chapter 38](combined-finger.html) obtains a deamortized $O(\log\log n)$-competitive BST by a different route, combining GreedyASS with Tango.
 - **Dynamic optimality.** [[Deamortization.Algorithm.Results.dynamic_optimal]] is an implication. No dynamically optimal algorithm is known, and none is claimed.

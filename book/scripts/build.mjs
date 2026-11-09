@@ -8,6 +8,7 @@
 //   @index              the declaration index (generated)
 //   @audit              the audit tables (generated)
 //   @claims             the list of main results, for the checking page
+//   @bibliography       the list of cited works (generated)
 //
 // A fenced block ```headline id … ``` states a chapter's main result: header
 // lines (title, source, key, theorems, skip) up to the first blank line, then
@@ -16,14 +17,19 @@
 //
 // and inline [[Name]] or [[Name|text]] for a hyperlinked, hoverable reference.
 // Every name must resolve to a constant that Lean exported, or the build fails.
+//
+// Citations [@key], [@a; @b], [-@key] and @key refer to src/bibliography.json
+// (see scripts/bibliography.mjs). Unknown keys and entries that no chapter
+// cites fail the build.
 
-import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { copyFileSync, cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
 import container from 'markdown-it-container';
 import katex from 'katex';
 import { escapeHtml, renderLean } from './lean-html.mjs';
+import { citedKeys, citePlugin, formatReference, loadBibliography, parseSourceLine, renderCitation } from './bibliography.mjs';
 
 const bookDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = join(bookDir, 'src');
@@ -37,6 +43,8 @@ const data = JSON.parse(readFileSync(dataPath, 'utf8'));
 const config = JSON.parse(readFileSync(join(srcDir, 'book.json'), 'utf8'));
 const errors = [];
 const fail = (msg) => errors.push(msg);
+const bib = loadBibliography(JSON.parse(readFileSync(join(srcDir, 'bibliography.json'), 'utf8')).entries);
+bib.errors.forEach(fail);
 
 const STANDARD_AXIOMS = ['propext', 'Classical.choice', 'Quot.sound'];
 const LIB = 'RotationBST';
@@ -74,7 +82,8 @@ function docsUrl(name) {
 // and chapters, a chapter possibly with sub-pages), then appendices. Numbers
 // are assigned here: chapters 1, 2, … across parts, sub-pages N.1, N.2, …,
 // appendices A, B, …. A chapter with sub-pages is a short overview page whose
-// own headings are not numbered.
+// own headings are not numbered. A part may end with an unnumbered page of
+// bibliographic notes (`notes` in book.json).
 const chapters = [];
 {
   const add = (entry, extra) => {
@@ -93,6 +102,7 @@ const chapters = [];
       const ch = add(c, { kind: 'chapter', number: String(++number), part });
       ch.children = (c.children ?? []).map((k, i) => add(k, { kind: 'sub', number: `${number}.${i + 1}`, parent: ch, part }));
     }
+    if (p.notes) add(p.notes, { kind: 'notes', part });
   }
   config.appendices.forEach((a, i) => add(a, { kind: 'appendix', appendix: String.fromCharCode(65 + i) }));
 }
@@ -102,6 +112,7 @@ function pageLabel(ch) {
   if (ch.kind === 'chapter') return `Chapter ${ch.number}`;
   if (ch.kind === 'part') return `Part ${ch.partLabel}`;
   if (ch.kind === 'appendix') return `Appendix ${ch.appendix}`;
+  if (ch.kind === 'notes') return `Notes to Part ${ch.part.partLabel}`;
   return null;
 }
 // {{ref:slug}} and {{num:slug}} in a chapter's source become the label or the
@@ -179,7 +190,12 @@ for (const ch of chapters) {
       if (!kv) { fail(`${where}: bad header line ${JSON.stringify(line)}`); continue; }
       const [, k, v] = kv;
       if (k === 'title') claim.title = v;
-      else if (k === 'source') claim.source = v;
+      else if (k === 'source') {
+        claim.source = parseSourceLine(v);
+        if (!claim.source) fail(`${where}: source must list citation keys, as in "source: @sleator1985; @iacono2001"`);
+        for (const key of claim.source ?? []) if (!bib.byKey.has(key)) fail(`${where}: unknown citation key ${key}`);
+        if (claim.source) claim.source = claim.source.filter((key) => bib.byKey.has(key));
+      }
       else if (k === 'key') claim.key = v === 'yes';
       else if (k === 'theorems') claim.theorems.push(...v.split(/\s+/).filter(Boolean));
       else if (k === 'skip') {
@@ -253,8 +269,18 @@ for (const claim of claims) Object.assign(claim, claimClosure(claim));
 // ---------------------------------------------------------------------------
 // Rendering helpers
 
+const citations = new Map(); // key -> [{chapter, id}], in book order
+const bibPage = chapters.find((c) => c.text.split('\n').some((l) => /^@bibliography\s*$/.test(l)));
+if (!bibPage) fail('no page has the @bibliography directive');
+
 const md = new MarkdownIt({ html: true, typographer: true });
 const docMd = new MarkdownIt({ html: false, typographer: false });
+md.use(citePlugin, {
+  bib,
+  link: (entry) => currentPage.citeTarget(entry),
+  onError: (msg) => fail(`${currentWhere}: ${msg}`),
+});
+const renderSource = (page, keys) => renderCitation(bib, keys, 'source', (entry) => page.citeTarget(entry));
 
 const katexMacros = config.katexMacros ?? {};
 function tex(src, displayMode, where) {
@@ -271,6 +297,23 @@ class Page {
     this.chapter = chapter;
     this.hover = [];
     this.hoverIndex = new Map();
+    this.bibHover = [];
+    this.bibIndex = new Map();
+    this.citeCount = 0;
+  }
+  // Link to a bibliography entry, with its hover card; records the citation
+  // for the back-links of the bibliography.
+  citeTarget(entry) {
+    let index = this.bibIndex.get(entry.key);
+    if (index === undefined) {
+      index = this.bibHover.length;
+      this.bibIndex.set(entry.key, index);
+      this.bibHover.push(formatReference(entry));
+    }
+    const id = `cite-${++this.citeCount}`;
+    if (!citations.has(entry.key)) citations.set(entry.key, []);
+    citations.get(entry.key).push({ chapter: this.chapter, id });
+    return { href: `${bibPage.href}#ref-${entry.key}`, attrs: ` data-b="${index}" id="${id}"` };
   }
   // Hover/link target for a constant, as seen from this page.
   target(name) {
@@ -462,7 +505,7 @@ md.renderer.rules.math_block = (tokens, idx) => `<div class="math-display">${tex
 // Directives on their own line.
 md.block.ruler.before('paragraph', 'directive', (state, startLine, _endLine, silent) => {
   const line = state.src.slice(state.bMarks[startLine] + state.tShift[startLine], state.eMarks[startLine]);
-  const m = line.match(/^@(decl|stmt|viz|index|audit|claims)\b(.*)$/);
+  const m = line.match(/^@(decl|stmt|viz|index|audit|claims|bibliography)\b(.*)$/);
   if (!m) return false;
   if (silent) return true;
   const tok = state.push('directive', '', 0);
@@ -493,6 +536,7 @@ md.renderer.rules.directive = (tokens, idx) => {
   if (kind === 'index') return renderIndex(page);
   if (kind === 'audit') return renderAudit(page);
   if (kind === 'claims') return renderClaims(page);
+  if (kind === 'bibliography') return '<!--@bibliography-->\n';
   return '';
 };
 
@@ -530,7 +574,7 @@ function renderHeadline(page, claim) {
   currentWhere = where;
   const lean = claim.roots.map((n) => renderDecl(page, n, 'stmt', { noHome: true })).join('');
   return `<section class="headline" id="claim-${claim.id}" data-claim="${claim.id}">`
-    + `<div class="headline-label">${claimLabel(claim)}${claim.source ? ` · <span class="headline-source">${md.renderInline(claim.source)}</span>` : ''}</div>`
+    + `<div class="headline-label">${claimLabel(claim)}${claim.source?.length ? ` · <span class="headline-source">${renderSource(page, claim.source)}</span>` : ''}</div>`
     + `<div class="headline-title">${md.renderInline(claim.title)}</div>`
     + `<div class="headline-statement">${statement}</div>`
     + `<details class="headline-lean"><summary>The Lean statement${claim.roots.length > 1 ? 's' : ''}</summary><div class="decl-group">${lean}</div></details>`
@@ -548,7 +592,7 @@ function renderClaims(page) {
       + `<div class="claim-head"><label><input type="checkbox" class="claim-toggle" data-claim="${claim.id}">`
       + `<span class="claim-title">${claim.key ? '<span class="headline-star" aria-hidden="true">★</span> ' : ''}${md.renderInline(claim.title)}</span></label>`
       + `${onlyButton(claim)}</div>`
-      + `<span class="claim-meta"><a href="${ch.href}#claim-${claim.id}">${escapeHtml(where)}</a>${claim.source ? ` · ${md.renderInline(claim.source)}` : ''} · ${claimCounts(claim)}</span>`
+      + `<span class="claim-meta"><a href="${ch.href}#claim-${claim.id}">${escapeHtml(where)}</a>${claim.source?.length ? ` · ${renderSource(page, claim.source)}` : ''} · ${claimCounts(claim)}</span>`
       + `<details class="claim-statement"><summary>Statement</summary>${md.render(claim.body, { nested: true }).replace(/href="#/g, `href="${ch.href}#`)}</details></li>`;
   });
   return `<ul class="claim-list">${rows.join('')}</ul>`
@@ -557,13 +601,14 @@ function renderClaims(page) {
 }
 
 // Callouts: ::: note Title / ::: caveat / ::: lean / ::: details Title
-for (const kind of ['note', 'caveat', 'check', 'details', 'aside', 'exercise']) {
+// ::: todo Title marks results that are stated but not formalized yet.
+for (const kind of ['note', 'caveat', 'check', 'details', 'aside', 'exercise', 'todo']) {
   md.use(container, kind, {
     render(tokens, idx) {
       const tok = tokens[idx];
       if (tok.nesting === 1) {
         const title = tok.info.trim().slice(kind.length).trim();
-        const defaults = { note: 'Note', caveat: 'Caveat', check: 'Reading the Lean', aside: 'Aside', exercise: 'Try it' };
+        const defaults = { note: 'Note', caveat: 'Caveat', check: 'Reading the Lean', aside: 'Aside', exercise: 'Try it', todo: 'Not yet formalized' };
         const heading = title || defaults[kind] || '';
         if (kind === 'details') return `<details class="callout details"><summary>${md.renderInline(heading)}</summary>\n`;
         return `<div class="callout ${kind}"><div class="callout-title">${md.renderInline(heading)}</div>\n`;
@@ -609,6 +654,8 @@ md.renderer.rules.heading_open = (tokens, idx, opts, env, self) => {
   const ch = currentPage.chapter;
   if (t.tag === 'h1' && ch.kind === 'sub') {
     html += `<span class="chapnum"><a href="${ch.parent.href}">Chapter ${ch.parent.number} · ${escapeHtml(ch.parent.title)}</a> · Section ${ch.number}</span>`;
+  } else if (t.tag === 'h1' && ch.kind === 'notes') {
+    html += `<span class="chapnum"><a href="${ch.part.href}">Part ${ch.part.partLabel} · ${escapeHtml(ch.part.title)}</a> · Notes</span>`;
   } else if (t.tag === 'h1' && pageLabel(ch)) {
     html += `<span class="chapnum">${pageLabel(ch)}</span>`;
   }
@@ -744,6 +791,7 @@ function layout(page, body) {
 <span class="topbar-spacer"></span>
 <a class="topbar-link" href="checking.html">Check a result</a>
 <a class="topbar-link" href="declarations.html">Declarations</a>
+${bibPage ? `<a class="topbar-link" href="${bibPage.href}">Bibliography</a>` : ''}
 <a class="topbar-link" href="${config.repo}">Lean source</a>
 <button class="theme" type="button" aria-label="Toggle dark mode">◐</button></header>
 <div class="layout">
@@ -757,6 +805,7 @@ ${nav}
 </div>
 <div class="hover-card" role="tooltip" hidden></div>
 <script type="application/json" id="lean-hover">${JSON.stringify(page.hover).replace(/</g, '\\u003c')}</script>
+${page.bibHover.length ? `<script type="application/json" id="bib-hover">${JSON.stringify(page.bibHover).replace(/</g, '\\u003c')}</script>\n` : ''}
 <script src="assets/book.js" defer></script>
 <script src="assets/checking.js" defer></script>
 ${page.usesViz ? '<script type="module" src="assets/viz/index.js"></script>' : ''}
@@ -780,6 +829,39 @@ for (const ch of chapters) {
   const body = md.render(ch.text);
   rendered.set(ch.href, { page, body });
   sectionNumbers.set(ch.href, new Map((page.toc ?? []).map((t) => [t.id, t.number])));
+}
+
+// The bibliography lists the works cited on the rendered pages, with links
+// back to the first citation on each page. Pages that book.json does not list
+// yet (drafts) are still checked: their keys must exist, and they count as
+// citing the entries they use.
+const draftCited = new Set();
+{
+  const listed = new Set(chapters.map((c) => c.file));
+  const walk = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? walk(join(dir, d.name)) : [join(dir, d.name)]));
+  for (const path of walk(join(srcDir, 'chapters'))) {
+    const file = relative(join(srcDir, 'chapters'), path);
+    if (!file.endsWith('.md') || listed.has(file)) continue;
+    for (const key of citedKeys(readFileSync(path, 'utf8'))) {
+      if (!bib.byKey.has(key)) fail(`${file} (not in book.json): unknown citation key ${key}`);
+      else draftCited.add(key);
+    }
+  }
+}
+for (const e of bib.order) {
+  if (!citations.has(e.key) && !draftCited.has(e.key)) fail(`bibliography: ${e.key} is never cited`);
+}
+if (bibPage) {
+  const entry = rendered.get(bibPage.href);
+  const items = bib.order.filter((e) => citations.has(e.key)).map((e) => {
+    const pages = [];
+    for (const c of citations.get(e.key)) if (!pages.some((p) => p.chapter === c.chapter)) pages.push(c);
+    const back = pages.map(({ chapter, id }) => `<a href="${chapter.href}#${id}">${escapeHtml(pageLabel(chapter) ?? chapter.title)}</a>`);
+    return `<li class="bib-entry" id="ref-${e.key}"><span class="bib-label">${escapeHtml(e.label)}</span>`
+      + `<span class="bib-ref">${formatReference(e)}</span>`
+      + `<span class="bib-cited">Cited in ${back.join(', ')}.</span></li>`;
+  });
+  entry.body = entry.body.replace('<!--@bibliography-->', `<ol class="bibliography">${items.join('\n')}</ol>`);
 }
 
 // Cross-references whose text is "Chapter N", "Section N.M" or "Appendix X" are

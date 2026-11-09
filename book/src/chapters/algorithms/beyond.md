@@ -1,10 +1,10 @@
 # Beyond single accesses
 
-The theorems of [Chapter 14](analysis.html) are about one algorithm serving accesses to a fixed set of keys. Splay trees do more. Sleator and Tarjan show that insertion, deletion, split and join also cost $O(\log n)$ amortized, so a splay tree is a complete dictionary with the same guarantee. Their paper also analyses a variant that splays only along long paths, and the expected shape of the tree under random requests (the *snapshot*). Tarjan later proved the *scanning theorem*: accessing every key once, in increasing order, costs $O(n)$ from any initial tree. The library proves versions of all four. The two headline results are the dictionary bound and the scanning theorem:
+The theorems of [Chapter 14](analysis.html) are about one algorithm serving accesses to a fixed set of keys. Splay trees do more. Sleator and Tarjan show that insertion, deletion, split and join also cost $O(\log n)$ amortized, so a splay tree is a complete dictionary with the same guarantee. Their paper also analyses a variant that splays only along long paths, and the expected shape of the tree under random requests (the *snapshot*). Tarjan [-@tarjan1985] later proved the *scanning theorem*: accessing every key once, in increasing order, costs $O(n)$ from any initial tree. The library proves versions of all four. The two headline results are the dictionary bound and the scanning theorem:
 
 ```headline splay-updates
 title: Splay trees support updates in $O(\log n)$ amortized time
-source: Sleator and Tarjan, *Self-adjusting binary search trees* (1985)
+source: @sleator1985
 key: yes
 theorems: Splay.Updates.Results.balance
 
@@ -17,7 +17,7 @@ In Lean, the operations are [[RotationBST.Splay.Updates.split]], [[RotationBST.S
 
 ```headline splay-scanning
 title: Sequential access in splay trees takes linear time
-source: Tarjan, *Sequential access in splay trees takes linear time* (1985)
+source: @tarjan1985
 key: yes
 theorems: Splay.Results.scanning
 
@@ -153,7 +153,7 @@ Accessing $0, 1, \dots, n-1$ in order costs $O(n)$ by the scanning theorem, from
 
 @decl RotationBST.Splay.Results.scanning RotationBST.Splay.Results.pointer_scanning
 
-The scan `List.range t.size` is every key once, in increasing order. The constants are deliberately generous. The README notes that the sharper $5.5n$ of Kakimura and Terai is not claimed.
+The scan `List.range t.size` is every key once, in increasing order. The constants are deliberately generous. The README notes that the sharper $5.5n$ of Kakimura and Terai [-@kakimura2026] is not claimed.
 
 ### The ghost marking
 

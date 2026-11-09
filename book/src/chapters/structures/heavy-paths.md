@@ -1,12 +1,12 @@
 # One heavy path
 
-The deamortization of [Chapter 37](deamortization.html) runs an arbitrary source BST algorithm inside a tree that it keeps balanced in a weighted sense: whatever shape the source tree takes, every key $i$ stays at depth $O(\log(W/w_i))$ in the tree that is actually stored, where $w_i$ is the key's weight and $W$ the total weight. This is Theorem 5 of Bose, Collette, Fagerberg and Langerman (2012), and its formal counterpart is [[Deamortization.Weighted.Results.simulation]]. The simulation stores the source tree through its *heavy-path decomposition*. Each heavy path is kept as a pair of pop-tarts, the weighted stacks of [Chapter 44](pop-tarts.html) and [Chapter 45](chocolate.html). The subtrees hanging off a path are stored inside the pop-tarts as weighted leaves, and they are represented in the same way, recursively.
+The deamortization of [Chapter 37](deamortization.html) runs an arbitrary source BST algorithm inside a tree that it keeps balanced in a weighted sense: whatever shape the source tree takes, every key $i$ stays at depth $O(\log(W/w_i))$ in the tree that is actually stored, where $w_i$ is the key's weight and $W$ the total weight. This is Theorem 5 of Bose, Collette, Fagerberg and Langerman [-@bose2012], and its formal counterpart is [[Deamortization.Weighted.Results.simulation]]. The simulation stores the source tree through its *heavy-path decomposition*. Each heavy path is kept as a pair of pop-tarts, the weighted stacks of [Chapter 44](pop-tarts.html) and [Chapter 45](chocolate.html). The subtrees hanging off a path are stored inside the pop-tarts as weighted leaves, and they are represented in the same way, recursively.
 
 This section is the first of four on that representation. It covers the decomposition itself and the representation of a *single* heavy path by a pair of pop-tarts, with its off-path subtrees treated as opaque payloads.
 
 ```headline heavy-paths-pair
 title: A heavy path stored in two pop-tarts
-source: Bose, Collette, Fagerberg and Langerman, *De-amortizing binary search trees* (2012)
+source: @bose2012
 theorems: HeavyPath.Results.path_exists HeavyPath.Results.light_bound HeavyPath.Paired.Results.extract_build HeavyPath.Paired.Results.located_key_bound
 
 Let $t$ be a tree whose nodes carry weights, and let $W$ be its total weight. Each node has a *solid* edge to its heavier child (the left child on a tie); its other child edge is *light*.

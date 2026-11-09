@@ -12,7 +12,7 @@ The controller that schedules the rounds is the subject of [Chapter 35](combo-ro
 
 ```headline combo-workers-replay
 title: Every online BST algorithm gives a worker, well-behaved for stable charges that dominate its cost
-source: Demaine, Iacono, Langerman and Özkan, *Combining binary search trees* (2013)
+source: @demaine2013
 theorems: Combo.Worker.Replay.Results.algorithms_well_behaved Combo.Worker.Replay.Results.correct
 
 Let $A_0, A_1$ be two online algorithms of the rotation model ([Chapter 5](online.html)) and let $T$ be a tree on $n$ keys. There is one interruptible replay worker for the pair, fixed before any charges, overhead or constants are chosen, with the following property. Take any overhead $f \ge n$, any constants $C_0$ and $C_1 \ge 20$, and any nonnegative charges $\tau_\mu(X, i)$ (the charge of the $i$-th request of $X$ on side $\mu$) such that, for every sequence $X$ of keys below $n$,

@@ -2,13 +2,13 @@
 
 An online geometric algorithm ([Chapter 8](geometry.html)) answers each request by naming a set of keys: the row of points it adds at the current time. It never says how a binary search tree would touch those keys, or what shape the tree would be in. [Chapter 9](equivalence.html) shows that, offline, a point set can always be turned back into a BST execution of comparable cost, but that conversion builds a treap ordered by the *next* time each key is touched ([Chapter 20](treaps.html)), which requires knowing the future.
 
-Demaine, Harmon, Iacono, Kane and Pătraşcu (2009) showed that the future is not needed. Every online geometric algorithm can be simulated by an online BST algorithm whose cost is a constant times the number of points, plus a startup term. Their construction keeps the tree heap-ordered by the *last* time each key was touched. Keys touched at the same time are grouped into a "supernode", stored as a split tree ([Chapter 21](split-trees.html)) so that it can be broken apart cheaply when later rows touch some of its keys. Applied to GreedyASS ([Chapter 16](greedy.html)), this makes the geometric greedy algorithm an online BST algorithm, so its conjectured dynamic optimality is a statement about binary search trees.
+Demaine, Harmon, Iacono, Kane and Pătraşcu [-@demaine2009] showed that the future is not needed. Every online geometric algorithm can be simulated by an online BST algorithm whose cost is a constant times the number of points, plus a startup term. Their construction keeps the tree heap-ordered by the *last* time each key was touched. Keys touched at the same time are grouped into a "supernode", stored as a split tree ([Chapter 21](split-trees.html)) so that it can be broken apart cheaply when later rows touch some of its keys. Applied to GreedyASS ([Chapter 16](greedy.html)), this makes the geometric greedy algorithm an online BST algorithm, so its conjectured dynamic optimality is a statement about binary search trees.
 
 The library formalizes this simulation as a single fixed algorithm, in the sense of [[RotationBST.Algorithm]], whose cost is linear in the geometric point count. Here is the theorem in its basic form.
 
 ```headline online-simulation
 title: Every online geometric algorithm is an online BST algorithm
-source: Demaine, Harmon, Iacono, Kane and Pătraşcu, *The geometry of binary search trees* (2009)
+source: @demaine2009
 key: yes
 theorems: Geometric.Simulation.Results.online_simulation
 
@@ -72,10 +72,10 @@ None of the constants is meant to be sharp. They come out of a straightforward a
 
 The point of the theorem is that geometry can be used to design BST algorithms. GreedyASS adds, for each request, the minimal legal row ([[Geometric.GreedyASS.Results.greedy_minimum]]), and it is an online geometric algorithm ([[Geometric.greedyASS]]). Instantiating `A` with it in `normalized_simulation` gives an online BST algorithm whose total cost on every sequence is at most $6019$ times the number of points GreedyASS adds, plus $6018\,n$.
 
-In the other direction, every BST execution with $r$ rotations on $m$ requests yields an arborally satisfied set of at most $2r + m$ points ([[Geometric.Equivalence.Results.rotations_to_ass]]). Together with the simulation, this means that GreedyASS is dynamically optimal as a BST algorithm, up to the additive term, if and only if its point count is within a constant factor of the minimum arborally satisfied superset of the requests. Whether this holds is the geometric form of the dynamic optimality conjecture for Greedy (Lucas, 1988; Munro, 2000; Demaine et al., 2009). It is open, and the library does not claim it.
+In the other direction, every BST execution with $r$ rotations on $m$ requests yields an arborally satisfied set of at most $2r + m$ points ([[Geometric.Equivalence.Results.rotations_to_ass]]). Together with the simulation, this means that GreedyASS is dynamically optimal as a BST algorithm, up to the additive term, if and only if its point count is within a constant factor of the minimum arborally satisfied superset of the requests. Whether this holds is the geometric form of the dynamic optimality conjecture for Greedy [@lucas1988; @munro2000; @demaine2009]. It is open, and the library does not claim it.
 
 ::: caveat Not claimed
-The library proves no upper bound on the number of points GreedyASS adds, beyond what follows from the definitions. Known results about Greedy, such as its access lemma and the working-set bound (Fox, 2011), are not formalized. The simulation transfers whatever bound one proves for a geometric algorithm, with a constant factor, but the bound itself must come from elsewhere.
+The library proves no upper bound on the number of points GreedyASS adds, beyond what follows from the definitions. Known results about Greedy, such as its access lemma and the working-set bound [@fox2011], are not formalized. The simulation transfers whatever bound one proves for a geometric algorithm, with a constant factor, but the bound itself must come from elsewhere.
 :::
 
 ## Why the past suffices

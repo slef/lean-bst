@@ -274,6 +274,36 @@ a.ref.inline:hover code { background: var(--accent-soft); }
 .hover-card .hc-foot { padding: .35rem .85rem .5rem; color: var(--fg-faint); font-size: .72rem; display: flex; gap: .7rem; flex-wrap: wrap; }
 .hover-card .hc-kind { text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
 
+/* --- citations ---------------------------------------------------------------- */
+
+a.cite { scroll-margin-top: 5rem; color: inherit; text-decoration: underline dotted color-mix(in srgb, var(--accent) 60%, transparent); text-underline-offset: .18em; }
+a.cite:hover, a.cite.hovered, a.cite:focus-visible { color: var(--accent); text-decoration-style: solid; }
+/* The card sits right after the citation in the page, so it must not inherit
+   the look of its surroundings, such as an uppercase headline label. */
+.hover-card.cite-card {
+  display: block; text-transform: none; letter-spacing: normal; font-style: normal; font-weight: 400;
+  text-align: left; white-space: normal; text-indent: 0; width: max-content; max-width: min(32rem, calc(100vw - 2rem));
+}
+.hover-card.cite-card[hidden] { display: none; }
+.hover-card .hc-ref { padding: .65rem .85rem .45rem; font-family: var(--serif); font-size: .92rem; line-height: 1.45; color: var(--fg); }
+.hover-card .hc-foot a { color: var(--accent); text-decoration: none; }
+.hover-card .hc-foot a:hover { text-decoration: underline; }
+.bib-authors { font-weight: 600; }
+.bib-title { font-style: normal; }
+.bib-links { white-space: normal; }
+.bib-link { font-family: var(--sans); font-size: .82em; color: var(--accent); text-decoration: none; overflow-wrap: anywhere; }
+.bib-link:hover { text-decoration: underline; }
+.bib-version, .bib-note { display: block; margin-top: .25rem; font-size: .9em; color: var(--fg-soft); }
+.hover-card .bib-links { display: block; margin-top: .3rem; }
+
+ol.bibliography { list-style: none; padding: 0; margin: 1.5rem 0; }
+.bib-entry { margin: 0 0 1.05rem; padding: .3rem .6rem; border-radius: 6px; scroll-margin-top: 4.5rem; }
+.bib-entry:target { background: var(--accent-soft); }
+.bib-label { display: block; font-family: var(--sans); font-size: .78rem; font-weight: 600; color: var(--fg-faint); letter-spacing: .02em; }
+.bib-ref { display: block; }
+.bib-cited { display: block; margin-top: .2rem; font-family: var(--sans); font-size: .76rem; color: var(--fg-faint); }
+.bib-cited a { color: var(--fg-soft); }
+
 /* --- callouts -------------------------------------------------------------- */
 
 .callout {
@@ -291,6 +321,8 @@ a.ref.inline:hover code { background: var(--accent-soft); }
 .callout.exercise { background: var(--violet-soft); border-color: color-mix(in srgb, var(--violet) 25%, transparent); }
 .callout.exercise .callout-title { color: var(--violet); }
 .callout.aside .callout-title { color: var(--fg-faint); }
+.callout.todo { background: var(--bg-soft); border: 1.5px dashed var(--fg-faint); }
+.callout.todo .callout-title { color: var(--fg-soft); }
 details.callout { padding: .6rem 1.1rem; }
 details.callout summary { cursor: pointer; font-family: var(--sans); font-weight: 600; font-size: .9rem; }
 details.callout[open] summary { margin-bottom: .6rem; }
@@ -533,6 +565,7 @@ details.claim-statement summary { cursor: pointer; font-family: var(--sans); fon
 .bm-node { cursor: pointer; }
 .bm-node rect { fill: var(--bg-soft); stroke: var(--fg-faint); stroke-width: 1.2; }
 .bm-node.lower rect { stroke-dasharray: 4 3; }
+.bm-node.todo-model .bm-sym, .bm-node.todo-model .bm-name { fill: var(--fg-soft); }
 .bm-node .bm-sym { font-weight: 700; font-size: 15px; }
 .bm-node .bm-name { font-size: 11.5px; fill: var(--fg-soft); }
 .bm-node.focus rect { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }

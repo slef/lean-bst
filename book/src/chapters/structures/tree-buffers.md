@@ -1,6 +1,6 @@
 # Tree buffers
 
-ComboBST ([Chapter 33](combining.html)) runs two online BST algorithms on one physical tree, in alternating rounds. Every round starts from the same initial tree $T$, so at the end of a round the structure must turn whatever tree the interrupted worker left behind back into $T$. It has no memory outside the tree beyond a constant number of registers. Where does it keep the description of $T$? Demaine, Iacono, Langerman and Özkan (*Combining binary search trees*, Section 3) answer: in the nodes themselves. Each node may carry $O(\log n)$ bits of augmented data, so the $n$ nodes together form a *buffer* of $n$ cells. Their Definition 8 stores the $j$-th cell in the $j$-th node in inorder, and a buffer finger walks from cell to cell by inorder traversal.
+ComboBST ([Chapter 33](combining.html)) runs two online BST algorithms on one physical tree, in alternating rounds. Every round starts from the same initial tree $T$, so at the end of a round the structure must turn whatever tree the interrupted worker left behind back into $T$. It has no memory outside the tree beyond a constant number of registers. Where does it keep the description of $T$? Demaine, Iacono, Langerman and Özkan [-@demaine2013, Section 3] answer: in the nodes themselves. Each node may carry $O(\log n)$ bits of augmented data, so the $n$ nodes together form a *buffer* of $n$ cells. Their Definition 8 stores the $j$-th cell in the $j$-th node in inorder, and a buffer finger walks from cell to cell by inorder traversal.
 
 The difficulty is that the tree changes shape while the buffer is in use. When the tree state is loaded, a second finger rotates the tree while the buffer finger reads the saved instructions, and every rotation can lengthen the buffer finger's route. Their Lemma 9 says this costs little: an inorder traversal interleaved with $r$ rotations by other fingers takes $O(n + r)$ time. Lemma 10 then makes saving and loading the tree state cost $O(n)$, because a linear-time normalization performs only $O(n)$ rotations.
 
@@ -8,7 +8,7 @@ This section formalizes the buffer: the scan and its cost, the cells and their r
 
 ```headline tree-buffers-scan
 title: An inorder scan interleaved with $r$ rotations costs at most $4n + 3r$
-source: Demaine, Iacono, Langerman and Özkan, *Combining binary search trees* (2013)
+source: @demaine2013
 theorems: TreeBuffer.Scan.Results.cost TreeBuffer.Scan.Results.total TreeBuffer.Scan.Results.completion
 
 Let $T$ be a tree with $n$ nodes, whose keys are the inorder ranks $0,\dots,n-1$. A scan finger sits on any node, and the cells still to visit are either a suffix $b, b+1, \dots, n-1$ in increasing order or a prefix $b-1, \dots, 1, 0$ in decreasing order. A scan step either moves the finger one edge along a shortest path, in the current tree, toward the next pending cell, or *visits* that cell once the finger is on it. Both cost one unit. Arbitrary rotations of the tree, performed by someone else, may be interleaved between any two scan steps. If a trace contains $r$ such rotations, the scan's work is

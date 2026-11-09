@@ -1,8 +1,8 @@
 # The lazy and the (weighted) dynamic finger
 
-A static binary search tree never changes shape. The classical way to search it, the **root finger**, starts every search at the root, so a search for $x$ costs the depth of $x$. Its optimum is well understood: the best static tree serves a sequence in time proportional to $m$ plus the entropy of the access frequencies ([Chapter 12](bounds.html#comparison-with-a-fixed-tree)). Bose, Douïeb, Iacono and Langerman (2013) studied a different way to search the same tree, the **lazy finger**: each search starts where the previous one ended. To go from $x$ to $y$, the finger climbs from $x$ to their lowest common ancestor and descends to $y$. Up to a factor of two, lazy finger is at least as good as root finger: the walk through the LCA is never longer than the walk up to the root and down again, which costs at most twice a root-finger search. And it is no better than a BST with rotations, which can simulate it. Between those two, it can be much better than root finger: a sequential scan $0, 1, \dots, n-1, 0, 1, \dots$ of length $m \ge n$ costs $O(m)$ with a lazy finger in every tree, but $\Omega(m \log n)$ with a root finger in every tree.
+A static binary search tree never changes shape. The classical way to search it, the **root finger**, starts every search at the root, so a search for $x$ costs the depth of $x$. Its optimum is well understood: the best static tree serves a sequence in time proportional to $m$ plus the entropy of the access frequencies ([Chapter 12](bounds.html#comparison-with-a-fixed-tree)). Bose, Douïeb, Iacono and Langerman [-@bose2016] studied a different way to search the same tree, the **lazy finger**: each search starts where the previous one ended. To go from $x$ to $y$, the finger climbs from $x$ to their lowest common ancestor and descends to $y$. Up to a factor of two, lazy finger is at least as good as root finger: the walk through the LCA is never longer than the walk up to the root and down again, which costs at most twice a root-finger search. And it is no better than a BST with rotations, which can simulate it. Between those two, it can be much better than root finger: a sequential scan $0, 1, \dots, n-1, 0, 1, \dots$ of length $m \ge n$ costs $O(m)$ with a lazy finger in every tree, but $\Omega(m \log n)$ with a root finger in every tree.
 
-The optimal root-finger cost is a function of the access frequencies alone. The optimal lazy-finger cost depends on the frequencies of *consecutive pairs*. The natural entropy of those, the conditional entropy, is not the answer: the paper shows that no BST, static or not, is bounded by it within any constant factor and additive startup term ([Chapter 16](conditional-entropy.html)). What does capture it is the **weighted dynamic finger** bound of Iacono and Langerman: give every key $k$ a positive weight $w_k$, and charge a move from $x$ to $y$
+The optimal root-finger cost is a function of the access frequencies alone. The optimal lazy-finger cost depends on the frequencies of *consecutive pairs*. The natural entropy of those, the conditional entropy, is not the answer: the paper shows that no BST, static or not, is bounded by it within any constant factor and additive startup term ([Chapter 16](conditional-entropy.html)). What does capture it is the **weighted dynamic finger** bound of Iacono and Langerman [-@iacono2016]: give every key $k$ a positive weight $w_k$, and charge a move from $x$ to $y$
 
 $$1 + \log_2 \frac{\sum_{k = \min(x,y)}^{\max(x,y)} w_k}{\min(w_x, w_y)}.$$
 
@@ -10,7 +10,7 @@ The paper's main theorem, its Theorem 5, says that the best static tree with a l
 
 ```headline lazy-finger-characterization
 title: The optimal lazy-finger tree costs the best weighted dynamic finger bound, up to constant factors
-source: Bose, Douïeb, Iacono and Langerman, *The power and limitations of static binary search trees with lazy finger* (2014)
+source: @bose2016
 key: yes
 theorems: LazyFinger.Results.characterization_from LazyFinger.Results.characterization LazyFinger.Results.characterization_long_sequence
 
@@ -33,7 +33,7 @@ Both costs charge one unit per request, and the minimum over trees is attained. 
 
 ```headline lazy-finger-weights
 title: Weights give a tree, and every tree is represented by weights
-source: Bose, Douïeb, Iacono and Langerman, *The power and limitations of static binary search trees with lazy finger* (2014)
+source: @bose2016
 theorems: LazyFinger.Results.tree_for_weights LazyFinger.Results.tree_weights_two_sided LazyFinger.Results.tree_weights
 
 With the notation of the previous box, write $\mathrm{LF}_p(T, X) = \sum_i (1 + d_T(x_{i-1}, x_i))$ for the lazy-finger cost of one tree $T$ from $x_0 = p$, $c_w(x, y) = 1 + \log_2\bigl(W(x,y) / \min(w_x, w_y)\bigr)$ for the weighted charge, and $\mathrm{WDF}_p(w, X) = \sum_i c_w(x_{i-1}, x_i)$.
@@ -47,14 +47,14 @@ In Lean, $\mathrm{LF}_p(T, X)$ is [[LazyFinger.costFrom]], $c_w$ is [[WeightedFi
 
 ```headline random-weighted-tree
 title: A random tree realizes the weighted dynamic finger bound for every pair
-source: Bose, Douïeb, Iacono and Langerman, *The power and limitations of static binary search trees with lazy finger* (2014)
+source: @bose2016
 theorems: LazyFinger.Random.Results.weighted_charge
 
 Let $w$ be positive on $\{0, \dots, n-1\}$. Draw a random order of the keys by repeatedly choosing one of the remaining keys with probability proportional to its weight. There is an assignment of a tree $T_\sigma$ on the $n$ keys to every order $\sigma$ such that, for all keys $x, y < n$,
 
 $$\mathbb E_\sigma\bigl[\,1 + d_{T_\sigma}(x, y)\,\bigr] \;\le\; 4\,\Bigl(1 + \log_2 \frac{W(x,y)}{\min(w_x, w_y)}\Bigr).$$
 
-The assignment depends on $w$ and $n$ only, so one random tree serves every pair at once. This is Theorem 1 of the paper, which attributes it to Seidel and Aragon; in the proof, $T_\sigma$ is the treap whose priority order is $\sigma$. In Lean, the expectation is [[Treap.Random.average]] and the right side is $4$ times [[WeightedFinger.charge]].
+The assignment depends on $w$ and $n$ only, so one random tree serves every pair at once. This is Theorem 1 of the paper, which attributes it to Seidel and Aragon [-@seidel1996]; in the proof, $T_\sigma$ is the treap whose priority order is $\sigma$. In Lean, the expectation is [[Treap.Random.average]] and the right side is $4$ times [[WeightedFinger.charge]].
 ```
 
 The first box is the paper's Theorem 5; the second and third are the steps of its proof. To confirm them, a reader needs only the tree shapes and depths of [Chapter 1](shapes.html), the lazy-finger distance and costs of [Section 14.1](#distance-in-a-fixed-tree) and [Section 14.3](#the-lazy-finger-cost), the weighted charge of [Section 14.5](#weighted-dynamic-finger), and, for the third box, the weighted sampling of [Chapter 31](treaps.html). The [checking page](checking.html) lists the exact reading path of each.

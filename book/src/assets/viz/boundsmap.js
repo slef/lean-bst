@@ -35,6 +35,7 @@ const B = {
   SO: { sym: 'SO', name: 'entropy', def: 'Bounds.staticCost' },
   DF: { sym: 'DF', name: 'dynamic finger', def: 'Bounds.dynamicFingerCostFrom' },
   SF: { sym: 'SF', name: 'static finger', def: 'Bounds.fingerCost' },
+  BAL: { sym: 'm(1 + log n)', name: 'balanced tree', def: null },
 };
 
 const T = {
@@ -59,12 +60,13 @@ const TEXT = {
   dynFinger: 'LF* is at most n plus four times the dynamic finger sum, from any start key.',
   wsSo: 'Every algorithm with the working-set bound has the static optimality bound (with new constants).',
   soSf: 'Every algorithm with the static optimality bound has the static finger bound, for every finger at once.',
+  sfBal: 'Each term of the static finger sum is at most 1 + log₂ n, so SF ≤ m(1 + log₂ n) for every finger: every bound above is at most what a balanced tree pays. Classical, but not formalized yet.',
   dfSf: 'The dynamic finger sum is at most twice the static finger sum, for every finger f, plus log(|p − f| + 1) for the start key p: a step from x to y costs at most the steps from x to f and from f to y. This is classical, but not formalized yet.',
 };
 
 const MAPS = {
   bigo: {
-    w: 780, h: 580, bw: 150,
+    w: 780, h: 690, bw: 150,
     title: 'How the bounds relate, up to constants',
     nodes: [
       { id: 'IB', x: 430, y: 45, parts: [B.IB], lower: true },
@@ -77,6 +79,7 @@ const MAPS = {
         note: 'Every fixed tree costs at least a third of SO, and some fixed tree costs at most SO.' },
       { id: 'DF', x: 610, y: 420, parts: [B.DF] },
       { id: 'SF', x: 430, y: 540, parts: [B.SF] },
+      { id: 'BAL', x: 430, y: 650, parts: [B.BAL] },
     ],
     algs: [
       { id: 'tango', label: 'Tango trees', x: 215, y: 62, href: 'tango.html' },
@@ -85,6 +88,10 @@ const MAPS = {
       { id: 'combined', label: 'Combined BST', sub: 'Theorem 4.3', x: 640, y: 222, href: 'combined-finger.html' },
       { id: 'greedy', label: 'GreedyASS', x: 690, y: 284, href: 'greedy-finger.html' },
       { id: 'dp', label: 'Optimal tree (DP)', sub: 'static, offline', x: 690, y: 342, href: 'optimal-lazy-finger.html' },
+      { id: 'entropy', label: 'Entropy tree', sub: 'static, offline', x: 95, y: 515, href: 'static-trees.html#entropy-trees' },
+      { id: 'knuth', label: 'Optimal static tree', sub: 'Knuth, offline', x: 245, y: 560, href: 'static-trees.html#optimal-static-trees' },
+      { id: 'balanced', label: 'Balanced trees', sub: 'AVL, red-black, BB[α]', x: 190, y: 650, href: 'part-classical.html' },
+      { id: 'random', label: 'Random trees', sub: 'treaps, in expectation', x: 670, y: 650, href: 'random-trees.html' },
     ],
     edges: [
       { from: 'IB', to: 'OPT', text: TEXT.wilber, thms: T.wilber },
@@ -96,6 +103,16 @@ const MAPS = {
       { from: 'WS', to: 'RF', text: TEXT.wsSo, thms: T.wsSo },
       { from: 'RF', to: 'SF', text: TEXT.soSf, thms: T.soSf },
       { from: 'DF', to: 'SF', todo: true, label: 'not yet formalized', lab: [535, 500, 'start'], text: TEXT.dfSf },
+      { from: 'SF', to: 'BAL', todo: true, label: 'not yet formalized', lab: [440, 600, 'start'], text: TEXT.sfBal },
+      { from: 'entropy', to: 'RF', kind: 'alg',
+        text: 'A static tree with the weighted median at every root costs at most the entropy bound SO. It is built from the access frequencies, so it is offline.',
+        thms: [T.entropy[1]] },
+      { from: 'knuth', to: 'RF', kind: 'alg', todo: true,
+        text: "Knuth's dynamic program, sped up by Yao's quadrangle inequality, computes a static tree of cost exactly RF* in O(n²) time. It is offline: it needs the access frequencies." },
+      { from: 'balanced', to: 'BAL', kind: 'alg', todo: true,
+        text: 'A tree of height O(log n) serves every request with O(log n) nodes: the perfect static tree, and AVL, red-black, WAVL, BB[α] and scapegoat trees under insertions and deletions.' },
+      { from: 'random', to: 'BAL', kind: 'alg', todo: true,
+        text: 'In a random BST or a treap, every key has expected depth at most 2 ln n, so the expected cost is at most m(1 + 2 ln n).' },
       { from: 'tango', to: 'OPT', kind: 'alg', label: 'O(log log n)', lab: [318, 98, 'start'],
         text: 'Tango trees, an online BST algorithm, cost at most O(log log n) times the cost of any offline execution from the same initial tree, plus O(n log log n).',
         thms: ['Tango.Algorithm.Results.exists_competitive'] },
@@ -340,7 +357,7 @@ export default function mount(root, cfg = {}) {
       } else {
         const what = n.lower ? 'This is a lower bound: every execution costs at least a constant fraction of it.'
           : `A bound in terms of it implies bounds in terms of: <strong>${esc(list(proven))}</strong>${tail}. It follows from a bound in terms of: <strong>${esc(list(names(up)))}</strong>.${metText()}`;
-        const which = n.parts.map((p) => `<strong>${esc(p.sym)}</strong>, ${esc(p.name)} (${link([p.def])})`).join('; ');
+        const which = n.parts.map((p) => `<strong>${esc(p.sym)}</strong>, ${esc(p.name)} (${p.def ? link([p.def]) : 'no Lean definition yet'})`).join('; ');
         const note = n.note ? `${esc(n.note)} <span class="bm-thm">${link(n.thms)}</span> ` : '';
         caption.innerHTML = `${which}. ${note}${what}`;
       }
@@ -348,7 +365,7 @@ export default function mount(root, cfg = {}) {
     g.addEventListener('mouseenter', show);
     g.addEventListener('focus', show);
     g.addEventListener('click', () => {
-      const href = n.alg ? n.href : hrefFor(n.parts[0].def);
+      const href = n.alg ? n.href : n.parts[0].def && hrefFor(n.parts[0].def);
       if (href) location.href = href;
     });
     nodeEls.set(n.id, g);

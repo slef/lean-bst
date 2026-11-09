@@ -5,7 +5,7 @@
 - Below it is the classical **root-finger** static tree, the setting of static optimality ([Chapter 12](bounds.html)). The tree is fixed and every search starts at the root.
 - Above it is the **dynamic** BST of Part I. It also searches from the root each time, but may rotate.
 
-Theorem 6 of Bose, Douïeb, Iacono and Langerman says that, up to constant factors, lazy finger is never worse than root finger and never better than a dynamic BST, and that both gaps can be arbitrarily large. The chapter also states the consequences listed in §1.4 of their paper: the optimal lazy-finger tree has static optimality, the static finger property and the dynamic finger property, all at once.
+Theorem 6 of Bose, Douïeb, Iacono and Langerman [-@bose2016] says that, up to constant factors, lazy finger is never worse than root finger and never better than a dynamic BST, and that both gaps can be arbitrarily large. The chapter also states the consequences listed in §1.4 of their paper: the optimal lazy-finger tree has static optimality, the static finger property and the dynamic finger property, all at once.
 
 Throughout, $X = x_1, \dots, x_m$ is a sequence of keys in $\{0, \dots, n-1\}$ (*valid* requests), and all three costs charge one unit per request plus one per pointer move or rotation. We write
 
@@ -15,7 +15,7 @@ Throughout, $X = x_1, \dots, x_m$ is a sequence of keys in $\{0, \dots, n-1\}$ (
 
 ```headline lazy-finger-hierarchy
 title: Lazy finger sits strictly between root-finger static trees and dynamic BSTs
-source: Bose, Douïeb, Iacono and Langerman, *The power and limitations of static binary search trees with lazy finger* (2014)
+source: @bose2016
 key: yes
 theorems: LazyFinger.Results.optimal_root_finger LazyFinger.Dynamic.Results.optimal LazyFinger.Sequential.Results.family LazyFinger.Separation.Results.family
 
@@ -34,7 +34,7 @@ Item 2 is an existence statement about executions, so it compares lazy finger wi
 
 ```headline lazy-finger-consequences
 title: The optimal lazy-finger tree has static optimality, static finger and dynamic finger at once
-source: Bose, Douïeb, Iacono and Langerman, *The power and limitations of static binary search trees with lazy finger* (2014)
+source: @bose2016
 theorems: LazyFinger.Consequences.Results.simultaneous
 
 This is the list of consequences in §1.4 of the paper. For every sequence $X$ of $m$ valid requests on $n$ keys there is a tree $t$ on $n$ keys whose lazy-finger cost, from the root, is the optimum $\mathrm{LF}^*_n(X)$, and this cost is at most
@@ -77,7 +77,7 @@ The goal of this section is item 2 of the headline. Let $t$ be a tree and $X$ a 
 
 1. The lazy-finger distance is exactly the length of a shortest pointer walk ([Section 15.2.1](#walking-the-edge-distance)).
 2. A lazy finger is therefore a *one-finger execution* in the multi-finger model of [Chapter 10](fingers.html), at exactly the lazy-finger cost ([Section 15.2.2](#one-persistent-finger)).
-3. A multi-finger execution with a constant number of fingers can be simulated by a conventional BST at a constant factor. This is the *finger hand* of [Chapter 35](finger-hands.html). The method is due to Demaine, Iacono, Langerman and Özkan (2013). Optimizing over reference trees then gives the theorem ([Section 15.2.3](#from-one-finger-to-a-conventional-bst)).
+3. A multi-finger execution with a constant number of fingers can be simulated by a conventional BST at a constant factor. This is the *finger hand* of [Chapter 35](finger-hands.html). The method is due to Demaine, Iacono, Langerman and Özkan [-@demaine2013]. Optimizing over reference trees then gives the theorem ([Section 15.2.3](#from-one-finger-to-a-conventional-bst)).
 
 ### Walking the edge distance
 

@@ -1,12 +1,12 @@
 # The combination theorem
 
-Different BST algorithms are good on different sequences. Splay trees have the working-set and dynamic-finger bounds, Tango trees are $O(\log\log n)$-competitive, GreedyASS is competitive with the best lazy-finger tree, and no single analysis gives all of these at once. Demaine, Iacono, Langerman and Özkan (2013) showed that this is no obstacle: given two online BSTs $A_0$ and $A_1$, one online BST costs, on every sequence and in fact on every contiguous window of every sequence, at most a constant times the cheaper of the two, plus an additive overhead. Their construction, *ComboBST*, runs the two algorithms in alternating rounds of fixed length, each round starting again from a saved copy of the initial tree, and it simulates the extra fingers it needs inside a single-finger BST.
+Different BST algorithms are good on different sequences. Splay trees have the working-set and dynamic-finger bounds, Tango trees are $O(\log\log n)$-competitive, GreedyASS is competitive with the best lazy-finger tree, and no single analysis gives all of these at once. Demaine, Iacono, Langerman and Özkan [-@demaine2013] showed that this is no obstacle: given two online BSTs $A_0$ and $A_1$, one online BST costs, on every sequence and in fact on every contiguous window of every sequence, at most a constant times the cheaper of the two, plus an additive overhead. Their construction, *ComboBST*, runs the two algorithms in alternating rounds of fixed length, each round starting again from a saved copy of the initial tree, and it simulates the extra fingers it needs inside a single-finger BST.
 
 This section is the entry point to the formalization of that paper. It states the abstract counterpart of the paper's Theorem 3 and its extension to finite families, explains the hypotheses carefully, and develops the part of the proof that is pure accounting: well-behaved charges, the counting of rounds, and the window bounds. The machinery that makes the combination a real pointer-machine execution is in the next three sections and in [Chapter 50](tree-state.html) of Part IV.
 
 ```headline combo-two
 title: One online BST is as good as the better of two, on every window
-source: Demaine, Iacono, Langerman and Özkan, *Combining binary search trees* (2013)
+source: @demaine2013
 key: yes
 theorems: Combo.Online.Results.window_policy
 
@@ -25,7 +25,7 @@ In Lean, the algorithms are one [[Combo.Controller.Worker]] with a side bit, its
 
 ```headline combo-family
 title: One online BST is as good as the best of a finite family, on every window
-source: Demaine, Iacono, Langerman and Özkan, *Combining binary search trees* (2013)
+source: @demaine2013
 theorems: Combo.Family.Physical.Results.finite_policy
 
 The paper combines $k$ algorithms two at a time in a balanced binary tree (Section 1.2). Fix a nonempty initial tree $S$ with $n$ keys and a nonempty finite family $A_1, \dots, A_k$ of interruptible algorithms on $S$, possibly with different state types, each with a pointer interpretation and request correctness, and each well-behaved for its own charge $\tau_j$, with common $F \ge n$, $C_0$ and $C_1$. Let $d = \lceil \log_2 k \rceil$. Then there is one online pointer policy such that for every valid sequence $X$ its run from $S$ is legal, its total cost is at most $\alpha \min_j \sum_i \tau_j(X, i) + \beta F$, and for every window $[lo, hi)$ the run splits additively as in the box above and the window costs at most
@@ -374,5 +374,5 @@ These hold for **every** prepared policy `p`, not only for a chosen one: a prepa
 
 - **Real-world storage.** The paper's clauses that ComboBST is a real-world BST when $A_0$ and $A_1$ are, and that OneFinger-BST preserves this (Theorems 3 and 5), are not formalized. The library's model charges pointer operations and requests only; the policy uses classical choice and uncharged private planning.
 - **The $O(k)$ overhead.** The paper states an $O(k)$ overhead for $k$ algorithms. The library's scales grow by a factor of order $C_0(C_1 + d)$ per level, which is a constant for fixed $k$ but much larger than $O(k)$.
-- **Corollary 4.** The paper's application combines splay trees, multi-splay trees and layered working-set trees. None of these is provided as a well-behaved worker, so Corollary 4 is not formalized. The applications that are formalized are GreedyASS and Tango, in [Chapter 38](combined-finger.html).
+- **Corollary 4.** The paper's application combines splay trees, multi-splay trees [@wang2006] and layered working-set trees [@bose2012layered]. None of these is provided as a well-behaved worker, so Corollary 4 is not formalized. The applications that are formalized are GreedyASS and Tango, in [Chapter 38](combined-finger.html).
 - **Arbitrary BSTs.** No theorem turns an arbitrary [[RotationBST.Algorithm]] into a well-behaved worker. The worker, its interpretation, correctness and charges are always supplied.

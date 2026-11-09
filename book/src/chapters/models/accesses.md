@@ -71,7 +71,7 @@ Rotations connect all shapes of a given size, and linearly many suffice.
 
 @stmt RotationBST.Geometry.reset
 
-The proof rotates both shapes into the right spine `.node .nil (.node .nil …)` with at most $n$ rotations each, then reverses the second sequence; rotations are reversible (`Rotations.symm`). The bound $2n$ is the classical one, up to the additive constant in Sleator, Tarjan and Thurston's $2n-6$, which the library does not attempt.
+The proof rotates both shapes into the right spine `.node .nil (.node .nil …)` with at most $n$ rotations each, then reverses the second sequence; rotations are reversible (`Rotations.symm`). The bound $2n$ is the classical one, up to the additive constant in the $2n-6$ of Sleator, Tarjan and Thurston [-@sleator1988], which the library does not attempt.
 
 An access may therefore be preceded by a reset to any shape, at an extra cost of at most $2n$.
 

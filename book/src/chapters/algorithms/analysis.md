@@ -11,7 +11,7 @@ These are the headline results of the 1985 paper, and all four hold for the same
 
 ```headline splay-balance
 title: Splaying costs $O(\log n)$ amortized per access
-source: Sleator and Tarjan, *Self-adjusting binary search trees* (1985)
+source: @sleator1985
 key: yes
 theorems: Splay.Results.correct Splay.Results.balance
 
@@ -24,7 +24,7 @@ In Lean, `correct` certifies one splay as an [[RotationBST.Access]], and `balanc
 
 ```headline splay-static-optimality
 title: Splaying is statically optimal
-source: Sleator and Tarjan, *Self-adjusting binary search trees* (1985)
+source: @sleator1985
 key: yes
 theorems: Splay.Results.staticOptimality StaticTree.Results.entropy_lower_bound
 
@@ -39,7 +39,7 @@ In Lean, `staticOptimality` is the property [[RotationBST.HasStaticOptimalityBou
 
 ```headline splay-static-finger
 title: Splaying has the static finger property
-source: Sleator and Tarjan, *Self-adjusting binary search trees* (1985)
+source: @sleator1985
 key: yes
 theorems: Splay.Results.staticFinger
 
@@ -54,7 +54,7 @@ In Lean, `staticFinger` is the property [[RotationBST.HasStaticFingerBound]] of 
 
 ```headline splay-working-set
 title: Splaying has the working-set property
-source: Sleator and Tarjan, *Self-adjusting binary search trees* (1985)
+source: @sleator1985
 key: yes
 theorems: Splay.Results.workingSet
 
@@ -69,7 +69,7 @@ In Lean, $w_j$ is [[RotationBST.workingSetNumber]] and the sum is [[RotationBST.
 
 ## Weights and potential
 
-Sleator and Tarjan analyse splaying with a potential function. Each item $i$ gets a fixed positive weight $w(i)$. The *size* $s(x)$ of a node is the total weight of its subtree, its *rank* is $r(x) = \log_2 s(x)$, and the potential of a tree is the sum of the ranks of its nodes. The Access Lemma bounds the amortized cost of one splay. Their Theorems 1–5 then follow by choosing the weights. The rest of this section shows the formal versions of the potential, the lemma and the five theorems. The bounds themselves (working set, entropy, finger) are defined in [Chapter 10](bounds.html).
+Sleator and Tarjan [-@sleator1985] analyse splaying with a potential function. Each item $i$ gets a fixed positive weight $w(i)$. The *size* $s(x)$ of a node is the total weight of its subtree, its *rank* is $r(x) = \log_2 s(x)$, and the potential of a tree is the sum of the ranks of its nodes. The Access Lemma bounds the amortized cost of one splay. Their Theorems 1–5 then follow by choosing the weights. The rest of this section shows the formal versions of the potential, the lemma and the five theorems. The bounds themselves (working set, entropy, finger) are defined in [Chapter 10](bounds.html).
 
 @decl RotationBST.Splay.mass RotationBST.Splay.potential
 
@@ -185,7 +185,7 @@ Theorem 5 of the paper charges each access the *smallest* of its three logarithm
 As for the static finger theorem, there is no `f < t.size` hypothesis. The minimum is taken **per access**, so this is not merely the minimum of the three earlier theorems. The proof uses the sum of three weights: the recency weight $1/\rho^2$, which changes after each access as in the working-set proof, plus two fixed weights, $q_i/m$ and $1/(|i - f| + 1)^2$. The total weight is at most $7 < 2^3$, so $\log_2 W \le 3$. Each of the three weights is at most the combined weight, so the amortized cost of an access is at most $10\cdot$`unifiedCharge`. Every charge is at least $1$, which absorbs the $m$ requests into the constant $11$.
 
 ::: caveat Not the dynamic unified bound
-This is the 1985 *fixed-finger* unified theorem. It is not Iacono's later unified bound, in which the finger distance is measured to recently accessed keys. Whether splay trees satisfy that bound is open, and the library makes no claim about it.
+This is the 1985 *fixed-finger* unified theorem. It is not Iacono's later unified bound [@iacono2001], in which the finger distance is measured to recently accessed keys. Whether splay trees satisfy that bound is open, and the library makes no claim about it.
 :::
 
 ## Measured cost against the bounds

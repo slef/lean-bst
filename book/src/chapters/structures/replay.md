@@ -39,7 +39,7 @@ The five results say that streams and traces are the same thing, and that undoin
 
 @decl RotationBST.Multifinger.Replay.Results.physical RotationBST.Multifinger.Replay.Results.record RotationBST.Multifinger.Replay.Results.restore RotationBST.Multifinger.Replay.Results.inverse_size RotationBST.Multifinger.Replay.Results.roundtrip
 
-The restoration is of the *configuration*: the cursor comes back to the same node, with the same path to the root, not only the same tree. This is the step behind the tree-state buffer of the ComboBST paper (Demaine, Iacono, Langerman and Özkan, Section 3). There, a tree state is saved by recording the operations of a linear-time algorithm that turns the tree into a path, and it is loaded by turning the current tree into a path and then undoing the recorded operations. The snapshots of [Chapter 51](snapshots.html) formalize this. The factor $3$ of `inverse_size` is the same factor as in the reversal of pointer traces inside the reshaping theorem [[Pointer.Lazy.Results.reshape]] of [Chapter 6](pointer.html).
+The restoration is of the *configuration*: the cursor comes back to the same node, with the same path to the root, not only the same tree. This is the step behind the tree-state buffer of the ComboBST paper [@demaine2013, Section 3]. There, a tree state is saved by recording the operations of a linear-time algorithm that turns the tree into a path, and it is loaded by turning the current tree into a path and then undoing the recorded operations. The snapshots of [Chapter 51](snapshots.html) formalize this. The factor $3$ of `inverse_size` is the same factor as in the reversal of pointer traces inside the reshaping theorem [[Pointer.Lazy.Results.reshape]] of [Chapter 6](pointer.html).
 
 ## Walks and detours
 
@@ -49,7 +49,7 @@ A walk only moves the cursor, so it never changes the tree. The three facts that
 
 A [[Pointer.Move]] is a [[Pointer.Step]], a [[Pointer.Walk]] of $k$ moves is a [[Pointer.Trace]] of $k$ instructions, and the two ends of a walk represent the same tree.
 
-The proof of Theorem 6 of Bose, Collette, Fagerberg and Langerman (*De-amortizing binary search trees*) serves a request in the middle of other work. The simulated algorithm has a pending sequence of operations. Whenever too many of them have been performed without reaching the next requested key, the deamortized algorithm "accesses this element by moving the finger to it and back". This is a *detour*: a walk from the current configuration to the requested key, and the reverse walk, after which the pending work resumes exactly where it stopped. The library states it in five steps.
+The proof of Theorem 6 of Bose, Collette, Fagerberg and Langerman [-@bose2012] serves a request in the middle of other work. The simulated algorithm has a pending sequence of operations. Whenever too many of them have been performed without reaching the next requested key, the deamortized algorithm "accesses this element by moving the finger to it and back". This is a *detour*: a walk from the current configuration to the requested key, and the reverse walk, after which the pending work resumes exactly where it stopped. The library states it in five steps.
 
 @decl RotationBST.Pointer.Detour.Results.trace_nonempty
 

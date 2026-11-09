@@ -1,12 +1,12 @@
 # The optimal lazy-finger tree
 
-A static binary search tree with a *lazy finger* serves each request by walking, along tree edges, from the previously requested key to the new one; the first search starts at the root. [Chapter 14](lazy-finger.html) introduced this model and its cost, and characterized the optimal cost up to constant factors. That characterization is not an algorithm. This chapter gives one: Theorem 8 of Bose, Douïeb, Iacono and Langerman computes an optimal lazy-finger tree exactly, by a dynamic program over key intervals that runs in cubic time once the request sequence has been summarized.
+A static binary search tree with a *lazy finger* serves each request by walking, along tree edges, from the previously requested key to the new one; the first search starts at the root. [Chapter 14](lazy-finger.html) introduced this model and its cost, and characterized the optimal cost up to constant factors. That characterization is not an algorithm. This chapter gives one: Theorem 8 of Bose, Douïeb, Iacono and Langerman [-@bose2016] computes an optimal lazy-finger tree exactly, by a dynamic program over key intervals that runs in cubic time once the request sequence has been summarized.
 
 The library proves two things about this algorithm. It returns a tree whose lazy-finger cost equals the optimum over all shapes. And, in an explicit, annotated cost model for a random-access machine, its work is at most $4m + 64(n+1)^3$ for $m$ requests on $n$ keys.
 
 ```headline optimal-lazy-finger
 title: An optimal lazy-finger tree can be computed with $4m + 64(n+1)^3$ work
-source: Bose, Douïeb, Iacono and Langerman, *The power and limitations of static binary search trees with lazy finger* (2014)
+source: @bose2016
 key: yes
 theorems: OptimalLazyFinger.Work.Results.root_start OptimalLazyFinger.Work.Results.specified_start
 

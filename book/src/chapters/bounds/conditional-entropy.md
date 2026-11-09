@@ -2,11 +2,11 @@
 
 The cost of the optimal root-finger tree has a classical closed form. Up to constant factors it is the *entropy bound* $m + \sum_x q_x \log_2(m/q_x)$, where $q_x$ counts the requests for $x$ ([Chapter 12](bounds.html)). A lazy finger profits from a different kind of regularity: a request is cheap when it is close, in the tree, to the *previous* request. So the natural candidate for a closed form of the optimal lazy-finger cost is the **conditional entropy** of each request given its predecessor, the information content of the transitions.
 
-Bose, Douïeb, Iacono and Langerman show that this candidate fails (Lemma 7 of their paper). Some sequences have conditional entropy zero, since each key is always followed by the same key, and still cost $\Omega(\log n)$ per request with a lazy finger in any tree. The library proves a stronger form: the sequence costs that much in *every* dynamic BST. The proof is Wilber's interleave bound ([Chapter 13](wilber.html)) applied to a repeated bit-reversal sequence. The paper therefore characterizes the optimal lazy finger differently, by the weighted benchmark of [Chapter 14](lazy-finger.html).
+Bose, Douïeb, Iacono and Langerman [-@bose2016] show that this candidate fails (Lemma 7 of their paper). Some sequences have conditional entropy zero, since each key is always followed by the same key, and still cost $\Omega(\log n)$ per request with a lazy finger in any tree. The library proves a stronger form: the sequence costs that much in *every* dynamic BST. The proof is Wilber's interleave bound ([Chapter 13](wilber.html)) applied to a repeated bit-reversal sequence. The paper therefore characterizes the optimal lazy finger differently, by the weighted benchmark of [Chapter 14](lazy-finger.html).
 
 ```headline entropy-obstruction
 title: No BST, and in particular no lazy-finger tree, is bounded by the conditional entropy
-source: Bose, Douïeb, Iacono and Langerman, *The power and limitations of static binary search trees with lazy finger* (2014)
+source: @bose2016
 key: yes
 theorems: ConditionalEntropy.Results.obstruction LazyFinger.Dynamic.Results.optimal
 

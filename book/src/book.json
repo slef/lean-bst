@@ -23,13 +23,15 @@
         { "slug": "accesses", "file": "models/accesses.md", "title": "Accesses and executions" },
         { "slug": "keys", "file": "models/keys.md", "title": "Putting the keys back" },
         { "slug": "online", "file": "models/online.md", "title": "Online algorithms and cost" },
+        { "slug": "dictionary", "file": "models/dictionary.md", "title": "Insertions and deletions" },
         { "slug": "pointer", "file": "models/pointer.md", "title": "The pointer machine" },
         { "slug": "regions", "file": "models/regions.md", "title": "Touched regions" },
         { "slug": "geometry", "file": "models/geometry.md", "title": "The geometric view" },
         { "slug": "fingers", "file": "models/fingers.md", "title": "Many fingers" },
         { "slug": "linked-search", "file": "models/linked-search.md", "title": "Linked searches" },
         { "slug": "equivalence", "file": "models/equivalence.md", "title": "How the models agree" }
-      ]
+      ],
+      "notes": { "slug": "notes-models", "file": "models/notes.md", "title": "Bibliographic notes" }
     },
     {
       "label": "II",
@@ -42,11 +44,25 @@
         { "slug": "lazy-finger-hierarchy", "file": "bounds/lazy-finger-hierarchy.md", "title": "Where lazy finger stands" },
         { "slug": "wilber", "file": "bounds/wilber.md", "title": "Wilber's interleave bound" },
         { "slug": "conditional-entropy", "file": "bounds/conditional-entropy.md", "title": "Conditional entropy" }
-      ]
+      ],
+      "notes": { "slug": "notes-bounds", "file": "bounds/notes.md", "title": "Bibliographic notes" }
     },
     {
       "label": "III",
-      "title": "Algorithms",
+      "title": "Classical search trees",
+      "slug": "part-classical",
+      "file": "classical/part-classical.md",
+      "chapters": [
+        { "slug": "static-trees", "file": "classical/static-trees.md", "title": "Static search trees" },
+        { "slug": "rank-balanced", "file": "classical/rank-balanced.md", "title": "Rank-balanced trees" },
+        { "slug": "weight-balanced", "file": "classical/weight-balanced.md", "title": "Weight-balanced trees" },
+        { "slug": "random-trees", "file": "classical/random-trees.md", "title": "Random search trees" }
+      ],
+      "notes": { "slug": "notes-classical", "file": "classical/notes.md", "title": "Bibliographic notes" }
+    },
+    {
+      "label": "IV",
+      "title": "Adaptive algorithms",
       "slug": "part-algorithms",
       "file": "algorithms/part-algorithms.md",
       "chapters": [
@@ -99,10 +115,11 @@
         },
         { "slug": "deamortization", "file": "algorithms/deamortization.md", "title": "Deamortization" },
         { "slug": "combined-finger", "file": "algorithms/combined-finger.md", "title": "All the finger bounds at once" }
-      ]
+      ],
+      "notes": { "slug": "notes-algorithms", "file": "algorithms/notes.md", "title": "Bibliographic notes" }
     },
     {
-      "label": "IV",
+      "label": "V",
       "title": "Structures",
       "slug": "part-structures",
       "file": "structures/part-structures.md",
@@ -149,11 +166,13 @@
             { "slug": "snapshots", "file": "structures/snapshots.md", "title": "Snapshots" }
           ]
         }
-      ]
+      ],
+      "notes": { "slug": "notes-structures", "file": "structures/notes.md", "title": "Bibliographic notes" }
     }
   ],
   "appendices": [
     { "slug": "audit", "file": "appendices/audit.md", "title": "What Lean checks" },
-    { "slug": "declarations", "file": "appendices/declarations.md", "title": "Index of declarations" }
+    { "slug": "declarations", "file": "appendices/declarations.md", "title": "Index of declarations" },
+    { "slug": "bibliography", "file": "appendices/bibliography.md", "title": "Bibliography" }
   ]
 }

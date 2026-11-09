@@ -1,10 +1,10 @@
 # How the models agree
 
-Part I has now described binary search tree executions in five ways: rotation traces on shapes ([Chapter 3](accesses.html)), the same traces on labelled trees ([Chapter 4](keys.html)), a single-pointer machine ([Chapter 6](pointer.html)), rooted regions rearranged at each request ([Chapter 7](regions.html)), and arborally satisfied point sets ([Chapter 8](geometry.html)). The two models since then, many fingers and linked searches, serve particular results and are related to the others in their own chapters. This chapter proves that the geometric view measures the same thing as the other four. Demaine, Harmon, Iacono, Kane and Pătraşcu (2009) showed that the cheapest arborally satisfied superset of the request points has, up to constant factors, the cost of the best BST execution. Every BST question about a fixed sequence thereby becomes a question about points in the plane: no trees, no rotations, only rectangles.
+Part I has now described binary search tree executions in five ways: rotation traces on shapes ([Chapter 3](accesses.html)), the same traces on labelled trees ([Chapter 4](keys.html)), a single-pointer machine ([Chapter 6](pointer.html)), rooted regions rearranged at each request ([Chapter 7](regions.html)), and arborally satisfied point sets ([Chapter 8](geometry.html)). The two models since then, many fingers and linked searches, serve particular results and are related to the others in their own chapters. This chapter proves that the geometric view measures the same thing as the other four. Demaine, Harmon, Iacono, Kane and Pătraşcu [-@demaine2009] showed that the cheapest arborally satisfied superset of the request points has, up to constant factors, the cost of the best BST execution. Every BST question about a fixed sequence thereby becomes a question about points in the plane: no trees, no rotations, only rectangles.
 
 ```headline ass-equivalence
 title: Offline BST cost and arborally satisfied sets agree up to constant factors
-source: Demaine, Harmon, Iacono, Kane and Pătraşcu, *The geometry of binary search trees* (2009)
+source: @demaine2009
 key: yes
 theorems: Geometric.Equivalence.Results.rotations_to_ass Geometric.Equivalence.Results.ass_to_rotations
 
@@ -98,7 +98,7 @@ Together, these theorems pin down the offline optimum. Writing $\mathrm{OPT}_{\m
 
 ## Online: from geometric algorithms to BST algorithms
 
-The conversions above see the whole future. The treap construction in particular orders keys by their next touch, which no online algorithm knows. An *online geometric algorithm* ([[Geometric.OnlineAlgorithm]], [Chapter 8](geometry.html)) instead adds the points of each row knowing only the past rows and the current request, and [[Geometric.rowCost]] counts the points it adds. Demaine et al. showed that such an algorithm can be simulated online by a BST with a constant-factor overhead. The library proves this in the following form.
+The conversions above see the whole future. The treap construction in particular orders keys by their next touch, which no online algorithm knows. An *online geometric algorithm* ([[Geometric.OnlineAlgorithm]], [Chapter 8](geometry.html)) instead adds the points of each row knowing only the past rows and the current request, and [[Geometric.rowCost]] counts the points it adds. @demaine2009 showed that such an algorithm can be simulated online by a BST with a constant-factor overhead. The library proves this in the following form.
 
 **Theorem (online simulation).** For every online geometric algorithm `A` on $n$ keys there is a single BST [[RotationBST.Algorithm]] of [Chapter 5](online.html) such that, from every initial tree of size $n$ and on every sequence of keys below $n$, its rotation count is at most $6018$ times the number of points `A` adds, plus $6018\,n$.
 

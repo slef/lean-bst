@@ -6,7 +6,7 @@ No online BST algorithm is known to be dynamically optimal, that is, within a co
 
 ```headline tango
 title: Tango trees are $O(\log\log n)$-competitive
-source: Demaine, Harmon, Iacono and Pătraşcu, *Dynamic optimality—almost* (2004)
+source: @demaine2007
 key: yes
 theorems: Tango.Algorithm.Results.exists_competitive
 
@@ -21,7 +21,7 @@ In Lean, the algorithm is an [[RotationBST.Algorithm]], the online algorithms of
 
 The section has two layers. To confirm the result, the box above is enough: its statement uses only the rotation model and the online algorithms of Part I, and the [checking page](checking.html) lists those definitions. You never need to know how Tango trees work. To see why the result holds, read on. The section describes the algorithm with its Lean definitions, and states the full theorem again, in English and in Lean, in [Section 19.7](#from-a-policy-to-an-algorithm). [Section 19.1](#auxiliary-trees-inside-a-bst) and [Section 19.2](#three-amortized-operations) build the auxiliary trees and their three operations, [Section 19.3](#marked-trees) the state of the data structure, [Section 19.4](#the-online-policy) the interface that any implementation must satisfy, [Section 19.5](#serving-a-request) the implementation itself, [Section 19.6](#competitiveness) the bound for every policy, and [Section 19.7](#from-a-policy-to-an-algorithm) how a policy becomes an ordinary online algorithm.
 
-The construction is that of Demaine, Harmon, Iacono and Pătraşcu (2007). The BST is a tree of **auxiliary trees**, one per preferred path. Each auxiliary tree is a BST on the keys of its path, so it has at most $h$ nodes, where $h$ is the height of the reference tree. The empty subtrees of an auxiliary tree are not empty in the whole BST: each holds the auxiliary trees of the paths that hang below, in key order. A search for $x$ walks down through a sequence of auxiliary trees, one per preferred path it crosses. Crossing from one path to the next is a preference change. To keep the structure in sync with the preferences, Tango cuts and joins auxiliary trees, which takes $O(\log h)$ per change.
+The construction is that of Demaine, Harmon, Iacono and Pătraşcu [-@demaine2007]. The BST is a tree of **auxiliary trees**, one per preferred path. Each auxiliary tree is a BST on the keys of its path, so it has at most $h$ nodes, where $h$ is the height of the reference tree. The empty subtrees of an auxiliary tree are not empty in the whole BST: each holds the auxiliary trees of the paths that hang below, in key order. A search for $x$ walks down through a sequence of auxiliary trees, one per preferred path it crosses. Crossing from one path to the next is a preference change. To keep the structure in sync with the preferences, Tango cuts and joins auxiliary trees, which takes $O(\log h)$ per change.
 
 The library follows this plan with one difference. The original paper uses red-black trees with worst-case $O(\log h)$ split and concatenate. The library uses **splay trees** as auxiliary trees and analyses them with the splay potential, so the per-request bound is amortized. The definitions are in `Algorithms/Tango/Auxiliary/Definitions/Abstract.lean`, `State/Abstract.lean`, `Algorithm/Definitions/Abstract.lean`, `Algorithm/Request/Abstract.lean` and `Algorithm/Executable/Abstract.lean`; the theorems are in `Auxiliary/Abstract.lean` and `Algorithm/Abstract.lean`.
 

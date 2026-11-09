@@ -1,6 +1,6 @@
 # The pointer machine
 
-The root-access model of [Chapter 3](accesses.html) lets an access rotate anywhere in the tree and charges only for rotations. The standard BST model of the literature (Wilber; Demaine, Harmon, Iacono, Kane and Pătraşcu) is more operational. A single pointer starts at the root for each request. It moves along edges and rotates the node it points to over its parent. Every move and every rotation costs one unit, and the pointer must visit the requested key. This chapter defines that machine in Lean and proves that the two models agree up to constant factors in total cost, offline for executions and online for algorithms.
+The root-access model of [Chapter 3](accesses.html) lets an access rotate anywhere in the tree and charges only for rotations. The standard BST model of the literature [@wilber1989; @demaine2009] is more operational. A single pointer starts at the root for each request. It moves along edges and rotates the node it points to over its parent. Every move and every rotation costs one unit, and the pointer must visit the requested key. This chapter defines that machine in Lean and proves that the two models agree up to constant factors in total cost, offline for executions and online for algorithms.
 
 ```headline pointer-model
 title: The rotation model and the pointer machine agree up to constant factors

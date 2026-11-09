@@ -1,6 +1,6 @@
 # Bounds
 
-Part I fixed what a BST execution is and what it costs. Part II asks how much a request sequence *must* or *may* cost, independently of any algorithm. Two kinds of statements live here. **Upper-bound benchmarks** are explicit functions of the sequence, such as the entropy of its access frequencies, that a good algorithm should match. **Lower bounds** hold for every execution, hence for the offline optimum. Algorithms enter only in [Part III](part-algorithms.html), where each is measured against both.
+Part I fixed what a BST execution is and what it costs. Part II asks how much a request sequence *must* or *may* cost, independently of any algorithm. Two kinds of statements live here. **Upper-bound benchmarks** are explicit functions of the sequence, such as the entropy of its access frequencies, that a good algorithm should match. **Lower bounds** hold for every execution, hence for the offline optimum. Algorithms enter only in [Part III](part-classical.html) and [Part IV](part-algorithms.html), where each is measured against both.
 
 - [Chapter 12](bounds.html) defines the classical benchmarks of the splay-tree literature: the working set, static optimality, the static and dynamic finger sums, the unified charge, and comparison with a fixed tree. It proves the implications between them, and the entropy bounds that make "static optimality" mean what its name says.
 - [Chapter 13](lazy-finger.html) studies a static tree searched with a *lazy finger*, where each search starts where the previous one ended, and proves that the best such tree costs, up to constant factors, the best weighted dynamic finger bound.
@@ -18,7 +18,8 @@ Two figures collect the relations between them: the first up to constant factors
 - $\mathrm{LF}^*$, the cost of the best static tree searched with a lazy finger, [[LazyFinger.optimalCost]] ([Chapter 14](lazy-finger.html));
 - $\mathrm{WDF}^*$, the best weighted dynamic finger bound, [[WeightedFinger.optimalCostFrom]] ([Chapter 14](lazy-finger.html));
 - $\mathrm{RF}^*$, the cost of the best static tree searched from the root, the minimum of [[StaticTree.cost]] over trees;
-- $\mathrm{SO}$, the entropy bound [[Bounds.staticCost]]; $\mathrm{WS}$, the working-set sum [[workingSetSum]]; $\mathrm{SF}$, the static finger sum [[Bounds.fingerCost]]; and $\mathrm{DF}$, the dynamic finger sum [[Bounds.dynamicFingerCostFrom]].
+- $\mathrm{SO}$, the entropy bound [[Bounds.staticCost]]; $\mathrm{WS}$, the working-set sum [[workingSetSum]]; $\mathrm{SF}$, the static finger sum [[Bounds.fingerCost]]; and $\mathrm{DF}$, the dynamic finger sum [[Bounds.dynamicFingerCostFrom]];
+- $m(1 + \log n)$, what a balanced tree pays, about $\log_2 n$ per request whatever the sequence. It is the baseline of the classical trees of [Part III](part-classical.html), and has no Lean definition yet.
 
 ### Up to constants
 
@@ -32,10 +33,14 @@ The bubbles are algorithms. An arrow from an algorithm to a bound means that the
 |---|---|---|---|
 | Tango trees ([Chapter 28](tango.html)) | $\mathrm{OPT}$, ratio $O(\log\log n)$ | An online BST algorithm whose total cost is at most $(56\log_2(\lfloor\log_2 n\rfloor + 1) + 16)$ times that of any offline execution from the same tree, plus $O(n \log\log n)$. | [[Tango.Algorithm.Results.exists_competitive\|exists_competitive]] |
 | Splay trees ([Chapter 19](analysis.html)) | $\mathrm{WS}$ | At most $10\,\mathrm{WS} + 6n(1 + \lfloor\log_2 n\rfloor)$ rotations, from every initial tree. | [[Splay.Results.workingSet\|Splay.workingSet]] |
-| Splay trees | $\mathrm{OPT}$, ratio $O(\log\log n \cdot \log^2\log\log n)$ | Chmel, Haeupler, Hladík, Koucký, Roeyskoe, Rozhoň, Sladký and Tarjan, *Splay trees are almost dynamically optimal* (arXiv:2607.18498, 2026). | not formalized yet |
+| Splay trees | $\mathrm{OPT}$, ratio $O(\log\log n \cdot \log^2\log\log n)$ | Proved by @chmel2026. | not formalized yet |
 | GreedyASS ([Chapter 23](greedy-finger.html)) | $\mathrm{LF}^* = \mathrm{WDF}^*$ | Some online BST algorithm costs at most $722280\,\mathrm{LF}^* + 96303\,n$, and at most $2889120\,\mathrm{WDF}^* + 96303\,n$ from every start key. | [[Geometric.GreedyASS.Performance.Results.bst\|GreedyASS bst]] |
 | Combined BST ([Chapter 38](combined-finger.html)) | $\mathrm{OPT}$, ratio $O(\log\log n)$, and $\mathrm{WDF}^* = \mathrm{LF}^*$ | One causal program, chosen before the requests: GreedyASS and Tango with linear startup, combined by ComboBST and deamortized. Its cost is $O(n + \min(\mathrm{WDF}^*, (m + R)(1 + \log_2(1 + \lfloor\log_2 n\rfloor))))$ for every offline execution with $R$ rotations, and each request costs less than $251 + 195\log_2 n$. | [[Geometric.GreedyASS.Combination.Deamortized.Results.combined\|combined]] |
 | Optimal lazy-finger tree ([Chapter 29](optimal-lazy-finger.html)) | $\mathrm{LF}^*$ | A dynamic program builds a static tree whose lazy-finger cost is exactly $\mathrm{LF}^*$. It reads the whole sequence first. | [[OptimalLazyFinger.Work.Results.root_start\|root_start]] |
+| Entropy tree ([Chapter 18](static-trees.html#entropy-trees)) | $\mathrm{RF}^* = \mathrm{SO}$ | A static tree with the weighted median at every root costs at most $\mathrm{SO}$. It is built from the access frequencies. | [[StaticTree.Results.entropy_upper_bound\|entropy_upper_bound]] |
+| Optimal static tree ([Chapter 18](static-trees.html#optimal-static-trees)) | $\mathrm{RF}^*$ | Knuth's dynamic program computes a static tree of cost exactly $\mathrm{RF}^*$, in $O(n^2)$ time. | not formalized yet |
+| Balanced trees ([Part III](part-classical.html)) | $m(1 + \log n)$ | The perfect static tree, and AVL, red-black, WAVL, BB[α] and scapegoat trees under updates, have height $O(\log n)$. | not formalized yet |
+| Random trees ([Chapter 21](random-trees.html)) | $m(1 + \log n)$, in expectation | Every key of a random BST or a treap has expected depth at most $2 \ln n$. | not formalized yet |
 | Multiple trees ([Chapter 30](multiple-trees.html)), not a BST | $m(1+H)$, ratio $O(\log n / \log c)$ | With $c$ successors per key and $10nc$ words, cost at most $6\,m(1+H)\,(1 + \log_2 n)/(1 + \log_2 c)$, in the linked-search model. | [[MultipleTrees.Results.sequence\|MultipleTrees.sequence]] |
 
 ### With constants

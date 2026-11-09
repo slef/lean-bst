@@ -2,7 +2,7 @@
 
 The online simulation of [Chapter 17](simulation.html) keeps groups of keys that were touched at the same time, and it must later break these groups apart, a few keys at a time, as new requests touch parts of them. Each group is a binary search tree in its own right, sitting inside the big tree. What the simulation needs from it is a single operation: *split off the keys up to a given rank*, paid for by the keys of the group. Over the whole life of a group, a key may be involved in many splits, so a logarithmic cost per split is too much. The cost must be constant per key, amortized over all splits the group ever undergoes.
 
-The classical way to achieve this is a finger search tree in which a split at rank $k$ costs $O(\log \min(k, n-k))$, the logarithm of the *smaller* side. A charge of that form adds up to $O(n)$ over any sequence of splits that eventually separates all $n$ keys. This accounting is the one used for level-linked search trees in Hoffmann, Mehlhorn, Rosenstiehl and Tarjan's linear-time Jordan sorting (1986), and Demaine, Harmon, Iacono, Kane and Pătraşcu build the *split trees* of their geometric simulation (2009) on the same principle. The difficulty in the BST model is that there are no finger pointers. Every access starts at the root, so a finger has to be *a shape of the tree*: the tree is restructured so that the endpoint is at the root and the keys near it are shallow.
+The classical way to achieve this is a finger search tree in which a split at rank $k$ costs $O(\log \min(k, n-k))$, the logarithm of the *smaller* side. A charge of that form adds up to $O(n)$ over any sequence of splits that eventually separates all $n$ keys. This accounting is the one used for level-linked search trees in the linear-time Jordan sorting of Hoffmann, Mehlhorn, Rosenstiehl and Tarjan [-@hoffmann1986], and Demaine, Harmon, Iacono, Kane and Pătraşcu [-@demaine2009] build the *split trees* of their geometric simulation on the same principle. The difficulty in the BST model is that there are no finger pointers. Every access starts at the root, so a finger has to be *a shape of the tree*: the tree is restructured so that the endpoint is at the root and the keys near it are shallow.
 
 The library implements split trees as 2–3–4 trees viewed as binary search trees. This chapter shows the vocabulary, all in `Structures/SplitTree`, and the contract that the simulation uses. The implementation of splitting, joining and two-ended fingers is internal to the library; it is checked by Lean but not part of the reading interface.
 
@@ -10,7 +10,7 @@ The chapter's main result has two halves. A finger at the minimum can be built c
 
 ```headline split-fingers
 title: Fingers as tree shapes, and splits paid for by the smaller side
-source: Demaine, Harmon, Iacono, Kane and Pătraşcu, *The geometry of binary search trees* (2009)
+source: @demaine2009
 theorems: SplitTree.Results.finger_construction SplitTree.Results.finger_access SplitTree.Results.linear_accounting
 
 Let $t$ be a 2–3–4 tree of height $h$ with $n$ keys, stored as a BST in its standard binary representation.
@@ -24,7 +24,7 @@ In Lean, $t$ is a [[SplitTree.Multiway]] with [[SplitTree.Multiway.Balanced]], i
 
 ## 2–3–4 trees without keys
 
-A 2–3–4 tree, the B-tree of order 4 (Bayer and McCreight, 1972), has internal nodes with two, three or four children, holding one, two or three keys, and all leaves at the same depth. As with binary shapes in [Chapter 1](shapes.html), the library stores no keys. A node's keys are the inorder ranks between its subtrees.
+A 2–3–4 tree, the B-tree of order 4 [@bayer1972], has internal nodes with two, three or four children, holding one, two or three keys, and all leaves at the same depth. As with binary shapes in [Chapter 1](shapes.html), the library stores no keys. A node's keys are the inorder ranks between its subtrees.
 
 @decl RotationBST.SplitTree.Multiway RotationBST.SplitTree.Multiway.size RotationBST.SplitTree.Multiway.nodes
 
