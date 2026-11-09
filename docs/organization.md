@@ -576,3 +576,17 @@ This chapter concerns abstract BST operations. It does not establish bounds on
 finite-word storage or private computation, the full real-world clauses of
 ComboBST/deamortization, or dynamic optimality. Those remaining developments
 are separate from this complete abstract-model result.
+
+## Tango with linear startup as one algorithm
+
+ROADMAP entry 3 (branch `formalize-tango-linear`, 2026-11-09).
+[`Tango.Algorithm.Results.exists_competitive_linear`](../RotationBST/Algorithms/Tango/Algorithm/Abstract.lean)
+states that one online algorithm, fixed for each `n`, has total cost at most
+`(70 log₂(⌊log₂ n⌋ + 1) + 20)(R + m) + 44n` from every initial tree on `n` keys.
+It sits next to `exists_competitive` (startup `O(n log log n)`, factor `56`).
+The proof (`Algorithms/Tango/Algorithm/Linear.lean`) only composes two existing
+results: the bottom-up policy's bound `run + m ≤ 42n + F(R + m)`
+(`BottomUp.balanced_policy`) and the erasure to a rotation algorithm with one
+`2n` reset (`Policy.rotation_algorithm`). Regression examples:
+`RotationBSTTests/TangoLinear.lean`. The book chapter `algorithms/tango-linear.md`
+still composes the two by hand.

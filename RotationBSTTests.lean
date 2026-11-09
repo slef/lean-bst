@@ -5,6 +5,7 @@ import RotationBSTTests.UniformCombination
 import RotationBSTTests.CombinationCharges
 import RotationBSTTests.TangoInitialization
 import RotationBSTTests.TangoCombination
+import RotationBSTTests.TangoLinear
 
 public import RotationBST
 public import RotationBSTTests.AbstractBoundary
