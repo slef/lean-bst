@@ -43,6 +43,8 @@ if (!fs.existsSync(path.join(DIST, 'index.html'))) {
 const { chromium } = await import('playwright-core');
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff', '.png': 'image/png' };
 const server = http.createServer((req, res) => {
+  // Full Chrome asks for /favicon.ico on its own; the book has no favicon.
+  if (req.url === '/favicon.ico') { res.writeHead(204); res.end(); return; }
   let file = path.join(DIST, decodeURIComponent(req.url.split('?')[0].split('#')[0]));
   if (file.endsWith('/')) file = path.join(file, 'index.html');
   fs.readFile(file, (err, data) => {
@@ -59,7 +61,11 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const problems = [];
 let current = '';
 page.on('pageerror', (e) => problems.push(`${current}: JavaScript error: ${e.message}`));
-page.on('console', (m) => { if (m.type() === 'error') problems.push(`${current}: console error: ${m.text()}`); });
+// "Failed to load resource" carries no URL; the response and requestfailed
+// handlers below report local failures with their URL instead.
+page.on('console', (m) => {
+  if (m.type() === 'error' && !/^Failed to load resource/.test(m.text())) problems.push(`${current}: console error: ${m.text()}`);
+});
 page.on('requestfailed', (r) => { if (r.url().startsWith(base)) problems.push(`${current}: failed request ${r.url().slice(base.length)}`); });
 page.on('response', (r) => { if (r.url().startsWith(base) && r.status() >= 400) problems.push(`${current}: ${r.status()} for ${r.url().slice(base.length)}`); });
 
