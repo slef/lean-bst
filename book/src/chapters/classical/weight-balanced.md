@@ -24,12 +24,12 @@ Roadmap [entry 8](https://github.com/slef/lean-bst/blob/main/ROADMAP.md#8-weight
 
 ## Restoring by rebuilding: scapegoat trees
 
-Scapegoat trees [@andersson1989; @galperin1993] store no balance information at all. An insertion that lands deeper than $\log_{1/\alpha} n$ walks back up to find a *scapegoat*, an ancestor whose subtree violates weight balance with $\beta = \alpha$, and rebuilds that subtree into a perfect tree. When deletions shrink the tree by a constant factor, the whole tree is rebuilt.
+Scapegoat trees [@andersson1989; @galperin1993] store no balance information at all. An insertion that lands deeper than $\log_{1/\alpha} n$ walks back up to find a *scapegoat*, an ancestor whose subtree violates weight balance with $\beta = \alpha$, and rebuilds that subtree into a balanced tree. (Galperin and Rivest measure a subtree by its number of keys rather than keys plus one; this only shifts constants.) When deletions shrink the tree by a constant factor, the whole tree is rebuilt.
 
-In the rotation model, rebuilding needs no new tool. The reset theorem of [Chapter 3](accesses.html#any-shape-to-any-shape) turns any tree into any other of the same size with at most $2s$ rotations. Applied inside a subtree of size $s$, with the balanced tree as the target, it rebuilds the subtree with at most $2s$ rotations. The proof of the reset theorem rotates the tree into a right spine and back out. That is also the Day–Stout–Warren algorithm [@day1976; @stout1986], which does it in linear time.
+In the rotation model, rebuilding needs no new tool. The reset theorem of [Chapter 3](accesses.html#any-shape-to-any-shape) turns any tree into any other of the same size with at most $2s$ rotations. Applied inside a subtree of size $s$, with the balanced tree as the target, it rebuilds the subtree with at most $2s$ rotations. The proof of the reset theorem rotates the tree into a right spine and back out. The Day–Stout–Warren algorithm [@day1976; @stout1986] follows the same idea: it rotates the tree into a vine, then compresses the vine into a tree of minimum height, in linear time.
 
 ::: todo
-- A subtree of size $s$ can be rebuilt into the balanced tree with at most $2s$ rotations, by an explicit linear-time procedure.
+- A subtree of size $s$ can be rebuilt into a tree of minimum height with at most $2s$ rotations, by an explicit linear-time procedure.
 - Scapegoat trees have height at most $\log_{1/\alpha} n + 1$.
 - An insertion or a deletion costs $O(\log n)$ amortized, rebuilding included.
 

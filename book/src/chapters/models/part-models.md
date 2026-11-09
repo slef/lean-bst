@@ -6,10 +6,10 @@ Part I fixes what a binary search tree execution is and what it costs. The liter
 
 | Chapters | Model | An execution is | Cost |
 |---|---|---|---|
-| {{num:shapes}}–{{num:accesses}} | [Rotations](shapes.html) | A sequence of root accesses on a tree whose keys are its inorder ranks. Each request rotates anywhere until the requested key is at the root. | $m + R$: one per request, one per rotation |
+| {{num:shapes}}–{{num:accesses}} | [Rotations](shapes.html) | A sequence of root accesses on a tree whose keys are its inorder ranks, changed by [rotations](rotations.html). Each request rotates anywhere until the requested key is at the root. | $m + R$: one per request, one per rotation |
 | {{num:keys}} | [Labelled trees](keys.html) | The same, on trees that store arbitrary ordered keys | $m + R$ |
 | {{num:online}} | [Online algorithms](online.html) | A rule that chooses each access from the requests so far. Its run is an execution of the rotation model. | $m + R$ |
-| {{num:dictionary}} | [Insertions and deletions](dictionary.html) | A sequence of searches, insertions and deletions by rank, with balance data in the nodes. Only the splay-tree version is formalized. | one per request, one per node of the search path, one per rotation |
+| {{num:dictionary}} | [Insertions and deletions](dictionary.html) | A sequence of searches, insertions and deletions by rank, with balance data in the nodes. Only the splay-tree version is formalized. | one per node of the search path, one per rotation |
 | {{num:pointer}} | [Pointer machine](pointer.html) | One cursor, which starts at the root for every request, moves along edges and rotates its node over its parent | $K$: one per request, one per instruction |
 | {{num:regions}} | [Touched regions](regions.html) | Each request touches a rooted subtree containing the requested key, and rearranges it | the number of touched nodes |
 | {{num:geometry}} | [Geometric view](geometry.html) | An arborally satisfied set of points (key, time) containing the requests | $\lvert E\rvert$: the number of points |

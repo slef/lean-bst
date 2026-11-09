@@ -212,8 +212,9 @@ section "Beyond single accesses", `algorithms/beyond.md`).
 
 - operations by rank, as in `Splay.Updates`: access rank `x`, insert at gap
   `k ≤ n`, delete rank `x` (split and join optional);
-- cost: one unit, plus one per node of the search path in the tree before
-  the operation, plus one per rotation; rank, colour or size changes counted
+- cost: one unit per node of the search path in the tree before the
+  operation, plus one per rotation (so a search that changes nothing costs
+  `1 + depth`, the static cost `StaticTree.cost`); rank, colour or size changes counted
   separately (a second counter);
 - node data of an arbitrary type, through `Models/Labelled/Metadata` or a
   tree type with a field per node;
@@ -252,7 +253,8 @@ trees" (`classical/rank-balanced.md`). Needs entry 6.
 rules:
 
 ```lean
-/-- A tree with an integer rank in each node; a missing child has rank -1. -/
+/-- A tree with an integer rank in each node; a missing child has rank -1.
+`height` below is defined on this type, counting edges. -/
 def RotationBST.Classical.RankBalanced.RankedTree := ...
 inductive Rule | avl | redBlack | wavl
 def Valid (r : Rule) : RankedTree → Prop
@@ -304,15 +306,19 @@ invariant.
 /-- Every child's weight (size + 1) is at most β times its parent's. -/
 def RotationBST.Classical.WeightBalanced.Balanced (β : ℝ) : Tree → Prop
 
+-- `Tango.height` counts nodes on the longest root-to-leaf path.
 theorem height_le (β) (hβ : 1/2 < β ∧ β < 1) (t) (h : Balanced β t) :
-    (t.height : ℝ) ≤ Real.logb (1/β) (t.size + 1)
+    (Tango.height t : ℝ) ≤ Real.logb (1/β) (t.size + 1)
 
-/-- Rebuilding inside a subtree: an explicit linear procedure (vine and
-compress), returning the balanced tree and at most 2s rotations. -/
+/-- Rebuilding inside a subtree: an explicit linear procedure (to the right
+spine, then compress), returning a tree of minimum height and at most 2s
+rotations. Day–Stout–Warren's compression does not build `Tango.balanced`
+exactly; either target it with a different second phase, or state the
+height only, as here. -/
 def rebuild (t : Tree) : Tree × Nat
 theorem rebuild_spec (t : Tree) :
-    (rebuild t).1 = Tango.balanced t.size ∧ (rebuild t).2 ≤ 2 * t.size ∧
-      Rotations t (rebuild t).1 (rebuild t).2
+    (rebuild t).1.size = t.size ∧ Tango.height (rebuild t).1 = Nat.log2 t.size + 1 ∧
+      (rebuild t).2 ≤ 2 * t.size ∧ Rotations t (rebuild t).1 (rebuild t).2
 
 -- BB[α], for 2/11 < α ≤ 1 - √2/2: single/double rotations restore balance,
 -- and the total number of rotations over m updates from empty is O(m).
@@ -348,8 +354,9 @@ binary tree structures* (JAR 2020) cover similar ground.
 
 ```lean
 -- (a) Expected depth, a corollary of Treap.Random.common_ancestor_probability
--- with x = y and uniform weights.
-theorem RotationBST.Treap.Random.Results.expected_depth (n x : Nat) (hx : x < n)
+-- with x = y and uniform weights. Proved next to it, stated in
+-- Classical/Random/Abstract.lean.
+theorem RotationBST.Classical.Random.Results.expected_depth (n x : Nat) (hx : x < n)
     (T : List Nat → Tree)
     (spec : ∀ xs, (T xs).size = n ∧ Geometric.Heap xs.idxOf (T xs) 0) :
     average (fun _ => 1) (Finset.range n) (fun xs => ((T xs).depth x : ℝ)) =
@@ -360,7 +367,7 @@ theorem RotationBST.Treap.Random.Results.expected_depth (n x : Nat) (hx : x < n)
 -- set (history independence); expected rotations per update < 2.
 theorem bstInsertAll_treap (order : List Nat) ... :
     Geometric.Heap order.idxOf (bstInsertAll order) 0
-theorem expected_insert_rotations ... : average ... ≤ 2
+theorem expected_insert_rotations ... : average ... < 2
 
 -- (c) Randomized BSTs produce the uniform treap distribution after every
 -- operation; zip trees produce the treap of their (rank, key) priorities.

@@ -22,7 +22,7 @@ Moreover, for every $\varepsilon > 0$ there is a capacity $c$, depending only on
 The cost is that of the linked-search model of [Chapter 11](linked-search.html): one unit per visited tree node and per pointer link followed. The store is built from the transition counts of the very sequence it serves, and the time to build it is not part of the bound; the counts themselves are not stored. In Lean, the execution is [[RotationBST.LinkedSearch.Execution]], the space [[RotationBST.LinkedSearch.Store.words]], the counts [[RotationBST.LazyFinger.frequency]], $m + I$ is [[RotationBST.ConditionalEntropy.cost]] and $H$ is [[RotationBST.ConditionalEntropy.entropy]].
 ```
 
-The box is enough to confirm the result; its reading path consists of the linked-search model, the conditional-entropy definitions and the construction of this chapter. The rest of the chapter builds the structure and proves the bound. [Section 30.1](#offline-preprocessing-online-queries) explains the setting, [Section 30.2](#selecting-the-successors) and [Section 30.3](#local-trees) build the local trees, [Section 30.4](#the-store) assembles them, [Section 30.5](#serving-one-request) bounds a single request, and [Section 30.6](#the-tradeoff) states Theorem 9 and its Section 7 consequence in full.
+The box is enough to confirm the result; its reading path consists of the linked-search model, the conditional-entropy definitions and the construction of this chapter. The rest of the chapter builds the structure and proves the bound. [Section 30.1](#offline-preprocessing-online-queries) explains the setting, [Section 30.2](#selecting-the-successors) and [Section 30.3](#local-trees) build the local trees, [Section 30.4](#the-store) assembles them, [Section 30.5](#serving-one-request) bounds a single request, and [Section 30.6](#the-tradeoff) states the paper's Theorem 9 and its Section 7 consequence in full.
 
 The definitions are in `Algorithms/MultipleTrees/Definitions/Abstract.lean`, `Selection/Definitions/Abstract.lean` and `Cache/Definitions/Abstract.lean`; the theorems are in `Algorithms/MultipleTrees/Abstract.lean`, `Selection/Abstract.lean` and `Cache/Abstract.lean`.
 
@@ -120,7 +120,7 @@ The sequence is a list of `Fin n`, so its validity is part of its type; `xs.map 
 
 Two capacities are worth spelling out. With $c = n$, every observed successor is stored, the store has $O(n^2)$ words and the cost is at most $6(m + I)$, within a constant of the benchmark. With $c = 1$, the store has $O(n)$ words and the cost is $O((m + I)\log n)$. In between, the factor is $(1 + \log_2 n)/(1 + \log_2 c) \approx \log_c n$.
 
-**Theorem (polynomial space, Section 7).** Let $n \ge 1$ and $\varepsilon > 0$. There is a capacity $c$ with $1 \le c \le n$, depending only on $n$ and $\varepsilon$, such that for every start $p$ and every sequence $X$, the store built with capacity $c$ from the transition counts of $X$ serves $X$ from $p$ at cost at most $\frac{6}{\min(\varepsilon,1)}\, m\,(1 + H)$, and uses at most $20\, n^{1+\varepsilon}$ words.
+**Theorem (polynomial space, Section 7 of the paper).** Let $n \ge 1$ and $\varepsilon > 0$. There is a capacity $c$ with $1 \le c \le n$, depending only on $n$ and $\varepsilon$, such that for every start $p$ and every sequence $X$, the store built with capacity $c$ from the transition counts of $X$ serves $X$ from $p$ at cost at most $\frac{6}{\min(\varepsilon,1)}\, m\,(1 + H)$, and uses at most $20\, n^{1+\varepsilon}$ words.
 
 @decl RotationBST.MultipleTrees.Results.polynomial_space
 

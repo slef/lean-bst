@@ -21,7 +21,7 @@ const s = (name, attrs = {}, parent) => {
 const L = 'RotationBST.';
 const W = 860, H = 540, BW = 168, BH = 50;
 
-const NODES = [
+export const NODES = [
   { id: 'MF', x: 100, y: 70, sym: 'Many fingers', name: 'K: instructions + requests', href: 'fingers.html',
     text: 'Several persistent fingers in one tree; each moves or rotates at its node, and a request is served when some finger stands on it.' },
   { id: 'PTR', x: 430, y: 70, sym: 'Pointer machine', name: 'K: instructions + requests', href: 'pointer.html',
@@ -36,7 +36,7 @@ const NODES = [
     text: 'The rotation model on trees that store arbitrary ordered keys.' },
   { id: 'REG', x: 760, y: 350, sym: 'Touched regions', name: 'touched nodes', href: 'regions.html',
     text: 'Each request touches a rooted subtree containing the requested key and rearranges it; the cost is the number of touched nodes.' },
-  { id: 'DIC', x: 430, y: 350, sym: 'Insertions, deletions', name: 'm + search + R', href: 'dictionary.html', todo: true,
+  { id: 'DIC', x: 430, y: 350, sym: 'Insertions, deletions', name: 'search paths + R', href: 'dictionary.html', todo: true,
     text: 'Dictionaries: insertions and deletions by rank, each charged its search path plus its rotations, with balance data in the nodes. Only the splay-tree version is formalized.' },
   { id: 'ONP', x: 100, y: 490, sym: 'Online pointer', name: 'algorithms', href: 'pointer.html#running-an-online-algorithm-on-the-pointer-machine',
     text: 'Online algorithms on the pointer machine: each response depends only on the requests so far.' },
@@ -46,10 +46,10 @@ const NODES = [
     text: 'Rules that add one row of points per request, looking only at the rows before it.' },
 ];
 
-const EDGES = [
+export const EDGES = [
   { from: 'MF', to: 'PTR', off: -6, label: '1 finger: K ≤ 464·cost', lab: [265, 52, 'middle'], thms: ['LazyFinger.Dynamic.Results.same_tree'],
     text: 'A static tree searched with a lazy finger is a one-finger execution, and from the same tree some pointer execution costs at most 464 times as much. For k fingers the library proves a factor 344 + 60(k + 1) in a proof file, outside the reading interface.' },
-  { from: 'PTR', to: 'MF', off: -6, label: 'traces are 1-finger traces', lab: [265, 106, 'middle'], thms: [],
+  { from: 'PTR', to: 'MF', off: -6, label: 'traces are 1-finger traces', lab: [265, 106, 'middle'], thms: [], internal: true,
     text: 'Every pointer trace is a one-finger trace with the same instructions (proved in a proof file, outside the reading interface). Requests differ: a finger is never sent back to the root.' },
   { from: 'ROT', to: 'PTR', off: -6, label: 'K + 32d ≤ 32R + 17m', lab: [250, 138, 'end'], thms: ['Pointer.Results.to_pointer_lazy', 'Pointer.Results.to_pointer'],
     text: 'A rotation execution becomes a pointer execution serving the same requests from the same tree, ending d rotations away from the same final tree. Exactly the same final tree is reachable at cost K ≤ m + 2nR.' },

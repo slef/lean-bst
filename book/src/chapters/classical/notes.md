@@ -10,7 +10,7 @@ The optimal static tree for given access frequencies goes back to @gilbert1959, 
 
 When only the gaps carry weight, the problem is that of optimal alphabetic codes. @hu1971 solved it in $O(n \log n)$ time. The algorithm of @garsia1977 computes a tree of the same cost by a simpler procedure, with the same running time.
 
-Near-optimal trees are easier to build. @mehlhorn1975 put the weighted median at the root and recursed, and showed that the resulting tree is within an additive constant of the entropy bound, which no tree can beat by more than a constant factor. @mehlhorn1977 gave the best possible bound on the weighted path length of optimal trees in terms of the entropy. @larmore1987 computed approximately optimal trees in subquadratic time. These entropy bounds are the ones the book proves in [Chapter 13](bounds.html#comparison-with-a-fixed-tree).
+Near-optimal trees are easier to build. @mehlhorn1975 chose each root by bisecting the weight, built the tree in linear time, and bounded its cost by a constant times the entropy plus a constant. @mehlhorn1977 gave the best possible bound on the weighted path length in terms of the entropy, with an additive constant only. @larmore1987 computed approximately optimal trees in subquadratic time. These entropy bounds are the ones the book proves in [Chapter 13](bounds.html#comparison-with-a-fixed-tree).
 
 Weights can also change. @mehlhorn1979 maintained nearly optimal trees under changing frequencies, and the biased search trees of @bent1985 keep every key $x$ at depth $O(\log(W/w_x))$ under insertions, deletions, joins and splits.
 
@@ -44,7 +44,7 @@ Treaps are due to Aragon and Seidel; the journal version is @seidel1996. The sam
 
 ## Insertions and deletions
 
-[Chapter 6](dictionary.html) adds insertions and deletions to the model of Part I. The amortized bounds for splay trees with updates are in @sleator1985. Level-linked trees support finger searches and updates near a finger in time logarithmic in the distance [@brown1980; @huddleston1982], and @hoffmann1986 used them for linear-time Jordan sorting.
+[Chapter 6](dictionary.html) adds insertions and deletions to the model of [Part I](part-models.html). The amortized bounds for splay trees with updates are in @sleator1985. Level-linked trees support finger searches and updates near a finger in time logarithmic in the distance [@brown1980; @huddleston1982], and @hoffmann1986 used them for linear-time Jordan sorting.
 
 ## Rotation distance
 

@@ -185,7 +185,7 @@ Theorem 5 of the paper charges each access the *smallest* of its three logarithm
 As for the static finger theorem, there is no `f < t.size` hypothesis. The minimum is taken **per access**, so this is not merely the minimum of the three earlier theorems. The proof uses the sum of three weights: the recency weight $1/\rho^2$, which changes after each access as in the working-set proof, plus two fixed weights, $q_i/m$ and $1/(|i - f| + 1)^2$. The total weight is at most $7 < 2^3$, so $\log_2 W \le 3$. Each of the three weights is at most the combined weight, so the amortized cost of an access is at most $10\cdot$`unifiedCharge`. Every charge is at least $1$, which absorbs the $m$ requests into the constant $11$.
 
 ::: caveat Not the dynamic unified bound
-This is the 1985 *fixed-finger* unified theorem. It is not Iacono's later unified bound [@iacono2001], in which the finger distance is measured to recently accessed keys. Whether splay trees satisfy that bound is open, and the library makes no claim about it.
+This is the 1985 *fixed-finger* unified theorem. It is not the later unified bound of @iacono2001, in which the finger distance is measured to recently accessed keys. Whether splay trees satisfy that bound is open, and the library makes no claim about it.
 :::
 
 ## Measured cost against the bounds

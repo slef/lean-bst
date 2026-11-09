@@ -10,7 +10,7 @@ The dynamic finger bound for splay trees is the theorem of @cole2000sorting and 
 
 ## The lazy finger and the weighted dynamic finger
 
-The lazy finger of [Chapter 13](lazy-finger.html) is due to @bose2016. They showed that, unlike the root finger, its optimum is not described by an entropy, derived an asymptotically tight expression for it, and computed the optimal tree by dynamic programming. Expressed with weights on the keys, this cost is the weighted dynamic finger bound, the name used by @iacono2016, who showed that GreedyASS meets it. [Chapter 23](greedy-finger.html) formalizes their proof. The comparison of [Chapter 14](lazy-finger-hierarchy.html) between lazy-finger trees, root-finger trees and dynamic BSTs is Theorem 6 of @bose2016. @chalermsook2016landscape extend the lazy finger to several fingers and obtain a hierarchy of bounds, and @goyal2019 use a related certificate to bound GreedyASS on decomposable sequences.
+The lazy finger of [Chapter 13](lazy-finger.html) is due to @bose2016. They showed that, unlike the root finger, its optimum is not described by an entropy, derived an asymptotically tight expression for it, and computed the optimal tree by dynamic programming. Expressed with weights on the keys, this cost is the weighted dynamic finger bound, the name used by @iacono2016, who showed that GreedyASS meets it. [Chapter 23](greedy-finger.html) formalizes their proof. The comparison of [Chapter 14](lazy-finger-hierarchy.html) between lazy-finger trees, root-finger trees and dynamic BSTs is Theorem 6 of @bose2016. @chalermsook2016landscape extend the lazy finger to several fingers and obtain a hierarchy of bounds, including a tight $O(n \log d)$ bound for GreedyASS on $d$-decomposable sequences, which @goyal2019 proved independently with a new lower-bound certificate.
 
 ## Lower bounds
 
@@ -24,7 +24,7 @@ No polynomial-time algorithm is known that computes the offline optimum within a
 
 ## Conditional entropy
 
-The conditional-entropy benchmark of [Chapter 16](conditional-entropy.html), the proof that no BST meets it (Lemma 7), and the multiple-tree structure that does (Theorem 9) are from @bose2016. The bit-reversal sequence used in the proof is Wilber's standard hard example [@wilber1989].
+The conditional-entropy benchmark of [Chapter 16](conditional-entropy.html), the proof that no BST meets it (Lemma 7), and the multiple-tree structure that meets it within a factor $\log n / \log c$ with $O(nc)$ words of space (Theorem 9) are from @bose2016. The bit-reversal sequence used in the proof is Wilber's standard hard example [@wilber1989].
 
 ## Related bounds not covered
 

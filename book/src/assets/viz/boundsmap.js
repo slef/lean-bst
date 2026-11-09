@@ -64,7 +64,7 @@ const TEXT = {
   dfSf: 'The dynamic finger sum is at most twice the static finger sum, for every finger f, plus log(|p − f| + 1) for the start key p: a step from x to y costs at most the steps from x to f and from f to y. This is classical, but not formalized yet.',
 };
 
-const MAPS = {
+export const MAPS = {
   bigo: {
     w: 780, h: 690, bw: 150,
     title: 'How the bounds relate, up to constants',
@@ -110,7 +110,7 @@ const MAPS = {
       { from: 'knuth', to: 'RF', kind: 'alg', todo: true,
         text: "Knuth's dynamic program, sped up by Yao's quadrangle inequality, computes a static tree of cost exactly RF* in O(n²) time. It is offline: it needs the access frequencies." },
       { from: 'balanced', to: 'BAL', kind: 'alg', todo: true,
-        text: 'A tree of height O(log n) serves every request with O(log n) nodes: the perfect static tree, and AVL, red-black, WAVL, BB[α] and scapegoat trees under insertions and deletions.' },
+        text: 'A tree of height O(log n) serves every request with O(log n) nodes: the balanced static tree, and AVL, red-black, WAVL, BB[α] and scapegoat trees under insertions and deletions.' },
       { from: 'random', to: 'BAL', kind: 'alg', todo: true,
         text: 'In a random BST or a treap, every key has expected depth at most 2 ln n, so the expected cost is at most m(1 + 2 ln n).' },
       { from: 'tango', to: 'OPT', kind: 'alg', label: 'O(log log n)', lab: [318, 98, 'start'],

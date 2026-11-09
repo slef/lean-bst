@@ -5,7 +5,7 @@ This survey lists the research literature on binary search trees, grouped by top
 For each result the tables give:
 
 - **Key**: the entry in `book/src/bibliography.json`. Results listed without a key are not in the bibliography; their identifier is given instead, checked against Crossref, DataCite or arxiv.org.
-- **In the book**: where it appears. Chapter numbers are those of the current build (Part I: 1–11, Part II: 12–16, Part III: 17–25, Part IV: 26–33), with the page slug. "Notes" means it is only cited in a part's bibliographic notes. "Classical branch" means it belongs to the "Classical search trees" part being written on the branch `book-classical`.
+- **In the book**: where it appears. Chapters are identified by their page slug. The numbers next to them are those of the book before the classical part was added (Part I: 1–11, Part II: 12–16, Part III: 17–25, Part IV: 26–33); since then, Part III is "Classical search trees" and the later parts moved down by one. Follow the slug, not the number. "Notes" means it is only cited in a part's bibliographic notes. "Classical branch" means it belongs to the "Classical search trees" part being written on the branch `book-classical`.
 - **Recommendation**: **core** (should get a chapter or a section), **notes** (cite in the notes, no formal treatment needed), or **out of scope**.
 
 Every DOI and arXiv identifier in the bibliography was resolved and its title compared with the entry. The method and the few entries without a verifiable link are listed at the end.
@@ -110,7 +110,7 @@ Rotation distance, which the classical branch and Part I touch:
 | $\tilde O(\log\log n)$-competitive | `chmel2026` | Part II map (dashed), roadmap 2 | **core**, when refereed |
 | Traversal conjecture: special cases | `chaudhuri1993`, `levy2019preorders` | Notes III | **core** as statements in an "Easy sequences" section; proofs optional |
 | Deque conjecture: $O(n\alpha(n))$, $O(n\alpha^*(n))$; output-restricted deques linear | `sundar1992`, `pettie2008`, `tarjan1985`, `elmasry2004` | Notes III | **core** as statements; the output-restricted case is a candidate for formalization |
-| Split conjecture, union-find connection | `lucas1991` | Notes III | notes |
+| Split conjecture, union-find connection | `lucas1992` | Notes III | notes |
 | Forbidden 0-1 matrices applied to splay trees | `pettie2010` | Notes III | notes |
 | Why splaying works: general access-lemma conditions | `subramanian1996`, `chalermsook2015tick` | Notes III | **core**: a section generalizing the access lemma of Section 18.2 would serve splay, GreedyASS and multi-splay |
 | Splay is dynamically optimal iff approximately monotone | `levy2019path`, `levy2019foundation` | Notes III | notes |

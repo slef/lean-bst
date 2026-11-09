@@ -6,7 +6,7 @@ A static tree can know two things in advance: the number of keys, or how often e
 
 ## Perfect trees
 
-The library defines the perfect tree [[Tango.perfect]] of height $h$, and the balanced tree [[Tango.balanced]] on any number $n$ of keys, which splits the keys evenly at every node ([Section 25.1](preferred-paths.html)).
+The library defines the perfect tree [[Tango.perfect]] with $h$ levels, and the balanced tree [[Tango.balanced]] on any number $n$ of keys, which splits the keys evenly at every node ([Section 25.1](preferred-paths.html)).
 
 ::: todo
 - The balanced tree on $n$ keys has height $\lfloor \log_2 n \rfloor$, so it serves $m$ requests at cost at most $m(1 + \lfloor \log_2 n \rfloor)$.
@@ -23,7 +23,7 @@ Suppose that key $x$ is requested $q_x$ times among $m$ requests. A tree in whic
 - **Lower bound.** Every static tree costs at least a third of the entropy bound ([[StaticTree.Results.entropy_lower_bound]]).
 - **Upper bound.** Some static tree costs at most the entropy bound ([[StaticTree.Results.entropy_upper_bound]]).
 
-The tree of the upper bound is built by a rule close to that of @mehlhorn1975: put the weighted median at the root and recurse on both sides. This is the weighted search tree of [Chapter 33](prefix-sums.html#weighted-search-trees), where every key of weight $w_x$ lands at depth at most $\log_2(W/w_x)$. Mehlhorn's sharper analysis, which bounds the cost by the entropy plus a small additive constant per request, is not formalized. The constant factor of the library's bound is enough for every use in this book.
+The tree of the upper bound is built by a rule close to that of @mehlhorn1975: put the weighted median at the root and recurse on both sides. This is the weighted search tree of [Chapter 33](prefix-sums.html#weighted-search-trees), where every key of weight $w_x$ lands at depth at most $\log_2(W/w_x)$. With weights on the keys only, the library's bound is already the entropy plus one unit per request, with no constant factor. Mehlhorn's analyses [@mehlhorn1975; @mehlhorn1977] also allow weights on the gaps between keys, for unsuccessful searches; they are not formalized.
 
 ## Optimal static trees
 
@@ -31,7 +31,7 @@ The entropy tree is within a constant factor of the best static tree. The best s
 
 $$C(i, j) \;=\; W(i, j) + \min_{i \le r \le j} \bigl( C(i, r - 1) + C(r + 1, j) \bigr), \qquad C(i, i - 1) = 0 .$$
 
-Computed directly this takes $O(n^3)$ time [@gilbert1959]. @knuth1971 observed that the optimal roots are monotone: some optimal root of keys $i..j$ lies between optimal roots of $i..j-1$ and of $i+1..j$. Restricting the minimum to that window makes the total work $O(n^2)$. @yao1980 explained why. Whenever the weight function satisfies the *quadrangle inequality* and is monotone on nested intervals, so does the cost $C$, and then the optimal roots are monotone. The interval weight $W$ satisfies the quadrangle inequality with equality, and it is monotone because weights are nonnegative.
+Computed directly this takes $O(n^3)$ time; @gilbert1959 used the same recurrence when only the gaps carry weight. @knuth1971 observed that the optimal roots are monotone: some optimal root of keys $i..j$ lies between optimal roots of $i..j-1$ and of $i+1..j$. Restricting the minimum to that window makes the total work $O(n^2)$. @yao1980 explained why. Whenever the weight function satisfies the *quadrangle inequality* and is monotone on nested intervals, so does the cost $C$, and then the optimal roots are monotone. The interval weight $W$ satisfies the quadrangle inequality with equality, and it is monotone because weights are nonnegative.
 
 The book will present Yao's theorem as the general statement and Knuth's algorithm as its instance. The classical problem also gives weights to the gaps between keys, for unsuccessful searches. The same recurrence and the same theorem cover that case. In the models of this book, every request is a key, so the gap weights are zero.
 

@@ -11,10 +11,14 @@ npm ci
 npm run extract                  # Lean → build/lean-data.json, build/vectors.json
 npm run build                    # → dist/
 npm test                         # JavaScript ports against values computed by Lean
+npm run lint                     # coherence of the sources (numbers, citations, roadmap, figures, coverage)
+npm run check:pages              # every built page in headless Chromium
+npm run check                    # build, lint, test and check:pages together: run before every commit
+npm run verify:bib               # changed bibliography entries against Crossref, DataCite and arXiv
 npm run serve                    # http://localhost:8000
 ```
 
-`npm run extract` reads the compiled library of the checkout in `LEAN_ROOT` (default: the parent directory) and runs `lean/Export.lean` through `lake env lean`. It fails if the `.ilean` files are stale with respect to the sources. `BOOK_DIST` changes the output directory of `build` and `serve`. CI (`.github/workflows/book.yml`) builds the library and the book and publishes `dist/` to GitHub Pages.
+`npm run extract` reads the compiled library of the checkout in `LEAN_ROOT` (default: the parent directory) and runs `lean/Export.lean` through `lake env lean`. It fails if the `.ilean` files are stale with respect to the sources. `BOOK_DIST` changes the output directory of `build` and `serve`. CI (`.github/workflows/book.yml`) builds the library and the book, runs the lint, the tests and the page check, and publishes `dist/` to GitHub Pages. What each check covers, and the process for every kind of change, is in [docs/maintaining-the-book.md](../docs/maintaining-the-book.md).
 
 ## Layout
 

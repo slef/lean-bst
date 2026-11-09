@@ -28,7 +28,9 @@ jobs:
           npm ci
           npm run extract
           npm run build
+          npm run lint
           npm test
+          npm run check:pages -- --require
       - uses: actions/upload-pages-artifact@v3
         with:
           path: book/dist

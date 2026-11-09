@@ -23,7 +23,7 @@ Apart from [[Geometric.Heap]], which the general treap facts at the end of the c
 
 ## Treaps on ranks
 
-A *treap*, introduced by @seidel1996 and the same object as a Cartesian tree [@vuillemin1980], is a binary search tree whose nodes also carry priorities, arranged in heap order: every node has priority at most that of each of its descendants. When priorities are distinct, the treap on a given key set is unique: its root is the key of minimum priority, and its two subtrees are the treaps of the keys on either side. On shapes, where keys are inorder ranks, heap order is a property of a shape and a priority function on ranks:
+A *treap*, introduced by Aragon and Seidel at FOCS 1989 [@seidel1996] and the same object as a Cartesian tree [@vuillemin1980], is a binary search tree whose nodes also carry priorities, arranged in heap order: every node has priority at most that of each of its descendants. When priorities are distinct, the treap on a given key set is unique: its root is the key of minimum priority, and its two subtrees are the treaps of the keys on either side. On shapes, where keys are inorder ranks, heap order is a property of a shape and a priority function on ranks:
 
 @decl RotationBST.Geometric.Heap
 

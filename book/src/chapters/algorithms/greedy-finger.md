@@ -62,7 +62,7 @@ As a BST: there is a single online BST algorithm, depending only on $n$, whose t
 In Lean, the sum is [[Bounds.dynamicFingerCostFrom]]` p X`.
 ```
 
-The three boxes are enough to confirm the results: their statements use only the benchmarks of [Chapter 14](lazy-finger.html), the GreedyASS sweep of [Chapter 21](greedy.html), and the online algorithms of Part I. The rest of this section has three parts. [Section 23.1](#reading-the-statements) explains the conventions and the two forms of each statement, geometric and BST. [Section 23.2](#the-geometric-bounds) to [Section 23.4](#on-the-pointer-machine) state every theorem of `Algorithms/GreedyASS/Performance/Abstract.lean`, in English and in Lean. [Section 23.5](#from-theorem-3-1-to-the-finger-bounds) derives them from Theorem 3.1, and [Section 23.6](#a-map-of-the-proof-of-theorem-3-1) gives a map of the proof of Theorem 3.1 across the next three sections.
+The three boxes are enough to confirm the results: their statements use only the benchmarks of [Chapter 14](lazy-finger.html), the GreedyASS sweep of [Chapter 21](greedy.html), and the online algorithms of [Part I](part-models.html). The rest of this section has three parts. [Section 23.1](#reading-the-statements) explains the conventions and the two forms of each statement, geometric and BST. [Section 23.2](#the-geometric-bounds) to [Section 23.4](#on-the-pointer-machine) state every theorem of `Algorithms/GreedyASS/Performance/Abstract.lean`, in English and in Lean. [Section 23.5](#from-theorem-3-1-to-the-finger-bounds) derives them from Theorem 3.1, and [Section 23.6](#a-map-of-the-proof-of-theorem-3-1) gives a map of the proof of Theorem 3.1 across the next three sections.
 
 ## Reading the statements
 

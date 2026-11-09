@@ -3,7 +3,7 @@
 [Chapter 14](lazy-finger.html) introduced the lazy finger: a *static* BST in which each search starts where the previous one ended, instead of at the root. This chapter places that model between its two natural neighbours.
 
 - Below it is the classical **root-finger** static tree, the setting of static optimality ([Chapter 12](bounds.html)). The tree is fixed and every search starts at the root.
-- Above it is the **dynamic** BST of Part I. It also searches from the root each time, but may rotate.
+- Above it is the **dynamic** BST of [Part I](part-models.html). It also searches from the root each time, but may rotate.
 
 Theorem 6 of Bose, Douïeb, Iacono and Langerman [-@bose2016] says that, up to constant factors, lazy finger is never worse than root finger and never better than a dynamic BST, and that both gaps can be arbitrarily large. The chapter also states the consequences listed in §1.4 of their paper: the optimal lazy-finger tree has static optimality, the static finger property and the dynamic finger property, all at once.
 

@@ -1,8 +1,8 @@
 # Classical search trees
 
-Parts I and II fixed the models and the benchmarks. Part III collects the classical binary search trees, which do not adapt to the requests. Their shape depends on the set of keys, on the history of insertions and deletions, and for random trees on random choices. It never depends on which keys are searched. They are the baseline that the adaptive algorithms of [Part IV](part-algorithms.html) are measured against.
+[Part I](part-models.html) and [Part II](part-bounds.html) fixed the models and the benchmarks. [Part III](part-classical.html) collects the classical binary search trees, which do not adapt to the requests. Their shape depends on the set of keys, on the history of insertions and deletions, and for random trees on random choices. It never depends on which keys are searched. They are the baseline that the adaptive algorithms of [Part IV](part-algorithms.html) are measured against.
 
-The baseline is simple to state. A tree of height $h$ serves a search with at most $h + 1$ nodes, and a balanced tree has height about $\log_2 n$. So $m$ searches cost at most about $m(1 + \log_2 n)$. Every benchmark of Part II is at most this much, up to constant factors: it is the bottom box of the [map of the bounds](part-bounds.html#a-map-of-the-bounds). In general it cannot be beaten. On the bit-reversal sequence every BST pays $\Omega(\log n)$ per request ([Chapter 17](conditional-entropy.html#the-bit-reversal-sequence)). What a classical tree cannot do is exploit an easy sequence. On a sequential scan, a balanced tree still pays $\log_2 n$ per request, while splay trees pay a constant amortized ([Section 23.3](beyond.html#sequential-access)).
+The baseline is simple to state. A tree of height $h$ serves a search with at most $h + 1$ nodes, and a balanced tree has height about $\log_2 n$. So $m$ searches cost at most about $m(1 + \log_2 n)$. Every benchmark of [Part II](part-bounds.html) is at most this much, up to constant factors: it is the bottom box of the [map of the bounds](part-bounds.html#a-map-of-the-bounds). In general it cannot be beaten. On the bit-reversal sequence every BST pays $\Omega(\log n)$ per request ([Chapter 17](conditional-entropy.html#the-bit-reversal-sequence)). What a classical tree cannot do is exploit an easy sequence. On a sequential scan, a balanced tree still pays $\log_2 n$ per request, while splay trees pay a constant amortized ([Section 23.3](beyond.html#sequential-access)).
 
 The part has four chapters, one per idea for keeping a tree shallow. Each chapter presents one theory, and the classical structures as its instances, rather than one analysis per structure:
 
@@ -19,15 +19,15 @@ The table lists the guarantees that the chapters state. Here $n$ is the number o
 
 | Structure | Height | Rotations per update | Status | Chapter |
 |---|---|---|---|---|
-| Perfect static tree | $\lfloor \log_2 n \rfloor$ | none (static) | not yet formalized | {{num:static-trees}} |
+| Balanced static tree | $\lfloor \log_2 n \rfloor$ | none (static) | not yet formalized | {{num:static-trees}} |
 | Entropy tree for given frequencies | key $x$ at depth $\le \log_2(W/w_x)$ | none (static) | formalized | {{num:static-trees}} |
 | Optimal static tree (Knuth) | depends on the frequencies | none (static) | not yet formalized | {{num:static-trees}} |
 | AVL tree | $< 1.4405 \log_2(n + 2)$ | insertion: one single or double rotation; deletion: $O(\log n)$ | not yet formalized | {{num:rank-balanced}} |
 | Red-black tree | $\le 2 \log_2(n + 1)$ | insertion $\le 2$, deletion $\le 3$ | not yet formalized | {{num:rank-balanced}} |
 | WAVL tree | as AVL without deletions, never worse than red-black | $\le 2$ | not yet formalized | {{num:rank-balanced}} |
-| BB[α] tree | $\le \log_{1/(1-\alpha)} (n + 1)$ | $O(1)$ amortized | not yet formalized | {{num:weight-balanced}} |
-| Scapegoat tree | $\le \log_{1/\alpha} n + 1$ | $O(\log n)$ amortized, by rebuilding | not yet formalized | {{num:weight-balanced}} |
-| Random BST, treap | expected depth $\le 2 \ln n$ | treap: fewer than 2 expected | partly formalized | {{num:random-trees}} |
+| BB[α] tree, $\alpha < \frac12$ | $\le \log_{1/(1-\alpha)} (n + 1)$ | $O(1)$ amortized | not yet formalized | {{num:weight-balanced}} |
+| Scapegoat tree, $\alpha > \frac12$ | $\le \log_{1/\alpha} n + 1$ | $O(\log n)$ amortized, by rebuilding | not yet formalized | {{num:weight-balanced}} |
+| Random BST, treap | expected depth $\le 2 \ln n$ | treap: fewer than 2 expected | not yet formalized (ancestor probabilities are) | {{num:random-trees}} |
 
 ## What is formalized
 

@@ -22,7 +22,7 @@ The last three chapters are transformations rather than algorithms. They take on
 
 ## What each chapter uses
 
-The splay-tree chapter needs only Part I and the benchmarks of [Chapter 12](bounds.html). The others draw on more of the book.
+The splay-tree chapter needs only [Part I](part-models.html) and the benchmarks of [Chapter 12](bounds.html). The others draw on more of the book.
 
 - **GreedyASS** is defined in the geometric view of [Chapter 8](geometry.html). Turning it into a BST uses treaps ([Chapter 26](treaps.html)) and split trees ([Chapter 27](split-trees.html)), and its finger bounds are stated with the lazy-finger costs of [Chapter 13](lazy-finger.html).
 - **Tango trees** charge their work to Wilber's interleave bound ([Chapter 15](wilber.html)).

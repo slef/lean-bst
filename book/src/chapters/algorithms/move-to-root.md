@@ -50,7 +50,7 @@ Packaged as an [`Algorithm`](online.html#online-algorithms), move-to-root ignore
 
 @decl RotationBST.moveToRootAlgorithm
 
-The certificate `correct` is the first conjunct of the theorem above. All the definitions of [Chapter 5](online.html) and Part II therefore apply to it: `moveToRootAlgorithm.cost`, its total cost, and the properties `HasWorkingSetBound` and the others of [Chapter 10](bounds.html). The library proves none of those properties for move-to-root, and they fail: on the repeated scans below, the cost per request grows linearly in $n$, while every benchmark of Part II charges a scan request $O(\log n)$.
+The certificate `correct` is the first conjunct of the theorem above. All the definitions of [Chapter 5](online.html) and [Part II](part-bounds.html) therefore apply to it: `moveToRootAlgorithm.cost`, its total cost, and the properties `HasWorkingSetBound` and the others of [Chapter 10](bounds.html). The library proves none of those properties for move-to-root, and they fail: on the repeated scans below, the cost per request grows linearly in $n$, while every benchmark of [Part II](part-bounds.html) charges a scan request $O(\log n)$.
 
 ## Why it is not enough
 

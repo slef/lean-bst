@@ -12,15 +12,15 @@ The split trees of [Chapter 27](split-trees.html) come from the online simulatio
 
 ## Prefix sums and weighted trees
 
-Two-dimensional prefix sums are folklore. The weighted search trees of [Chapter 28](prefix-sums.html), with every key $x$ at depth at most $\log_2(W/w_x)$ plus a constant, follow the weighted-median rule of @mehlhorn1975. The biased search trees of @bent1985 reach the same depths in a dynamic setting.
+Two-dimensional prefix sums are folklore. The weighted search trees of [Chapter 28](prefix-sums.html), with every key $x$ at depth at most $\log_2(W/w_x)$, follow the weighted-median rule of @mehlhorn1975. The biased search trees of @bent1985 reach the same depths in a dynamic setting.
 
 ## Simulating fingers
 
-BST deques, tendons and finger hands ([Chapter 29](finger-simulation.html)) are the multi-finger simulation of @demaine2013. Their construction shows that a constant number of persistent fingers can be simulated by one root cursor at a constant factor. The library's version is a reconstruction with explicit constants. @chalermsook2018multi give a different simulation of $k$ fingers in a BST, through the geometric view, and use it to study multi-finger bounds.
+BST deques, tendons and finger hands ([Chapter 29](finger-simulation.html)) are the multi-finger simulation of @demaine2013. Their construction shows that a constant number of persistent fingers can be simulated by one root cursor at a constant factor. The library's version is a reconstruction with explicit constants. @chalermsook2018multi simulate $k$ fingers by one with an $O(\log k)$ overhead, using techniques from the $k$-server problem.
 
 ## Replays, pop-tarts and heavy paths
 
-The detours of [Chapter 30](replay.html) appear in the deamortization of @bose2012, in the proof of their Theorem 6. Pop-tarts ([Chapter 31](poptarts.html)) and the heavy-path representation ([Chapter 32](heavy-path-simulation.html)) are from the same paper, Section 3. Heavy paths themselves are older. The heavy-path decomposition appears in the dynamic trees of @sleator1983 and in the nearest common ancestor algorithm of @harel1984. Its key property, that a root-to-leaf path crosses $O(\log n)$ light edges, is what keeps the stored depths logarithmic. Weighted versions such as those of the deamortization replace $\log n$ by $\log(W/w_x)$.
+The detours of [Chapter 30](replay.html) appear in the deamortization of @bose2012, in the proof of their Theorem 6. Pop-tarts ([Chapter 31](poptarts.html)) and the heavy-path representation ([Chapter 32](heavy-path-simulation.html)) are from the same paper: pop-tarts from its Section 2, heavy paths from its Section 3. Heavy paths themselves are older. The heavy-path decomposition appears in the dynamic trees of @sleator1983 and in the nearest common ancestor algorithm of @harel1984. Its key property, that a root-to-leaf path crosses $O(\log n)$ light edges, is what keeps the stored depths logarithmic. Weighted versions such as those of the deamortization replace $\log n$ by $\log(W/w_x)$.
 
 ## Saving trees in their nodes
 

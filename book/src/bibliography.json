@@ -251,6 +251,7 @@
       ],
       "title": "Dynamic optimality for skip lists and B-trees",
       "venue": "Proceedings of the 19th Annual ACM-SIAM Symposium on Discrete Algorithms (SODA)",
+      "pages": "1106–1114",
       "year": 2008
     },
     {
@@ -369,6 +370,7 @@
       "venue": "ACM Transactions on Algorithms",
       "volume": "19",
       "number": "3",
+      "pages": "1–19",
       "year": 2023,
       "doi": "10.1145/3595180",
       "arxiv": "1908.00848",
@@ -410,6 +412,7 @@
       "venue": "The Electronic Journal of Combinatorics",
       "volume": "25",
       "number": "4",
+      "pages": "P4.18",
       "year": 2018,
       "doi": "10.37236/7762",
       "arxiv": "1803.11427"
@@ -978,6 +981,7 @@
       "venue": "Algorithmica",
       "volume": "88",
       "number": "3",
+      "pages": "article 40",
       "year": 2026,
       "doi": "10.1007/s00453-025-01364-2",
       "versions": [
@@ -1504,7 +1508,7 @@
       "year": 1988
     },
     {
-      "key": "lucas1991",
+      "key": "lucas1992",
       "type": "incollection",
       "authors": [
         "Joan M. Lucas"
@@ -1512,7 +1516,7 @@
       "title": "On the competitiveness of splay trees: relations to the union-find problem",
       "venue": "On-Line Algorithms, DIMACS Series in Discrete Mathematics and Theoretical Computer Science 7",
       "pages": "95–124",
-      "year": 1991,
+      "year": 1992,
       "doi": "10.1090/dimacs/007/08"
     },
     {

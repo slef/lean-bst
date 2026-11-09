@@ -16,7 +16,7 @@ No polynomial-time algorithm is known that computes the offline optimum of a giv
 
 ## The pointer machine and touched regions
 
-The single-cursor pointer machine of [Chapter 6](pointer.html) is the BST model of @wilber1989, made precise by @demaine2009. Derryberry's thesis [@derryberry2009] compares the variants of this model used in the literature and shows that they agree up to constant factors. The touched-region accounting of [Chapter 7](regions.html) is the one used by @demaine2009 and in most later work on dynamic optimality.
+The single-cursor pointer machine of [Chapter 6](pointer.html) is the standard BST model of the literature, stated precisely by @demaine2009. Derryberry's thesis [@derryberry2009] compares the variants of this model used in the literature and shows that they agree up to constant factors. The touched-region accounting of [Chapter 7](regions.html) is the one used by @demaine2009 and in most later work on dynamic optimality.
 
 ## The geometric view
 
@@ -24,7 +24,7 @@ The geometric view of [Chapter 8](geometry.html) is due to @demaine2009, who sho
 
 ## Many fingers and linked searches
 
-Executions with several persistent fingers ([Chapter 9](fingers.html)) are simulated by a single cursor in @demaine2013. @chalermsook2018multi study the multi-finger model through the geometric view and prove multi-finger bounds for Greedy. The linked-search model of [Chapter 10](linked-search.html) is the model of the multiple-tree structure of @bose2016, Theorem 9; it is a pointer machine whose memory holds many trees, not a BST.
+Executions with several persistent fingers ([Chapter 9](fingers.html)) are simulated by a single cursor in @demaine2013. @chalermsook2018multi show that the offline optimum with $k$ fingers can be matched by a single root finger with an $O(\log k)$ factor overhead, which is tight, and give randomized online BSTs within a further $(\log k)^{O(1)}$ factor, using techniques from the $k$-server problem. The linked-search model of [Chapter 10](linked-search.html) is the model of the multiple-tree structure of @bose2016, Theorem 9; it is a pointer machine whose memory holds many trees, not a BST.
 
 ## How the models agree
 

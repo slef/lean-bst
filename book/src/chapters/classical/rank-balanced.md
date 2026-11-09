@@ -1,6 +1,6 @@
 # Rank-balanced trees
 
-AVL trees [@adelson1962] and red-black trees [@bayer1972symmetric; @guibas1978] are usually presented as two different structures, with different invariants and different case analyses. @haeupler2015 showed that both are instances of one framework. Each node stores an integer *rank*, and an invariant on the rank differences between parents and children replaces both the AVL height condition and the red-black colours. The same framework gives a third structure, the weak AVL or *WAVL* tree, with better guarantees than either. This chapter follows that framework.
+AVL trees [@adelson1962] and red-black trees [@bayer1972symmetric; @guibas1978] are usually presented as two different structures, with different invariants and different case analyses. @haeupler2015 showed that both are instances of one framework. Each node stores an integer *rank*, and an invariant on the rank differences between parents and children replaces both the AVL height condition and the red-black colours. The same framework gives a third structure, the weak AVL or *WAVL* tree, which combines the best properties of both. This chapter follows that framework.
 
 Nothing in this chapter is formalized yet. The updates need the dictionary model of [Chapter 6](dictionary.html), which is not formalized either.
 
@@ -14,7 +14,7 @@ Every node $x$ has a rank $r(x) \ge 0$, and a missing child has rank $-1$. The *
 | Red-black | every rank difference is 0 or 1, and no parent of a 0-child is itself a 0-child | the black height; a 0-child is a red node |
 | WAVL | every rank difference is 1 or 2, and every leaf is 1,1 | at least the height, at most twice it |
 
-Under each rule, the rank and the height are within a factor of two of each other, and a counting argument bounds the rank. The smallest AVL tree of rank $k$ has a Fibonacci number of keys, and a red-black tree of rank $k$ has at least $2^k - 1$ keys. Inverting these counts gives the height bounds.
+Under each rule, the rank and the height are within a factor of two of each other, and a counting argument bounds the rank. The smallest AVL tree of rank $k$ has one less than a Fibonacci number of keys, $F_{k+3} - 1$, and a red-black tree of rank $k$ has at least $2^{k+1} - 1$ keys. Inverting these counts gives the height bounds.
 
 ::: todo
 - AVL trees have height less than $1.4405 \log_2(n + 2)$.
