@@ -186,6 +186,27 @@ Validation of ROADMAP entries 1 and 4
    audit and one added regression module (FingerBaseline).
    scripts/check_imports.py: passed (1499 reachable library modules).
 
+14. Optimal static trees: Gilbert–Moore/Knuth recurrence, Yao, Knuth (ROADMAP 5)
+   Evidence: Classical/Static/Optimal/Abstract.lean.
+   For any interval weight W, the recurrence C(i, j) = W(i, j) +
+   min_{i <= r < j} (C(i, r) + C(r + 1, j)) is attained by a tree and is
+   at most the subtree-weight cost of every tree on [i, j). If W satisfies the
+   quadrangle inequality and is monotone under inclusion, C satisfies the
+   quadrangle inequality and the largest optimal roots satisfy
+   R(i, j) <= R(i, j + 1) and R(i, j) <= R(i + 1, j). Knuth's algorithm
+   returns C(0, n) after examining at most 2n^2 candidate roots (lookups are
+   not counted; Lean evaluation time is not claimed). For key weights the
+   cost is sum_x w[x](depth x + 1); with request counts it is the static
+   search cost, so optCost(counts) is the best static tree for the sequence,
+   between a third of the entropy bound and the entropy bound.
+   Not claimed: gap (unsuccessful-search) weights as a separate statement,
+   Garsia–Wachs or Hu–Tucker, approximate trees (Mehlhorn).
+
+Validation of ROADMAP entry 5
+   lake build --wfail: passed (9480 jobs), including the whole-library axiom
+   audit and one added regression module (OptimalStatic).
+   scripts/check_imports.py: passed (1507 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.

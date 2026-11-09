@@ -86,6 +86,7 @@ RotationBST/
     Normalization/  request charges versus rotation charges
   Classical/        Part III: classical, non-adaptive trees
     Static/         the balanced tree, its depth and cost; deep keys in every tree
+      Optimal/      interval recurrence, Yao's lemma, Knuth's O(n²) algorithm
                     (rank-balanced, weight-balanced, random trees: planned)
   Algorithms/       Part IV: adaptive algorithms, definitions then bounds
     MoveToRoot/
@@ -619,3 +620,44 @@ Choices made:
 Regression examples: `RotationBSTTests/FingerBaseline.lean` (the balanced tree
 on 6, 7 and 8 keys, depths, a path, concrete costs, and the chain
 DF ⇒ SF ⇒ logarithmic).
+
+## Optimal static trees
+
+ROADMAP entry 5 (branch `formalize-optimal-static`, stacked on
+`formalize-finger-baseline`, 2026-11-09). Entry points:
+[`Classical.Static.Optimal.Results`](../RotationBST/Classical/Static/Optimal/Abstract.lean);
+the table in the roadmap entry lists them.
+
+Layout of `Classical/Static/Optimal/`:
+
+| File | Content |
+|---|---|
+| `Definitions/Abstract.lean` | `treeCost`, `cost` (the recurrence), `candidate`, `root`, `tree`, `Quadrangle`, `Monotone`, Knuth's `scan`, `knuthEntry`, `knuthTables`, `knuth`; key weights `weightedCost`, `rangeWeight`, `optCost`, `optTree`, `counts` |
+| `Recurrence.lean` | optimality of the recurrence, the root and the tree |
+| `Quadrangle.lean` | Yao's lemma and Knuth's root inequalities |
+| `Knuth.lean` | the tables are correct; the root ranges telescope to `2n²` steps |
+| `Weights.lean` | key weights, the weighted depth cost, request counts |
+| `Sequences.lean` | the best static tree for a sequence, entropy and balanced bounds |
+
+Choices made:
+
+- Half-open intervals `[i, j)` and an abstract interval weight `W`, so Yao's
+  lemma is stated once. Its hypotheses are the quadrangle inequality and
+  monotonicity under inclusion; key weights satisfy the first with equality.
+- `root` is the *largest* optimal root (Knuth's choice); with it both of
+  Knuth's inequalities hold, and Knuth's algorithm returns it because the scan
+  keeps the last minimizer.
+- Knuth's algorithm is defined by interval length with function-valued tables.
+  Its step count is the number of candidate roots examined, `R(i+1, j) −
+  R(i, j−1) + 1` per interval (one for a single key); lookups are not counted.
+  It is a specification of the algorithm, not a fast implementation.
+- `Optimal.tree` uses well-founded recursion, so the kernel does not reduce it
+  (`decide` cannot compare tree shapes); `#eval` works, and costs and roots
+  reduce.
+- The same recurrence with a different interval weight is
+  `OptimalLazyFinger.solve` (`Algorithms/`). `Classical` cannot import it, and
+  it reconstructs an arbitrary rather than the largest optimal root, so the
+  classical version is independent. A shared generic recurrence in `Structures/`
+  would be a later cleanup.
+
+Regression examples: `RotationBSTTests/OptimalStatic.lean`.

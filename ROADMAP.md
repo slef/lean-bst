@@ -205,6 +205,45 @@ Update the tables in `classical/part-classical.md` and `bounds/part-bounds.md`.
 
 ## 5. Optimal static trees
 
+**Status.** Formalized (branch `formalize-optimal-static`, stacked on
+`formalize-finger-baseline`, 2026-11-09); the book update below is pending.
+All statements are in `Classical/Static/Optimal/Abstract.lean`, namespace
+`RotationBST.Classical.Static.Optimal.Results`; the definitions are in
+`Classical/Static/Optimal/Definitions/Abstract.lean`. Differences from the
+targets below:
+
+- The recurrence, its roots and Knuth's algorithm are stated for an abstract
+  interval weight `W : Nat → Nat → Nat` over half-open intervals `[i, j)`:
+  `Optimal.cost W i j`, `Optimal.root W i j` (the *largest* optimal root),
+  `Optimal.tree W i j`, `Optimal.knuth W n : Nat × Nat` (cost, steps). Key
+  weights are the instance `rangeWeight w i j = ∑_{i ≤ x < j} w[x]`; gap
+  weights are another additive instance, not stated separately.
+- `optCost`, `optTree` (in `Classical.Static`, with `w : List Nat`) are the
+  targets; `weightedCost w t = ∑ₓ w[x](depth x + 1)` as suggested.
+- Yao's lemma is `cost_quadrangle` (the quadrangle inequality passes from a
+  monotone `W` to the cost) and Knuth's inequalities `root_le_root_right`
+  (`R(i, j) ≤ R(i, j + 1)`) and `root_le_root_left` (`R(i, j) ≤ R(i + 1, j)`).
+- Steps count examined candidate roots; the bound is `2n²`, sharper than the
+  target `4(n + 1)²`: `knuth_steps`, and `knuth_steps_le` for key weights.
+
+| Statement | Declaration (under `Optimal.Results`) |
+|---|---|
+| the tree has `j - i` keys and costs `cost W i j`; no tree costs less | `tree_size`, `tree_cost`, `cost_le_treeCost` |
+| Yao: quadrangle inequality for the cost | `cost_quadrangle` |
+| Knuth's root inequalities | `root_le_root_right`, `root_le_root_left` |
+| Knuth's algorithm: cost, steps `≤ 2n²` | `knuth_cost`, `knuth_steps` |
+| key weights satisfy the hypotheses | `rangeWeight_quadrangle`, `rangeWeight_monotone` |
+| `weightedCost = ∑` of subtree weights | `weightedCost_eq_treeCost` |
+| `optTree` has `n` keys, costs `optCost`; `optCost` is minimal | `optTree_size`, `optTree_cost`, `optCost_le` |
+| Knuth for key weights | `knuth_optCost`, `knuth_steps_le` |
+| `StaticTree.cost t xs = weightedCost (counts n xs) t` | `staticCost_eq_weightedCost` |
+| the best static tree for a sequence (`RF*`) | `optTree_static`, `optCost_le_static` |
+| `H/3 ≤ RF* ≤ H` for the entropy bound `H = Bounds.staticCost` | `optCost_entropy` |
+| `RF* ≤ m(⌊log₂ n⌋ + 1)` | `optCost_le_balanced` |
+
+For the figure, `knuth → RF` is `knuth_optCost` with `optTree_static` and
+`optCost_le_static`.
+
 **Source.** E. N. Gilbert and E. F. Moore, *Variable-length binary encodings*
 (1959); D. E. Knuth, *Optimum binary search trees*, Acta Informatica 1 (1971);
 F. F. Yao, *Efficient dynamic programming using quadrangle inequalities*, STOC
