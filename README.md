@@ -58,12 +58,20 @@ is local to this repository; upstream abstract registration is separate work.
 | Models | Rooted-region (touched-subtree) model | [Region](RotationBST/Models/Region/View/Abstract.lean) |
 | Models | Arborally satisfied sets, online and offline geometric algorithms | [Definitions](RotationBST/Models/Geometric/Definitions/Abstract.lean), [online](RotationBST/Models/Geometric/Online/Abstract.lean), [results](RotationBST/Models/Geometric/Abstract.lean) |
 | Models | Offline and online geometric equivalence | [Equivalence](RotationBST/Models/Equivalence/Abstract.lean) |
+| Models | Dictionary model: accesses, insertions, deletions with node data | [Dictionary](RotationBST/Models/Dictionary/Abstract.lean), [definitions](RotationBST/Models/Dictionary/Definitions/Abstract.lean) |
 | Bounds | Working set, static optimality, static finger, unified | [Working set](RotationBST/Bounds/WorkingSet/Abstract.lean), [static](RotationBST/Bounds/Abstract.lean), [unified](RotationBST/Bounds/Unified/Abstract.lean) |
-| Bounds | Working set ⇒ static optimality ⇒ static finger | [Implications](RotationBST/Bounds/Implications/Abstract.lean) |
+| Bounds | Working set ⇒ static optimality ⇒ static finger; dynamic finger ⇒ static finger ⇒ logarithmic | [Implications](RotationBST/Bounds/Implications/Abstract.lean), [dynamic finger](RotationBST/Bounds/DynamicFinger/Abstract.lean), [baseline](RotationBST/Bounds/Logarithmic/Abstract.lean) |
 | Bounds | Fixed-tree benchmark and entropy lower bound | [Static tree](RotationBST/Bounds/StaticTree/Abstract.lean) |
 | Bounds | Wilber's interleave lower bound | [Interleave](RotationBST/Bounds/Interleave/Abstract.lean), [definition](RotationBST/Bounds/Interleave/Definitions/Abstract.lean) |
 | Bounds | Lazy finger, weighted characterization, separations | [Lazy finger](RotationBST/Bounds/LazyFinger/Abstract.lean), [entropy obstruction](RotationBST/Bounds/ConditionalEntropy/Abstract.lean) |
 | Bounds | Request charges versus rotation charges | [Normalization](RotationBST/Bounds/Normalization/Abstract.lean) |
+| Classical | Balanced static tree, depth and cost; deep keys in every tree | [Static trees](RotationBST/Classical/Static/Abstract.lean) |
+| Classical | Optimal static trees: recurrence, Yao's lemma, Knuth's algorithm | [Optimal](RotationBST/Classical/Static/Optimal/Abstract.lean) |
+| Classical | Weight balance and its height; rebuilding by rotations | [Weight-balanced](RotationBST/Classical/WeightBalanced/Abstract.lean) |
+| Classical | Scapegoat trees: height and amortized cost | [Scapegoat](RotationBST/Classical/Scapegoat/Abstract.lean) |
+| Classical | AVL, red-black and WAVL rules and their heights | [Rank-balanced](RotationBST/Classical/RankBalanced/Abstract.lean) |
+| Classical | WAVL/AVL insertion: validity, two rotations, amortized rank changes | [Insertion](RotationBST/Classical/RankBalanced/Insertion/Abstract.lean) |
+| Classical | Random treaps and random BSTs: expected depth; insertion builds the treap | [Random](RotationBST/Classical/Random/Abstract.lean) |
 | Algorithms | Move-to-root baseline | [Algorithm](RotationBST/Algorithms/MoveToRoot/Algorithm/Abstract.lean), [correctness](RotationBST/Algorithms/MoveToRoot/Abstract.lean) |
 | Algorithms | Splay: algorithm and results | [Algorithm](RotationBST/Algorithms/Splay/Algorithm/Abstract.lean), [overview](RotationBST/Algorithms/Splay/Abstract.lean) |
 | Algorithms | GreedyASS | [Algorithm](RotationBST/Algorithms/GreedyASS/Algorithm/Abstract.lean), [legality](RotationBST/Algorithms/GreedyASS/Abstract.lean), [finger bounds](RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
@@ -85,7 +93,8 @@ The source tree follows the textbook order rather than the source papers:
 | Directory | Contents |
 |---|---|
 | `Models/` | The rotation model on shapes and its equivalent formulations: labelled BSTs, online algorithms and cost conventions, the pointer machine, the rooted-region model, arboral geometry, and the equivalences between them. |
-| `Bounds/` | Sequence bounds and their relations: working set, static optimality, static finger, unified, the fixed-tree benchmark, Wilber's interleave lower bound, and cost normalization. |
+| `Bounds/` | Sequence bounds and their relations: working set, static optimality, static finger, dynamic finger, the logarithmic baseline, unified, the fixed-tree benchmark, Wilber's interleave lower bound, and cost normalization. |
+| `Classical/` | Classical search trees that do not adapt to the requests. So far the balanced and the optimal static trees, the height bounds of weight- and rank-balanced trees, and the expected depth of random treaps; scapegoat trees with their amortized cost. |
 | `Algorithms/` | One directory per algorithm: definition first, then its upper and lower bounds. Move-to-root, splay, GreedyASS, the causal geometric simulation, and Tango. |
 | `Structures/` | Supporting data structures: next-touch treaps and multiway finger/split trees. |
 | `Audit/` | The `#check_bst_abstract` command. |

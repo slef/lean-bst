@@ -13,6 +13,7 @@ public import RotationBST.Models.Pointer.Abstract
 public import RotationBST.Models.Region.View.Abstract
 public import RotationBST.Models.Geometric.Abstract
 public import RotationBST.Models.Equivalence.Abstract
+public import RotationBST.Models.Dictionary.Abstract
 
 public import RotationBST.Models.Labelled.Search.Abstract
 public import RotationBST.Models.LinkedSearch.Abstract
@@ -25,6 +26,8 @@ public import RotationBST.Bounds.WorkingSet.Abstract
 public import RotationBST.Bounds.Abstract
 public import RotationBST.Bounds.Unified.Abstract
 public import RotationBST.Bounds.Implications.Abstract
+public import RotationBST.Bounds.DynamicFinger.Abstract
+public import RotationBST.Bounds.Logarithmic.Abstract
 public import RotationBST.Bounds.StaticTree.Abstract
 public import RotationBST.Bounds.Interleave.Abstract
 public import RotationBST.Bounds.Normalization.Abstract
@@ -42,9 +45,19 @@ public import RotationBST.Bounds.LazyFinger.Edges.Abstract
 public import RotationBST.Bounds.LazyFinger.Neighborhood.Abstract
 public import RotationBST.Bounds.StaticTree.Trace.Abstract
 
+-- Classical search trees (Part III of the book).
+public import RotationBST.Classical.Static.Abstract
+public import RotationBST.Classical.Static.Optimal.Abstract
+public import RotationBST.Classical.WeightBalanced.Abstract
+public import RotationBST.Classical.Scapegoat.Abstract
+public import RotationBST.Classical.RankBalanced.Abstract
+public import RotationBST.Classical.RankBalanced.Insertion.Abstract
+public import RotationBST.Classical.Random.Abstract
+
 -- Part III: algorithms.
 public import RotationBST.Algorithms.MoveToRoot.Abstract
 public import RotationBST.Algorithms.Splay.Abstract
+public import RotationBST.Algorithms.Splay.Updates.Dictionary.Abstract
 public import RotationBST.Algorithms.GreedyASS.Abstract
 public import RotationBST.Algorithms.Simulation.Abstract
 public import RotationBST.Algorithms.Tango.Abstract

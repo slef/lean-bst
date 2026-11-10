@@ -2,6 +2,8 @@ module
 
 public import RotationBST.Bounds.Implications.Properties
 public import RotationBST.Bounds.Implications.StaticFinger
+public import RotationBST.Bounds.DynamicFinger.Proofs
+public import RotationBST.Bounds.Implications.Logarithmic
 
 @[expose] public section
 
@@ -39,5 +41,18 @@ theorem HasStaticOptimalityBound.staticFinger (a : Algorithm) (h : HasStaticOpti
 theorem HasWorkingSetBound.staticFinger (a : Algorithm) (h : HasWorkingSetBound a) :
     HasStaticFingerBound a :=
   (h.staticOptimality a).staticFinger a
+
+/-- Dynamic finger implies static finger: start the dynamic-finger sum at the
+fixed finger, where it is at most twice the static-finger sum. -/
+theorem HasDynamicFingerBound.staticFinger (a : Algorithm) (h : HasDynamicFingerBound a) :
+    HasStaticFingerBound a := by
+  obtain ⟨C, D, h⟩ := h
+  refine ⟨2 * C, D, ?_⟩
+  intro t xs f hf valid
+  have hc := h t xs f hf valid
+  have hs := Bounds.dynamicFingerCostFrom_finger_le f xs
+  have hm := mul_le_mul_of_nonneg_left hs (Nat.cast_nonneg (α := ℝ) C)
+  simp only [Nat.cast_mul, Nat.cast_ofNat]
+  nlinarith
 
 end RotationBST

@@ -17,6 +17,21 @@ at the end are hard results, to be done last or not at all.
 
 ## 1. Dynamic finger implies static finger
 
+**Status.** Formalized (branch `formalize-finger-baseline`, 2026-11-09); the
+book update below is pending. Checked names, all under `RotationBST`:
+
+| Statement | Declaration | File |
+|---|---|---|
+| `DF(p, xs) ≤ 2·SF(f, xs) + log₂(d(p, f) + 1)` | `Bounds.dynamicFinger_le_fingerCost` | `Bounds/DynamicFinger/Abstract.lean` |
+| `DF(f, xs) ≤ 2·SF(f, xs)` | `Bounds.dynamicFinger_le_fingerCost_self` | `Bounds/DynamicFinger/Abstract.lean` |
+| the property, for every start key `p < n` | `HasDynamicFingerBound` | `Bounds/DynamicFinger/Definitions/Abstract.lean` |
+| DF ⇒ SF, constants `(C, D) ↦ (2C, D)` | `Bounds.dynamicFinger_implies_staticFinger` | `Bounds/Implications/Abstract.lean` |
+
+The statements are exactly the targets below. No algorithm in the library has
+`HasDynamicFingerBound` yet: GreedyASS's `bst_dynamic` gives one algorithm per
+universe size `n`, not one for all sizes, so it does not instantiate the
+property; the implication is about the properties only.
+
 **Source.** Classical. Shown as the dashed arrow DF → SF in the map of the
 bounds (the introduction to Part II of the book, section "A map of the bounds").
 
@@ -120,6 +135,35 @@ theorem RotationBST.Tango.Algorithm.Results.exists_competitive_linear (n : Nat) 
 
 ## 4. Perfect trees and the logarithmic baseline
 
+**Status.** Formalized (branch `formalize-finger-baseline`, 2026-11-09); the
+book update below is pending. The statements differ from the targets below in
+three ways: the tree is `Classical.Static.balanced`, a copy of `Tango.balanced`
+(`Classical` may not import `Algorithms`; the two definitions are textually
+identical); the finger inequality is named `fingerCost_le_log` and uses the
+new baseline `Bounds.logCost n xs = m(1 + log₂ n)`; and there are two extra
+results. Checked names, all under `RotationBST`:
+
+| Statement | Declaration | File |
+|---|---|---|
+| the balanced tree on `n` keys | `Classical.Static.balanced` | `Classical/Static/Definitions/Abstract.lean` |
+| it has `n` keys | `Classical.Static.Results.balanced_size` | `Classical/Static/Abstract.lean` |
+| depth ≤ `⌊log₂ n⌋` | `Classical.Static.Results.balanced_depth` | same |
+| every nonempty tree has a key at depth ≥ `⌊log₂ n⌋` | `Classical.Static.Results.exists_deep` | same |
+| static cost ≤ `m(⌊log₂ n⌋ + 1)` | `Classical.Static.Results.balanced_cost` | same |
+| static cost ≤ `logCost n xs` (reals) | `Classical.Static.Results.balanced_cost_le_logCost` | same |
+| every static tree pays `m(⌊log₂ n⌋ + 1)` on `m` repeats of a deep key | `Classical.Static.Results.exists_expensive` | same |
+| the baseline `m(1 + log₂ n)` | `Bounds.logCost` | `Bounds/Logarithmic/Abstract.lean` |
+| the property "O(1 + log n) amortized per request" | `HasLogarithmicBound` | same |
+| `SF(f, xs) ≤ logCost n xs` for `f < n` | `Bounds.fingerCost_le_log` | `Bounds/Implications/Abstract.lean` |
+| SF ⇒ logarithmic, same constants | `Bounds.staticFinger_implies_logarithmic` | same |
+
+For the figure: `SF → BAL` is `Bounds.fingerCost_le_log` (and the property
+version `staticFinger_implies_logarithmic`), and `B.BAL` can take the `def`
+`Bounds.logCost`. The perfect tree reaches the baseline
+(`balanced_cost_le_logCost`), but that is a static tree, not an online
+algorithm; the `balanced → BAL` edge still waits on entry 7 or 8 or a
+relabelled bubble, as the book instructions below say.
+
 **Source.** Classical. Shown as the box `m(1 + log n)` at the bottom of the
 map of the bounds, with a dashed arrow `SF → m(1 + log n)` and the "Balanced
 trees" bubble. Book chapter "Static search trees" (`classical/static-trees.md`,
@@ -160,6 +204,45 @@ them `thms`. Give `B.BAL` a `def` if a definition of `m(1 + log n)` is added.
 Update the tables in `classical/part-classical.md` and `bounds/part-bounds.md`.
 
 ## 5. Optimal static trees
+
+**Status.** Formalized (branch `formalize-optimal-static`, stacked on
+`formalize-finger-baseline`, 2026-11-09); the book update below is pending.
+All statements are in `Classical/Static/Optimal/Abstract.lean`, namespace
+`RotationBST.Classical.Static.Optimal.Results`; the definitions are in
+`Classical/Static/Optimal/Definitions/Abstract.lean`. Differences from the
+targets below:
+
+- The recurrence, its roots and Knuth's algorithm are stated for an abstract
+  interval weight `W : Nat → Nat → Nat` over half-open intervals `[i, j)`:
+  `Optimal.cost W i j`, `Optimal.root W i j` (the *largest* optimal root),
+  `Optimal.tree W i j`, `Optimal.knuth W n : Nat × Nat` (cost, steps). Key
+  weights are the instance `rangeWeight w i j = ∑_{i ≤ x < j} w[x]`; gap
+  weights are another additive instance, not stated separately.
+- `optCost`, `optTree` (in `Classical.Static`, with `w : List Nat`) are the
+  targets; `weightedCost w t = ∑ₓ w[x](depth x + 1)` as suggested.
+- Yao's lemma is `cost_quadrangle` (the quadrangle inequality passes from a
+  monotone `W` to the cost) and Knuth's inequalities `root_le_root_right`
+  (`R(i, j) ≤ R(i, j + 1)`) and `root_le_root_left` (`R(i, j) ≤ R(i + 1, j)`).
+- Steps count examined candidate roots; the bound is `2n²`, sharper than the
+  target `4(n + 1)²`: `knuth_steps`, and `knuth_steps_le` for key weights.
+
+| Statement | Declaration (under `Optimal.Results`) |
+|---|---|
+| the tree has `j - i` keys and costs `cost W i j`; no tree costs less | `tree_size`, `tree_cost`, `cost_le_treeCost` |
+| Yao: quadrangle inequality for the cost | `cost_quadrangle` |
+| Knuth's root inequalities | `root_le_root_right`, `root_le_root_left` |
+| Knuth's algorithm: cost, steps `≤ 2n²` | `knuth_cost`, `knuth_steps` |
+| key weights satisfy the hypotheses | `rangeWeight_quadrangle`, `rangeWeight_monotone` |
+| `weightedCost = ∑` of subtree weights | `weightedCost_eq_treeCost` |
+| `optTree` has `n` keys, costs `optCost`; `optCost` is minimal | `optTree_size`, `optTree_cost`, `optCost_le` |
+| Knuth for key weights | `knuth_optCost`, `knuth_steps_le` |
+| `StaticTree.cost t xs = weightedCost (counts n xs) t` | `staticCost_eq_weightedCost` |
+| the best static tree for a sequence (`RF*`) | `optTree_static`, `optCost_le_static` |
+| `H/3 ≤ RF* ≤ H` for the entropy bound `H = Bounds.staticCost` | `optCost_entropy` |
+| `RF* ≤ m(⌊log₂ n⌋ + 1)` | `optCost_le_balanced` |
+
+For the figure, `knuth → RF` is `knuth_optCost` with `optTree_static` and
+`optCost_le_static`.
 
 **Source.** E. N. Gilbert and E. F. Moore, *Variable-length binary encodings*
 (1959); D. E. Knuth, *Optimum binary search trees*, Acta Informatica 1 (1971);
@@ -204,6 +287,51 @@ trees" with `@decl`s and a headline. In `boundsmap.js`, drop `todo: true` from
 
 ## 6. A dictionary model
 
+**Status.** Formalized (branch `formalize-dictionary`, stacked on
+`formalize-optimal-static`, 2026-11-10); the book update below is pending.
+Definitions in `Models/Dictionary/Definitions/Abstract.lean`, results in
+`Models/Dictionary/Abstract.lean` (`RotationBST.Dictionary.Results`), the splay
+instance in `Algorithms/Splay/Updates/Dictionary/Abstract.lean`
+(`RotationBST.Splay.Updates.Results`). The design:
+
+- Trees with node data are `LabelledTree α` (the datum is balance data; keys
+  stay inorder ranks). `Tree.unit` is a shape with no data.
+- `Op`: `access x`, `insert k` (gap), `delete x`; `Op.Valid`, `Op.resize`,
+  `Op.ValidSeq`. Split and join are not included.
+- Primitive `Moves s t a e`: `a` rotations (data travel with nodes) and `e`
+  data edits (`Edit`: change one node's datum), in any order.
+- One structural change per update, `Splice t x u`: the node of rank `x` has at
+  most one child and is removed (read backwards: a node is inserted at rank
+  `x`, as a leaf or above a subtree).
+- `Step s op t c e`. Access: moves; `c = 1 + depth x` in `s` plus rotations.
+  Insert: moves, splice in, moves; `c = 1 + depth` of the new node plus all
+  rotations. Delete: moves, splice out the node of rank `x`, or its predecessor
+  or successor when `x` has two children (`Tree.TwoChildren`; the node at `x`
+  keeps its datum), moves; `c = 1 + depth` of the spliced node plus rotations.
+  `e` is the number of data edits.
+- `Execution` over a list of operations; `Algorithm α` (online: past
+  operations, tree, operation ↦ tree, `c`, `e`, certified by `Step`) with
+  `runFrom`.
+
+Differences from the requirements above: the search charge is taken in the
+tree where the structural change happens, not necessarily the tree before the
+operation. Without moves before the change (the classical trees) this is the
+search path in the tree before the operation, and one rotation changes a
+depth by at most one (`depth_rotations`), so moves before the change pay for
+any shortcut. An insertion above a subtree pays the path to that subtree, not
+to the gap below it. The generic parts of `Algorithms/Splay/Updates/` were not
+moved: the splay model is a forest model with split and join, and it stays as
+it is; the instance theorems relate the two. Checked names:
+
+| Statement | Declaration |
+|---|---|
+| sizes; validity; data do not affect `c` | `Dictionary.Results.step_size`, `step_valid`, `step_unit`, `execution_unit` |
+| an online algorithm executes every valid sequence | `Dictionary.Results.algorithm_execution` |
+| a rotation changes a depth by at most one | `Dictionary.Results.depth_rotations` |
+| the rotation model embeds, `c ≤ m + 2R` (target: `≤ 2(m + R)`) | `Dictionary.Results.of_execution` |
+| searching without moving costs `∑ (1 + depth)` = `StaticTree.cost` | `Dictionary.Results.static_execution` |
+| splay access, insert, delete are steps, `c ≤ 2, 3, 2 ×` splay's charge | `Splay.Updates.Results.dictionary_access`, `dictionary_insert`, `dictionary_delete` |
+
 **Source.** Book chapter "Insertions and deletions" (`models/dictionary.md`).
 It generalizes `Splay.Updates.Step` and `Splay.Updates.Execution` (book
 section "Beyond single accesses", `algorithms/beyond.md`).
@@ -241,6 +369,54 @@ the `ROT → DIC` edge, and give the edge `thms`. Update the models table in
 `models/part-models.md`.
 
 ## 7. Rank-balanced trees
+
+**Status.** Partly formalized (branch `formalize-rank-balanced`, stacked on
+`formalize-weight-balanced`, 2026-11-10): the static half. Statements in
+`Classical/RankBalanced/Abstract.lean`
+(`RotationBST.Classical.RankBalanced.Results`), definitions in
+`Classical/RankBalanced/Definitions/Abstract.lean`. Still open: insertion and
+deletion with bottom-up rebalancing as dictionary steps (entry 6 is done),
+their rotation counts, and the amortized rank-change bounds.
+
+The definitions are as below: `RankedTree := LabelledTree Int`, `rank`
+(`-1` for the empty tree), `Rule` (`avl`, `redBlack`, `wavl`), `Rule.Local`,
+`Valid`, plus `NoZeroChild` for the red-black rule. Every rank is required to
+be nonnegative; red-black uses "rank differences 0 or 1, no 0-child has a
+0-child", WAVL "rank differences 1 or 2, leaves have rank 0".
+
+Differences from the targets below: heights count nodes
+(`Classical.Static.height` of the shape), one more than edges. So the AVL
+bound is `height ≤ log_φ(n + 1)` with `φ = Real.goldenRatio`, rather than a
+decimal constant (in edges it is `log_φ(n + 1) − 1 < 1.4405 log₂(n + 2)`; the
+decimal form is not proved). The red-black bound is `2 log₂(n + 1)` in nodes,
+stronger than the target in edges. The WAVL bound is `rank + 1 ≤ 2 log₂(n + 1)`.
+`wavl_height_insertions` is not done (it needs the insertion procedure).
+
+**Insertion: formalized** (branch `formalize-rank-insertion`, stacked on
+`formalize-random-insertion`, 2026-11-10), for the WAVL rule, which is also
+AVL insertion. Definitions in `Classical/RankBalanced/Insertion/Definitions/Abstract.lean`
+(`leafAt`, `fixLeft`, `fixRight`, `insert` returning (tree, rotations, rank
+changes), `insertAll`, `insertEdits`), statements in
+`Classical/RankBalanced/Insertion/Abstract.lean` (`RankBalanced.Results`):
+
+| Statement | Declaration |
+|---|---|
+| insertion is a dictionary step (rank changes are data edits) | `insert_step`, `insert_size` |
+| it keeps the WAVL rule and the AVL rule | `insert_wavl`, `insert_avl` |
+| at most 2 rotations (target `avl_insert_rotations`, `wavl_update_rotations` for insertions) | `insert_rotations` |
+| after `m` insertions from empty, height `≤ log_φ(m + 1)` (target `wavl_height_insertions`, in nodes) | `insertAll_height` |
+| `m` insertions from empty change at most `7m` ranks (target `wavl_amortized_rank_changes`, insertions only) | `insertEdits_empty` |
+
+The amortization uses the number of 1,1-nodes as potential. Still open:
+deletion (WAVL and red-black, with `≤ 2` and `≤ 3` rotations), red-black
+insertion, and amortized rank changes with deletions.
+
+| Statement | Declaration (under `RankBalanced.Results`) |
+|---|---|
+| AVL: rank = height in edges; `height ≤ log_φ(n + 1)` | `avl_height_rank`, `avl_height` |
+| red-black: `height ≤ 2 log₂(n + 1)` | `redBlack_height` |
+| WAVL: `rank + 1 ≤ 2 log₂(n + 1)`, same for height | `wavl_rank`, `wavl_height` |
+| every AVL tree is a WAVL tree | `avl_wavl` |
 
 **Source.** B. Haeupler, S. Sen and R. E. Tarjan, *Rank-balanced trees*, ACM
 TALG 11(4) (2015), for the framework and WAVL trees; G. M. Adelson-Velsky and
@@ -289,6 +465,56 @@ headlines. Update `classical/part-classical.md` and `bounds/part-bounds.md`
 (the "Balanced trees" row), and the `balanced → BAL` edge of `boundsmap.js`.
 
 ## 8. Weight-balanced and scapegoat trees
+
+**Status.** Partly formalized (branch `formalize-weight-balanced`, stacked on
+`formalize-dictionary`, 2026-11-10): the static half. Statements in
+`Classical/WeightBalanced/Abstract.lean`
+(`RotationBST.Classical.WeightBalanced.Results`), definitions in
+`Classical/WeightBalanced/Definitions/Abstract.lean`. Still open: BB[α]
+rebalancing by single and double rotations with `O(m)` rotations, scapegoat
+trees as a `Dictionary.Algorithm` with their height invariant and `O(m log n)`
+total cost, and the common "a perfectly balanced subtree needs
+`Ω((β - 1/2)s)` updates" lemma.
+
+**Scapegoat trees: formalized** (branch `formalize-scapegoat`, stacked on
+`formalize-random-depth`, 2026-11-10). Statements in
+`Classical/Scapegoat/Abstract.lean` (`RotationBST.Classical.Scapegoat.Results`),
+definitions in `Classical/Scapegoat/Definitions/Abstract.lean`. The parameter
+`α` is a rational with `1/2 < α < 1` (so `step` and `run` are executable); the
+state is the shape and `N`, the largest key count since the last full
+rebuild. Insertion adds a leaf; if its depth `d` has `α^d N < 1` it rebuilds
+(`rebuild`, entry 8) the deepest subtree on the path whose height exceeds
+`log_{1/α}` of its size. Deletion is plain (successor for two children) and
+rebuilds the whole tree when fewer than `αN` keys remain. Costs are the
+dictionary model's (entry 6).
+
+| Statement | Declaration (under `Scapegoat.Results`) |
+|---|---|
+| every operation is a dictionary step; runs are dictionary executions | `step_dictionary`, `run_execution` |
+| from empty, every depth `≤ log_{1/α} n + 1` | `reachable_depth` |
+| from empty, total cost `≤ ∑ bound α nᵢ`, `bound α n = (2/(2α−1) + 1)(log_{1/α} n + 2) + 1 + 2α/(1−α)` | `total_cost` |
+| hence `≤ m · bound α m` | `total_cost_le` |
+
+The analysis (`Classical/Scapegoat/Analysis.lean`) uses the potential
+`(2/(2α−1)) Σ (|size l − size r| − 1)⁺ + (2α/(1−α))(N − n)` and the invariant
+`n ≤ N`, `αN ≤ n`, `α^depth N ≥ 1`. Not done: BB[α], and a
+`Dictionary.Algorithm` packaging (the count `N` is not stored in the tree).
+
+Differences from the targets below: heights use `Classical.Static.height`
+(nodes on a longest path, the same as `Tango.height`, which `Classical` cannot
+import); the height bound needs only `0 < β < 1`; `rebuild` reaches
+`Classical.Static.balanced` exactly (not just its height), by rotating to the
+right spine and then running the spine procedure of the balanced tree
+backwards, so the Day–Stout–Warren compression is not used; the height
+statement needs `0 < n`. Checked names:
+
+| Statement | Declaration |
+|---|---|
+| `height ≤ log_{1/β}(n + 1)` for `β`-balanced trees | `WeightBalanced.Results.height_le` |
+| the balanced tree is `β`-balanced for `β ≥ 2/3` | `WeightBalanced.Results.balanced_balanced` |
+| `rebuild t` is the balanced tree, height `⌊log₂ n⌋ + 1` | `WeightBalanced.Results.rebuild_tree`, `rebuild_height` |
+| it is reached by exactly `(rebuild t).2 ≤ 2n` rotations | `WeightBalanced.Results.rebuild_rotations`, `rebuild_cost` |
+| minimum height: `height t ≥ ⌊log₂ n⌋ + 1`; the balanced tree attains it | `Static.Results.log2_lt_height`, `balanced_height` |
 
 **Source.** J. Nievergelt and E. M. Reingold, *Binary search trees of bounded
 balance*, SIAM J. Comput. 2(1) (1973); N. Blum and K. Mehlhorn, *On the
@@ -339,6 +565,27 @@ also serve `Models/Rotation/`).
 edge of `boundsmap.js`.
 
 ## 9. Random search trees
+
+**Status.** Step (a) formalized (branch `formalize-random-depth`, stacked on
+`formalize-rank-balanced`, 2026-11-10). Step (b), first part, formalized
+(branch `formalize-random-insertion`, stacked on `formalize-scapegoat`):
+`Classical.Random.Results.insertAll_treap` (for a permutation `order` of the
+`n` keys, `insertAll order`, plain insertion by comparison into a key-labelled
+tree, erases to the treap of `order.idxOf`), and its consequence for random
+BSTs, `random_bst_depth` (`H(x + 1) + H(n - x) - 2` when the insertion order is
+uniformly random) and `random_bst_depth_le` (`2 ln n`). Still open in (b):
+treap insertion and deletion by rotations with history independence, and the
+expected number of rotations per update. Step (c) is open. The
+statement is the target (a) below with explicit casts:
+`RotationBST.Classical.Random.Results.expected_depth` in
+`Classical/Random/Abstract.lean`, with `average` meaning
+`Treap.Random.average` and `harmonic` Mathlib's (cast from `ℚ`). The proof is
+in `Classical/Random/Depth.lean`, not next to `Structures/Treap/Random/Common.lean`:
+it needs `LazyFinger.searchPath_length` from `Bounds/`, which `Structures/`
+may not import. A corollary `expected_depth_le` bounds every expected depth by
+`2 ln n`, using `H(k) ≤ 1 + ln k` proved there (Mathlib's
+`harmonic_le_one_add_log` needs the integration library, which is not built
+locally).
 
 **Source.** T. N. Hibbard, *Some combinatorial properties of certain trees
 with applications to searching and sorting*, JACM 9 (1962); R. Seidel and

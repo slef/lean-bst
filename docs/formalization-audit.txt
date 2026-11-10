@@ -168,6 +168,149 @@ not merely against build success. Paths are relative to the repository root.
    Public names and existing book chapters are preserved. docs/organization.md
    gives the complete chapter progression and the exact checked entry points.
 
+13. Dynamic finger, perfect trees and the logarithmic baseline (ROADMAP 1, 4)
+   Evidence: Bounds/DynamicFinger/Abstract.lean, Bounds/Logarithmic/Abstract.lean,
+   Bounds/Implications/Abstract.lean, Classical/Static/Abstract.lean.
+   DF(p, xs) <= 2 SF(f, xs) + log2(d(p, f) + 1) for every f, p and xs, with
+   one unit per request in both sums; no hypothesis on f or p. The properties
+   satisfy DF => SF (constants 2C, D) and SF => logarithmic (same constants).
+   The balanced tree has every key at depth <= floor(log2 n) and static cost
+   <= m(floor(log2 n) + 1); every nonempty tree has a key at depth
+   >= floor(log2 n), so m repeats of it cost at least m(floor(log2 n) + 1).
+   Not claimed: any algorithm with the dynamic-finger property, worst-case
+   (rather than total) bounds, and the balanced -> BAL figure edge, which
+   concerns online algorithms.
+
+Validation of ROADMAP entries 1 and 4
+   lake build --wfail: passed (9462 jobs), including the whole-library axiom
+   audit and one added regression module (FingerBaseline).
+   scripts/check_imports.py: passed (1499 reachable library modules).
+
+14. Optimal static trees: Gilbert–Moore/Knuth recurrence, Yao, Knuth (ROADMAP 5)
+   Evidence: Classical/Static/Optimal/Abstract.lean.
+   For any interval weight W, the recurrence C(i, j) = W(i, j) +
+   min_{i <= r < j} (C(i, r) + C(r + 1, j)) is attained by a tree and is
+   at most the subtree-weight cost of every tree on [i, j). If W satisfies the
+   quadrangle inequality and is monotone under inclusion, C satisfies the
+   quadrangle inequality and the largest optimal roots satisfy
+   R(i, j) <= R(i, j + 1) and R(i, j) <= R(i + 1, j). Knuth's algorithm
+   returns C(0, n) after examining at most 2n^2 candidate roots (lookups are
+   not counted; Lean evaluation time is not claimed). For key weights the
+   cost is sum_x w[x](depth x + 1); with request counts it is the static
+   search cost, so optCost(counts) is the best static tree for the sequence,
+   between a third of the entropy bound and the entropy bound.
+   Not claimed: gap (unsuccessful-search) weights as a separate statement,
+   Garsia–Wachs or Hu–Tucker, approximate trees (Mehlhorn).
+
+Validation of ROADMAP entry 5
+   lake build --wfail: passed (9480 jobs), including the whole-library axiom
+   audit and one added regression module (OptimalStatic).
+   scripts/check_imports.py: passed (1507 reachable library modules).
+
+15. A dictionary model (ROADMAP 6)
+   Evidence: Models/Dictionary/Definitions/Abstract.lean,
+   Models/Dictionary/Abstract.lean, Algorithms/Splay/Updates/Dictionary/Abstract.lean.
+   Operations by rank (access, insert at a gap, delete) on trees with node
+   data. A step is rotations and data edits around one splice of a node with
+   at most one child; the main cost is 1 + the depth of the place of the
+   change plus all rotations, data edits are counted separately. Every
+   rotation-model execution of m accesses with R rotations is a dictionary
+   execution with main cost <= m + 2R; searching without moving costs the
+   static search cost; splay access, insert and delete are dictionary steps
+   with main cost at most 2, 3 and 2 times splay's charge.
+   Not claimed: split and join, a pointer machine with allocation, payload
+   data beyond implicit ranks, or a splay Dictionary.Algorithm.
+
+Validation of ROADMAP entry 6
+   lake build --wfail: passed (9496 jobs), including the whole-library axiom
+   audit and one added regression module (Dictionary).
+   scripts/check_imports.py: passed (1514 reachable library modules).
+
+16. Weight-balanced trees, static half (ROADMAP 8, partly)
+   Evidence: Classical/WeightBalanced/Abstract.lean, Classical/Static/Abstract.lean.
+   A tree in which every child's weight (size + 1) is at most beta times its
+   parent's has height <= log_{1/beta}(n + 1) for 0 < beta < 1; the balanced
+   tree is beta-balanced for beta >= 2/3 and has the minimum height
+   floor(log2 n) + 1. rebuild t is the balanced tree, reached from t by an
+   explicit sequence of at most 2n rotations.
+   Not claimed: BB[alpha] rebalancing, scapegoat trees, amortized bounds.
+
+Validation of ROADMAP entry 8 (static half)
+   lake build --wfail: passed (9510 jobs), including the whole-library axiom
+   audit and one added regression module (WeightBalanced).
+   scripts/check_imports.py: passed (1520 reachable library modules).
+
+17. Rank-balanced trees, static half (ROADMAP 7, partly)
+   Evidence: Classical/RankBalanced/Abstract.lean.
+   Ranked trees (integer rank per node, -1 for a missing child) under three
+   rules. AVL: rank = height in edges and height (in nodes) <= log_phi(n + 1).
+   Red-black: height <= 2 log2(n + 1). WAVL: rank + 1 and height
+   <= 2 log2(n + 1). Every AVL tree is a WAVL tree.
+   Not claimed: insertion and deletion procedures, rotation counts, amortized
+   rank changes, the decimal form 1.4405 log2(n + 2) of the AVL bound.
+
+Validation of ROADMAP entry 7 (static half)
+   lake build --wfail: passed (9526 jobs), including the whole-library axiom
+   audit and one added regression module (RankBalanced).
+   scripts/check_imports.py: passed (1524 reachable library modules).
+
+18. Expected depth in a random treap (ROADMAP 9(a))
+   Evidence: Classical/Random/Abstract.lean.
+   For every family of treaps of the n keys indexed by priority orders, the
+   expectation of the depth of key x over a uniformly random order is
+   H(x + 1) + H(n - x) - 2, hence at most 2 ln n.
+   Not claimed: insertion without rebalancing builds the treap (9(b)),
+   treap updates, randomized BSTs or zip trees (9(c)), the height (S2).
+
+Validation of ROADMAP entry 9(a)
+   lake build --wfail: passed (9536 jobs), including the whole-library axiom
+   audit and one added regression module (RandomTrees).
+   scripts/check_imports.py: passed (1527 reachable library modules).
+
+19. Scapegoat trees (ROADMAP 8, scapegoat part)
+   Evidence: Classical/Scapegoat/Abstract.lean.
+   For rational 1/2 < alpha < 1, scapegoat insertion (leaf, then rebuild the
+   deepest too-deep subtree when the leaf is deeper than log_{1/alpha} N) and
+   deletion (plain, then rebuild everything below alpha N keys) are dictionary
+   steps. From the empty tree every depth stays <= log_{1/alpha} n + 1, and m
+   operations cost at most the sum of (2/(2 alpha - 1) + 1)(log_{1/alpha} n_i + 2)
+   + 1 + 2 alpha/(1 - alpha) over the key counts n_i, rebuilding included.
+   Not claimed: the cost of computing subtree sizes during the scapegoat
+   search (not a counter of the model), BB[alpha] trees.
+
+Validation of the scapegoat trees
+   lake build --wfail: passed (9552 jobs), including the whole-library axiom
+   audit and one added regression module (Scapegoat).
+   scripts/check_imports.py: passed (1534 reachable library modules).
+
+20. Random BSTs by insertion (ROADMAP 9(b), first part)
+   Evidence: Classical/Random/Abstract.lean.
+   Inserting a permutation of the n keys one by one, by comparison and
+   without rebalancing, builds the treap whose priorities are the positions
+   in the permutation. Hence with a uniformly random insertion order the
+   expected depth of key x is H(x + 1) + H(n - x) - 2 <= 2 ln n.
+   Not claimed: treap updates by rotations, their expected rotation count,
+   randomized BSTs, zip trees.
+
+Validation of ROADMAP entry 9(b), first part
+   lake build --wfail: passed (9556 jobs), including the whole-library axiom
+   audit; regression examples added to RandomTrees.
+   scripts/check_imports.py: passed (1536 reachable library modules).
+
+21. WAVL and AVL insertion (ROADMAP 7, insertion)
+   Evidence: Classical/RankBalanced/Insertion/Abstract.lean.
+   Bottom-up insertion with promotions and at most one single or double
+   rotation is a dictionary step whose rank changes are data edits. It keeps
+   the WAVL and the AVL rules and uses at most 2 rotations. After m insertions
+   from the empty tree the height is at most log_phi(m + 1) and at most 7m
+   ranks have changed in total.
+   Not claimed: deletion, red-black insertion, amortized bounds with deletions.
+
+Validation of ROADMAP entry 7, insertion
+   lake build --wfail: passed (9572 jobs), including the whole-library axiom
+   audit and one added regression module (RankInsertion).
+   scripts/check_imports.py: passed (1543 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.

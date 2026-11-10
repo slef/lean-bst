@@ -70,18 +70,31 @@ RotationBST/
     Geometric/      points, arborally satisfied sets, online and offline
                     geometric algorithms, rooted rows of a fixed tree
     Equivalence/    offline ASS <-> region <-> rotation <-> pointer
+    Dictionary/     accesses, insertions and deletions by rank on trees with
+                    node data; search-path cost; the rotation model embeds
   Bounds/           Part II: bounds and their relations
     WorkingSet/     working-set numbers and property
     Abstract.lean   frequency entropy, static optimality, static finger
     Unified/        the 1985 fixed-finger unified charge
-    Implications/   working set => static optimality => static finger
+    Implications/   working set => static optimality => static finger,
+                    dynamic finger => static finger => logarithmic
+    DynamicFinger/  dynamic-finger sum and property; DF <= 2 SF + start term
+    Logarithmic/    the baseline m(1 + log n) and its property
     StaticTree/     fixed-tree benchmark and the entropy lower bound
     Interleave/     Wilber's interleave quantity and lower bound
     LazyFinger/     fixed-tree distances, weighted characterization, separations
     WeightedFinger/ weighted dynamic-finger benchmark
     ConditionalEntropy/ transition entropy and its obstruction
     Normalization/  request charges versus rotation charges
-  Classical/        Part III (planned): static, rank-balanced, weight-balanced, random trees
+  Classical/        Part III: classical, non-adaptive trees
+    Static/         the balanced tree, its depth and cost; deep keys in every tree
+      Optimal/      interval recurrence, Yao's lemma, Knuth's O(n²) algorithm
+    WeightBalanced/ bounded balance and its height; rebuilding by rotations
+    Scapegoat/      scapegoat trees: height and amortized cost from empty
+    RankBalanced/   ranked trees; AVL, red-black and WAVL rules and their heights
+      Insertion/    WAVL/AVL insertion: validity, two rotations, amortized rank changes
+    Random/         expected depth in a random treap; insertion builds the treap
+                    (rank-balanced, weight-balanced, random trees: planned)
   Algorithms/       Part IV: adaptive algorithms, definitions then bounds
     MoveToRoot/
     Splay/          algorithm, potential, access lemma, nine ST85 theorems,
@@ -576,3 +589,266 @@ This chapter concerns abstract BST operations. It does not establish bounds on
 finite-word storage or private computation, the full real-world clauses of
 ComboBST/deamortization, or dynamic optimality. Those remaining developments
 are separate from this complete abstract-model result.
+
+## Dynamic finger, perfect trees and the logarithmic baseline
+
+ROADMAP entries 1 and 4 (branch `formalize-finger-baseline`, 2026-11-09).
+The first files of `Classical/`; the book chapters are not updated yet.
+
+| Result | Checked entry point |
+|---|---|
+| DF ≤ 2·SF + start term | [`Bounds.dynamicFinger_le_fingerCost`, `dynamicFinger_le_fingerCost_self`](../RotationBST/Bounds/DynamicFinger/Abstract.lean) |
+| DF property ⇒ SF property | [`Bounds.dynamicFinger_implies_staticFinger`](../RotationBST/Bounds/Implications/Abstract.lean) |
+| SF ≤ m(1 + log n), SF property ⇒ logarithmic property | [`Bounds.fingerCost_le_log`, `staticFinger_implies_logarithmic`](../RotationBST/Bounds/Implications/Abstract.lean) |
+| Balanced tree: size, depth ≤ ⌊log₂ n⌋, cost | [`Classical.Static.Results.balanced_size`, `balanced_depth`, `balanced_cost`, `balanced_cost_le_logCost`](../RotationBST/Classical/Static/Abstract.lean) |
+| Every static tree: a key at depth ≥ ⌊log₂ n⌋, a sequence costing m(⌊log₂ n⌋ + 1) | [`Classical.Static.Results.exists_deep`, `exists_expensive`](../RotationBST/Classical/Static/Abstract.lean) |
+
+New definitions: `HasDynamicFingerBound` in
+`Bounds/DynamicFinger/Definitions/Abstract.lean` (which now imports
+`Models/Online/Abstract`), `Bounds.logCost` and `HasLogarithmicBound` in
+`Bounds/Logarithmic/Abstract.lean`, and `Classical.Static.balanced` in
+`Classical/Static/Definitions/Abstract.lean`.
+
+Choices made:
+
+- `HasDynamicFingerBound` quantifies over every start key `p < n`. Changing
+  `p` moves the sum by at most `1 + log₂ n`, which the startup term absorbs, so
+  "for some `p`" or "`p` = root" would give an equivalent property.
+- `Classical.Static.balanced` duplicates `Tango.balanced` because `Classical`
+  may not import `Algorithms`. A later cleanup could define Tango's reference
+  tree as the classical one (Tango may import `Classical`, which is below it).
+- The baseline uses the real logarithm, `m(1 + log₂ n)`, like the other
+  sequence costs; the tree statements use `⌊log₂ n⌋` (`Nat.log2`), which is
+  what depth counts. `balanced_cost_le_logCost` connects the two.
+- `HasStaticFingerBound.logarithmic` keeps the constants: the finger is put at
+  rank 0, and the empty tree is handled separately (only the empty sequence is
+  valid there).
+
+Regression examples: `RotationBSTTests/FingerBaseline.lean` (the balanced tree
+on 6, 7 and 8 keys, depths, a path, concrete costs, and the chain
+DF ⇒ SF ⇒ logarithmic).
+
+## Optimal static trees
+
+ROADMAP entry 5 (branch `formalize-optimal-static`, stacked on
+`formalize-finger-baseline`, 2026-11-09). Entry points:
+[`Classical.Static.Optimal.Results`](../RotationBST/Classical/Static/Optimal/Abstract.lean);
+the table in the roadmap entry lists them.
+
+Layout of `Classical/Static/Optimal/`:
+
+| File | Content |
+|---|---|
+| `Definitions/Abstract.lean` | `treeCost`, `cost` (the recurrence), `candidate`, `root`, `tree`, `Quadrangle`, `Monotone`, Knuth's `scan`, `knuthEntry`, `knuthTables`, `knuth`; key weights `weightedCost`, `rangeWeight`, `optCost`, `optTree`, `counts` |
+| `Recurrence.lean` | optimality of the recurrence, the root and the tree |
+| `Quadrangle.lean` | Yao's lemma and Knuth's root inequalities |
+| `Knuth.lean` | the tables are correct; the root ranges telescope to `2n²` steps |
+| `Weights.lean` | key weights, the weighted depth cost, request counts |
+| `Sequences.lean` | the best static tree for a sequence, entropy and balanced bounds |
+
+Choices made:
+
+- Half-open intervals `[i, j)` and an abstract interval weight `W`, so Yao's
+  lemma is stated once. Its hypotheses are the quadrangle inequality and
+  monotonicity under inclusion; key weights satisfy the first with equality.
+- `root` is the *largest* optimal root (Knuth's choice); with it both of
+  Knuth's inequalities hold, and Knuth's algorithm returns it because the scan
+  keeps the last minimizer.
+- Knuth's algorithm is defined by interval length with function-valued tables.
+  Its step count is the number of candidate roots examined, `R(i+1, j) −
+  R(i, j−1) + 1` per interval (one for a single key); lookups are not counted.
+  It is a specification of the algorithm, not a fast implementation.
+- `Optimal.tree` uses well-founded recursion, so the kernel does not reduce it
+  (`decide` cannot compare tree shapes); `#eval` works, and costs and roots
+  reduce.
+- The same recurrence with a different interval weight is
+  `OptimalLazyFinger.solve` (`Algorithms/`). `Classical` cannot import it, and
+  it reconstructs an arbitrary rather than the largest optimal root, so the
+  classical version is independent. A shared generic recurrence in `Structures/`
+  would be a later cleanup.
+
+Regression examples: `RotationBSTTests/OptimalStatic.lean`.
+
+## The dictionary model
+
+ROADMAP entry 6 (branch `formalize-dictionary`, stacked on
+`formalize-optimal-static`, 2026-11-10). The roadmap entry describes the
+design and lists the checked names.
+
+| File | Content |
+|---|---|
+| `Models/Dictionary/Definitions/Abstract.lean` | `Tree.TwoChildren`, `Op`, `Edit`, `Moves`, `Splice`, `Step`, `Execution`, `Algorithm`, `Tree.unit` |
+| `Models/Dictionary/Basic.lean` | sizes, erasing data, deciding `TwoChildren`, depth under rotations, the embedding of the rotation model, static searches |
+| `Models/Dictionary/Abstract.lean` | the statements (`Dictionary.Results`) |
+| `Algorithms/Splay/Updates/Dictionary/` | splay access, insert and delete as dictionary steps |
+
+Choices made:
+
+- Node data are `LabelledTree α` labels and travel with rotations; the shape
+  view is `LabelledTree Unit` (`Tree.unit`). The datum is balance data only;
+  payloads are implicit in the ranks.
+- Every update is a sequence of rotations and data edits around one splice.
+  A splice removes a node with at most one child; insertion is a splice read
+  backwards, so a new node may go above a subtree (splay's root insertion) as
+  well as at a leaf (the classical trees).
+- Deletion of a node with two children splices its predecessor or successor
+  and keeps the node at `x` with its datum, as in the classical algorithms
+  (colours and ranks stay with positions).
+- The search charge is `1 + depth` of the place of the change, in the tree at
+  that moment. Moves before the change are charged as rotations, and a
+  rotation moves a depth by at most one, so the charge is never less than half
+  the honest walk in the original tree plus the rotations. Data edits are a
+  separate counter, as the classical bounds count them separately.
+- Splay's forest model (split, join) is kept as is in `Algorithms/Splay/Updates`;
+  the instance theorems relate each splay update to a dictionary step with
+  main cost at most 3 times splay's charge. A splay `Dictionary.Algorithm`
+  (with explicit costs) is not defined.
+
+Regression examples: `RotationBSTTests/Dictionary.lean` (a leaf insertion with
+a data edit, a two-children deletion, static searches, the splay instance).
+
+## Weight-balanced trees: the static half
+
+ROADMAP entry 8, partly (branch `formalize-weight-balanced`, stacked on
+`formalize-dictionary`, 2026-11-10). Files: `Classical/WeightBalanced/`
+(`Definitions/Abstract.lean`: `weight`, `Balanced`, `vineCost`, `rebuild`;
+`Height.lean`; `Rebuild.lean`; `Abstract.lean`) and `Classical/Static/Height.lean`
+(`height` of the balanced tree, minimum height). `Classical.Static.height` was
+added to `Classical/Static/Definitions/Abstract.lean`.
+
+Choices made:
+
+- `Balanced β` bounds both children's weights (size + 1) by `β` times the
+  parent's. The height bound `(1/β)^height ≤ weight` needs only `β > 0`; the
+  logarithmic form needs `β < 1`.
+- `rebuild` is honest: its count is the length of an explicit rotation
+  sequence (`vineCost t` rotations to the right spine, `vineCost (balanced n)`
+  back), certified by `rebuild_rotations`. The way back reverses the spine
+  procedure (`Rotations.symm`) instead of Day–Stout–Warren compression, and
+  lands on `balanced n` exactly.
+- The balanced tree is `β`-balanced only for `β ≥ 2/3` (two keys force it),
+  so rebuilding restores bounded balance for those `β`.
+- The dynamic results (BB[α] rotations, scapegoat trees) need the dictionary
+  model of entry 6 and are not done.
+
+Regression examples: `RotationBSTTests/WeightBalanced.lean`.
+
+## Rank-balanced trees: the static half
+
+ROADMAP entry 7, partly (branch `formalize-rank-balanced`, stacked on
+`formalize-weight-balanced`, 2026-11-10). Files: `Classical/RankBalanced/`
+(`Definitions/Abstract.lean`: `RankedTree`, `rank`, `Rule`, `NoZeroChild`,
+`Rule.Local`, `Valid`; `Heights.lean`; `Abstract.lean`).
+
+Choices made:
+
+- One representation for the three rules, as in Haeupler, Sen and Tarjan:
+  `LabelledTree Int`, a missing child at rank `-1`, so the rank is the node
+  datum of the dictionary model (entry 6) and promotions are data edits.
+- Heights count nodes, the convention of `Classical.Static.height`, so the
+  bounds read `height ≤ log_φ(n + 1)` (AVL) and `≤ 2 log₂(n + 1)`
+  (red-black, WAVL).
+- The proofs are minimum-size inductions: `φ^height ≤ n + 1` for AVL (using
+  `φ² = φ + 1` from Mathlib's `Real.goldenRatio`; this imports
+  `Mathlib.NumberTheory.Real.GoldenRatio`, which had to be built once),
+  `2^(rank+1) ≤ n + 1` for red-black, `2^(rank+1) ≤ (n + 1)²` for WAVL; the
+  red-black height uses a joint induction (a 0-child's subtree is one level
+  shorter than its rank allows).
+- Insertion, deletion and their rotation and rank-change counts are not done.
+
+Regression examples: `RotationBSTTests/RankBalanced.lean` (a red-black tree
+with a 0-child, a WAVL tree that is not AVL, a chain of 0-children).
+
+## Random search trees: expected depth
+
+ROADMAP entry 9(a) (branch `formalize-random-depth`, stacked on
+`formalize-rank-balanced`, 2026-11-10). `Classical/Random/Depth.lean` proves
+`expected_depth` (`H(x + 1) + H(n - x) - 2`) and `expected_depth_le` (`2 ln n`);
+`Classical/Random/Abstract.lean` states them. The proof writes the depth as the
+number of keys on the search path minus one, and applies
+`Treap.Random.common_ancestor_probability` with `x = y` and uniform weights.
+It only uses the random-treap development of `Structures/Treap/Random`, which
+is unchanged. Regression examples: `RotationBSTTests/RandomTrees.lean`
+(the values `5/6` and `1` for three keys).
+
+## Scapegoat trees
+
+ROADMAP entry 8, scapegoat part (branch `formalize-scapegoat`, stacked on
+`formalize-random-depth`, 2026-11-10).
+
+| File | Content |
+|---|---|
+| `Classical/Scapegoat/Definitions/Abstract.lean` | `insertLeaf`, `bstDelete`, `deleteTarget`, `Violates`, `fix`, `State`, `step`, `run`, `sizesFrom`, `bound` |
+| `Shape.lean` | plain insertion and deletion: sizes, splice certificates, depths, the imbalance potential `phi` |
+| `Fix.lean` | the scapegoat search: rotation certificate, depths, payment by `phi` |
+| `Analysis.lean` | dictionary steps, the invariant `Inv`, the per-step amortized inequality (in `ℚ`) |
+| `Bounds.lean` | depths and costs in real logarithms |
+| `Abstract.lean` | the statements |
+
+Choices made:
+
+- `α` is rational, so the algorithm runs (`decide +kernel` evaluates small
+  runs in the tests); the bounds cast it to `ℝ`.
+- The height test is log-free: a node at depth `d` in a subtree of size `s`
+  is too deep when `α^d · s < 1`. `fix` rebuilds the deepest such subtree on
+  the path, whose child on the path then holds more than `α s` keys; that is
+  what makes the imbalance potential pay for the rebuild.
+- The invariant `α^depth · N ≥ 1` survives a rebuild because a rebuilt subtree
+  of size `s` has height `⌊log₂ s⌋`, smaller than the violating depth; this
+  needs `α ≥ 1/2`. `fix_depth` is stated for any downward-closed depth
+  condition.
+- The cost bound is per operation in the key count before it, `bound α n`,
+  summed over `sizesFrom 0 ops`. Searches are charged through the dictionary
+  model; finding the scapegoat (subtree sizes) is not charged, as the model
+  has no counter for it.
+- Not packaged as a `Dictionary.Algorithm`: the count `N` lives in the state,
+  not in the tree.
+
+Regression examples: `RotationBSTTests/Scapegoat.lean` (small runs evaluated
+in the kernel, the first violating depth for `α = 2/3`, the theorems at `2/3`).
+
+## Random search trees: insertion
+
+ROADMAP entry 9(b), first part (branch `formalize-random-insertion`, stacked
+on `formalize-scapegoat`, 2026-11-10). `Classical/Random/Definitions/Abstract.lean`
+defines `insertKey` and `insertAll` on key-labelled trees (comparison-based,
+no rebalancing; the shape is the `erase`). `Classical/Random/Insertion.lean`
+proves `insertAll_treap` by the recursion "the first key is the root, the
+others split by comparison" (`insertAll_cons`), with the order's positions as
+priorities, and `random_bst_depth` by applying `expected_depth` to the family
+`treapOf` (the inserted tree on permutations, any treap elsewhere) and
+`Treap.Random.average_mono` (the average only sees actual orders). The tree is
+labelled by keys rather than ranks so that insertion is by comparison; on a
+permutation of `0, …, n - 1` keys and ranks coincide. Regression examples are
+in `RotationBSTTests/RandomTrees.lean`.
+
+## Rank-balanced insertion
+
+ROADMAP entry 7, insertion (branch `formalize-rank-insertion`, stacked on
+`formalize-random-insertion`, 2026-11-10).
+
+| File | Content |
+|---|---|
+| `Insertion/Definitions/Abstract.lean` | `leafAt`, `fixLeft`, `fixRight`, `insert`, `insertAll`, `insertEdits` |
+| `Insertion/Certificate.lean` | the splice and the explicit rotation and edit sequence of each case |
+| `Insertion/Validity.lean` | `Post` (what a grown subtree looks like), WAVL and AVL preserved, two rotations |
+| `Insertion/Sequences.lean` | insertions from empty stay AVL; height `≤ log_φ(m + 1)` |
+| `Insertion/Edits.lean` | the 1,1-node potential; `7m` rank changes from empty |
+
+Choices made:
+
+- One functional bottom-up procedure: `insert` recurses to the gap and each
+  level calls `fixLeft` or `fixRight` on the way back. A subtree whose rank
+  grew is a new leaf or a 1,2-node (`Post`), which is what the rotation cases
+  need. AVL is handled as "WAVL with no 2,2-node" (`avl_iff`), preserved by the
+  same case analysis.
+- Each rank change is one data edit of the dictionary model; the certificate
+  lists them explicitly (one demotion for a single rotation; one promotion and
+  two demotions for a double rotation).
+- The library function is `RankBalanced.insert`; with `RankBalanced` open it
+  clashes with Lean's `insert` notation, so tests write it in full.
+- Proofs avoid `split` on the nested `match` of `fixLeft`: `rename_i` gave
+  wrong names there, so the case analysis uses `by_cases` and `cases`.
+
+Regression examples: `RotationBSTTests/RankInsertion.lean` (a promotion, a
+single and a double rotation with their counts, `insertEdits` on three keys).
