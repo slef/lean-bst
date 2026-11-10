@@ -283,6 +283,20 @@ Validation of the scapegoat trees
    audit and one added regression module (Scapegoat).
    scripts/check_imports.py: passed (1534 reachable library modules).
 
+20. Random BSTs by insertion (ROADMAP 9(b), first part)
+   Evidence: Classical/Random/Abstract.lean.
+   Inserting a permutation of the n keys one by one, by comparison and
+   without rebalancing, builds the treap whose priorities are the positions
+   in the permutation. Hence with a uniformly random insertion order the
+   expected depth of key x is H(x + 1) + H(n - x) - 2 <= 2 ln n.
+   Not claimed: treap updates by rotations, their expected rotation count,
+   randomized BSTs, zip trees.
+
+Validation of ROADMAP entry 9(b), first part
+   lake build --wfail: passed (9556 jobs), including the whole-library axiom
+   audit; regression examples added to RandomTrees.
+   scripts/check_imports.py: passed (1536 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.

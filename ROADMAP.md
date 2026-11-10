@@ -548,7 +548,15 @@ edge of `boundsmap.js`.
 ## 9. Random search trees
 
 **Status.** Step (a) formalized (branch `formalize-random-depth`, stacked on
-`formalize-rank-balanced`, 2026-11-10); steps (b) and (c) are open. The
+`formalize-rank-balanced`, 2026-11-10). Step (b), first part, formalized
+(branch `formalize-random-insertion`, stacked on `formalize-scapegoat`):
+`Classical.Random.Results.insertAll_treap` (for a permutation `order` of the
+`n` keys, `insertAll order`, plain insertion by comparison into a key-labelled
+tree, erases to the treap of `order.idxOf`), and its consequence for random
+BSTs, `random_bst_depth` (`H(x + 1) + H(n - x) - 2` when the insertion order is
+uniformly random) and `random_bst_depth_le` (`2 ln n`). Still open in (b):
+treap insertion and deletion by rotations with history independence, and the
+expected number of rotations per update. Step (c) is open. The
 statement is the target (a) below with explicit casts:
 `RotationBST.Classical.Random.Results.expected_depth` in
 `Classical/Random/Abstract.lean`, with `average` meaning

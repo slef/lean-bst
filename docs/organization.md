@@ -92,7 +92,7 @@ RotationBST/
     WeightBalanced/ bounded balance and its height; rebuilding by rotations
     Scapegoat/      scapegoat trees: height and amortized cost from empty
     RankBalanced/   ranked trees; AVL, red-black and WAVL rules and their heights
-    Random/         expected depth in a random treap
+    Random/         expected depth in a random treap; insertion builds the treap
                     (rank-balanced, weight-balanced, random trees: planned)
   Algorithms/       Part IV: adaptive algorithms, definitions then bounds
     MoveToRoot/
@@ -805,3 +805,18 @@ Choices made:
 
 Regression examples: `RotationBSTTests/Scapegoat.lean` (small runs evaluated
 in the kernel, the first violating depth for `α = 2/3`, the theorems at `2/3`).
+
+## Random search trees: insertion
+
+ROADMAP entry 9(b), first part (branch `formalize-random-insertion`, stacked
+on `formalize-scapegoat`, 2026-11-10). `Classical/Random/Definitions/Abstract.lean`
+defines `insertKey` and `insertAll` on key-labelled trees (comparison-based,
+no rebalancing; the shape is the `erase`). `Classical/Random/Insertion.lean`
+proves `insertAll_treap` by the recursion "the first key is the root, the
+others split by comparison" (`insertAll_cons`), with the order's positions as
+priorities, and `random_bst_depth` by applying `expected_depth` to the family
+`treapOf` (the inserted tree on permutations, any treap elsewhere) and
+`Treap.Random.average_mono` (the average only sees actual orders). The tree is
+labelled by keys rather than ranks so that insertion is by comparison; on a
+permutation of `0, …, n - 1` keys and ranks coincide. Regression examples are
+in `RotationBSTTests/RandomTrees.lean`.
