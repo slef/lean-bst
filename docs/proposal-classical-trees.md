@@ -2,10 +2,10 @@
 
 Branch `book-classical`, worktree `../lean-bst-classical`.
 
-**Status (2026-11-09).** Stubbed as a separate part. The chapters exist as
-stubs, with the unformalized results in "Not yet formalized" boxes, and are
-listed in ROADMAP.md as entries 4–9 and stretch goals S1–S4. The material that
-is already formalized has not been moved yet; the stubs link to it where it is.
+**Status (2026-11-10).** Implemented as a separate part. Most of it is
+formalized and shown in the book; what remains is in ROADMAP.md entries 7–9
+(deletions, red-black insertion, BB[α] rebalancing, treap updates, other
+samplers) and stretch goals S1–S4. This proposal is kept for its rationale.
 
 ## Approach
 

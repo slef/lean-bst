@@ -2,24 +2,41 @@
 
 The third way to keep a tree shallow is to leave its shape to chance. Several classical structures do this, and all of them draw from the same distribution: the *random BST*. This chapter presents that distribution once, through treaps, and the structures as different ways to sample it and keep it under updates.
 
+```headline random-bst-depth
+title: In a random binary search tree, key $x$ has expected depth $H_{x+1} + H_{n-x} - 2 \le 2\ln n$
+source: @hibbard1962; @seidel1996
+theorems: Classical.Random.Results.random_bst_depth Classical.Random.Results.random_bst_depth_le Classical.Random.Results.insertKeys_treap
+
+Insert the keys $0, \dots, n - 1$ into an empty binary search tree, without rebalancing, in a uniformly random order. Then key $x$ has expected depth exactly $H_{x+1} + H_{n-x} - 2$, where $H_k = 1 + \frac12 + \dots + \frac1k$ is the harmonic number, and this is at most $2 \ln n$. The tree built from an insertion order is the treap whose priorities are the positions in the order.
+
+In Lean, insertion is [[RotationBST.Classical.Random.insertKeys]], the expectation over random orders is [[RotationBST.Treap.Random.average]] of [Chapter 31](treaps.html#random-treaps) with uniform weights, and `harmonic` is Mathlib's.
+```
+
 ## One distribution
 
-Give the $n$ keys a uniformly random order, and read it as priorities: the first key in the order has the smallest priority. The treap for these priorities is the BST in which every node has a smaller priority than its descendants ([Chapter 31](treaps.html#treaps-for-arbitrary-priorities)). It is unique, and it is the same tree as the one obtained by inserting the keys into an empty BST, without rebalancing, in that order. This is the random BST of @hibbard1962.
+Give the $n$ keys a uniformly random order, and read it as priorities: the first key in the order has the smallest priority. The treap for these priorities is the BST in which every node has a smaller priority than its descendants, [[Geometric.Heap]] of [Chapter 31](treaps.html#treaps-for-arbitrary-priorities). It is unique. It is also the tree obtained by inserting the keys into an empty BST, without rebalancing, in that order: the first key becomes the root, and each later key is a descendant of every earlier key on its search path. This is the random BST of @hibbard1962.
 
-Everything about its expected shape follows from one fact. A key $a$ is an ancestor of $x$ exactly when $a$ has the smallest priority among the keys between $a$ and $x$, inclusive. With a uniform order this happens with probability $1/(|a - x| + 1)$. The library proves the weighted version of this fact, for the random treaps of [Chapter 31](treaps.html#random-treaps), in which the order is drawn with probabilities proportional to given weights. With equal weights, it is the uniform case.
+@decl RotationBST.Classical.Random.insertKey RotationBST.Classical.Random.insertKeys
 
-Summing over $a$ gives the expected depth of $x$, the number of its proper ancestors. Counting keys from $0$,
+Here keys are labels, compared on insertion, and the shape of the result is its `erase`. `insertKey` goes left at a larger label and right otherwise.
 
-$$\mathbb{E}[\mathrm{depth}(x)] \;=\; \sum_{a \ne x} \frac{1}{|a - x| + 1} \;=\; H_{x+1} + H_{n-x} - 2 \;\le\; 2 \ln n ,$$
+**Theorem (insertion builds the treap).** If `order` lists the keys $0, \dots, n - 1$ once each, then inserting them in that order gives a tree on $n$ keys with the heap property for the positions in the order.
 
-where $H_k = 1 + \frac12 + \dots + \frac1k$ is the harmonic number. So a random BST serves $m$ searches at expected cost at most $m(1 + 2\ln n) \approx m(1 + 1.39 \log_2 n)$.
+@decl RotationBST.Classical.Random.Results.insertKeys_treap
 
-::: todo
-- With uniform weights, the expected depth of $x$ in a random treap is $H_{x+1} + H_{n-x} - 2$. This is a short corollary of the formalized ancestor probability.
-- Inserting the keys in a given order into an empty BST, without rebalancing, builds the treap whose priorities are the positions in that order.
+Everything about the expected shape follows from one fact. A key $a$ is an ancestor of $x$ exactly when $a$ has the smallest priority among the keys between $a$ and $x$, inclusive. With a uniform order this happens with probability $1/(|a - x| + 1)$. The library proves the weighted version of this fact, for the random treaps of [Chapter 31](treaps.html#random-treaps), in which the order is drawn with probabilities proportional to given weights; with equal weights, it is the uniform case. Summing over $a$ gives the expected depth of $x$, its number of proper ancestors. Counting keys from $0$,
 
-Roadmap [entry 9](https://github.com/slef/lean-bst/blob/main/ROADMAP.md#9-random-search-trees). The Isabelle formalization of @eberl2020 covers similar ground.
-:::
+$$\mathbb{E}[\mathrm{depth}(x)] \;=\; \sum_{a \ne x} \frac{1}{|a - x| + 1} \;=\; H_{x+1} + H_{n-x} - 2 \;\le\; 2 \ln n .$$
+
+**Theorem (expected depth in a random treap).** For every family of trees `T xs` on $n$ keys, one for every list `xs`, with the heap property for the positions in `xs`, the expected depth of $x$ over a uniformly random order is $H_{x+1} + H_{n-x} - 2$, and at most $2 \ln n$.
+
+@decl RotationBST.Classical.Random.Results.expected_depth RotationBST.Classical.Random.Results.expected_depth_le
+
+Combining the two theorems gives the headline result for random insertion orders:
+
+@decl RotationBST.Classical.Random.Results.random_bst_depth RotationBST.Classical.Random.Results.random_bst_depth_le
+
+Summing over the searches, a random BST serves $m$ searches at expected cost at most $m(1 + 2\ln n) \approx m(1 + 1.39 \log_2 n)$; the library states the bound per key, not this sum. The Isabelle formalization of @eberl2020 covers similar ground.
 
 ## Treaps
 

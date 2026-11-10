@@ -125,7 +125,7 @@ export function decomposePaths(t, lo, past) {
 
 export const preferredPaths = (reference, past) => parts(decomposePaths(reference, 0, past));
 
-// --- Tango.balanced
+// --- Tree.balanced (Tango.balanced is an alias)
 
 export function balanced(n) {
   if (n === 0) return null;

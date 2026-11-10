@@ -35,7 +35,7 @@ const B = {
   SO: { sym: 'SO', name: 'entropy', def: 'Bounds.staticCost' },
   DF: { sym: 'DF', name: 'dynamic finger', def: 'Bounds.dynamicFingerCostFrom' },
   SF: { sym: 'SF', name: 'static finger', def: 'Bounds.fingerCost' },
-  BAL: { sym: 'm(1 + log n)', name: 'balanced tree', def: null },
+  BAL: { sym: 'm(1 + log n)', name: 'balanced tree', def: 'Bounds.logCost' },
 };
 
 const T = {
@@ -49,6 +49,8 @@ const T = {
   entropy: ['StaticTree.Results.entropy_lower_bound', 'StaticTree.Results.entropy_upper_bound'],
   wsSo: ['Bounds.workingSet_implies_staticOptimality'],
   soSf: ['Bounds.staticOptimality_implies_staticFinger'],
+  dfSf: ['Bounds.dynamicFinger_le_fingerCost', 'Bounds.dynamicFinger_implies_staticFinger'],
+  sfBal: ['Bounds.fingerCost_le_log', 'Bounds.staticFinger_implies_logarithmic'],
 };
 
 const TEXT = {
@@ -60,8 +62,8 @@ const TEXT = {
   dynFinger: 'LF* is at most n plus four times the dynamic finger sum, from any start key.',
   wsSo: 'Every algorithm with the working-set bound has the static optimality bound (with new constants).',
   soSf: 'Every algorithm with the static optimality bound has the static finger bound, for every finger at once.',
-  sfBal: 'Each term of the static finger sum is at most 1 + log₂ n, so SF ≤ m(1 + log₂ n) for every finger: every bound above is at most what a balanced tree pays. Classical, but not formalized yet.',
-  dfSf: 'The dynamic finger sum is at most twice the static finger sum, for every finger f, plus log(|p − f| + 1) for the start key p: a step from x to y costs at most the steps from x to f and from f to y. This is classical, but not formalized yet.',
+  sfBal: 'Each term of the static finger sum is at most 1 + log₂ n, so SF ≤ m(1 + log₂ n) for every finger: every bound above is at most what a balanced tree pays. As properties, the static finger bound implies the logarithmic bound with the same constants.',
+  dfSf: 'The dynamic finger sum is at most twice the static finger sum, for every finger f, plus log(|p − f| + 1) for the start key p: a step from x to y costs at most the steps from x to f and from f to y. As properties, the dynamic finger bound implies the static finger bound, with constants (2C, D).',
 };
 
 export const MAPS = {
@@ -90,8 +92,8 @@ export const MAPS = {
       { id: 'dp', label: 'Optimal tree (DP)', sub: 'static, offline', x: 690, y: 342, href: 'optimal-lazy-finger.html' },
       { id: 'entropy', label: 'Entropy tree', sub: 'static, offline', x: 95, y: 515, href: 'static-trees.html#entropy-trees' },
       { id: 'knuth', label: 'Optimal static tree', sub: 'Knuth, offline', x: 245, y: 560, href: 'static-trees.html#optimal-static-trees' },
-      { id: 'balanced', label: 'Balanced trees', sub: 'AVL, red-black, BB[α]', x: 190, y: 650, href: 'part-classical.html' },
-      { id: 'random', label: 'Random trees', sub: 'treaps, in expectation', x: 670, y: 650, href: 'random-trees.html' },
+      { id: 'balanced', label: 'Balanced tree', sub: 'static', x: 190, y: 650, href: 'static-trees.html#balanced-trees' },
+      { id: 'random', label: 'Random BST', sub: 'in expectation', x: 670, y: 650, href: 'random-trees.html' },
     ],
     edges: [
       { from: 'IB', to: 'OPT', text: TEXT.wilber, thms: T.wilber },
@@ -102,17 +104,20 @@ export const MAPS = {
       { from: 'LF', to: 'DF', text: TEXT.dynFinger, thms: T.dynFinger },
       { from: 'WS', to: 'RF', text: TEXT.wsSo, thms: T.wsSo },
       { from: 'RF', to: 'SF', text: TEXT.soSf, thms: T.soSf },
-      { from: 'DF', to: 'SF', todo: true, label: 'not yet formalized', lab: [535, 500, 'start'], text: TEXT.dfSf },
-      { from: 'SF', to: 'BAL', todo: true, label: 'not yet formalized', lab: [440, 600, 'start'], text: TEXT.sfBal },
+      { from: 'DF', to: 'SF', text: TEXT.dfSf, thms: T.dfSf },
+      { from: 'SF', to: 'BAL', text: TEXT.sfBal, thms: T.sfBal },
       { from: 'entropy', to: 'RF', kind: 'alg',
         text: 'A static tree with the weighted median at every root costs at most the entropy bound SO. It is built from the access frequencies, so it is offline.',
         thms: [T.entropy[1]] },
-      { from: 'knuth', to: 'RF', kind: 'alg', todo: true,
-        text: "Knuth's dynamic program, sped up by Yao's quadrangle inequality, computes a static tree of cost exactly RF* in O(n²) time. It is offline: it needs the access frequencies." },
-      { from: 'balanced', to: 'BAL', kind: 'alg', todo: true,
-        text: 'A tree of height O(log n) serves every request with O(log n) nodes: the balanced static tree, and AVL, red-black, WAVL, BB[α] and scapegoat trees under insertions and deletions.' },
-      { from: 'random', to: 'BAL', kind: 'alg', todo: true,
-        text: 'In a random BST or a treap, every key has expected depth at most 2 ln n, so the expected cost is at most m(1 + 2 ln n).' },
+      { from: 'knuth', to: 'RF', kind: 'alg',
+        text: "The optimal-tree recurrence builds a static tree of cost exactly RF*, and Knuth's algorithm, sped up by Yao's quadrangle inequality, computes that cost examining at most 2n² candidate roots. It is offline: it needs the access frequencies.",
+        thms: ['Classical.Static.Optimal.Results.optTree_static', 'Classical.Static.Optimal.Results.optCost_le_static', 'Classical.Static.Optimal.Results.knuth_optCost'] },
+      { from: 'balanced', to: 'BAL', kind: 'alg',
+        text: 'The balanced static tree serves every sequence at cost at most m(1 + log₂ n). The dynamic classical trees of Part III (AVL, red-black, WAVL, scapegoat) have logarithmic height under updates; the library proves their height and update bounds, not a search cost against this baseline.',
+        thms: ['Classical.Static.Results.balanced_cost_le_logCost'] },
+      { from: 'random', to: 'BAL', kind: 'alg',
+        text: 'In a random BST, built by inserting the keys in a uniformly random order, every key has expected depth at most 2 ln n, so a search costs at most 1 + 2 ln n in expectation.',
+        thms: ['Classical.Random.Results.random_bst_depth_le'] },
       { from: 'tango', to: 'OPT', kind: 'alg', label: 'O(log log n)', lab: [318, 98, 'start'],
         text: 'Tango trees, an online BST algorithm, cost at most O(log log n) times the cost of any offline execution from the same initial tree, plus O(n log log n).',
         thms: ['Tango.Algorithm.Results.exists_competitive'] },
@@ -171,7 +176,7 @@ export const MAPS = {
         text: 'Some fixed tree costs at most the entropy bound: RF_t ≤ SO for some t.', thms: [T.entropy[1]] },
       { from: 'WS', to: 'SO', label: 'property ⇒', lab: [140, 360, 'end'], text: TEXT.wsSo, thms: T.wsSo },
       { from: 'SO', to: 'SF', label: 'property ⇒', lab: [300, 490, 'end'], text: TEXT.soSf, thms: T.soSf },
-      { from: 'DF', to: 'SF', todo: true, label: '2·SF + log n, not yet formalized', lab: [560, 500, 'start'], text: TEXT.dfSf },
+      { from: 'DF', to: 'SF', label: '2·SF + log n', lab: [560, 500, 'start'], text: TEXT.dfSf, thms: T.dfSf },
     ],
   },
 };

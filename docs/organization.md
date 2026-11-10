@@ -615,9 +615,11 @@ are separate from this complete abstract-model result.
 ## Classical search trees and the baselines
 
 ROADMAP entries 1, 3–6, 7 (static half and WAVL/AVL insertion), 8 (static
-half and scapegoat trees) and 9(a), 9(b) (first part). The book chapters do
-not cite these names yet; `docs/book-updates-classical.md` lists the names
-that changed during the cleanup before merging.
+half and scapegoat trees) and 9 (expected depth, and random BSTs by
+insertion). The book shows them in
+`book/src/chapters/classical/` (Part III), `models/dictionary.md`,
+`models/shapes.md` (`Tree.height`), `bounds/bounds.md` (dynamic finger and the
+logarithmic baseline) and `algorithms/tango-linear.md`.
 
 ### Shared vocabulary
 

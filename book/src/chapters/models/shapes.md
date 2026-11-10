@@ -32,6 +32,14 @@ The depth of a key is the length of its search path, which is what a search pays
 
 `t.depth x` searches by rank. At `node l r`, the root has rank `l.size`. A smaller `x` continues in `l` with the same rank, and a larger one in `r` with rank `x - l.size - 1`; that subtraction is only evaluated when `x > l.size`, so it never truncates. Each step down adds one. On `nil` the result is $0$; this case only makes the function total and is never reached for ranks below `t.size`. Fixed-tree search costs ([Chapter 10](bounds.html)) and the split-tree finger bounds ([Chapter 21](split-trees.html)) are stated with it.
 
+## Height
+
+The height of a tree counts the nodes on a longest path from the root down:
+
+@decl RotationBST.Tree.height
+
+The empty tree has height $0$ and a single node has height $1$. So the height is one more than the largest depth: every key $x$ has $\mathrm{depth}(x) < \mathrm{height}$. Counting nodes rather than edges makes the empty tree fit without a special case. Balanced trees ([Chapter 18](static-trees.html)), rank-balanced and weight-balanced trees ([Chapter 19](rank-balanced.html), [Chapter 20](weight-balanced.html)) and the reference trees of Tango ([Section 25.1](preferred-paths.html)) are measured with it.
+
 ## Implicit keys
 
 Inorder visits the left subtree, then the root, then the right subtree. So in `node l r` the root has rank `l.size`: exactly `l.size` keys come before it. More generally, take a subtree whose smallest key has rank $lo$ in the whole tree. Its root has rank $lo + {}$`l.size`, its left subtree starts at $lo$, and its right subtree starts at $lo + {}$`l.size`$ + 1$.

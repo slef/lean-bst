@@ -26,21 +26,13 @@ The box above states the result; checking it needs only Wilber's definitions and
 
 ## The reference tree
 
-Only two properties of the reference tree matter: it has the right number of keys, and it is shallow. The library measures depth by height, in nodes:
-
-@decl RotationBST.Tango.height
-
-The empty tree has height $0$ and a single node has height $1$. This counts the nodes on a longest root-to-leaf path, not the edges, so a preferred path, which is a set of nodes on one downward path, never has more nodes than the height.
+Only two properties of the reference tree matter: it has the right number of keys, and it is shallow. The library measures depth by [[RotationBST.Tree.height]] ([Chapter 1](shapes.html#height)), which counts the nodes on a longest root-to-leaf path, not the edges. So a preferred path, which is a set of nodes on one downward path, never has more nodes than the height.
 
 Two families of reference trees are provided. Perfect trees are the classical choice when $n = 2^h - 1$:
 
 @decl RotationBST.Tango.perfect
 
-For every other $n$, the library uses a balanced tree on exactly $n$ ranks, splitting the remaining keys as evenly as possible with the larger half on the left:
-
-@decl RotationBST.Tango.balanced
-
-`termination_by n => n` tells Lean that the recursion terminates because the argument decreases. Both halves, `(n + 1) / 2` and `n / 2`, are at most `n`. The definition is executable: `balanced 7` is `perfect 3`, and `balanced 6` has a left subtree of size $3$ and a right subtree of size $2$. Its height is at most $\lfloor\log_2 n\rfloor + 1$, which is the bound used in the final theorem of [Chapter 19](tango.html).
+For every other $n$, the library uses the balanced tree [[RotationBST.Tree.balanced]] of [Chapter 18](static-trees.html#balanced-trees), which splits the remaining keys as evenly as possible, with the larger half on the left. For example, `balanced 7` is `perfect 3`, and `balanced 6` has a left subtree of size $3$ and a right subtree of size $2$. Its height is at most $\lfloor\log_2 n\rfloor + 1$, which is the bound used in the final theorem of [Chapter 19](tango.html). Tango's own names for these two definitions, `Tango.height` and `Tango.balanced`, are aliases.
 
 A preferred path is a path in the ordinary sense. It starts at some node and repeatedly steps to a child:
 

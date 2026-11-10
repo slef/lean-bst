@@ -4,7 +4,7 @@
 
 Together the two arguments prove the exact form of the equivalence, with no constant factors at all: a point set and a BST execution in the rooted-region model of [Chapter 7](regions.html) cost the same.
 
-The last two sections leave the geometric setting. They state the classical facts about treaps for arbitrary distinct priorities, and define the *random* treaps that Lazy Finger Theorem 1 uses in [Chapter 14](lazy-finger.html).
+The last two sections leave the geometric setting. They state the classical facts about treaps for arbitrary distinct priorities, and define the *random* treaps that Lazy Finger Theorem 1 uses in [Chapter 14](lazy-finger.html), and that give the expected depths of random search trees in [Chapter 21](random-trees.html).
 
 ```headline treap-regions
 title: Arborally satisfied sets are exactly rooted-region executions

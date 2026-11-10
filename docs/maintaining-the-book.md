@@ -47,7 +47,7 @@ npm run verify:bib     # only if bibliography.json changed (needs network)
 | Check | Command | What it catches |
 |---|---|---|
 | Build | `npm run build` | Unknown or internal Lean names; `@decl` without source; bad headline blocks (sources, theorems, skips); KaTeX errors; links to missing pages or anchors; cross-references that cannot be numbered; unknown, malformed or uncited bibliography keys; unknown figures; bad figure JSON. Warns about reading-interface declarations that no chapter shows. |
-| Lint | `npm run lint` | Chapter, part, appendix or book-section numbers written in plain text; citations written by hand; an author named right before `[@key]` (the name would appear twice); a key cited twice in one sentence; a key whose year differs from its entry's year; articles without pages; links to missing `ROADMAP.md` entries; `todo` boxes without a roadmap link; roadmap entries naming book files that do not exist; roadmap targets that now exist in Lean (the entry may be done); library names in roadmap target statements that do not exist; figure nodes and edges naming theorems that their page never links (the figure link would be dead), or pages and anchors that do not exist; `todo` figure items without a roadmap option; part introductions and the preface map that miss a chapter; "has N parts" in the preface; files under `chapters/` that `book.json` does not list. `--verbose` also lists chapters that a part's notes do not mention. |
+| Lint | `npm run lint` | Chapter, part, appendix or book-section numbers written in plain text; citations written by hand; an author named right before `[@key]` (the name would appear twice); a key cited twice in one sentence; a key whose year differs from its entry's year; articles without pages; links to missing `ROADMAP.md` entries; `todo` boxes without a roadmap link; roadmap entries naming book files that do not exist; roadmap targets that now exist in Lean (the entry may be done); library names in roadmap target statements that do not exist; figure nodes and edges naming theorems that their page never links (the figure link would be dead), or pages and anchors that do not exist; `todo` figure items without a roadmap option; table rows whose status cell says "not formalized" but that link a Lean declaration; phrases that record a gap ("not stated as one Lean theorem", "has no Lean definition", …), unless the paragraph is marked `<!-- known gap -->`; roadmap entries whose lettered items do not start at (a); part introductions and the preface map that miss a chapter; "has N parts" in the preface; files under `chapters/` that `book.json` does not list. `--verbose` also lists chapters that a part's notes do not mention. |
 | Unit tests | `npm test` | The ports of the tree algorithms used by figures, and the bibliography parser and renderer. |
 | Pages | `npm run check:pages` | In headless Chromium, every page: JavaScript errors, failed requests, figures that draw nothing, KaTeX errors, citations without reference data. Skips with a message when no Chromium is found (set `CHROME_PATH`); CI runs it with `--require`. |
 | Bibliography | `npm run verify:bib` | For entries changed since `HEAD` (or `-- --all`, or `-- key …`): each DOI resolves on Crossref or DataCite, each arXiv id on arxiv.org, to a work with the same title and first author; every other URL answers. |
@@ -140,6 +140,11 @@ for the whole book:
   hypotheses, attributions, years.
 - Overclaiming: "formalized", "proves" and "the library shows" only next to a
   shown declaration; status columns that match the `todo` boxes.
+- That a verb in a headline ("computes a tree", "builds", "runs in time") is
+  backed by a theorem about the function's actual output: a function that
+  returns a cost does not compute a tree.
+- Units: heights count nodes, depths count edges; "from the empty tree"
+  restrictions on amortized bounds.
 - That `[@key]` cites the paper the sentence means, and that what the
   sentence says the paper did is what the paper did (read its abstract).
 - That one concept has one definition everywhere it appears: the chapter,

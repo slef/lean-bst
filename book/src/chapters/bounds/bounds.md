@@ -121,7 +121,27 @@ The dynamic finger bound replaces the fixed finger by the *previous* request: a 
 
 @decl RotationBST.Bounds.dynamicFingerCostFrom
 
-`dynamicFingerCostFrom p xs` charges each request $x_i$ the amount $1 + \log_2(|x_i - x_{i-1}| + 1)$, with a real base-two logarithm, where $x_0 = p$ is an explicitly supplied predecessor of the first request. The unit makes an immediately repeated request cost $1$, as in every other benchmark of this chapter. The bound was proved for splay trees by Cole and coauthors [@cole2000sorting; @cole2000proof]; that proof is not in the library, and there is no `Has…Bound` property for this benchmark. The library proves it instead for GreedyASS ([Chapter 23](greedy-finger.html)), and for the optimal lazy-finger tree ([Chapter 15](lazy-finger-hierarchy.html)), where it is the unit-weight case of the weighted dynamic finger bound of [Chapter 14](lazy-finger.html).
+`dynamicFingerCostFrom p xs` charges each request $x_i$ the amount $1 + \log_2(|x_i - x_{i-1}| + 1)$, with a real base-two logarithm, where $x_0 = p$ is an explicitly supplied predecessor of the first request. The unit makes an immediately repeated request cost $1$, as in every other benchmark of this chapter. The bound was proved for splay trees by Cole and coauthors [@cole2000sorting; @cole2000proof]; that proof is not in the library. The library proves it instead for GreedyASS ([Chapter 23](greedy-finger.html)), and for the optimal lazy-finger tree ([Chapter 15](lazy-finger-hierarchy.html)), where it is the unit-weight case of the weighted dynamic finger bound of [Chapter 14](lazy-finger.html).
+
+The property has the same shape as the others, with the start key quantified like the finger:
+
+@decl RotationBST.HasDynamicFingerBound
+
+The bound must hold for every start key `p < t.size`. Changing `p` changes the sum by at most $1 + \log_2 n$, which the startup term absorbs, so fixing `p` would give an equivalent property. No algorithm in the library is proved to have this property as stated: the GreedyASS theorem of [Chapter 23](greedy-finger.html) gives one algorithm for each number of keys $n$, while the property asks for one algorithm for all $n$.
+
+Dynamic finger is stronger than static finger. A step from $x$ to $y$ is at most the step from $x$ to $f$ and back from $f$ to $y$, because $|x - y| + 1 \le (|x - f| + 1)(|y - f| + 1)$. Summing, each request's finger term is counted at most twice:
+
+**Theorem (dynamic finger and static finger).** For every finger $f$, start key $p$ and sequence, the dynamic finger sum is at most twice the static finger sum plus $\log_2(|p - f| + 1)$. Starting at the finger, the extra term vanishes.
+
+@decl RotationBST.Bounds.dynamicFinger_le_fingerCost RotationBST.Bounds.dynamicFinger_le_fingerCost_self
+
+## The logarithmic baseline
+
+Every bound above is at most what a balanced tree pays, about $\log_2 n$ per request whatever the sequence. The library names this baseline, and the corresponding property:
+
+@decl RotationBST.Bounds.logCost RotationBST.HasLogarithmicBound
+
+`logCost n xs` is $m(1 + \log_2 n)$. An algorithm has the logarithmic bound when it pays $O(1 + \log n)$ amortized per request, after the usual startup allowance. The balanced static tree of [Chapter 18](static-trees.html#balanced-trees) meets the baseline on every sequence, and every static tree pays it on some sequence. The dynamic trees of [Part III](part-classical.html) have logarithmic height under updates; a search-cost statement for them against `logCost` is not formalized.
 
 ## The unified charge
 
@@ -139,7 +159,7 @@ Frequencies come from the **whole** sequence `original`, so $m$ is its length an
 - Since the minimum is taken per access, `unifiedSum` is at most each of the three earlier sums up to constants, and can be much smaller than all of them: a sequence that alternates between a hot spot near $f$ and a small working set far away is cheap for one charge on one half and for another on the other half.
 :::
 
-Splaying satisfies this bound ([[RotationBST.Splay.Results.unified]], [Chapter 14](analysis.html#the-unified-theorem-theorem-5)). The library defines no `Has…Bound` property for it, because no implication involving it is proved.
+Splaying satisfies this bound ([[RotationBST.Splay.Results.unified]], [Chapter 14](analysis.html#the-unified-theorem-theorem-5)). The library defines no `Has…Bound` property for it, because no implication involving it is proved. <!-- known gap -->
 
 ## Comparison with a fixed tree
 
@@ -171,7 +191,7 @@ The bound is tight up to that factor: some fixed tree achieves the entropy bound
 
 @decl RotationBST.StaticTree.Results.entropy_upper_bound
 
-The constant is one, and there is no additive term. The tree has all $n$ keys, including those never requested, and the statement includes $n = 0$ and the empty sequence, where both sides are $0$. Combined with the lower bound, the best fixed tree for `xs` costs between $\tfrac13\,\mathtt{staticCost}$ and $\mathtt{staticCost}$, which is the classical statement that optimal static trees cost $\Theta(m + \sum_x q_x \log_2(m/q_x))$.
+The constant is one, and there is no additive term. The tree has all $n$ keys, including those never requested, and the statement includes $n = 0$ and the empty sequence, where both sides are $0$. Combined with the lower bound, the best fixed tree for `xs` costs between $\tfrac13\,\mathtt{staticCost}$ and $\mathtt{staticCost}$, which is the classical statement that optimal static trees cost $\Theta(m + \sum_x q_x \log_2(m/q_x))$. The optimal static tree itself, and this two-sided bound for it, are in [Chapter 18](static-trees.html#key-weights-and-request-sequences) ([[Classical.Static.Optimal.Results.optCost_entropy]]).
 
 Consequently, a working-set algorithm competes with every fixed BST.
 
@@ -185,15 +205,17 @@ Here `t` is the algorithm's initial tree and `u` is any comparison tree of the s
 
 The following implications hold for every algorithm and use nothing about splaying. They are inequalities between sequence functions, lifted to properties.
 
-**Theorem (implications).** For every algorithm, the working-set bound implies static optimality, and static optimality implies the static finger bound. Hence the working-set bound implies the static finger bound.
+**Theorem (implications).** For every algorithm, the working-set bound implies static optimality, and static optimality implies the static finger bound. Hence the working-set bound implies the static finger bound. The dynamic finger bound also implies the static finger bound, and the static finger bound implies the logarithmic bound.
 
-@decl RotationBST.Bounds.workingSet_implies_staticOptimality RotationBST.Bounds.staticOptimality_implies_staticFinger RotationBST.Bounds.workingSet_implies_staticFinger
+@decl RotationBST.Bounds.workingSet_implies_staticOptimality RotationBST.Bounds.staticOptimality_implies_staticFinger RotationBST.Bounds.workingSet_implies_staticFinger RotationBST.Bounds.dynamicFinger_implies_staticFinger RotationBST.Bounds.fingerCost_le_log RotationBST.Bounds.staticFinger_implies_logarithmic
 
 - **Working set ⇒ static optimality.** The key inequality is
   $$\mathtt{workingSetSum}(n, [], xs) \;\le\; \mathtt{staticCost}(n, xs) + n\,(1 + \lfloor\log_2 n\rfloor).$$
   The proof groups the charges by key. Between consecutive accesses to $x$, the working-set number is at most the time elapsed (the gap). The gaps of key $x$ sum to at most $m$, and a finite Jensen inequality bounds $\sum \log_2(\text{gap})$ by $q_x \log_2(m/q_x)$. First accesses are charged to the startup term. The constants become $(C + 1, C + D)$.
 - **Static optimality ⇒ static finger.** Apply the weighted entropy inequality with weights $1/(|x-f|+1)^2$, which sum to at most $4$ on both sides of $f$ together. This gives $\mathtt{staticCost} \le 3\,\mathtt{fingerCost}(f)$ for every $f$, and the constants become $(3C, D)$.
 - **Working set ⇒ static finger** is the composition.
+- **Dynamic finger ⇒ static finger** follows from the inequality of the previous section, taking the start key equal to the finger. The constants become $(2C, D)$.
+- **Static finger ⇒ logarithmic.** Two keys among $n$ are less than $n$ apart, so each static-finger term is at most $1 + \log_2 n$, and the constants do not change.
 
 ::: note Why these are separate theorems
 In Sleator and Tarjan's paper, Theorems 2 and 3 are proved directly from the access lemma, with suitably chosen weights. The library instead proves the working-set theorem for splay once and derives static optimality and static finger through these algorithm-independent implications. The splay-specific sharper forms, without startup when every key occurs, are proved separately in [Chapter 9](analysis.html).
@@ -211,5 +233,5 @@ The left-hand side is the cost of the online pointer implementation of `a`, incl
 
 ## What is not formalized
 
-Two well-known results are absent. The **dynamic finger** theorem for splay trees [@cole2000sorting; @cole2000proof] is not in the library: its proof is long. The benchmark itself is defined above, and other structures are proved to meet it. **The unified bound** [@iacono2001; @badoiu2007] replaces the fixed finger by the distance to recently accessed keys; it is open whether splay trees satisfy it. Both are mentioned here only to place the formalized bounds. Two further results appear as dashed arrows in the [map of the bounds](part-bounds.html#a-map-of-the-bounds) and are listed in the library's [roadmap](https://github.com/slef/lean-bst/blob/main/ROADMAP.md): the elementary inequality by which dynamic finger implies static finger, and the theorem of @chmel2026 that splay trees are $O(\log\log n \cdot \log^2\log\log n)$-competitive. The lower-bound side of [Part II](part-bounds.html) is [Chapter 11](wilber.html).
+Two well-known results are absent. The **dynamic finger** theorem for splay trees [@cole2000sorting; @cole2000proof] is not in the library: its proof is long. The benchmark itself is defined above, and other structures are proved to meet it. **The unified bound** [@iacono2001; @badoiu2007] replaces the fixed finger by the distance to recently accessed keys; it is open whether splay trees satisfy it. Both are mentioned here only to place the formalized bounds. One further result appears as a dashed arrow in the [map of the bounds](part-bounds.html#a-map-of-the-bounds) and is listed in the library's [roadmap](https://github.com/slef/lean-bst/blob/main/ROADMAP.md): the theorem of @chmel2026, a 2026 preprint, that splay trees are $O(\log\log n \cdot \log^2\log\log n)$-competitive. The lower-bound side of [Part II](part-bounds.html) is [Chapter 11](wilber.html).
 

@@ -193,7 +193,7 @@ For the classical reference trees the height is logarithmic, so the factor is do
 
 @decl RotationBST.Tango.Algorithm.Results.perfect_competitive RotationBST.Tango.Algorithm.Results.balanced_competitive
 
-`perfect_competitive` is `competitive` for `perfect h`, rewritten with [[RotationBST.Tango.Results.perfect_reference]]: on $n = 2^h - 1$ keys the factor is $56\log_2 h + 16$, with $h = \log_2(n+1)$. `balanced_competitive` covers every $n$ with the executable [[RotationBST.Tango.balanced]] reference tree. Its height is at most $\lfloor\log_2 n\rfloor + 1$, so
+`perfect_competitive` is `competitive` for `perfect h`, rewritten with [[RotationBST.Tango.Results.perfect_reference]]: on $n = 2^h - 1$ keys the factor is $56\log_2 h + 16$, with $h = \log_2(n+1)$. `balanced_competitive` covers every $n$ with the executable [[RotationBST.Tree.balanced]] reference tree. Its height is at most $\lfloor\log_2 n\rfloor + 1$, so
 $$T_{\text{Tango}} \le \bigl(56\log_2(\lfloor\log_2 n\rfloor + 1) + 16\bigr)(R + m) + \bigl(14\log_2(\lfloor\log_2 n\rfloor + 1) + 4\bigr)\,n.$$
 This is the $O(\log\log n)$-competitiveness of Tango trees, with explicit constants.
 

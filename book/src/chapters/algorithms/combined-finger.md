@@ -66,7 +66,7 @@ The program is a function from whole request sequences to outputs (a [[Deamortiz
 - **A unit per request.** The weighted charge is $1 + \log_2(W[x_{j-1}, x_j] / \min(w_{x_{j-1}}, w_{x_j}))$, as in [Chapter 24](greedy-finger.html), and the competitive term charges $m + R$, not $R$. Without the unit, a sequence that repeats one key would have benchmark $0$ and no BST could meet it.
 - **The finger benchmark.** $\mathrm{WF}^*(p, X)$ starts from an explicit predecessor $x_0 = p$, and the bound holds for every valid $p$. It is an infimum of real numbers over the weightings positive on $\{0, \dots, n-1\}$. A bound by the infimum implies the bound for every weighting; [[Geometric.GreedyASS.Combination.Deamortized.Results.weights_competitive]] states that form.
 - **The competitive benchmark.** $R$ is the number of rotations of any [[RotationBST.Execution]] serving $X$: the rotate-to-root model of [Chapter 3](accesses.html), where each access rotates the requested key to the root. Its initial tree is any tree on $n$ keys, not necessarily `saved`.
-- **The doubly logarithmic factor.** The paper's $\log\log n$ appears as $\lceil 64(14L + 6)\rceil$ with $L = \log_2(1 + \lfloor\log_2 n\rfloor)$, coming from Tango on the balanced reference tree [[Tango.balanced]] of height at most $1 + \lfloor\log_2 n\rfloor$. Since $\lceil 64(14L + 6)\rceil \le 896\,L + 385$, the factor is $O(1 + L)$, and it is positive even when $n = 1$, where $L = 0$.
+- **The doubly logarithmic factor.** The paper's $\log\log n$ appears as $\lceil 64(14L + 6)\rceil$ with $L = \log_2(1 + \lfloor\log_2 n\rfloor)$, coming from Tango on the balanced reference tree [[Tree.balanced]] of height at most $1 + \lfloor\log_2 n\rfloor$. Since $\lceil 64(14L + 6)\rceil \le 896\,L + 385$, the factor is $O(1 + L)$, and it is positive even when $n = 1$, where $L = 0$.
 - **Constants.** They are explicit witnesses, products of the constants of the ingredients, and nowhere near optimal: the coefficient of $\mathrm{WF}^*$ in the total is about $6.0 \cdot 10^{17}$, and that of $n$ is about $4.4 \cdot 10^{17}$. [Section 38.2](#how-the-pieces-fit) shows where each comes from.
 - **Valid inputs.** Requests and the start key must be less than $n$, and `saved` must be nonempty. The empty sequence is allowed: its total is the setup alone.
 
@@ -177,7 +177,7 @@ These workers are not used for Theorem 4.3. Their allowance, $\mathtt{chargeFact
 
 ### The linear-startup worker
 
-**Theorem (the Tango worker with linear startup).** For every tree `saved` on $n$ keys there is a replay planner starting from `saved` that is well-behaved, with allowance $2816\,n$, $C_0 = 1$, $C_1 = 20$, and the interleave charges of [[Tango.balanced]]` n` scaled by `linearChargeFactor`.
+**Theorem (the Tango worker with linear startup).** For every tree `saved` on $n$ keys there is a replay planner starting from `saved` that is well-behaved, with allowance $2816\,n$, $C_0 = 1$, $C_1 = 20$, and the interleave charges of [[Tree.balanced]]` n` scaled by `linearChargeFactor`.
 
 @decl Tango.Combination.Results.linear_balanced_worker
 

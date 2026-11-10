@@ -303,6 +303,48 @@ for (const f of ['docs/organization.md']) {
 }
 
 // ---------------------------------------------------------------------------
+// 5b. Status claims. A table row whose status cell says "not formalized" must
+//     not link a theorem, and phrases that record a gap are listed so that
+//     they are revisited when the gap closes.
+
+const notFormalizedCell = /^\s*not (yet )?formalized( yet)?\.?\s*$/i;
+for (const p of pages) {
+  const lines = p.text.split('\n');
+  lines.forEach((line, i) => {
+    if (!line.trimStart().startsWith('|')) return;
+    const cells = line.split(/(?<!\\)\|/).slice(1, -1);
+    if (cells.some((c) => notFormalizedCell.test(c)) && /\[\[[^\]]+\]\]/.test(line)) {
+      error(`${p.file}:${i + 1}`, 'a table row says "not formalized" but links a Lean declaration');
+    }
+  });
+  const gapPhrases = [
+    /not stated as (one|a single|a separate) (Lean )?theorem/i,
+    /has no Lean definition/i,
+    /no `?Has…Bound`? property/i,
+    /(composition|combination) is done in the text/i,
+    /has no directory yet/i,
+  ];
+  // A deliberate gap is acknowledged by `<!-- known gap -->` in the same paragraph.
+  const paragraphAt = (i) => p.text.slice(p.text.lastIndexOf('\n\n', i) + 1, (p.text.indexOf('\n\n', i) + 1 || p.text.length + 1) - 1);
+  for (const re of gapPhrases) {
+    for (const m of p.text.matchAll(new RegExp(re.source, 'gi'))) {
+      if (paragraphAt(m.index).includes('<!-- known gap -->')) continue;
+      warn(`${p.file}:${lineOf(p.text, m.index)}`, `"${m[0]}" records a gap: check that it is still true, and that ROADMAP.md lists it`);
+    }
+  }
+}
+
+// Lettered sub-items of a roadmap entry, such as "(a)", "(b)", must start at
+// (a) and have no gaps.
+for (const entry of entries) {
+  const title = entry.split('\n')[0].replace(/^#+ /, '');
+  const letters = [...new Set([...entry.matchAll(/(?:^|\s)\(([a-h])\)\s/gm)].map((m) => m[1]))].sort();
+  if (letters.length && letters.some((l, i) => l !== String.fromCharCode(97 + i))) {
+    warn(`ROADMAP.md (${title})`, `lettered items ${letters.map((l) => `(${l})`).join(', ')} do not start at (a) or have gaps`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 // 6. Files under chapters/ that book.json does not list.
 
 const listed = new Set(pages.map((p) => p.file));

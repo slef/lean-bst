@@ -12,7 +12,7 @@ This section proves that bound. The algorithm is the Tango of [Chapter 29](tango
 title: Tango with a linear startup term
 source: @demaine2007
 key: yes
-theorems: Tango.BottomUp.Results.balanced_policy Tango.Algorithm.Rotation.Results.rotation_algorithm
+theorems: Tango.BottomUp.Results.balanced_policy Tango.Algorithm.Rotation.Results.rotation_algorithm Tango.Algorithm.Results.exists_competitive_linear
 
 For every $n$ there is a Tango policy for the balanced reference tree on $n$ keys, fixed before any request is known, whose step applies each request's preference updates bottom-up, with the following property. Let $X$ be any sequence of $m$ requests, and take any offline execution that serves $X$ with $R$ rotations from **any** tree on $n$ keys. Then the policy, run from its reference tree, serves $X$ with total cost (rotations plus one per request) at most
 
@@ -20,7 +20,7 @@ $$42\,n \;+\; \bigl(70\,L + 20\bigr)\,(R + m), \qquad L = \log_2(\lfloor\log_2 n
 
 Compared with [Chapter 29](tango.html), the startup term $(14L+4)\,n$ of the policy becomes $42n$, and the factor $56L+16$ becomes $70L+20$.
 
-A policy starts from its own reference tree. The second theorem turns any policy into an online algorithm in the sense of [Chapter 5](online.html) that performs exactly the policy's rotations when it starts from the reference tree. From any other tree of the same size it costs at most $m$, plus the policy's rotations, plus $2n$. Combining the two, which is immediate but not stated as one Lean theorem, gives an online BST of total cost at most $44n + (70L+20)(R+m)$ from every initial tree on $n$ keys, against every offline execution from that tree.
+A policy starts from its own reference tree. The second theorem turns any policy into an online algorithm in the sense of [Chapter 5](online.html) that performs exactly the policy's rotations when it starts from the reference tree. From any other tree of the same size it costs at most $m$, plus the policy's rotations, plus $2n$. Combining the two gives an online BST, chosen before the initial tree and the requests, of total cost at most $44n + (70L+20)(R+m)$ from every initial tree on $n$ keys, against every offline execution from that tree. The library states this combination as one theorem, `exists_competitive_linear`.
 
 In Lean, the policy is a [[RotationBST.Tango.Policy]] whose step is [[Tango.BottomUp.serve]], its cost is that of [[RotationBST.Tango.Policy.run]], the comparator is any [[RotationBST.Execution]], and the online algorithm is an [[RotationBST.Algorithm]] with cost [[RotationBST.Algorithm.totalCost]].
 ```
@@ -135,7 +135,7 @@ The weight used for the linear startup is the local join bound: $8\log_2 h(v) + 
 
 @decl Tango.Initialization.heightAt Tango.Initialization.heightSum Tango.Initialization.localCredit Tango.Initialization.localAllowance
 
-`heightAt t key` is the height, in nodes as in [[RotationBST.Tango.height]], of the subtree of `t` rooted at the node of inorder rank `key`, and $0$ for ranks outside `t`. `heightSum t` is the sum of all subtree heights. `localCredit t key` is $8\log_2(\mathtt{heightAt}\ t\ \mathit{key}) + 2$, a function of the fixed reference tree only. Its docstring stresses that it is not the charge of the evolving components; the bounds below relate the two. `localAllowance t` sums the credits structurally, and `allowance_localCredit` identifies it with the allowance of the weight `localCredit`.
+`heightAt t key` is the height, in nodes as in [[RotationBST.Tree.height]], of the subtree of `t` rooted at the node of inorder rank `key`, and $0$ for ranks outside `t`. `heightSum t` is the sum of all subtree heights. `localCredit t key` is $8\log_2(\mathtt{heightAt}\ t\ \mathit{key}) + 2$, a function of the fixed reference tree only. Its docstring stresses that it is not the charge of the evolving components; the bounds below relate the two. `localAllowance t` sums the credits structurally, and `allowance_localCredit` identifies it with the allowance of the weight `localCredit`.
 
 **Theorem (the credit of a balanced tree is linear).** The subtree heights of `balanced n` sum to at most $4n$, and its local credits sum to at most $42n$.
 
@@ -300,6 +300,12 @@ A policy becomes an ordinary online algorithm by the construction of [Chapter 29
 
 @decl Tango.Algorithm.Rotation.Results.rotation_algorithm
 
-The first conjunct compares [[RotationBST.Algorithm.runFrom]] from the reference tree with the plain tree of the policy's run. The second bounds [[RotationBST.Algorithm.totalCost]] from any `saved` tree. With `balanced_policy`, it gives the online algorithm of the headline: total cost at most $44n + (70L+20)(R + m)$ against every offline execution from the same initial tree. The library does not state this composition as a separate theorem; the existing [[RotationBST.Tango.Algorithm.Results.exists_competitive]] still uses the top-down policy.
+The first conjunct compares [[RotationBST.Algorithm.runFrom]] from the reference tree with the plain tree of the policy's run. The second bounds [[RotationBST.Algorithm.totalCost]] from any `saved` tree. With `balanced_policy`, it gives the online algorithm of the headline:
+
+**Theorem (Tango with linear startup, as one online algorithm).** For every $n$ there is an online BST algorithm whose total cost, from every initial tree on $n$ keys, is at most $(70L + 20)(R + m) + 44n$ against every offline execution from the same initial tree that serves the same $m$ requests with $R$ rotations.
+
+@decl RotationBST.Tango.Algorithm.Results.exists_competitive_linear
+
+It has the same shape as [[RotationBST.Tango.Algorithm.Results.exists_competitive]] of [Chapter 29](tango.html), which uses the top-down policy, with a larger factor and a linear additive term.
 
 The real consumer is the combination of [Chapter 38](combined-finger.html). There the bottom-up policy, packaged by `rotation_algorithm`, becomes an interruptible Tango worker for the ComboBST machinery of [Chapter 33](combining.html), with startup $2816n$ ([[RotationBST.Tango.Combination.Results.linear_balanced_worker]]). Its linear startup is what lets the combined bound of Theorem 4.3, [[RotationBST.Geometric.GreedyASS.Combination.Deamortized.Results.combined]], keep an additive $O(n)$.
