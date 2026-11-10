@@ -12,7 +12,7 @@ namespace RotationBST.Classical.Static.Optimal
 
 variable {W : Nat → Nat → Nat}
 
-theorem cost_quadrangle_len (hQ : Quadrangle W) (hM : Monotone W) (len : Nat) :
+theorem cost_quadrangle_len (hQ : Quadrangle W) (hM : InclusionMonotone W) (len : Nat) :
     ∀ i i' j j', j' - i = len → i ≤ i' → i' ≤ j → j ≤ j' →
       cost W i j + cost W i' j' ≤ cost W i' j + cost W i j' := by
   induction len using Nat.strong_induction_on with
@@ -60,12 +60,12 @@ theorem cost_quadrangle_len (hQ : Quadrangle W) (hM : Monotone W) (len : Nat) :
         omega
 
 /-- The optimal cost inherits the quadrangle inequality. -/
-theorem cost_quadrangle (hQ : Quadrangle W) (hM : Monotone W) : Quadrangle (cost W) :=
+theorem cost_quadrangle (hQ : Quadrangle W) (hM : InclusionMonotone W) : Quadrangle (cost W) :=
   fun i i' j j' h1 h2 h3 => cost_quadrangle_len hQ hM (j' - i) i i' j j' rfl h1 h2 h3
 
 /-- Knuth's first inequality: extending an interval to the right does not move
 the largest optimal root to the left. -/
-theorem root_le_root_right (hQ : Quadrangle W) (hM : Monotone W) {i j : Nat} (h : i < j) :
+theorem root_le_root_right (hQ : Quadrangle W) (hM : InclusionMonotone W) {i j : Nat} (h : i < j) :
     root W i j ≤ root W i (j + 1) := by
   obtain ⟨hr1, hr2, hr3, _⟩ := root_spec W h
   obtain ⟨hs1, hs2, hs3, hsmax⟩ := root_spec W (show i < j + 1 by omega)
@@ -81,7 +81,7 @@ theorem root_le_root_right (hQ : Quadrangle W) (hM : Monotone W) {i j : Nat} (h 
 
 /-- Knuth's second inequality: shrinking an interval from the left does not move
 the largest optimal root to the left. -/
-theorem root_le_root_left (hQ : Quadrangle W) (hM : Monotone W) {i j : Nat} (h : i + 1 < j) :
+theorem root_le_root_left (hQ : Quadrangle W) (hM : InclusionMonotone W) {i j : Nat} (h : i + 1 < j) :
     root W i j ≤ root W (i + 1) j := by
   obtain ⟨hr1, hr2, hr3, _⟩ := root_spec W (show i < j by omega)
   obtain ⟨hs1, hs2, hs3, hsmax⟩ := root_spec W h

@@ -10,7 +10,7 @@ open Classical.Scapegoat Dictionary
 private def three : List Op := [.insert 0, .insert 1, .insert 2]
 
 -- Plain operations.
-example : insertLeaf (.node .nil .nil) 1 = .node .nil (.node .nil .nil) := by decide
+example : Tree.insertAt (.node .nil .nil) 1 = .node .nil (.node .nil .nil) := by decide
 example : bstDelete (.node (.node .nil .nil) (.node .nil .nil)) 1 = .node (.node .nil .nil) .nil ∧
     deleteTarget (.node (.node .nil .nil) (.node .nil .nil)) 1 = 2 := by decide
 
@@ -21,11 +21,11 @@ example : (run (2 / 3) (.nil, 0) three).2 = 6 ∧
   decide +kernel
 -- A fourth key at depth 3 is not too deep (`(2/3)³ · 4 ≥ 1`), a fifth at
 -- depth 4 is (`(2/3)⁴ · 5 < 1`), and the whole path is then its scapegoat.
-example : ¬ Violates (2 / 3) (insertLeaf (.node .nil (.node .nil (.node .nil .nil))) 3) 3 := by
-  norm_num [Violates, insertLeaf, Tree.depth, Tree.size]
+example : ¬ Violates (2 / 3) (Tree.insertAt (.node .nil (.node .nil (.node .nil .nil))) 3) 3 := by
+  norm_num [Violates, Tree.insertAt, Tree.depth, Tree.size]
 example : Violates (2 / 3)
-    (insertLeaf (.node .nil (.node .nil (.node .nil (.node .nil .nil)))) 4) 4 := by
-  norm_num [Violates, insertLeaf, Tree.depth, Tree.size]
+    (Tree.insertAt (.node .nil (.node .nil (.node .nil (.node .nil .nil)))) 4) 4 := by
+  norm_num [Violates, Tree.insertAt, Tree.depth, Tree.size]
 
 example : Op.ValidSeq 0 (three ++ [.delete 1, .access 0]) := by
   simp [three, Op.ValidSeq, Op.Valid, Op.resize]

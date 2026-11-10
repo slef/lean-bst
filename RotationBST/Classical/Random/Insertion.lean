@@ -22,8 +22,8 @@ theorem insertKey_size (t : LabelledTree Nat) (y : Nat) :
     · simp only [LabelledTree.erase, Tree.size, il]; omega
     · simp only [LabelledTree.erase, Tree.size, ir]; omega
 
-theorem insertAll_size (order : List Nat) : (insertAll order).erase.size = order.length := by
-  unfold insertAll
+theorem insertKeys_size (order : List Nat) : (insertKeys order).erase.size = order.length := by
+  unfold insertKeys
   suffices ∀ t : LabelledTree Nat, (order.foldl insertKey t).erase.size = t.erase.size + order.length by
     simpa [LabelledTree.erase, Tree.size] using this .nil
   induction order with
@@ -48,10 +48,10 @@ theorem foldl_node (x : Nat) (rest : List Nat) (hx : x ∉ rest) (l r : Labelled
       rw [List.filter_cons_of_neg (by simp [h]), List.filter_cons_of_pos (by simp [h]),
         List.foldl_cons, ih hx']
 
-theorem insertAll_cons (x : Nat) (rest : List Nat) (hx : x ∉ rest) :
-    insertAll (x :: rest) =
-      .node (insertAll (rest.filter (· < x))) x (insertAll (rest.filter fun y => ¬ y < x)) := by
-  simp only [insertAll, List.foldl_cons, insertKey]
+theorem insertKeys_cons (x : Nat) (rest : List Nat) (hx : x ∉ rest) :
+    insertKeys (x :: rest) =
+      .node (insertKeys (rest.filter (· < x))) x (insertKeys (rest.filter fun y => ¬ y < x)) := by
+  simp only [insertKeys, List.foldl_cons, insertKey]
   exact foldl_node x rest hx .nil .nil
 
 /-- In a list without repetitions, a sublist's first key comes first. -/
@@ -104,14 +104,14 @@ theorem filter_range'_ge (lo k x : Nat) (h : lo ≤ x) (h' : x ≤ lo + k) :
 
 /-- Every sublist of the insertion order holding an interval of keys builds a
 treap for the order's positions. -/
-theorem insertAll_heap {L : List Nat} (hL : L.Nodup) (k : Nat) :
+theorem insertKeys_heap {L : List Nat} (hL : L.Nodup) (k : Nat) :
     ∀ (M : List Nat) (lo : Nat), M.length = k → M.Sublist L → M.Perm (List.range' lo k) →
-      Geometric.Heap L.idxOf (insertAll M).erase lo := by
+      Geometric.Heap L.idxOf (insertKeys M).erase lo := by
   induction k using Nat.strong_induction_on with
   | ind k ih =>
   intro M lo hlen hsub hperm
   cases M with
-  | nil => simp [insertAll, LabelledTree.erase, Geometric.Heap]
+  | nil => simp [insertKeys, LabelledTree.erase, Geometric.Heap]
   | cons x rest =>
     have hnd : (x :: rest).Nodup := hperm.nodup_iff.mpr List.nodup_range'
     have hx : x ∉ rest := (List.nodup_cons.mp hnd).1
@@ -133,8 +133,8 @@ theorem insertAll_heap {L : List Nat} (hL : L.Nodup) (k : Nat) :
       (List.filter_sublist).trans ((List.sublist_cons_self x rest).trans hsub)
     have hsB : (rest.filter fun y => ¬ y < x).Sublist L :=
       (List.filter_sublist).trans ((List.sublist_cons_self x rest).trans hsub)
-    rw [insertAll_cons x rest hx]
-    simp only [LabelledTree.erase, Geometric.Heap, insertAll_size, lA]
+    rw [insertKeys_cons x rest hx]
+    simp only [LabelledTree.erase, Geometric.Heap, insertKeys_size, lA]
     simp only [List.length_cons] at hlen
     refine ⟨?_, ih _ (by omega) _ lo lA hsA hA, ?_⟩
     · intro z hz
@@ -151,11 +151,11 @@ theorem insertAll_heap {L : List Nat} (hL : L.Nodup) (k : Nat) :
       exact ih _ (by omega) _ (x + 1) lB hsB hB
 
 /-- **Insertion builds the treap of the insertion order.** -/
-theorem insertAll_treap (n : Nat) (order : List Nat) (h : order.Perm (List.range n)) :
-    (insertAll order).erase.size = n ∧ Geometric.Heap order.idxOf (insertAll order).erase 0 := by
+theorem insertKeys_treap (n : Nat) (order : List Nat) (h : order.Perm (List.range n)) :
+    (insertKeys order).erase.size = n ∧ Geometric.Heap order.idxOf (insertKeys order).erase 0 := by
   have hlen : order.length = n := by simpa using h.length_eq
-  refine ⟨by rw [insertAll_size, hlen], ?_⟩
-  exact insertAll_heap (h.nodup_iff.mpr List.nodup_range) n order 0 hlen (List.Sublist.refl _)
+  refine ⟨by rw [insertKeys_size, hlen], ?_⟩
+  exact insertKeys_heap (h.nodup_iff.mpr List.nodup_range) n order 0 hlen (List.Sublist.refl _)
     (by rw [List.range_eq_range'] at h; exact h)
 
 /-! ### Random insertion orders -/
@@ -168,32 +168,32 @@ theorem perm_of_isOrder (n : Nat) (xs : List Nat) (h : IsOrder (Finset.range n) 
 /-- The treap used for orders that are not permutations, where the value does
 not matter. -/
 noncomputable def treapOf (n : Nat) (xs : List Nat) : Tree :=
-  if xs.Perm (List.range n) then (insertAll xs).erase
+  if xs.Perm (List.range n) then (insertKeys xs).erase
   else (Geometric.TreapOrder.Results.exists_tree xs.idxOf n 0).choose
 
 theorem treapOf_spec (n : Nat) (xs : List Nat) :
     (treapOf n xs).size = n ∧ Geometric.Heap xs.idxOf (treapOf n xs) 0 := by
   unfold treapOf
   split
-  · exact insertAll_treap n xs (by assumption)
+  · exact insertKeys_treap n xs (by assumption)
   · exact (Geometric.TreapOrder.Results.exists_tree xs.idxOf n 0).choose_spec
 
 /-- **Random binary search trees.** Inserting the keys in a uniformly random
 order, the expected depth of key `x` is `H(x + 1) + H(n - x) - 2`. -/
 theorem random_bst_depth (n x : Nat) (hx : x < n) :
-    average (fun _ => 1) (Finset.range n) (fun xs => ((insertAll xs).erase.depth x : ℝ)) =
+    average (fun _ => 1) (Finset.range n) (fun xs => ((insertKeys xs).erase.depth x : ℝ)) =
       ((harmonic (x + 1) : ℚ) : ℝ) + ((harmonic (n - x) : ℚ) : ℝ) - 2 := by
   rw [← expected_depth n x hx (treapOf n) (treapOf_spec n)]
   have hw : ∀ k ∈ Finset.range n, (0 : ℝ) < 1 := fun _ _ => one_pos
   have heq : ∀ xs, IsOrder (Finset.range n) xs →
-      ((insertAll xs).erase.depth x : ℝ) = ((treapOf n xs).depth x : ℝ) := by
+      ((insertKeys xs).erase.depth x : ℝ) = ((treapOf n xs).depth x : ℝ) := by
     intro xs hxs
     simp [treapOf, perm_of_isOrder n xs hxs]
   exact le_antisymm (average_mono _ _ _ _ hw fun xs h => (heq xs h).le)
     (average_mono _ _ _ _ hw fun xs h => (heq xs h).ge)
 
 theorem random_bst_depth_le (n x : Nat) (hx : x < n) :
-    average (fun _ => 1) (Finset.range n) (fun xs => ((insertAll xs).erase.depth x : ℝ)) ≤
+    average (fun _ => 1) (Finset.range n) (fun xs => ((insertKeys xs).erase.depth x : ℝ)) ≤
       2 * Real.log n := by
   rw [random_bst_depth n x hx, ← expected_depth n x hx (treapOf n) (treapOf_spec n)]
   exact expected_depth_le n x hx (treapOf n) (treapOf_spec n)

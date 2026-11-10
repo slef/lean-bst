@@ -11,6 +11,7 @@ cost of each is at most three times splay's own charge (one unit plus its
 rotations): splaying a node walks its search path by rotating it. -/
 namespace RotationBST.Splay.Updates
 open Dictionary
+open _root_.RotationBST.Tree (depth_left depth_root depth_right)
 
 theorem dictionary_access (t : Tree) (x : Nat) (hx : x < t.size) :
     ∃ c, Dictionary.Step t.unit (.access x) (run t x).1.unit c 0 ∧ c ≤ 2 * ((run t x).2 + 1) := by

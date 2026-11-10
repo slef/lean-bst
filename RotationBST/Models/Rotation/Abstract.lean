@@ -27,6 +27,20 @@ def Tree.depth : Tree → Nat → Nat
       else if x = l.size then 0
       else depth r (x - l.size - 1) + 1
 
+/-- The number of nodes on a longest root-to-leaf path (`0` for the empty
+tree). -/
+def Tree.height : Tree → Nat
+  | .nil => 0
+  | .node l r => 1 + max (height l) (height r)
+
+/-- The balanced tree on `n` keys. The root takes the middle rank; the left
+subtree gets `⌈(n-1)/2⌉` keys and the right subtree `⌊(n-1)/2⌋`, so the two
+sizes differ by at most one. -/
+def Tree.balanced : Nat → Tree
+  | 0 => .nil
+  | n + 1 => .node (balanced ((n + 1) / 2)) (balanced (n / 2))
+termination_by n => n
+
 /-- One rotation, at any depth. -/
 inductive Rotate : Tree → Tree → Prop where
   | right {a b c : Tree} : Rotate (.node (.node a b) c) (.node a (.node b c))

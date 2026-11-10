@@ -320,10 +320,31 @@ Validation of ROADMAP entry 7, insertion
    Reconstruction of private marks from history is uncharged, as for
    exists_competitive.
 
+23. Cleanup of the classical formalizations before merging (no new results)
+   Shared definitions moved down instead of being copied: Tree.height and
+   Tree.balanced (Models/Rotation/Abstract, Tango keeps export aliases);
+   balanced size and height, depth below height, depth under rotations
+   (Models/Rotation/Shapes); leaf insertion Tree.insertAt and
+   LabelledTree.insertAt with one splice certificate (Models/Dictionary);
+   the optimal-tree cost is LazyFinger.intervalCost; small logb facts in
+   Bounds/Implications/LogSum. Renamings for the book are listed in
+   docs/book-updates-classical.md. An independent read-only audit of the
+   result found no layering violations; its remaining optional items are
+   follow-ups 4-9 in docs/organization.md.
+
 Validation of ROADMAP entry 3
    lake build --wfail: passed (9446 jobs), including the whole-library axiom
    audit and one added regression module (TangoLinear).
    scripts/check_imports.py: passed (1491 reachable library modules).
+
+Validation of item 23 (classical cleanup)
+   lake build --wfail: passed (9578 jobs), including the whole-library axiom
+   audit and all regression modules.
+   scripts/check_imports.py: passed (1545 reachable library modules).
+   Book: npm run extract passed (8500 constants). npm run check fails only on
+   the nine Tango.height/Tango.balanced references listed in
+   docs/book-updates-classical.md; with those replaced, it passes (79 pages,
+   0 problems, 30 tests, 13 roadmap "now exists" warnings).
 
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom

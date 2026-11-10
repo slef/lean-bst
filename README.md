@@ -94,7 +94,7 @@ The source tree follows the textbook order rather than the source papers:
 |---|---|
 | `Models/` | The rotation model on shapes and its equivalent formulations: labelled BSTs, online algorithms and cost conventions, the pointer machine, the rooted-region model, arboral geometry, and the equivalences between them. |
 | `Bounds/` | Sequence bounds and their relations: working set, static optimality, static finger, dynamic finger, the logarithmic baseline, unified, the fixed-tree benchmark, Wilber's interleave lower bound, and cost normalization. |
-| `Classical/` | Classical search trees that do not adapt to the requests. So far the balanced and the optimal static trees, the height bounds of weight- and rank-balanced trees, and the expected depth of random treaps; scapegoat trees with their amortized cost. |
+| `Classical/` | Classical search trees that do not adapt to the requests: the balanced and the optimal static trees, weight-balanced trees and rebuilding, scapegoat trees, AVL, red-black and WAVL heights and WAVL/AVL insertion, random treaps and random BSTs. |
 | `Algorithms/` | One directory per algorithm: definition first, then its upper and lower bounds. Move-to-root, splay, GreedyASS, the causal geometric simulation, and Tango. |
 | `Structures/` | Supporting data structures: next-touch treaps and multiway finger/split trees. |
 | `Audit/` | The `#check_bst_abstract` command. |

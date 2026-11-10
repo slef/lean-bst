@@ -14,12 +14,6 @@ largest number of keys since the last rebuild of the whole tree. -/
 namespace RotationBST.Classical.Scapegoat
 open WeightBalanced
 
-/-- Insert a leaf at gap `k`, without rebalancing. -/
-def insertLeaf : Tree → Nat → Tree
-  | .nil, _ => .node .nil .nil
-  | .node l r, k =>
-      if k ≤ l.size then .node (insertLeaf l k) r else .node l (insertLeaf r (k - l.size - 1))
-
 /-- Delete rank `x` without rebalancing: a node with at most one child is
 spliced out; a node with two children loses its successor instead. -/
 def bstDelete : Tree → Nat → Tree
@@ -77,7 +71,7 @@ remain. -/
 def step (α : ℚ) (s : State) : Dictionary.Op → State × Nat
   | .access x => (s, s.1.depth x + 1)
   | .insert k =>
-      let t₁ := insertLeaf s.1 k
+      let t₁ := Tree.insertAt s.1 k
       let N := max s.2 (s.1.size + 1)
       let d := t₁.depth k
       if α ^ d * N < 1 then

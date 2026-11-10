@@ -25,7 +25,7 @@ theorem Bounds.fingerCost_le_logCost (n f : Nat) (xs : List Nat)
       List.length_cons, Nat.cast_add, Nat.cast_one] at hrest hlog ⊢
     nlinarith
 
-theorem Algorithm.cost_nil (a : Algorithm) (t : Tree) : a.cost t [] = 0 := rfl
+private theorem Algorithm.cost_nil (a : Algorithm) (t : Tree) : a.cost t [] = 0 := rfl
 
 /-- Static finger implies the logarithmic bound, with the same constants: put
 the finger at rank zero. An empty tree admits only the empty sequence. -/

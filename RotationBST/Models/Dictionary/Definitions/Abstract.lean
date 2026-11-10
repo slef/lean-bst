@@ -28,6 +28,20 @@ def Tree.unit : Tree → LabelledTree Unit
   | .nil => .nil
   | .node l r => .node l.unit () r.unit
 
+/-- Insert a new leaf at gap `g`, so that it gets rank `g`, without
+rebalancing. -/
+def Tree.insertAt : Tree → Nat → Tree
+  | .nil, _ => .node .nil .nil
+  | .node l r, g =>
+      if g ≤ l.size then .node (insertAt l g) r else .node l (insertAt r (g - l.size - 1))
+
+/-- Insert a new leaf with data `a` at gap `g`, without rebalancing. -/
+def LabelledTree.insertAt {α : Type} : LabelledTree α → Nat → α → LabelledTree α
+  | .nil, _, a => .node .nil a .nil
+  | .node l x r, g, a =>
+      if g ≤ l.erase.size then .node (insertAt l g a) x r
+      else .node l x (insertAt r (g - l.erase.size - 1) a)
+
 end RotationBST
 
 namespace RotationBST.Dictionary

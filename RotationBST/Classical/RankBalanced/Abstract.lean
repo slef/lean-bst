@@ -7,9 +7,9 @@ public import RotationBST.Classical.RankBalanced.AbstractBridge
 
 /-! Rank-balanced trees: heights and ranks under the AVL, red-black and WAVL
 rules. `Definitions/Abstract` gives ranked trees and the rules; heights count
-nodes (`Static.height`) and sizes are those of the underlying shape. -/
+nodes (`Tree.height`) and sizes are those of the underlying shape. -/
 namespace RotationBST.Classical.RankBalanced.Results
-open Static
+open _root_.RotationBST.Tree (height)
 
 /-- In an AVL tree a node's rank is its height in edges. -/
 theorem avl_height_rank (t : RankedTree) (h : Valid .avl t) : (height t.erase : Int) = rank t + 1 :=
@@ -44,5 +44,4 @@ end RotationBST.Classical.RankBalanced.Results
 #guard_msgs in
 #check_bst_abstract RotationBST.Classical.RankBalanced.Results allowing [
   RotationBST.Models.Rotation.Abstract,
-  RotationBST.Classical.Static.Definitions.Abstract,
   RotationBST.Classical.RankBalanced.Definitions.Abstract]

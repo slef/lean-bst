@@ -9,6 +9,7 @@ import Mathlib.Tactic
 `α^depth · N ≥ 1` with `α N ≤ n ≤ N` is maintained; and the potential
 `K Φ + L (N - n)` with `K = 2/(2α - 1)`, `L = 2α/(1 - α)` pays for rebuilding. -/
 namespace RotationBST.Classical.Scapegoat
+open _root_.RotationBST.Tree (balanced)
 open WeightBalanced Static Dictionary
 
 variable {α : ℚ}
@@ -22,11 +23,11 @@ theorem step_dictionary (s : State) (op : Op) (valid : op.Valid s.1.size) :
     have := Step.access (s := s.1.unit) (x := x) (by simpa [Op.Valid] using valid) .refl
     simpa [step] using this
   | insert k =>
-    have sp := insertLeaf_splice s.1 k (by simpa [Op.Valid] using valid)
+    have sp := unit_insertAt_splice s.1 k (by simpa [Op.Valid] using valid)
     have v : k ≤ s.1.unit.erase.size := by simpa [Op.Valid] using valid
     simp only [step]
     split
-    · cases hf : fix α (insertLeaf s.1 k) k with
+    · cases hf : fix α (Tree.insertAt s.1 k) k with
       | some p =>
         have m := moves_of_rotations (rotations_unit (fix_spec _ k p hf).1)
         have := Step.insert v .refl sp m
@@ -74,9 +75,6 @@ def Inv (α : ℚ) (s : State) : Prop :=
 
 theorem inv_empty : Inv α (.nil, 0) := by simp [Inv, Tree.size]
 
-theorem pow_anti (hα : 0 ≤ α ∧ α ≤ 1) {a b : Nat} (h : a ≤ b) : α ^ b ≤ α ^ a :=
-  pow_le_pow_of_le_one hα.1 hα.2 h
-
 /-- The balanced tree on `n` keys meets the depth condition with `N = n`. -/
 theorem balanced_inv (hα : 1 / 2 ≤ α) (n z : Nat) (hz : z < n) :
     1 ≤ α ^ (balanced n).depth z * n := by
@@ -101,9 +99,9 @@ theorem step_inv (hα : 1 / 2 < α ∧ α < 1) (s : State) (op : Op) (valid : op
   | insert k =>
     simp only [Op.Valid] at valid
     simp only [step]
-    set t₁ := insertLeaf s.1 k with ht₁
+    set t₁ := Tree.insertAt s.1 k with ht₁
     set N := max s.2 (s.1.size + 1) with hNdef
-    have hs₁ : t₁.size = s.1.size + 1 := insertLeaf_size _ _
+    have hs₁ : t₁.size = s.1.size + 1 := insertAt_size _ _
     have hNN : (s.2 : ℚ) ≤ N := by exact_mod_cast le_max_left _ _
     have hnN : s.1.size + 1 ≤ N := le_max_right _ _
     have hαN : α * N ≤ s.1.size + 1 := by
@@ -113,7 +111,7 @@ theorem step_inv (hα : 1 / 2 < α ∧ α < 1) (s : State) (op : Op) (valid : op
     -- Old keys meet the condition for the larger `N`.
     have hold : ∀ z < t₁.size, z ≠ k → 1 ≤ α ^ t₁.depth z * N := by
       intro z hz hzk
-      obtain ⟨x, hx, he⟩ := insertLeaf_depth_other s.1 k z valid (by omega) hzk
+      obtain ⟨x, hx, he⟩ := insertAt_depth_other s.1 k z valid (by omega) hzk
       rw [he]
       exact (hd x hx).trans (mul_le_mul_of_nonneg_left hNN (pow_nonneg hα0.1 _))
     have base : t₁.size ≤ N ∧ α * N ≤ t₁.size := ⟨by omega, by rw [hs₁]; push_cast; exact hαN⟩
@@ -123,17 +121,17 @@ theorem step_inv (hα : 1 / 2 < α ∧ α < 1) (s : State) (op : Op) (valid : op
       have hne : s.1 ≠ .nil := by
         intro he
         have hk0 : k = 0 := by simp [he, Tree.size] at valid; omega
-        have : t₁.depth k = 0 := by simp [t₁, he, hk0, insertLeaf, Tree.depth, Tree.size]
+        have : t₁.depth k = 0 := by simp [t₁, he, hk0, Tree.insertAt, Tree.depth, Tree.size]
         rw [this, pow_zero, one_mul] at hdeep
         have : (1 : ℚ) ≤ N := by exact_mod_cast (show 1 ≤ N by omega)
         linarith
-      obtain ⟨x, hx, hpar⟩ := insertLeaf_parent s.1 k valid hne
+      obtain ⟨x, hx, hpar⟩ := insertAt_parent s.1 k valid hne
       cases hf : fix α t₁ k with
       | some p =>
         have hsp := (fix_spec _ k p hf).2
         refine ⟨by rw [hsp]; exact base.1, by rw [hsp]; exact base.2, ?_⟩
         have := fix_depth hα.1.le (fun e => 1 ≤ α ^ e * N)
-          (fun a b hab hb => hb.trans (mul_le_mul_of_nonneg_right (pow_anti hα0 hab) (by positivity)))
+          (fun a b hab hb => hb.trans (mul_le_mul_of_nonneg_right (pow_le_pow_of_le_one hα0.1 hα0.2 hab) (by positivity)))
           t₁ k 0 p (by omega) hf (by simpa using hold)
           (by
             simp only [Nat.zero_add]
@@ -171,7 +169,7 @@ theorem step_inv (hα : 1 / 2 < α ∧ α < 1) (s : State) (op : Op) (valid : op
       have sp := (bstDelete_splice s.1 x valid).1
       obtain ⟨z₀, h₀, hdz⟩ := splice_depth sp z (by simpa using hz)
       simp only [unit_erase] at h₀ hdz
-      exact (hd z₀ h₀).trans (mul_le_mul_of_nonneg_right (pow_anti hα0 hdz) (by positivity))
+      exact (hd z₀ h₀).trans (mul_le_mul_of_nonneg_right (pow_le_pow_of_le_one hα0.1 hα0.2 hdz) (by positivity))
 
 theorem run_inv (hα : 1 / 2 < α ∧ α < 1) (s : State) (ops : List Op)
     (valid : Op.ValidSeq s.1.size ops) (h : Inv α s) : Inv α (run α s ops).1 := by
@@ -217,20 +215,20 @@ theorem step_amortized (hα : 1 / 2 < α ∧ α < 1) (s : State) (op : Op) (vali
   | insert k =>
     simp only [Op.Valid] at valid
     simp only [step]
-    set t₁ := insertLeaf s.1 k with ht₁
+    set t₁ := Tree.insertAt s.1 k with ht₁
     set N := max s.2 (s.1.size + 1) with hNdef
-    have hs₁ : t₁.size = s.1.size + 1 := insertLeaf_size _ _
+    have hs₁ : t₁.size = s.1.size + 1 := insertAt_size _ _
     -- The new leaf is at depth at most `e + 1`.
     have hdk : t₁.depth k ≤ e + 1 := by
       by_cases hne : s.1 = .nil
       · have hk0 : k = 0 := by simp [hne, Tree.size] at valid; omega
-        have : t₁.depth k = 0 := by simp [t₁, hne, hk0, insertLeaf, Tree.depth, Tree.size]
+        have : t₁.depth k = 0 := by simp [t₁, hne, hk0, Tree.insertAt, Tree.depth, Tree.size]
         omega
-      · obtain ⟨x, hx, hpar⟩ := insertLeaf_parent s.1 k valid hne
+      · obtain ⟨x, hx, hpar⟩ := insertAt_parent s.1 k valid hne
         rw [← ht₁] at hpar
         have := he x hx; omega
     have hdk' : (t₁.depth k : ℚ) ≤ e + 1 := by exact_mod_cast hdk
-    have hφ₁ : (phi t₁ : ℚ) ≤ phi s.1 + t₁.depth k := by exact_mod_cast phi_insertLeaf s.1 k
+    have hφ₁ : (phi t₁ : ℚ) ≤ phi s.1 + t₁.depth k := by exact_mod_cast phi_insertAt s.1 k
     have hΨ : (N : ℚ) - (s.1.size + 1 : Nat) ≤ s.2 - s.1.size := by
       rcases le_total s.2 (s.1.size + 1) with hle | hle
       · rw [show N = s.1.size + 1 from max_eq_right hle]; push_cast; linarith

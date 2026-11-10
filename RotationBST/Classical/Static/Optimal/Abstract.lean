@@ -18,37 +18,37 @@ theorem tree_size (W : Nat → Nat → Nat) (i j : Nat) : (tree W i j).size = j 
   Optimal.tree_size W i j
 
 /-- …whose cost is the value of the recurrence… -/
-theorem tree_cost (W : Nat → Nat → Nat) (i j : Nat) : treeCost W (tree W i j) i = cost W i j :=
+theorem tree_cost (W : Nat → Nat → Nat) (i j : Nat) : LazyFinger.intervalCost W (tree W i j) i = cost W i j :=
   Optimal.tree_cost W i j
 
 /-- …and no tree on those keys costs less. -/
-theorem cost_le_treeCost (W : Nat → Nat → Nat) (t : Tree) (i j : Nat) (h : t.size = j - i) :
-    cost W i j ≤ treeCost W t i :=
-  Optimal.cost_le_treeCost W t i j h
+theorem cost_le_intervalCost (W : Nat → Nat → Nat) (t : Tree) (i j : Nat) (h : t.size = j - i) :
+    cost W i j ≤ LazyFinger.intervalCost W t i :=
+  Optimal.cost_le_intervalCost W t i j h
 
 /-- **Yao.** The optimal cost inherits the quadrangle inequality from a
 monotone interval weight. -/
-theorem cost_quadrangle (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : Monotone W) :
+theorem cost_quadrangle (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : InclusionMonotone W) :
     Quadrangle (cost W) :=
   Optimal.cost_quadrangle hQ hM
 
 /-- **Knuth's inequalities**, first half: `R(i, j) ≤ R(i, j + 1)`. -/
-theorem root_le_root_right (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : Monotone W)
+theorem root_le_root_right (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : InclusionMonotone W)
     {i j : Nat} (h : i < j) : root W i j ≤ root W i (j + 1) :=
   Optimal.root_le_root_right hQ hM h
 
 /-- **Knuth's inequalities**, second half: `R(i, j) ≤ R(i + 1, j)`. -/
-theorem root_le_root_left (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : Monotone W)
+theorem root_le_root_left (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : InclusionMonotone W)
     {i j : Nat} (h : i + 1 < j) : root W i j ≤ root W (i + 1) j :=
   Optimal.root_le_root_left hQ hM h
 
 /-- Knuth's algorithm computes the recurrence… -/
-theorem knuth_cost (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : Monotone W) (n : Nat) :
+theorem knuth_cost (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : InclusionMonotone W) (n : Nat) :
     (knuth W n).1 = cost W 0 n :=
   Optimal.knuth_cost hQ hM n
 
 /-- …examining at most `2n²` candidate roots. -/
-theorem knuth_steps (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : Monotone W) (n : Nat) :
+theorem knuth_steps (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : InclusionMonotone W) (n : Nat) :
     (knuth W n).2 ≤ 2 * n ^ 2 :=
   Optimal.knuth_steps hQ hM n
 
@@ -57,13 +57,13 @@ theorem knuth_steps (W : Nat → Nat → Nat) (hQ : Quadrangle W) (hM : Monotone
 theorem rangeWeight_quadrangle (w : List Nat) : Quadrangle (rangeWeight w) :=
   Static.rangeWeight_quadrangle w
 
-theorem rangeWeight_monotone (w : List Nat) : Monotone (rangeWeight w) :=
+theorem rangeWeight_monotone (w : List Nat) : InclusionMonotone (rangeWeight w) :=
   Static.rangeWeight_monotone w
 
 /-- The subtree-weight cost is the weighted depth cost. -/
-theorem weightedCost_eq_treeCost (w : List Nat) (t : Tree) :
-    weightedCost w t = treeCost (rangeWeight w) t 0 :=
-  Static.weightedCost_eq_treeCost w t
+theorem weightedCost_eq_intervalCost (w : List Nat) (t : Tree) :
+    weightedCost w t = LazyFinger.intervalCost (rangeWeight w) t 0 :=
+  Static.weightedCost_eq_intervalCost w t
 
 theorem optTree_size (w : List Nat) : (optTree w).size = w.length :=
   Static.optTree_size w
@@ -119,5 +119,5 @@ end RotationBST.Classical.Static.Optimal.Results
   RotationBST.Bounds.WorkingSet.Abstract,
   RotationBST.Bounds.Abstract,
   RotationBST.Bounds.StaticTree.Definitions.Abstract,
-  RotationBST.Classical.Static.Definitions.Abstract,
+  RotationBST.Bounds.LazyFinger.Edges.Definitions.Abstract,
   RotationBST.Classical.Static.Optimal.Definitions.Abstract]

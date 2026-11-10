@@ -10,7 +10,7 @@ heap property for a priority order (`Geometric.Heap`, `Structures/Treap/Abstract
 `average` (`Structures/Treap/Random/Definitions/Abstract`) is the expectation
 over a random order, here with uniform weights, so that every order of the `n`
 keys is equally likely. Inserting the keys in that order without rebalancing
-(`insertAll`, `Definitions/Abstract`) builds exactly that treap. -/
+(`insertKeys`, `Definitions/Abstract`) builds exactly that treap. -/
 namespace RotationBST.Classical.Random.Results
 
 /-- **Expected depth in a random treap**: `H(x + 1) + H(n - x) - 2`. -/
@@ -30,20 +30,20 @@ theorem expected_depth_le (n x : Nat) (hx : x < n) (T : List Nat → Tree)
 /-- **Insertion builds the treap of the insertion order**: inserting a
 permutation of the `n` keys without rebalancing gives the tree with the heap
 property for the positions in the order. -/
-theorem insertAll_treap (n : Nat) (order : List Nat) (h : order.Perm (List.range n)) :
-    (insertAll order).erase.size = n ∧ Geometric.Heap order.idxOf (insertAll order).erase 0 :=
-  Random.insertAll_treap n order h
+theorem insertKeys_treap (n : Nat) (order : List Nat) (h : order.Perm (List.range n)) :
+    (insertKeys order).erase.size = n ∧ Geometric.Heap order.idxOf (insertKeys order).erase 0 :=
+  Random.insertKeys_treap n order h
 
 /-- **Random binary search trees.** Inserting the keys in a uniformly random
 order, key `x` has expected depth `H(x + 1) + H(n - x) - 2`… -/
 theorem random_bst_depth (n x : Nat) (hx : x < n) :
-    Treap.Random.average (fun _ => 1) (Finset.range n) (fun xs => ((insertAll xs).erase.depth x : ℝ)) =
+    Treap.Random.average (fun _ => 1) (Finset.range n) (fun xs => ((insertKeys xs).erase.depth x : ℝ)) =
       ((harmonic (x + 1) : ℚ) : ℝ) + ((harmonic (n - x) : ℚ) : ℝ) - 2 :=
   Random.random_bst_depth n x hx
 
 /-- …at most `2 ln n`. -/
 theorem random_bst_depth_le (n x : Nat) (hx : x < n) :
-    Treap.Random.average (fun _ => 1) (Finset.range n) (fun xs => ((insertAll xs).erase.depth x : ℝ)) ≤
+    Treap.Random.average (fun _ => 1) (Finset.range n) (fun xs => ((insertKeys xs).erase.depth x : ℝ)) ≤
       2 * Real.log n :=
   Random.random_bst_depth_le n x hx
 

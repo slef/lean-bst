@@ -11,7 +11,7 @@ open Dictionary
 
 variable {α : ℚ}
 
-theorem one_lt_inv (hα : 1 / 2 < α ∧ α < 1) : (1 : ℝ) < 1 / (α : ℝ) := by
+theorem one_lt_inv_alpha (hα : 1 / 2 < α ∧ α < 1) : (1 : ℝ) < 1 / (α : ℝ) := by
   have : (0 : ℝ) < α := by exact_mod_cast (show (0 : ℚ) < α by linarith)
   rw [lt_div_iff₀ this, one_mul]; exact_mod_cast hα.2
 
@@ -33,7 +33,7 @@ theorem depth_bound (hα : 1 / 2 < α ∧ α < 1) (s : State) (h : Inv α s) (z 
           apply mul_le_mul_of_nonneg_left _ hp.le
           rw [mul_one_div, le_div_iff₀ ha]; linarith
       _ = s.1.size * (1 / α) * α ^ s.1.depth z := by ring
-  have hb := one_lt_inv hα
+  have hb := one_lt_inv_alpha hα
   have := (Real.le_logb_iff_rpow_le (x := (s.1.depth z : ℝ)) (y := (s.1.size : ℝ) * (1 / α)) hb
     (by positivity)).mpr (by rw [Real.rpow_natCast]; exact hpow)
   rw [Real.logb_mul hn.ne' (by positivity), Real.logb_self_eq_one hb] at this
@@ -51,8 +51,8 @@ theorem bound_mono (hα : 1 / 2 < α ∧ α < 1) {n m : Nat} (h : n ≤ m) : bou
       rw [Nat.cast_zero, Real.logb_zero]
       rcases Nat.eq_zero_or_pos m with hm | hm
       · subst hm; simp
-      · exact Real.logb_nonneg (one_lt_inv hα) (by exact_mod_cast hm)
-    · exact Real.logb_le_logb_of_le (one_lt_inv hα) (by exact_mod_cast h0) (by exact_mod_cast h)
+      · exact Real.logb_nonneg (one_lt_inv_alpha hα) (by exact_mod_cast hm)
+    · exact Real.logb_le_logb_of_le (one_lt_inv_alpha hα) (by exact_mod_cast h0) (by exact_mod_cast h)
   nlinarith
 
 /-- Amortized cost of one step, with logarithms. -/
@@ -63,7 +63,7 @@ theorem step_bound (hα : 1 / 2 < α ∧ α < 1) (s : State) (op : Op) (valid : 
   have hD : 0 ≤ D := by
     rcases Nat.eq_zero_or_pos s.1.size with h0 | h0
     · simp [D, h0]
-    · have := Real.logb_nonneg (one_lt_inv hα) (show (1 : ℝ) ≤ s.1.size by exact_mod_cast h0)
+    · have := Real.logb_nonneg (one_lt_inv_alpha hα) (show (1 : ℝ) ≤ s.1.size by exact_mod_cast h0)
       simp only [D]; linarith
   set e := ⌊D⌋₊
   have he : ∀ z < s.1.size, s.1.depth z ≤ e := fun z hz => Nat.le_floor (depth_bound hα s h z hz)

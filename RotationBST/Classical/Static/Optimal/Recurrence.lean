@@ -85,7 +85,7 @@ theorem tree_empty (W : Nat → Nat → Nat) {i j : Nat} (h : j ≤ i) : tree W 
   rw [tree]; simp [show ¬ i < j by omega]
 
 theorem tree_spec (W : Nat → Nat → Nat) (len : Nat) :
-    ∀ i j, j - i = len → (tree W i j).size = j - i ∧ treeCost W (tree W i j) i = cost W i j := by
+    ∀ i j, j - i = len → (tree W i j).size = j - i ∧ LazyFinger.intervalCost W (tree W i j) i = cost W i j := by
   induction len using Nat.strong_induction_on with
   | ind len ih =>
     intro i j hlen
@@ -95,20 +95,20 @@ theorem tree_spec (W : Nat → Nat → Nat) (len : Nat) :
       have hr := ih (j - (root W i j + 1)) (by omega) (root W i j + 1) j rfl
       rw [tree_eq W h]
       refine ⟨by simp only [Tree.size, hl.1, hr.1]; omega, ?_⟩
-      simp only [treeCost, Tree.size, hl.1, hl.2, hr.1]
+      simp only [LazyFinger.intervalCost, Tree.size, hl.1, hl.2, hr.1]
       rw [show i + (root W i j - i + 1 + (j - (root W i j + 1))) = j by omega,
         show i + (root W i j - i) + 1 = root W i j + 1 by omega, hr.2, ← h3, candidate]
     · rw [tree_empty W (by omega), cost_empty W (by omega)]
-      simp [Tree.size, treeCost]; omega
+      simp [Tree.size, LazyFinger.intervalCost]; omega
 
 theorem tree_size (W : Nat → Nat → Nat) (i j : Nat) : (tree W i j).size = j - i :=
   (tree_spec W (j - i) i j rfl).1
 
-theorem tree_cost (W : Nat → Nat → Nat) (i j : Nat) : treeCost W (tree W i j) i = cost W i j :=
+theorem tree_cost (W : Nat → Nat → Nat) (i j : Nat) : LazyFinger.intervalCost W (tree W i j) i = cost W i j :=
   (tree_spec W (j - i) i j rfl).2
 
-theorem cost_le_treeCost (W : Nat → Nat → Nat) (t : Tree) :
-    ∀ i j, t.size = j - i → cost W i j ≤ treeCost W t i := by
+theorem cost_le_intervalCost (W : Nat → Nat → Nat) (t : Tree) :
+    ∀ i j, t.size = j - i → cost W i j ≤ LazyFinger.intervalCost W t i := by
   induction t with
   | nil =>
     intro i j h
@@ -120,7 +120,7 @@ theorem cost_le_treeCost (W : Nat → Nat → Nat) (t : Tree) :
     have hc := cost_le_candidate W (i := i) (j := j) (r := i + l.size) (by omega) (by omega)
     have hl := ihl i (i + l.size) (by omega)
     have hr := ihr (i + l.size + 1) j (by omega)
-    simp only [treeCost, Tree.size, candidate] at hc ⊢
+    simp only [LazyFinger.intervalCost, Tree.size, candidate] at hc ⊢
     rw [show i + (l.size + 1 + r.size) = j by omega]
     omega
 

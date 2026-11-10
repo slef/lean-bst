@@ -8,8 +8,9 @@ public import RotationBST.Classical.WeightBalanced.AbstractBridge
 /-! Weight-balanced trees: the height bound of trees of bounded balance, and
 rebuilding a tree into the balanced tree by at most `2n` rotations.
 `Definitions/Abstract` gives `weight`, `Balanced`, `vineCost` and `rebuild`;
-`Static/Definitions/Abstract` gives `balanced` and `height`. -/
+`Models/Rotation/Abstract` gives `Tree.balanced` and `Tree.height`. -/
 namespace RotationBST.Classical.WeightBalanced.Results
+open _root_.RotationBST.Tree (height balanced)
 open Static
 
 /-- **Height of trees of bounded balance.** If every child's weight is at most
@@ -27,7 +28,7 @@ theorem rebuild_tree (t : Tree) : (rebuild t).1 = balanced t.size := rfl
 
 /-- …of minimum height… -/
 theorem rebuild_height (t : Tree) (h : 0 < t.size) : height (rebuild t).1 = Nat.log2 t.size + 1 :=
-  Static.balanced_height t.size h
+  Static.balanced_height_eq t.size h
 
 /-- …by exactly the reported number of rotations… -/
 theorem rebuild_rotations (t : Tree) : Rotations t (rebuild t).1 (rebuild t).2 :=
@@ -43,5 +44,4 @@ end RotationBST.Classical.WeightBalanced.Results
 #guard_msgs in
 #check_bst_abstract RotationBST.Classical.WeightBalanced.Results allowing [
   RotationBST.Models.Rotation.Abstract,
-  RotationBST.Classical.Static.Definitions.Abstract,
   RotationBST.Classical.WeightBalanced.Definitions.Abstract]

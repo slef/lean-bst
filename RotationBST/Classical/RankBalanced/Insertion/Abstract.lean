@@ -6,7 +6,7 @@ public import RotationBST.Classical.RankBalanced.Insertion.AbstractBridge
 @[expose] public section
 
 /-! Insertion into WAVL and AVL trees. `Definitions/Abstract` gives the leaf
-insertion `leafAt`, the rebalancing `fixLeft`/`fixRight`, `insert` (tree,
+insertion `LabelledTree.insertAt` (a leaf of rank 0), the rebalancing `fixLeft`/`fixRight`, `insert` (tree,
 rotations, rank changes), `insertAll` and `insertEdits`. Costs are those of the
 dictionary model (`Models/Dictionary`); rank changes are its data edits. -/
 namespace RotationBST.Classical.RankBalanced.Results
@@ -15,7 +15,7 @@ namespace RotationBST.Classical.RankBalanced.Results
 rotations, and one data edit per rank change. -/
 theorem insert_step (t : RankedTree) (g : Nat) (hg : g ≤ t.erase.size) :
     Dictionary.Step t (.insert g) (insert t g).1
-      ((leafAt t g).erase.depth g + 1 + (insert t g).2.1) (insert t g).2.2 :=
+      ((t.insertAt g 0).erase.depth g + 1 + (insert t g).2.1) (insert t g).2.2 :=
   RankBalanced.insert_step t g hg
 
 theorem insert_size (t : RankedTree) (g : Nat) : (insert t g).1.erase.size = t.erase.size + 1 :=
@@ -35,7 +35,7 @@ theorem insert_rotations (t : RankedTree) (g : Nat) (h : Valid .wavl t) : (inser
 
 /-- After `m` insertions into the empty tree the height is at most `log_φ(m + 1)`. -/
 theorem insertAll_height (gs : List Nat) :
-    (Static.height (insertAll .nil gs).erase : ℝ) ≤ Real.logb Real.goldenRatio (gs.length + 1) :=
+    (Tree.height (insertAll .nil gs).erase : ℝ) ≤ Real.logb Real.goldenRatio (gs.length + 1) :=
   RankBalanced.insertAll_height gs
 
 /-- **Amortized rank changes**: `m` insertions into the empty tree change at most `7m` ranks. -/
@@ -49,6 +49,5 @@ end RotationBST.Classical.RankBalanced.Results
 #check_bst_abstract RotationBST.Classical.RankBalanced.Results allowing [
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Dictionary.Definitions.Abstract,
-  RotationBST.Classical.Static.Definitions.Abstract,
   RotationBST.Classical.RankBalanced.Definitions.Abstract,
   RotationBST.Classical.RankBalanced.Insertion.Definitions.Abstract]

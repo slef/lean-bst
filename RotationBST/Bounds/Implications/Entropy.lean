@@ -41,11 +41,6 @@ theorem gapSum_le_entropy (n : Nat) (xs : List Nat) (valid : ∀ x ∈ xs, x < n
   have h := logSum_le (gaps x 0 xs) (gaps_pos x 0 xs) xs.length hs
   simpa only [gaps_length] using h
 
-theorem logb_nat_nonneg (n : Nat) : 0 ≤ Real.logb 2 n := by
-  by_cases hn : n = 0
-  · subst n; simp
-  · exact Real.logb_nonneg (by norm_num) (by exact_mod_cast Nat.one_le_iff_ne_zero.mpr hn)
-
 /-- The working-set sum is at most frequency entropy plus the first-use allowance.
 This is a sequence inequality, independent of any BST algorithm. -/
 theorem workingSet_le_static (n : Nat) (xs : List Nat) (valid : ∀ x ∈ xs, x < n) :

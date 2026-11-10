@@ -1,7 +1,7 @@
 module
 
 public import RotationBST.Classical.WeightBalanced.Definitions.Abstract
-public import RotationBST.Classical.Static.Height
+public import RotationBST.Models.Rotation.Shapes
 public import Mathlib.Analysis.SpecialFunctions.Log.Base
 import Mathlib.Tactic
 
@@ -11,7 +11,7 @@ import Mathlib.Tactic
 by a factor `β` per level and never fall below one. The balanced tree is
 `β`-balanced for every `β ≥ 2/3`. -/
 namespace RotationBST.Classical.WeightBalanced
-open Static
+open _root_.RotationBST.Tree (height balanced)
 
 theorem one_le_weight (t : Tree) : (1 : ℝ) ≤ weight t := by
   unfold weight; norm_cast; omega
@@ -25,7 +25,7 @@ theorem pow_height_le (β : ℝ) (hβ : 0 < β) (t : Tree) (h : Balanced β t) :
     have pl := il bl
     have pr := ir br
     simp only [height]
-    rw [pow_succ]
+    rw [Nat.add_comm, pow_succ]
     have hb : 0 < 1 / β := by positivity
     rcases le_total (height l) (height r) with hlr | hlr
     · rw [max_eq_right hlr]
@@ -55,7 +55,7 @@ theorem balanced_balanced (β : ℝ) (hβ : 2 / 3 ≤ β) (n : Nat) : Balanced �
     | succ n =>
       rw [balanced]
       refine ⟨?_, ?_, ih _ (by omega), ih _ (by omega)⟩ <;>
-      · simp only [weight, Tree.size, balanced_size]
+      · simp only [weight, Tree.size, Tree.balanced_size]
         have h1 : (((n + 1) / 2 : Nat) : ℝ) * 3 + 1 ≤ 2 * (n + 1) := by
           have : (n + 1) / 2 * 3 + 1 ≤ 2 * (n + 1) := by omega
           exact_mod_cast this

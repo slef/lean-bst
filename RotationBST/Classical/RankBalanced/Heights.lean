@@ -3,14 +3,15 @@ module
 public import RotationBST.Classical.RankBalanced.Definitions.Abstract
 public import Mathlib.Analysis.SpecialFunctions.Log.Base
 public import Mathlib.NumberTheory.Real.GoldenRatio
+public import RotationBST.Bounds.Implications.LogSum
 import Mathlib.Tactic
 
 @[expose] public section
 
 /-! Heights and ranks of rank-balanced trees. Heights count nodes
-(`Static.height`); sizes are those of the underlying shape. -/
+(`Tree.height`); sizes are those of the underlying shape. -/
 namespace RotationBST.Classical.RankBalanced
-open Static
+open _root_.RotationBST.Tree (height)
 
 @[simp] theorem rank_node (l r : RankedTree) (k : Int) : rank (.node l k r) = k := rfl
 
@@ -30,13 +31,8 @@ theorem size_node (l r : RankedTree) (k : Int) :
     (LabelledTree.node l k r).erase.size = l.erase.size + 1 + r.erase.size := rfl
 
 theorem height_node (l r : RankedTree) (k : Int) :
-    height (LabelledTree.node l k r).erase = max (height l.erase) (height r.erase) + 1 := rfl
-
-/-- Converting the exponent of a power of two to a logarithm. -/
-theorem le_logb_of_pow (N M : Nat) (h : 2 ^ N ≤ M) : (N : ℝ) ≤ Real.logb 2 M := by
-  have hM : 0 < M := lt_of_lt_of_le (Nat.two_pow_pos N) h
-  rw [Real.le_logb_iff_rpow_le (by norm_num) (by exact_mod_cast hM), Real.rpow_natCast]
-  exact_mod_cast h
+    height (LabelledTree.node l k r).erase = max (height l.erase) (height r.erase) + 1 :=
+  Nat.add_comm 1 _
 
 /-! ### AVL trees -/
 
@@ -156,7 +152,7 @@ theorem redBlack_height_aux (t : RankedTree) (h : Valid .redBlack t) :
 theorem redBlack_height (t : RankedTree) (h : Valid .redBlack t) :
     (height t.erase : ℝ) ≤ 2 * Real.logb 2 (t.erase.size + 1) := by
   have h1 := (redBlack_height_aux t h).1
-  have h2 := le_logb_of_pow _ _ (redBlack_size t h)
+  have h2 := Bounds.le_logb_of_pow _ _ (redBlack_size t h)
   have hr := rank_ge .redBlack t h
   push_cast at h2
   have : (height t.erase : ℝ) ≤ 2 * ((rank t + 1).toNat : ℝ) := by
@@ -202,7 +198,7 @@ theorem wavl_size (t : RankedTree) (h : Valid .wavl t) :
 
 theorem wavl_rank (t : RankedTree) (h : Valid .wavl t) :
     (rank t : ℝ) + 1 ≤ 2 * Real.logb 2 (t.erase.size + 1) := by
-  have hs := le_logb_of_pow _ _ (wavl_size t h)
+  have hs := Bounds.le_logb_of_pow _ _ (wavl_size t h)
   have hr := rank_ge .wavl t h
   push_cast at hs
   rw [Real.logb_pow] at hs

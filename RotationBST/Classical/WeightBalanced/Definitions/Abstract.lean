@@ -1,6 +1,6 @@
 module
 
-public import RotationBST.Classical.Static.Definitions.Abstract
+public import RotationBST.Models.Rotation.Abstract
 public import Mathlib.Basic.Real.Basic
 
 @[expose] public section
@@ -30,6 +30,6 @@ def vineCost : Tree → Nat
 spine, then run the same procedure for the balanced tree backwards. Returns
 the new tree and the number of rotations. -/
 def rebuild (t : Tree) : Tree × Nat :=
-  (Static.balanced t.size, vineCost t + vineCost (Static.balanced t.size))
+  (Tree.balanced t.size, vineCost t + vineCost (Tree.balanced t.size))
 
 end RotationBST.Classical.WeightBalanced

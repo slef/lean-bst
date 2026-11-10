@@ -27,10 +27,10 @@ example : Valid .wavl wide ∧ ¬ Valid .avl wide := by
 example : ¬ Valid .redBlack (.node .nil 0 (.node .nil 0 (.node .nil 0 .nil))) := by
   simp [Valid, Rule.Local, NoZeroChild, rank]
 
-example : (Classical.Static.height redRight.erase : ℝ) ≤ 2 * Real.logb 2 (redRight.erase.size + 1) :=
+example : (Tree.height redRight.erase : ℝ) ≤ 2 * Real.logb 2 (redRight.erase.size + 1) :=
   Results.redBlack_height redRight (by simp [redRight, leaf, Valid, Rule.Local, NoZeroChild, rank])
 example (t : RankedTree) (h : Valid .avl t) :
-    (Classical.Static.height t.erase : ℝ) ≤ 2 * Real.logb 2 (t.erase.size + 1) :=
+    (Tree.height t.erase : ℝ) ≤ 2 * Real.logb 2 (t.erase.size + 1) :=
   Results.wavl_height t (Results.avl_wavl t h)
 
 end RotationBST.Tests.RankBalanced

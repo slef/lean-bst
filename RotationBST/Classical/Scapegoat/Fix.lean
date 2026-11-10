@@ -1,7 +1,9 @@
 module
 
 public import RotationBST.Classical.Scapegoat.Shape
+public import RotationBST.Models.Rotation.Shapes
 public import RotationBST.Classical.WeightBalanced.Rebuild
+public import RotationBST.Classical.Static.Balanced
 import Mathlib.Tactic
 
 @[expose] public section
@@ -10,6 +12,7 @@ import Mathlib.Tactic
 within any bound met by the new leaf's parent, and pays for its rotations by
 the drop of the imbalance potential. -/
 namespace RotationBST.Classical.Scapegoat
+open _root_.RotationBST.Tree (balanced depth_left depth_root depth_right)
 open WeightBalanced Static Dictionary
 
 variable {α : ℚ}
@@ -22,12 +25,10 @@ theorem phi_balanced (n : Nat) : phi (balanced n) = 0 := by
     cases n with
     | zero => simp [balanced, phi]
     | succ n =>
-      rw [balanced, phi, ih _ (by omega), ih _ (by omega), balanced_size, balanced_size]
+      rw [balanced, phi, ih _ (by omega), ih _ (by omega), Tree.balanced_size, Tree.balanced_size]
       simp only [imb]; omega
 
 theorem phi_rebuild (t : Tree) : phi (rebuild t).1 = 0 := phi_balanced _
-
-theorem rebuild_size (t : Tree) : (rebuild t).1.size = t.size := balanced_size _
 
 /-- A violation makes the subtree's height too large for its size. -/
 theorem violates_log2 (hα : 1 / 2 ≤ α) {t : Tree} {k : Nat} (h : Violates α t k) (hs : 0 < t.size) :

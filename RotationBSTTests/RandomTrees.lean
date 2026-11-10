@@ -34,14 +34,14 @@ example (n x : Nat) (hx : x < n) : Treap.Random.average (fun _ => 1) (Finset.ran
   Results.expected_depth_le n x hx (treap n) (treap_spec n)
 
 -- Insertion without rebalancing: the first key is the root.
-example : insertAll [1, 0, 2] = .node (.node .nil 0 .nil) 1 (.node .nil 2 .nil) := by decide
-example : (insertAll [0, 1, 2]).erase = .node .nil (.node .nil (.node .nil .nil)) := by decide
-example : Geometric.Heap [2, 0, 3, 1].idxOf (insertAll [2, 0, 3, 1]).erase 0 :=
-  (Results.insertAll_treap 4 [2, 0, 3, 1] (by decide)).2
+example : insertKeys [1, 0, 2] = .node (.node .nil 0 .nil) 1 (.node .nil 2 .nil) := by decide
+example : (insertKeys [0, 1, 2]).erase = .node .nil (.node .nil (.node .nil .nil)) := by decide
+example : Geometric.Heap [2, 0, 3, 1].idxOf (insertKeys [2, 0, 3, 1]).erase 0 :=
+  (Results.insertKeys_treap 4 [2, 0, 3, 1] (by decide)).2
 
 -- A random BST on 3 keys: the middle key has expected depth 1.
 example : Treap.Random.average (fun _ => 1) (Finset.range 3)
-    (fun xs => ((insertAll xs).erase.depth 1 : ℝ)) = 1 := by
+    (fun xs => ((insertKeys xs).erase.depth 1 : ℝ)) = 1 := by
   rw [Results.random_bst_depth 3 1 (by decide)]
   norm_num [harmonic]
 

@@ -22,7 +22,7 @@ theorem rangeWeight_quadrangle (w : List Nat) : Quadrangle (rangeWeight w) := by
     ← rangeWeight_add w h2 h3]
   omega
 
-theorem rangeWeight_monotone (w : List Nat) : Optimal.Monotone (rangeWeight w) := by
+theorem rangeWeight_monotone (w : List Nat) : Optimal.InclusionMonotone (rangeWeight w) := by
   intro i i' j j' h1 h2 h3
   rw [← rangeWeight_add w h1 (h2.trans h3), ← rangeWeight_add w h2 h3]
   omega
@@ -32,15 +32,15 @@ theorem rangeWeight_eq_range (w : List Nat) (lo n : Nat) :
   rw [rangeWeight, Finset.sum_Ico_eq_sum_range, Nat.add_sub_cancel_left]
 
 /-- The weighted depth cost of a tree on the keys `lo, lo + 1, …`. -/
-theorem weighted_eq_treeCost (w : List Nat) (t : Tree) (lo : Nat) :
+theorem weighted_eq_intervalCost (w : List Nat) (t : Tree) (lo : Nat) :
     ∑ x ∈ Finset.range t.size, w.getD (lo + x) 0 * (t.depth x + 1) =
-      treeCost (rangeWeight w) t lo := by
+      LazyFinger.intervalCost (rangeWeight w) t lo := by
   induction t generalizing lo with
-  | nil => simp [Tree.size, treeCost]
+  | nil => simp [Tree.size, LazyFinger.intervalCost]
   | node l r ihl ihr =>
     have hl := ihl lo
     have hr := ihr (lo + l.size + 1)
-    rw [treeCost, ← hl, ← hr, rangeWeight_eq_range]
+    rw [LazyFinger.intervalCost, ← hl, ← hr, rangeWeight_eq_range]
     simp only [Tree.size]
     rw [Finset.sum_range_add, Finset.sum_range_succ, Finset.sum_range_add, Finset.sum_range_succ]
     have hleft : ∀ x ∈ Finset.range l.size,
@@ -68,20 +68,20 @@ theorem weighted_eq_treeCost (w : List Nat) (t : Tree) (lo : Nat) :
     simp only [e2]
     ring
 
-theorem weightedCost_eq_treeCost (w : List Nat) (t : Tree) :
-    weightedCost w t = treeCost (rangeWeight w) t 0 := by
-  simpa [weightedCost] using weighted_eq_treeCost w t 0
+theorem weightedCost_eq_intervalCost (w : List Nat) (t : Tree) :
+    weightedCost w t = LazyFinger.intervalCost (rangeWeight w) t 0 := by
+  simpa [weightedCost] using weighted_eq_intervalCost w t 0
 
 theorem optTree_size (w : List Nat) : (optTree w).size = w.length := by
   simp [optTree, tree_size]
 
 theorem optTree_cost (w : List Nat) : weightedCost w (optTree w) = optCost w := by
-  rw [weightedCost_eq_treeCost, optTree, optCost, tree_cost]
+  rw [weightedCost_eq_intervalCost, optTree, optCost, tree_cost]
 
 theorem optCost_le (w : List Nat) (t : Tree) (h : t.size = w.length) :
     optCost w ≤ weightedCost w t := by
-  rw [weightedCost_eq_treeCost, optCost]
-  exact cost_le_treeCost _ t 0 w.length (by omega)
+  rw [weightedCost_eq_intervalCost, optCost]
+  exact cost_le_intervalCost _ t 0 w.length (by omega)
 
 theorem knuth_optCost (w : List Nat) : (knuth (rangeWeight w) w.length).1 = optCost w :=
   knuth_cost (rangeWeight_quadrangle w) (rangeWeight_monotone w) w.length

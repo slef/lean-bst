@@ -5,11 +5,8 @@ public import RotationBST.Algorithms.Tango.Definitions.Abstract
 @[expose] public section
 namespace RotationBST.Tango
 
-/-- A balanced reference BST on exactly `n` implicit inorder keys. Its two
-subtrees differ in size by at most one. -/
-def balanced : Nat → Tree
-  | 0 => .nil
-  | n + 1 => .node (balanced ((n + 1) / 2)) (balanced (n / 2))
-termination_by n => n
+/-! The balanced reference BST on exactly `n` implicit inorder keys is
+`Tree.balanced`; its two subtrees differ in size by at most one. -/
+export Tree (balanced)
 
 end RotationBST.Tango

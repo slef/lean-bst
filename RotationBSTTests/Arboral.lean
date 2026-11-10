@@ -325,9 +325,9 @@ namespace BalancedTango
 open Tango
 
 -- Empty, singleton, and power-of-two boundary cases use no padding keys.
-example : balanced 0 = .nil ∧ (balanced 1).size = 1 := by norm_num [balanced.eq_def, Tree.size]
+example : balanced 0 = .nil ∧ (balanced 1).size = 1 := by norm_num [Tree.balanced.eq_def, Tree.size]
 example : height (balanced 7) = 3 ∧ height (balanced 8) = 4 ∧ (balanced 8).size = 8 := by
-  norm_num [balanced.eq_def, height, Tree.size]
+  norm_num [Tree.balanced.eq_def, height, Tree.size]
 
 -- A non-perfect universe has the same competitive theorem with log-height 3.
 example : ∃ p : Policy (balanced 6),

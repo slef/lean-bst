@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Models.Dictionary.Definitions.Abstract
 public import RotationBST.Models.Rotation.Rotations
+public import RotationBST.Models.Rotation.Shapes
 public import RotationBST.Models.Labelled.ArbitraryKeys
 import Mathlib.Tactic
 
@@ -24,6 +25,56 @@ variable {α : Type}
   induction t with
   | nil => rfl
   | node l x r il ir => simp [Tree.unit, LabelledTree.erase, il, ir]
+
+/-! ### Inserting a leaf -/
+
+theorem insertAt_size (t : Tree) (g : Nat) : (t.insertAt g).size = t.size + 1 := by
+  induction t generalizing g with
+  | nil => simp [Tree.insertAt, Tree.size]
+  | node l r il ir =>
+    simp only [Tree.insertAt]; split
+    · simp only [Tree.size, il]; omega
+    · simp only [Tree.size, ir]; omega
+
+theorem erase_insertAt (t : LabelledTree α) (g : Nat) (a : α) :
+    (t.insertAt g a).erase = t.erase.insertAt g := by
+  induction t generalizing g with
+  | nil => rfl
+  | node l x r il ir =>
+    simp only [LabelledTree.insertAt, LabelledTree.erase, Tree.insertAt]; split
+    · simp [LabelledTree.erase, il]
+    · simp [LabelledTree.erase, ir]
+
+theorem insertAt_erase_size (t : LabelledTree α) (g : Nat) (a : α) :
+    (t.insertAt g a).erase.size = t.erase.size + 1 := by
+  rw [erase_insertAt, insertAt_size]
+
+theorem unit_insertAt (t : Tree) (g : Nat) : (t.insertAt g).unit = t.unit.insertAt g () := by
+  induction t generalizing g with
+  | nil => rfl
+  | node l r il ir =>
+    simp only [Tree.insertAt, Tree.unit, LabelledTree.insertAt, unit_erase]; split
+    · simp [Tree.unit, il]
+    · simp [Tree.unit, ir]
+
+/-- Inserting a leaf at gap `g` is the reverse of splicing out rank `g`. -/
+theorem insertAt_splice (t : LabelledTree α) (g : Nat) (a : α) (hg : g ≤ t.erase.size) :
+    Splice (t.insertAt g a) g t := by
+  induction t generalizing g with
+  | nil =>
+    have : g = 0 := by simp [LabelledTree.erase, Tree.size] at hg; omega
+    subst this; exact .noLeft
+  | node l x r il ir =>
+    simp only [LabelledTree.insertAt]; split
+    · exact .inLeft (il g (by assumption))
+    · rename_i h
+      have := Splice.inRight (l := l) (d := x)
+        (ir (g - l.erase.size - 1) (by simp [LabelledTree.erase, Tree.size] at hg; omega))
+      rwa [show l.erase.size + 1 + (g - l.erase.size - 1) = g by omega] at this
+
+theorem unit_insertAt_splice (t : Tree) (g : Nat) (hg : g ≤ t.size) :
+    Splice (t.insertAt g).unit g t.unit := by
+  rw [unit_insertAt]; exact insertAt_splice _ g () (by simpa using hg)
 
 theorem rotations_unit {a b : Tree} {k : Nat} (h : Rotations a b k) :
     LabelledTree.Rotations a.unit b.unit k := by
@@ -185,88 +236,10 @@ theorem Algorithm.runFrom_execution (A : Algorithm α) (past : List Op) (t : Lab
       have hs := A.correct past t op valid.1
       exact .cons hs (ih (past ++ [op]) _ (by rw [hs.size]; exact valid.2))
 
-/-! ### Depth under rotations -/
-
-theorem depth_left {l r : Tree} {x : Nat} (h : x < l.size) :
-    (Tree.node l r).depth x = l.depth x + 1 := by
-  simp [Tree.depth, h]
-
-theorem depth_root {l r : Tree} {x : Nat} (h : x = l.size) : (Tree.node l r).depth x = 0 := by
-  subst h; simp [Tree.depth]
-
-theorem depth_right {l r : Tree} {x : Nat} (h : l.size < x) :
-    (Tree.node l r).depth x = r.depth (x - l.size - 1) + 1 := by
-  simp [Tree.depth, show ¬ x < l.size by omega, show x ≠ l.size by omega]
-
-theorem depth_le_rotate {s t : Tree} (h : Rotate s t) (x : Nat) : s.depth x ≤ t.depth x + 1 := by
-  induction h generalizing x with
-  | right =>
-      rename_i a b c
-      have hab : (Tree.node a b).size = a.size + 1 + b.size := rfl
-      by_cases h1 : x < a.size
-      · rw [depth_left (l := .node a b) (r := c) (by rw [hab]; omega), depth_left (l := a) (r := b) h1,
-          depth_left (l := a) (r := .node b c) h1]
-      by_cases h2 : x = a.size
-      · rw [depth_left (l := .node a b) (r := c) (by rw [hab]; omega), depth_root (l := a) (r := b) h2,
-          depth_root (l := a) (r := .node b c) h2]
-      by_cases h3 : x < a.size + 1 + b.size
-      · rw [depth_left (l := .node a b) (r := c) (by rw [hab]; omega),
-          depth_right (l := a) (r := b) (by omega), depth_right (l := a) (r := .node b c) (by omega),
-          depth_left (l := b) (r := c) (by omega)]; try omega
-      by_cases h4 : x = a.size + 1 + b.size
-      · rw [depth_root (l := .node a b) (r := c) (by rw [hab]; omega),
-          depth_right (l := a) (r := .node b c) (by omega), depth_root (l := b) (r := c) (by omega)]
-        try omega
-      · rw [depth_right (l := .node a b) (r := c) (by rw [hab]; omega),
-          depth_right (l := a) (r := .node b c) (by omega), depth_right (l := b) (r := c) (by omega), hab,
-          show x - (a.size + 1 + b.size) - 1 = x - a.size - 1 - b.size - 1 by omega]; try omega
-  | left =>
-      rename_i a b c
-      have hab : (Tree.node a b).size = a.size + 1 + b.size := rfl
-      by_cases h1 : x < a.size
-      · rw [depth_left (l := a) (r := .node b c) h1, depth_left (l := .node a b) (r := c) (by rw [hab]; omega),
-          depth_left (l := a) (r := b) h1]; try omega
-      by_cases h2 : x = a.size
-      · rw [depth_root (l := a) (r := .node b c) h2, depth_left (l := .node a b) (r := c) (by rw [hab]; omega),
-          depth_root (l := a) (r := b) h2]; try omega
-      by_cases h3 : x < a.size + 1 + b.size
-      · rw [depth_right (l := a) (r := .node b c) (by omega), depth_left (l := b) (r := c) (by omega),
-          depth_left (l := .node a b) (r := c) (by rw [hab]; omega),
-          depth_right (l := a) (r := b) (by omega)]; try omega
-      by_cases h4 : x = a.size + 1 + b.size
-      · rw [depth_right (l := a) (r := .node b c) (by omega), depth_root (l := b) (r := c) (by omega),
-          depth_root (l := .node a b) (r := c) (by rw [hab]; omega)]
-      · rw [depth_right (l := a) (r := .node b c) (by omega), depth_right (l := b) (r := c) (by omega),
-          depth_right (l := .node a b) (r := c) (by rw [hab]; omega), hab,
-          show x - a.size - 1 - b.size - 1 = x - (a.size + 1 + b.size) - 1 by omega]
-  | inLeft h ih =>
-      rename_i a b c
-      have hs := h.size_eq
-      by_cases h1 : x < a.size
-      · rw [depth_left (l := a) (r := c) h1, depth_left (l := b) (r := c) (by omega)]; have := ih x; omega
-      by_cases h2 : x = a.size
-      · rw [depth_root (l := a) (r := c) h2, depth_root (l := b) (r := c) (by omega)]; try omega
-      · rw [depth_right (l := a) (r := c) (by omega), depth_right (l := b) (r := c) (by omega), hs]
-        try omega
-  | inRight h ih =>
-      rename_i a b c
-      by_cases h1 : x < c.size
-      · rw [depth_left (l := c) (r := a) h1, depth_left (l := c) (r := b) h1]; try omega
-      by_cases h2 : x = c.size
-      · rw [depth_root (l := c) (r := a) h2, depth_root (l := c) (r := b) h2]; try omega
-      · rw [depth_right (l := c) (r := a) (by omega), depth_right (l := c) (r := b) (by omega)]
-        have := ih (x - c.size - 1); omega
-
-theorem depth_le_rotations {s t : Tree} {k : Nat} (h : Rotations s t k) (x : Nat) :
-    s.depth x ≤ t.depth x + k := by
-  induction h with
-  | refl => omega
-  | step h _ ih => have := depth_le_rotate h x; omega
-
 /-- An access by `k` rotations brings a node at depth at most `k` to the root. -/
 theorem access_depth_le {s t : Tree} {x k : Nat} (h : Access s t x k) : s.depth x ≤ k := by
   obtain ⟨hr, hroot⟩ := h
-  have := depth_le_rotations hr x
+  have := hr.depth_le_reverse x
   cases t with
   | nil => exact hroot.elim
   | node l r =>

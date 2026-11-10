@@ -26,11 +26,10 @@ def changeCost (t : Tree) : List Nat → List Nat → Nat
   | _, [] => 0
   | past, x :: xs => changes t past x + changeCost t (past ++ [x]) xs
 
-/-- Height bounds the number of keys in any preferred path, independently of
-how that path is represented as an auxiliary balanced search tree. -/
-def height : Tree → Nat
-  | .nil => 0
-  | .node l r => 1 + max (height l) (height r)
+/-! Height (`Tree.height`, the number of nodes on a longest root-to-leaf path)
+bounds the number of keys in any preferred path, independently of how that path
+is represented as an auxiliary balanced search tree. -/
+export Tree (height)
 
 /-- A perfect reference tree, useful when the key count is `2^h - 1`. -/
 def perfect : Nat → Tree

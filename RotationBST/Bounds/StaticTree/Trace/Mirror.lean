@@ -2,15 +2,12 @@ module
 
 public import RotationBST.Bounds.StaticTree.Trace.Invariant
 public import RotationBST.Models.Pointer.Invariant.Mirror
+public import RotationBST.Models.Rotation.Shapes
 import Mathlib.Tactic
 
 @[expose] public section
 namespace RotationBST.StaticTree.Trace
-open _root_.RotationBST.Tree (depth)
-
-private theorem depth_right {l r : Tree} {x : Nat} (right : l.size < x) :
-    depth (.node l r) x = depth r (x - l.size - 1) + 1 := by
-  rw [depth, ite_eq_right (by omega), ite_eq_right (by omega)]
+open _root_.RotationBST.Tree (depth depth_right)
 
 /-- Reflection preserves search depth at the reflected existing rank. -/
 theorem mirror_rank_depth (t : Tree) (x : Nat) (inside : x < t.size) :

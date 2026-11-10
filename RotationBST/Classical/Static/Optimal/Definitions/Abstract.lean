@@ -1,6 +1,7 @@
 module
 
 public import RotationBST.Models.Rotation.Abstract
+public import RotationBST.Bounds.LazyFinger.Edges.Definitions.Abstract
 public import Mathlib.Data.List.FinRange
 public import Mathlib.Data.Nat.Find
 public import Mathlib.Algebra.BigOperators.Intervals
@@ -9,15 +10,11 @@ public import Mathlib.Algebra.BigOperators.Intervals
 
 /-! Optimal static trees by interval dynamic programming. Intervals are
 half-open: `[i, j)` holds the keys `i ≤ x < j`. The interval weight `W i j`
-is abstract; key weights are the instance `rangeWeight`. -/
+is abstract; key weights are the instance `rangeWeight`. The cost of a tree
+whose keys are `lo, lo + 1, …` is `LazyFinger.intervalCost W t lo`, the weight
+of the interval of every subtree summed over all subtrees; with key weights it
+is `∑ₓ wₓ (depth x + 1)` (`Results.weightedCost_eq_intervalCost`). -/
 namespace RotationBST.Classical.Static.Optimal
-
-/-- The cost of a tree whose keys are `lo, lo + 1, …`: the weight of the
-interval of every subtree, summed over all subtrees. With key weights this is
-`∑ₓ wₓ (depth x + 1)` (`Results.weightedCost_eq`). -/
-def treeCost (W : Nat → Nat → Nat) : Tree → Nat → Nat
-  | .nil, _ => 0
-  | .node l r, lo => W lo (lo + (Tree.node l r).size) + treeCost W l lo + treeCost W r (lo + l.size + 1)
 
 /-- The cubic recurrence `C(i, j) = W(i, j) + min_{i ≤ r < j} (C(i, r) + C(r + 1, j))`,
 with `C(i, j) = 0` for an empty interval. -/
@@ -54,7 +51,7 @@ def Quadrangle (W : Nat → Nat → Nat) : Prop :=
   ∀ i i' j j', i ≤ i' → i' ≤ j → j ≤ j' → W i j + W i' j' ≤ W i' j + W i j'
 
 /-- Monotonicity under inclusion: `W(i', j) ≤ W(i, j')` when `[i', j) ⊆ [i, j')`. -/
-def Monotone (W : Nat → Nat → Nat) : Prop :=
+def InclusionMonotone (W : Nat → Nat → Nat) : Prop :=
   ∀ i i' j j', i ≤ i' → i' ≤ j → j ≤ j' → W i' j ≤ W i j'
 
 /-- Among the roots `lo ≤ r ≤ hi`, the least candidate cost and the largest

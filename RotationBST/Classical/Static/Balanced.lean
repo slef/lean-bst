@@ -1,8 +1,9 @@
 module
 
-public import RotationBST.Classical.Static.Definitions.Abstract
+public import RotationBST.Models.Rotation.Shapes
 public import RotationBST.Bounds.StaticTree.Definitions.Abstract
 public import RotationBST.Bounds.Logarithmic.Abstract
+public import RotationBST.Bounds.Implications.LogSum
 import Mathlib.Data.Nat.Init
 import Mathlib.Tactic.SplitIfs
 
@@ -10,44 +11,12 @@ import Mathlib.Tactic.SplitIfs
 
 /-! Depth facts about the balanced tree and about arbitrary trees. -/
 namespace RotationBST.Classical.Static
+open _root_.RotationBST.Tree (balanced)
 
-theorem balanced_size (n : Nat) : (balanced n).size = n := by
-  induction n using Nat.strong_induction_on with
-  | ind n ih =>
-    cases n with
-    | zero => simp [balanced, Tree.size]
-    | succ n =>
-      rw [balanced, Tree.size, ih ((n + 1) / 2) (by omega), ih (n / 2) (by omega)]
-      omega
-
-/-- Fewer than `2^(h+1)` keys put every key at depth at most `h`. -/
-theorem balanced_depth_of_lt_pow (h : Nat) :
-    ∀ n x, n < 2 ^ (h + 1) → x < n → (balanced n).depth x ≤ h := by
-  induction h with
-  | zero =>
-    intro n x hn hx
-    have hn1 : n = 1 := by simp at hn; omega
-    subst hn1
-    have hx0 : x = 0 := by omega
-    subst hx0
-    simp [balanced, Tree.depth, Tree.size]
-  | succ h ih =>
-    intro n x hn hx
-    cases n with
-    | zero => omega
-    | succ n =>
-      have power : 2 ^ (h + 1 + 1) = 2 ^ (h + 1) * 2 := Nat.pow_succ ..
-      rw [power] at hn
-      rw [balanced, Tree.depth, balanced_size]
-      split_ifs with hl he
-      · have := ih ((n + 1) / 2) x (by omega) hl
-        omega
-      · omega
-      · have := ih (n / 2) (x - (n + 1) / 2 - 1) (by omega) (by omega)
-        omega
-
-theorem balanced_depth (n x : Nat) (hx : x < n) : (balanced n).depth x ≤ Nat.log2 n :=
-  balanced_depth_of_lt_pow (Nat.log2 n) n x Nat.lt_log2_self hx
+theorem balanced_depth (n x : Nat) (hx : x < n) : (balanced n).depth x ≤ Nat.log2 n := by
+  have := Tree.depth_lt_height (balanced n) x (by rwa [Tree.balanced_size])
+  have := Tree.balanced_height n
+  omega
 
 /-- Every nonempty tree has a key whose depth `d` satisfies `size < 2^(d+1)`. -/
 theorem exists_deep_pow (t : Tree) (h : 0 < t.size) :
@@ -109,11 +78,6 @@ theorem exists_expensive (t : Tree) (h : 0 < t.size) (m : Nat) :
   obtain ⟨x, hx, hd⟩ := exists_deep t h
   exact ⟨x, hx, by rw [cost_replicate]; exact Nat.mul_le_mul_left m (by omega)⟩
 
-theorem log2_le_logb (n : Nat) (hn : n ≠ 0) : (Nat.log2 n : ℝ) ≤ Real.logb 2 n := by
-  have hp : ((2 ^ Nat.log2 n : Nat) : ℝ) ≤ n := by exact_mod_cast Nat.log2_self_le hn
-  have := Real.logb_le_logb_of_le (b := 2) (by norm_num) (by positivity) hp
-  simpa [Real.logb_pow] using this
-
 /-- The balanced tree meets the logarithmic baseline with constant one. -/
 theorem balanced_cost_le_logCost (n : Nat) (xs : List Nat) (valid : ∀ x ∈ xs, x < n) :
     (StaticTree.cost (balanced n) xs : ℝ) ≤ Bounds.logCost n xs := by
@@ -129,7 +93,7 @@ theorem balanced_cost_le_logCost (n : Nat) (xs : List Nat) (valid : ∀ x ∈ xs
     subst hxs
     simp at hc ⊢
     exact_mod_cast hc
-  · have hl := log2_le_logb n hn
+  · have hl := Bounds.le_logb_of_pow _ _ (Nat.log2_self_le hn)
     have hm := mul_le_mul_of_nonneg_left (show (Nat.log2 n : ℝ) + 1 ≤ 1 + Real.logb 2 n by linarith)
       (Nat.cast_nonneg (α := ℝ) xs.length)
     linarith

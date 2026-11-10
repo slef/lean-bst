@@ -14,6 +14,6 @@ def insertKey : LabelledTree Nat → Nat → LabelledTree Nat
   | .node l x r, y => if y < x then .node (insertKey l y) x r else .node l x (insertKey r y)
 
 /-- Insert the keys of `order` one after the other, starting from the empty tree. -/
-def insertAll (order : List Nat) : LabelledTree Nat := order.foldl insertKey .nil
+def insertKeys (order : List Nat) : LabelledTree Nat := order.foldl insertKey .nil
 
 end RotationBST.Classical.Random

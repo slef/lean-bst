@@ -5,6 +5,7 @@ import Mathlib.Tactic
 
 @[expose] public section
 namespace RotationBST.Tests.OptimalStatic
+open _root_.RotationBST.Tree (balanced)
 open Classical.Static Classical.Static.Optimal
 
 private def w : List Nat := [5, 1, 9, 2]

@@ -21,7 +21,7 @@ theorem insertAll_size (t : RankedTree) (gs : List Nat) :
 
 /-- After `m` insertions into the empty tree, the height is at most `log_φ(m + 1)`. -/
 theorem insertAll_height (gs : List Nat) :
-    (Static.height (insertAll .nil gs).erase : ℝ) ≤ Real.logb Real.goldenRatio (gs.length + 1) := by
+    (Tree.height (insertAll .nil gs).erase : ℝ) ≤ Real.logb Real.goldenRatio (gs.length + 1) := by
   have := avl_height _ (insertAll_avl .nil gs trivial)
   rw [insertAll_size] at this
   simpa [LabelledTree.erase, Tree.size] using this

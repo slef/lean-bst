@@ -6,13 +6,16 @@ public import RotationBST.Classical.Static.AbstractBridge
 @[expose] public section
 
 /-! Static search trees: the balanced tree and the logarithmic baseline.
-`Definitions/Abstract` gives the balanced tree; `Bounds/StaticTree/Definitions`
+`Models/Rotation/Abstract` gives the balanced tree `Tree.balanced` and
+`Tree.height`; `Bounds/StaticTree/Definitions`
 gives the cost of searching a fixed tree; `Bounds/Logarithmic` gives the
 baseline `m(1 + log₂ n)`. -/
 namespace RotationBST.Classical.Static.Results
+open _root_.RotationBST.Tree (height balanced)
 
+/-- The balanced tree has `n` keys (`Tree.balanced_size`). -/
 theorem balanced_size (n : Nat) : (balanced n).size = n :=
-  Static.balanced_size n
+  Tree.balanced_size n
 
 /-- Every key of the balanced tree lies at depth at most `⌊log₂ n⌋`. -/
 theorem balanced_depth (n x : Nat) (hx : x < n) : (balanced n).depth x ≤ Nat.log2 n :=
@@ -40,12 +43,12 @@ theorem exists_expensive (t : Tree) (h : 0 < t.size) (m : Nat) :
   Static.exists_expensive t h m
 
 /-- The balanced tree has height `⌊log₂ n⌋ + 1`… -/
-theorem balanced_height (n : Nat) (h : 0 < n) : height (balanced n) = Nat.log2 n + 1 :=
-  Static.balanced_height n h
+theorem balanced_height_eq (n : Nat) (h : 0 < n) : height (balanced n) = Nat.log2 n + 1 :=
+  Static.balanced_height_eq n h
 
 /-- …the minimum: every nonempty tree has height at least `⌊log₂ n⌋ + 1`. -/
-theorem log2_lt_height (t : Tree) (h : 0 < t.size) : Nat.log2 t.size + 1 ≤ height t :=
-  Static.log2_lt_height t h
+theorem log2_add_one_le_height (t : Tree) (h : 0 < t.size) : Nat.log2 t.size + 1 ≤ height t :=
+  Static.log2_add_one_le_height t h
 
 end RotationBST.Classical.Static.Results
 
@@ -55,5 +58,4 @@ end RotationBST.Classical.Static.Results
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Online.Abstract,
   RotationBST.Bounds.StaticTree.Definitions.Abstract,
-  RotationBST.Bounds.Logarithmic.Abstract,
-  RotationBST.Classical.Static.Definitions.Abstract]
+  RotationBST.Bounds.Logarithmic.Abstract]

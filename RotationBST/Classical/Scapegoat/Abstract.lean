@@ -49,6 +49,5 @@ end RotationBST.Classical.Scapegoat.Results
 #check_bst_abstract RotationBST.Classical.Scapegoat.Results allowing [
   RotationBST.Models.Rotation.Abstract,
   RotationBST.Models.Dictionary.Definitions.Abstract,
-  RotationBST.Classical.Static.Definitions.Abstract,
   RotationBST.Classical.WeightBalanced.Definitions.Abstract,
   RotationBST.Classical.Scapegoat.Definitions.Abstract]

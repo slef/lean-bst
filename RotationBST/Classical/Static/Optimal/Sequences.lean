@@ -1,6 +1,7 @@
 module
 
 public import RotationBST.Classical.Static.Optimal.Weights
+public import RotationBST.Models.Rotation.Shapes
 public import RotationBST.Classical.Static.Balanced
 public import RotationBST.Bounds.StaticTree.Abstract
 import Mathlib.Tactic
@@ -11,6 +12,7 @@ import Mathlib.Tactic
 sequence: below every fixed tree, between a third of the entropy bound and the
 entropy bound, and below the balanced tree. -/
 namespace RotationBST.Classical.Static
+open _root_.RotationBST.Tree (balanced)
 
 theorem optTree_counts_size (n : Nat) (xs : List Nat) : (optTree (counts n xs)).size = n := by
   rw [optTree_size, counts_length]
@@ -38,6 +40,6 @@ theorem entropy_le_optCost (n : Nat) (xs : List Nat) (valid : ∀ x ∈ xs, x < 
 
 theorem optCost_le_balanced (n : Nat) (xs : List Nat) (valid : ∀ x ∈ xs, x < n) :
     optCost (counts n xs) ≤ xs.length * (Nat.log2 n + 1) :=
-  (optCost_le_static n xs (balanced n) (balanced_size n) valid).trans (balanced_cost n xs valid)
+  (optCost_le_static n xs (balanced n) (Tree.balanced_size n) valid).trans (balanced_cost n xs valid)
 
 end RotationBST.Classical.Static

@@ -19,6 +19,18 @@ theorem logb_nat_le (n : Nat) : Real.logb 2 n ≤ (n.log2 : ℝ) + 1 := by
   exact h.le
 
 
+theorem logb_nat_nonneg (n : Nat) : 0 ≤ Real.logb 2 n := by
+  by_cases hn : n = 0
+  · subst n; simp
+  · exact Real.logb_nonneg (by norm_num) (by exact_mod_cast Nat.one_le_iff_ne_zero.mpr hn)
+
+/-- Converting the exponent of a power of two to a logarithm. -/
+theorem le_logb_of_pow (N M : Nat) (h : 2 ^ N ≤ M) : (N : ℝ) ≤ Real.logb 2 M := by
+  have hM : 0 < M := lt_of_lt_of_le (Nat.two_pow_pos N) h
+  rw [Real.le_logb_iff_rpow_le (by norm_num) (by exact_mod_cast hM), Real.rpow_natCast]
+  exact_mod_cast h
+
+
 /-- Finite Jensen inequality for positive integer gaps, with an upper bound on
  their sum. The empty list is included using Lean's total division convention. -/
 theorem logSum_le (gs : List Nat) (positive : ∀ g ∈ gs, 0 < g)

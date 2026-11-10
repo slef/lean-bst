@@ -7,6 +7,7 @@ import Mathlib.Tactic
 
 @[expose] public section
 namespace RotationBST.Tests.FingerBaseline
+open _root_.RotationBST.Tree (balanced)
 open Classical.Static
 
 private def one : Tree := .node .nil .nil

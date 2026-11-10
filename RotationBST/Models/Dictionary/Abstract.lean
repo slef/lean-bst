@@ -38,10 +38,10 @@ theorem algorithm_execution (A : Algorithm α) (t : LabelledTree α) (ops : List
     Execution t ops (A.runFrom [] t ops).1 (A.runFrom [] t ops).2.1 (A.runFrom [] t ops).2.2 :=
   A.runFrom_execution [] t ops valid
 
-/-- One rotation changes a depth by at most one. -/
-theorem depth_rotations {s t : Tree} {k : Nat} (h : Rotations s t k) (x : Nat) :
+/-- Each rotation changes a depth by at most one. -/
+theorem rotations_depth_reverse {s t : Tree} {k : Nat} (h : Rotations s t k) (x : Nat) :
     s.depth x ≤ t.depth x + k :=
-  depth_le_rotations h x
+  h.depth_le_reverse x
 
 /-- **The rotation model embeds.** An execution of root accesses with `R`
 rotations is a dictionary execution of the same accesses with main cost at

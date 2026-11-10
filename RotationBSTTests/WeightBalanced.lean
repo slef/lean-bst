@@ -1,11 +1,13 @@
 module
 
 public import RotationBST.Classical.WeightBalanced.Abstract
+public import RotationBST.Models.Rotation.Shapes
 public import RotationBST.Classical.Static.Abstract
 import Mathlib.Tactic
 
 @[expose] public section
 namespace RotationBST.Tests.WeightBalanced
+open _root_.RotationBST.Tree (height balanced)
 open Classical.Static Classical.WeightBalanced
 
 private def path : Nat → Tree
@@ -30,12 +32,12 @@ example : height (rebuild (leftPath 7)).1 = Nat.log2 7 + 1 :=
 example (n : Nat) : (height (balanced n) : ℝ) ≤ Real.logb (1 / (2 / 3)) (n + 1) := by
   have := Results.height_le (2 / 3) (by norm_num) (balanced n)
     (Results.balanced_balanced (2 / 3) le_rfl n)
-  simpa [balanced_size] using this
+  simpa [Tree.balanced_size] using this
 
 -- No tree on 1000 keys is lower than the balanced one.
 example (t : Tree) (h : t.size = 1000) : height (balanced 1000) ≤ height t := by
-  rw [Classical.Static.Results.balanced_height 1000 (by decide)]
-  have := Classical.Static.Results.log2_lt_height t (by omega)
+  rw [Classical.Static.Results.balanced_height_eq 1000 (by decide)]
+  have := Classical.Static.Results.log2_add_one_le_height t (by omega)
   rwa [h] at this
 
 end RotationBST.Tests.WeightBalanced

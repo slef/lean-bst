@@ -11,27 +11,6 @@ and rank changes counted by `insert` are performed. -/
 namespace RotationBST.Classical.RankBalanced
 open Dictionary
 
-theorem leafAt_splice (t : RankedTree) (g : Nat) (hg : g ≤ t.erase.size) : Splice (leafAt t g) g t := by
-  induction t generalizing g with
-  | nil =>
-    have : g = 0 := by simp [LabelledTree.erase, Tree.size] at hg; omega
-    subst this; exact .noLeft
-  | node l k r il ir =>
-    simp only [leafAt]; split
-    · exact .inLeft (il g (by assumption))
-    · rename_i h
-      have := Splice.inRight (l := l) (d := k)
-        (ir (g - l.erase.size - 1) (by simp [LabelledTree.erase, Tree.size] at hg; omega))
-      rwa [show l.erase.size + 1 + (g - l.erase.size - 1) = g by omega] at this
-
-theorem leafAt_size (t : RankedTree) (g : Nat) : (leafAt t g).erase.size = t.erase.size + 1 := by
-  induction t generalizing g with
-  | nil => simp [leafAt, LabelledTree.erase, Tree.size]
-  | node l k r il ir =>
-    simp only [leafAt]; split
-    · simp only [LabelledTree.erase, Tree.size] at il ⊢; rw [il]; omega
-    · simp only [LabelledTree.erase, Tree.size] at ir ⊢; rw [ir]; omega
-
 theorem fixLeft_moves (l' : RankedTree) (k : Int) (r : RankedTree) (a e : Nat) :
     ∃ da de, Moves (.node l' k r) (fixLeft l' k r a e).1 da de ∧
       (fixLeft l' k r a e).2.1 = a + da ∧ (fixLeft l' k r a e).2.2 = e + de := by
@@ -71,11 +50,11 @@ theorem fixRight_moves (l : RankedTree) (k : Int) (r' : RankedTree) (a e : Nat) 
       · exact ⟨0, 0, .refl, rfl, rfl⟩
 
 theorem insert_moves (t : RankedTree) (g : Nat) :
-    Moves (leafAt t g) (insert t g).1 (insert t g).2.1 (insert t g).2.2 := by
+    Moves (t.insertAt g 0) (insert t g).1 (insert t g).2.1 (insert t g).2.2 := by
   induction t generalizing g with
   | nil => exact .refl
   | node l k r il ir =>
-    simp only [leafAt, insert]
+    simp only [LabelledTree.insertAt, insert]
     split
     · obtain ⟨da, de, m, ha, he⟩ := fixLeft_moves (insert l g).1 k r (insert l g).2.1 (insert l g).2.2
       rw [ha, he]
@@ -88,12 +67,12 @@ theorem insert_moves (t : RankedTree) (g : Nat) :
 /-- Insertion is a dictionary step: main cost `1 + depth` of the new leaf plus
 rotations, and one data edit per rank change. -/
 theorem insert_step (t : RankedTree) (g : Nat) (hg : g ≤ t.erase.size) :
-    Step t (.insert g) (insert t g).1 ((leafAt t g).erase.depth g + 1 + (insert t g).2.1) (insert t g).2.2 := by
-  have := Step.insert (s := t) (k := g) hg .refl (leafAt_splice t g hg) (insert_moves t g)
+    Step t (.insert g) (insert t g).1 ((t.insertAt g 0).erase.depth g + 1 + (insert t g).2.1) (insert t g).2.2 := by
+  have := Step.insert (s := t) (k := g) hg .refl (insertAt_splice t g 0 hg) (insert_moves t g)
   simpa using this
 
 theorem insert_size (t : RankedTree) (g : Nat) : (insert t g).1.erase.size = t.erase.size + 1 := by
   have := (insert_moves t g).size
-  rw [leafAt_size] at this; omega
+  rw [insertAt_erase_size] at this; omega
 
 end RotationBST.Classical.RankBalanced

@@ -66,7 +66,7 @@ def TablesCorrect (W : Nat → Nat → Nat) (n len : Nat)
     (t : (Nat → Nat → Nat) × (Nat → Nat → Nat) × Nat) : Prop :=
   ∀ i j, i ≤ j → j - i ≤ len → j ≤ n → t.1 i j = cost W i j ∧ (i < j → t.2.1 i j = root W i j)
 
-theorem knuthEntry_correct (hQ : Quadrangle W) (hM : Monotone W) {n len : Nat}
+theorem knuthEntry_correct (hQ : Quadrangle W) (hM : InclusionMonotone W) {n len : Nat}
     (C K : Nat → Nat → Nat)
     (hC : ∀ i j, i ≤ j → j - i ≤ len → j ≤ n → C i j = cost W i j)
     (hK : ∀ i j, i < j → j - i ≤ len → j ≤ n → K i j = root W i j)
@@ -126,7 +126,7 @@ theorem knuthTables_succ (W : Nat → Nat → Nat) (n len : Nat) :
        (knuthTables W n len).2.2 + ((List.range (n - len)).map fun i => (knuthEntry W
           (knuthTables W n len).1 (knuthTables W n len).2.1 i (i + len + 1)).2.2).sum) := rfl
 
-theorem knuthTables_correct (hQ : Quadrangle W) (hM : Monotone W) (n : Nat) :
+theorem knuthTables_correct (hQ : Quadrangle W) (hM : InclusionMonotone W) (n : Nat) :
     ∀ len, TablesCorrect W n len (knuthTables W n len) := by
   intro len
   induction len with
@@ -161,7 +161,7 @@ theorem telescope (a : Nat → Nat) (m : Nat) (mono : ∀ i < m, a i ≤ a (i + 
     simp only [List.map_cons, List.map_nil, List.sum_cons, List.sum_nil]
     omega
 
-theorem knuthTables_steps (hQ : Quadrangle W) (hM : Monotone W) (n : Nat) :
+theorem knuthTables_steps (hQ : Quadrangle W) (hM : InclusionMonotone W) (n : Nat) :
     ∀ len, len ≤ n → (knuthTables W n len).2.2 ≤ 2 * n * len := by
   intro len
   induction len with
@@ -204,11 +204,11 @@ theorem knuthTables_steps (hQ : Quadrangle W) (hM : Monotone W) (n : Nat) :
         omega
       nlinarith
 
-theorem knuth_cost (hQ : Quadrangle W) (hM : Monotone W) (n : Nat) :
+theorem knuth_cost (hQ : Quadrangle W) (hM : InclusionMonotone W) (n : Nat) :
     (knuth W n).1 = cost W 0 n :=
   ((knuthTables_correct hQ hM n n) 0 n (Nat.zero_le _) (by omega) le_rfl).1
 
-theorem knuth_steps (hQ : Quadrangle W) (hM : Monotone W) (n : Nat) :
+theorem knuth_steps (hQ : Quadrangle W) (hM : InclusionMonotone W) (n : Nat) :
     (knuth W n).2 ≤ 2 * n ^ 2 :=
   (knuthTables_steps hQ hM n n le_rfl).trans (by rw [Nat.pow_two, Nat.mul_assoc])
 

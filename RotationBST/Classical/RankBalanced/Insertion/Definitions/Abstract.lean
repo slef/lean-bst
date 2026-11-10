@@ -12,13 +12,6 @@ needs, ends the rebalancing. Each function returns the tree, the number of
 rotations and the number of rank changes. -/
 namespace RotationBST.Classical.RankBalanced
 
-/-- The tree with a new leaf of rank 0 at gap `g`, before rebalancing. -/
-def leafAt : RankedTree → Nat → RankedTree
-  | .nil, _ => .node .nil 0 .nil
-  | .node l k r, g =>
-      if g ≤ l.erase.size then .node (leafAt l g) k r
-      else .node l k (leafAt r (g - l.erase.size - 1))
-
 /-- Rebalance a node of rank `k` whose left subtree became `l'`. -/
 def fixLeft (l' : RankedTree) (k : Int) (r : RankedTree) (a e : Nat) : RankedTree × Nat × Nat :=
   if k - rank l' ≠ 0 then (.node l' k r, a, e)

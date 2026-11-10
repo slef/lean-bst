@@ -2,6 +2,7 @@ module
 
 public import RotationBST.Bounds.StaticTree.Definitions.Abstract
 public import RotationBST.Models.Pointer.Basic
+public import RotationBST.Models.Rotation.Shapes
 public import RotationBST.Models.Multifinger.Program.Replay.Abstract
 public import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic
@@ -10,37 +11,15 @@ import Mathlib.Tactic
 namespace RotationBST.StaticTree.Trace
 open _root_.RotationBST.Tree (depth)
 
-private theorem root_depth (a b c : Tree) (x : Nat) :
-    depth (.node (.node a b) c) x ≤ depth (.node a (.node b c)) x + 1 ∧
-    depth (.node a (.node b c)) x ≤ depth (.node (.node a b) c) x + 1 := by
-  have index : x - (a.size + 1 + b.size) - 1 = x - a.size - 1 - b.size - 1 := by omega
-  simp only [depth, Tree.size, index]
-  split_ifs <;> omega
-
 /-- A rotation at any depth changes every rank's depth by at most one. -/
 theorem rotate_depth {s t : Tree} (rotation : Rotate s t) (x : Nat) :
-    depth t x ≤ depth s x + 1 := by
-  induction rotation generalizing x with
-  | right => exact (root_depth _ _ _ x).2
-  | left => exact (root_depth _ _ _ x).1
-  | @inLeft a b c rotation ih =>
-    have bound := ih x
-    have size := rotation.size_eq
-    simp only [depth, ← size]
-    split_ifs <;> omega
-  | @inRight a b c rotation ih =>
-    have bound := ih (x - c.size - 1)
-    simp only [depth]
-    split_ifs <;> omega
+    depth t x ≤ depth s x + 1 :=
+  rotation.depth_le x
 
 /-- Depth drift is bounded by the number of actual rotations. -/
 theorem rotations_depth {s t : Tree} {cost : Nat} (rotations : Rotations s t cost) (x : Nat) :
-    depth t x ≤ depth s x + cost := by
-  induction rotations with
-  | refl => omega
-  | step rotation rest ih =>
-    have first := rotate_depth rotation x
-    omega
+    depth t x ≤ depth s x + cost :=
+  rotations.depth_le x
 
 /-- Pointer movements do not change the tree; allowing one rotation per
 instruction bounds every rank's depth after any physical trace. -/
