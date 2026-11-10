@@ -86,6 +86,20 @@ theorem Moves.append {s t u : LabelledTree α} {a e a' e' : Nat} (h : Moves s t 
   | rotate h _ ih => simpa [Nat.add_right_comm] using Moves.rotate h (ih g)
   | edit h _ ih => simpa [Nat.add_right_comm] using Moves.edit h (ih g)
 
+theorem Moves.inLeft {a b : LabelledTree α} {x y : Nat} (h : Moves a b x y) (d : α) (c : LabelledTree α) :
+    Moves (.node a d c) (.node b d c) x y := by
+  induction h with
+  | refl => exact .refl
+  | rotate h _ ih => exact .rotate (.inLeft h) ih
+  | edit h _ ih => exact .edit (.inLeft h) ih
+
+theorem Moves.inRight {a b : LabelledTree α} {x y : Nat} (h : Moves a b x y) (c : LabelledTree α) (d : α) :
+    Moves (.node c d a) (.node c d b) x y := by
+  induction h with
+  | refl => exact .refl
+  | rotate h _ ih => exact .rotate (.inRight h) ih
+  | edit h _ ih => exact .edit (.inRight h) ih
+
 theorem Moves.unit {s t : LabelledTree α} {a e : Nat} (h : Moves s t a e) :
     Moves s.erase.unit t.erase.unit a 0 :=
   moves_of_rotations (rotations_unit h.erase)

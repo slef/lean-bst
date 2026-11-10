@@ -92,6 +92,7 @@ RotationBST/
     WeightBalanced/ bounded balance and its height; rebuilding by rotations
     Scapegoat/      scapegoat trees: height and amortized cost from empty
     RankBalanced/   ranked trees; AVL, red-black and WAVL rules and their heights
+      Insertion/    WAVL/AVL insertion: validity, two rotations, amortized rank changes
     Random/         expected depth in a random treap; insertion builds the treap
                     (rank-balanced, weight-balanced, random trees: planned)
   Algorithms/       Part IV: adaptive algorithms, definitions then bounds
@@ -820,3 +821,34 @@ priorities, and `random_bst_depth` by applying `expected_depth` to the family
 labelled by keys rather than ranks so that insertion is by comparison; on a
 permutation of `0, …, n - 1` keys and ranks coincide. Regression examples are
 in `RotationBSTTests/RandomTrees.lean`.
+
+## Rank-balanced insertion
+
+ROADMAP entry 7, insertion (branch `formalize-rank-insertion`, stacked on
+`formalize-random-insertion`, 2026-11-10).
+
+| File | Content |
+|---|---|
+| `Insertion/Definitions/Abstract.lean` | `leafAt`, `fixLeft`, `fixRight`, `insert`, `insertAll`, `insertEdits` |
+| `Insertion/Certificate.lean` | the splice and the explicit rotation and edit sequence of each case |
+| `Insertion/Validity.lean` | `Post` (what a grown subtree looks like), WAVL and AVL preserved, two rotations |
+| `Insertion/Sequences.lean` | insertions from empty stay AVL; height `≤ log_φ(m + 1)` |
+| `Insertion/Edits.lean` | the 1,1-node potential; `7m` rank changes from empty |
+
+Choices made:
+
+- One functional bottom-up procedure: `insert` recurses to the gap and each
+  level calls `fixLeft` or `fixRight` on the way back. A subtree whose rank
+  grew is a new leaf or a 1,2-node (`Post`), which is what the rotation cases
+  need. AVL is handled as "WAVL with no 2,2-node" (`avl_iff`), preserved by the
+  same case analysis.
+- Each rank change is one data edit of the dictionary model; the certificate
+  lists them explicitly (one demotion for a single rotation; one promotion and
+  two demotions for a double rotation).
+- The library function is `RankBalanced.insert`; with `RankBalanced` open it
+  clashes with Lean's `insert` notation, so tests write it in full.
+- Proofs avoid `split` on the nested `match` of `fixLeft`: `rename_i` gave
+  wrong names there, so the case analysis uses `by_cases` and `cases`.
+
+Regression examples: `RotationBSTTests/RankInsertion.lean` (a promotion, a
+single and a double rotation with their counts, `insertEdits` on three keys).

@@ -297,6 +297,20 @@ Validation of ROADMAP entry 9(b), first part
    audit; regression examples added to RandomTrees.
    scripts/check_imports.py: passed (1536 reachable library modules).
 
+21. WAVL and AVL insertion (ROADMAP 7, insertion)
+   Evidence: Classical/RankBalanced/Insertion/Abstract.lean.
+   Bottom-up insertion with promotions and at most one single or double
+   rotation is a dictionary step whose rank changes are data edits. It keeps
+   the WAVL and the AVL rules and uses at most 2 rotations. After m insertions
+   from the empty tree the height is at most log_phi(m + 1) and at most 7m
+   ranks have changed in total.
+   Not claimed: deletion, red-black insertion, amortized bounds with deletions.
+
+Validation of ROADMAP entry 7, insertion
+   lake build --wfail: passed (9572 jobs), including the whole-library axiom
+   audit and one added regression module (RankInsertion).
+   scripts/check_imports.py: passed (1543 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.

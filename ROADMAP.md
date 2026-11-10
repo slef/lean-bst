@@ -392,6 +392,25 @@ decimal form is not proved). The red-black bound is `2 log₂(n + 1)` in nodes,
 stronger than the target in edges. The WAVL bound is `rank + 1 ≤ 2 log₂(n + 1)`.
 `wavl_height_insertions` is not done (it needs the insertion procedure).
 
+**Insertion: formalized** (branch `formalize-rank-insertion`, stacked on
+`formalize-random-insertion`, 2026-11-10), for the WAVL rule, which is also
+AVL insertion. Definitions in `Classical/RankBalanced/Insertion/Definitions/Abstract.lean`
+(`leafAt`, `fixLeft`, `fixRight`, `insert` returning (tree, rotations, rank
+changes), `insertAll`, `insertEdits`), statements in
+`Classical/RankBalanced/Insertion/Abstract.lean` (`RankBalanced.Results`):
+
+| Statement | Declaration |
+|---|---|
+| insertion is a dictionary step (rank changes are data edits) | `insert_step`, `insert_size` |
+| it keeps the WAVL rule and the AVL rule | `insert_wavl`, `insert_avl` |
+| at most 2 rotations (target `avl_insert_rotations`, `wavl_update_rotations` for insertions) | `insert_rotations` |
+| after `m` insertions from empty, height `≤ log_φ(m + 1)` (target `wavl_height_insertions`, in nodes) | `insertAll_height` |
+| `m` insertions from empty change at most `7m` ranks (target `wavl_amortized_rank_changes`, insertions only) | `insertEdits_empty` |
+
+The amortization uses the number of 1,1-nodes as potential. Still open:
+deletion (WAVL and red-black, with `≤ 2` and `≤ 3` rotations), red-black
+insertion, and amortized rank changes with deletions.
+
 | Statement | Declaration (under `RankBalanced.Results`) |
 |---|---|
 | AVL: rank = height in edges; `height ≤ log_φ(n + 1)` | `avl_height_rank`, `avl_height` |

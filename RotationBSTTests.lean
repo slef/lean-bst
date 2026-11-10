@@ -17,6 +17,7 @@ public import RotationBSTTests.WeightBalanced
 public import RotationBSTTests.RankBalanced
 public import RotationBSTTests.RandomTrees
 public import RotationBSTTests.Scapegoat
+public import RotationBSTTests.RankInsertion
 
 -- Lazy Finger and GreedyASS paper regressions.
 public import RotationBSTTests.ConditionalEntropy

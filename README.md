@@ -70,6 +70,7 @@ is local to this repository; upstream abstract registration is separate work.
 | Classical | Weight balance and its height; rebuilding by rotations | [Weight-balanced](RotationBST/Classical/WeightBalanced/Abstract.lean) |
 | Classical | Scapegoat trees: height and amortized cost | [Scapegoat](RotationBST/Classical/Scapegoat/Abstract.lean) |
 | Classical | AVL, red-black and WAVL rules and their heights | [Rank-balanced](RotationBST/Classical/RankBalanced/Abstract.lean) |
+| Classical | WAVL/AVL insertion: validity, two rotations, amortized rank changes | [Insertion](RotationBST/Classical/RankBalanced/Insertion/Abstract.lean) |
 | Classical | Random treaps and random BSTs: expected depth; insertion builds the treap | [Random](RotationBST/Classical/Random/Abstract.lean) |
 | Algorithms | Move-to-root baseline | [Algorithm](RotationBST/Algorithms/MoveToRoot/Algorithm/Abstract.lean), [correctness](RotationBST/Algorithms/MoveToRoot/Abstract.lean) |
 | Algorithms | Splay: algorithm and results | [Algorithm](RotationBST/Algorithms/Splay/Algorithm/Abstract.lean), [overview](RotationBST/Algorithms/Splay/Abstract.lean) |
