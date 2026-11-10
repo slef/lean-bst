@@ -70,6 +70,8 @@ RotationBST/
     Geometric/      points, arborally satisfied sets, online and offline
                     geometric algorithms, rooted rows of a fixed tree
     Equivalence/    offline ASS <-> region <-> rotation <-> pointer
+    Dictionary/     accesses, insertions and deletions by rank on trees with
+                    node data; search-path cost; the rotation model embeds
   Bounds/           Part II: bounds and their relations
     WorkingSet/     working-set numbers and property
     Abstract.lean   frequency entropy, static optimality, static finger
@@ -661,3 +663,41 @@ Choices made:
   would be a later cleanup.
 
 Regression examples: `RotationBSTTests/OptimalStatic.lean`.
+
+## The dictionary model
+
+ROADMAP entry 6 (branch `formalize-dictionary`, stacked on
+`formalize-optimal-static`, 2026-11-10). The roadmap entry describes the
+design and lists the checked names.
+
+| File | Content |
+|---|---|
+| `Models/Dictionary/Definitions/Abstract.lean` | `Tree.TwoChildren`, `Op`, `Edit`, `Moves`, `Splice`, `Step`, `Execution`, `Algorithm`, `Tree.unit` |
+| `Models/Dictionary/Basic.lean` | sizes, erasing data, deciding `TwoChildren`, depth under rotations, the embedding of the rotation model, static searches |
+| `Models/Dictionary/Abstract.lean` | the statements (`Dictionary.Results`) |
+| `Algorithms/Splay/Updates/Dictionary/` | splay access, insert and delete as dictionary steps |
+
+Choices made:
+
+- Node data are `LabelledTree α` labels and travel with rotations; the shape
+  view is `LabelledTree Unit` (`Tree.unit`). The datum is balance data only;
+  payloads are implicit in the ranks.
+- Every update is a sequence of rotations and data edits around one splice.
+  A splice removes a node with at most one child; insertion is a splice read
+  backwards, so a new node may go above a subtree (splay's root insertion) as
+  well as at a leaf (the classical trees).
+- Deletion of a node with two children splices its predecessor or successor
+  and keeps the node at `x` with its datum, as in the classical algorithms
+  (colours and ranks stay with positions).
+- The search charge is `1 + depth` of the place of the change, in the tree at
+  that moment. Moves before the change are charged as rotations, and a
+  rotation moves a depth by at most one, so the charge is never less than half
+  the honest walk in the original tree plus the rotations. Data edits are a
+  separate counter, as the classical bounds count them separately.
+- Splay's forest model (split, join) is kept as is in `Algorithms/Splay/Updates`;
+  the instance theorems relate each splay update to a dictionary step with
+  main cost at most 3 times splay's charge. A splay `Dictionary.Algorithm`
+  (with explicit costs) is not defined.
+
+Regression examples: `RotationBSTTests/Dictionary.lean` (a leaf insertion with
+a data edit, a two-children deletion, static searches, the splay instance).

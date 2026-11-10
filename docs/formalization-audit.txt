@@ -207,6 +207,25 @@ Validation of ROADMAP entry 5
    audit and one added regression module (OptimalStatic).
    scripts/check_imports.py: passed (1507 reachable library modules).
 
+15. A dictionary model (ROADMAP 6)
+   Evidence: Models/Dictionary/Definitions/Abstract.lean,
+   Models/Dictionary/Abstract.lean, Algorithms/Splay/Updates/Dictionary/Abstract.lean.
+   Operations by rank (access, insert at a gap, delete) on trees with node
+   data. A step is rotations and data edits around one splice of a node with
+   at most one child; the main cost is 1 + the depth of the place of the
+   change plus all rotations, data edits are counted separately. Every
+   rotation-model execution of m accesses with R rotations is a dictionary
+   execution with main cost <= m + 2R; searching without moving costs the
+   static search cost; splay access, insert and delete are dictionary steps
+   with main cost at most 2, 3 and 2 times splay's charge.
+   Not claimed: split and join, a pointer machine with allocation, payload
+   data beyond implicit ranks, or a splay Dictionary.Algorithm.
+
+Validation of ROADMAP entry 6
+   lake build --wfail: passed (9496 jobs), including the whole-library axiom
+   audit and one added regression module (Dictionary).
+   scripts/check_imports.py: passed (1514 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.

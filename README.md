@@ -58,6 +58,7 @@ is local to this repository; upstream abstract registration is separate work.
 | Models | Rooted-region (touched-subtree) model | [Region](RotationBST/Models/Region/View/Abstract.lean) |
 | Models | Arborally satisfied sets, online and offline geometric algorithms | [Definitions](RotationBST/Models/Geometric/Definitions/Abstract.lean), [online](RotationBST/Models/Geometric/Online/Abstract.lean), [results](RotationBST/Models/Geometric/Abstract.lean) |
 | Models | Offline and online geometric equivalence | [Equivalence](RotationBST/Models/Equivalence/Abstract.lean) |
+| Models | Dictionary model: accesses, insertions, deletions with node data | [Dictionary](RotationBST/Models/Dictionary/Abstract.lean), [definitions](RotationBST/Models/Dictionary/Definitions/Abstract.lean) |
 | Bounds | Working set, static optimality, static finger, unified | [Working set](RotationBST/Bounds/WorkingSet/Abstract.lean), [static](RotationBST/Bounds/Abstract.lean), [unified](RotationBST/Bounds/Unified/Abstract.lean) |
 | Bounds | Working set ⇒ static optimality ⇒ static finger; dynamic finger ⇒ static finger ⇒ logarithmic | [Implications](RotationBST/Bounds/Implications/Abstract.lean), [dynamic finger](RotationBST/Bounds/DynamicFinger/Abstract.lean), [baseline](RotationBST/Bounds/Logarithmic/Abstract.lean) |
 | Bounds | Fixed-tree benchmark and entropy lower bound | [Static tree](RotationBST/Bounds/StaticTree/Abstract.lean) |

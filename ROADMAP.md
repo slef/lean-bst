@@ -287,6 +287,51 @@ trees" with `@decl`s and a headline. In `boundsmap.js`, drop `todo: true` from
 
 ## 6. A dictionary model
 
+**Status.** Formalized (branch `formalize-dictionary`, stacked on
+`formalize-optimal-static`, 2026-11-10); the book update below is pending.
+Definitions in `Models/Dictionary/Definitions/Abstract.lean`, results in
+`Models/Dictionary/Abstract.lean` (`RotationBST.Dictionary.Results`), the splay
+instance in `Algorithms/Splay/Updates/Dictionary/Abstract.lean`
+(`RotationBST.Splay.Updates.Results`). The design:
+
+- Trees with node data are `LabelledTree α` (the datum is balance data; keys
+  stay inorder ranks). `Tree.unit` is a shape with no data.
+- `Op`: `access x`, `insert k` (gap), `delete x`; `Op.Valid`, `Op.resize`,
+  `Op.ValidSeq`. Split and join are not included.
+- Primitive `Moves s t a e`: `a` rotations (data travel with nodes) and `e`
+  data edits (`Edit`: change one node's datum), in any order.
+- One structural change per update, `Splice t x u`: the node of rank `x` has at
+  most one child and is removed (read backwards: a node is inserted at rank
+  `x`, as a leaf or above a subtree).
+- `Step s op t c e`. Access: moves; `c = 1 + depth x` in `s` plus rotations.
+  Insert: moves, splice in, moves; `c = 1 + depth` of the new node plus all
+  rotations. Delete: moves, splice out the node of rank `x`, or its predecessor
+  or successor when `x` has two children (`Tree.TwoChildren`; the node at `x`
+  keeps its datum), moves; `c = 1 + depth` of the spliced node plus rotations.
+  `e` is the number of data edits.
+- `Execution` over a list of operations; `Algorithm α` (online: past
+  operations, tree, operation ↦ tree, `c`, `e`, certified by `Step`) with
+  `runFrom`.
+
+Differences from the requirements above: the search charge is taken in the
+tree where the structural change happens, not necessarily the tree before the
+operation. Without moves before the change (the classical trees) this is the
+search path in the tree before the operation, and one rotation changes a
+depth by at most one (`depth_rotations`), so moves before the change pay for
+any shortcut. An insertion above a subtree pays the path to that subtree, not
+to the gap below it. The generic parts of `Algorithms/Splay/Updates/` were not
+moved: the splay model is a forest model with split and join, and it stays as
+it is; the instance theorems relate the two. Checked names:
+
+| Statement | Declaration |
+|---|---|
+| sizes; validity; data do not affect `c` | `Dictionary.Results.step_size`, `step_valid`, `step_unit`, `execution_unit` |
+| an online algorithm executes every valid sequence | `Dictionary.Results.algorithm_execution` |
+| a rotation changes a depth by at most one | `Dictionary.Results.depth_rotations` |
+| the rotation model embeds, `c ≤ m + 2R` (target: `≤ 2(m + R)`) | `Dictionary.Results.of_execution` |
+| searching without moving costs `∑ (1 + depth)` = `StaticTree.cost` | `Dictionary.Results.static_execution` |
+| splay access, insert, delete are steps, `c ≤ 2, 3, 2 ×` splay's charge | `Splay.Updates.Results.dictionary_access`, `dictionary_insert`, `dictionary_delete` |
+
 **Source.** Book chapter "Insertions and deletions" (`models/dictionary.md`).
 It generalizes `Splay.Updates.Step` and `Splay.Updates.Execution` (book
 section "Beyond single accesses", `algorithms/beyond.md`).

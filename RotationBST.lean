@@ -13,6 +13,7 @@ public import RotationBST.Models.Pointer.Abstract
 public import RotationBST.Models.Region.View.Abstract
 public import RotationBST.Models.Geometric.Abstract
 public import RotationBST.Models.Equivalence.Abstract
+public import RotationBST.Models.Dictionary.Abstract
 
 public import RotationBST.Models.Labelled.Search.Abstract
 public import RotationBST.Models.LinkedSearch.Abstract
@@ -51,6 +52,7 @@ public import RotationBST.Classical.Static.Optimal.Abstract
 -- Part III: algorithms.
 public import RotationBST.Algorithms.MoveToRoot.Abstract
 public import RotationBST.Algorithms.Splay.Abstract
+public import RotationBST.Algorithms.Splay.Updates.Dictionary.Abstract
 public import RotationBST.Algorithms.GreedyASS.Abstract
 public import RotationBST.Algorithms.Simulation.Abstract
 public import RotationBST.Algorithms.Tango.Abstract
