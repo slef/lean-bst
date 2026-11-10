@@ -267,6 +267,22 @@ Validation of ROADMAP entry 9(a)
    audit and one added regression module (RandomTrees).
    scripts/check_imports.py: passed (1527 reachable library modules).
 
+19. Scapegoat trees (ROADMAP 8, scapegoat part)
+   Evidence: Classical/Scapegoat/Abstract.lean.
+   For rational 1/2 < alpha < 1, scapegoat insertion (leaf, then rebuild the
+   deepest too-deep subtree when the leaf is deeper than log_{1/alpha} N) and
+   deletion (plain, then rebuild everything below alpha N keys) are dictionary
+   steps. From the empty tree every depth stays <= log_{1/alpha} n + 1, and m
+   operations cost at most the sum of (2/(2 alpha - 1) + 1)(log_{1/alpha} n_i + 2)
+   + 1 + 2 alpha/(1 - alpha) over the key counts n_i, rebuilding included.
+   Not claimed: the cost of computing subtree sizes during the scapegoat
+   search (not a counter of the model), BB[alpha] trees.
+
+Validation of the scapegoat trees
+   lake build --wfail: passed (9552 jobs), including the whole-library axiom
+   audit and one added regression module (Scapegoat).
+   scripts/check_imports.py: passed (1534 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.

@@ -49,6 +49,7 @@ public import RotationBST.Bounds.StaticTree.Trace.Abstract
 public import RotationBST.Classical.Static.Abstract
 public import RotationBST.Classical.Static.Optimal.Abstract
 public import RotationBST.Classical.WeightBalanced.Abstract
+public import RotationBST.Classical.Scapegoat.Abstract
 public import RotationBST.Classical.RankBalanced.Abstract
 public import RotationBST.Classical.Random.Abstract
 

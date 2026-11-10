@@ -90,6 +90,7 @@ RotationBST/
     Static/         the balanced tree, its depth and cost; deep keys in every tree
       Optimal/      interval recurrence, Yao's lemma, Knuth's O(n²) algorithm
     WeightBalanced/ bounded balance and its height; rebuilding by rotations
+    Scapegoat/      scapegoat trees: height and amortized cost from empty
     RankBalanced/   ranked trees; AVL, red-black and WAVL rules and their heights
     Random/         expected depth in a random treap
                     (rank-balanced, weight-balanced, random trees: planned)
@@ -768,3 +769,39 @@ number of keys on the search path minus one, and applies
 It only uses the random-treap development of `Structures/Treap/Random`, which
 is unchanged. Regression examples: `RotationBSTTests/RandomTrees.lean`
 (the values `5/6` and `1` for three keys).
+
+## Scapegoat trees
+
+ROADMAP entry 8, scapegoat part (branch `formalize-scapegoat`, stacked on
+`formalize-random-depth`, 2026-11-10).
+
+| File | Content |
+|---|---|
+| `Classical/Scapegoat/Definitions/Abstract.lean` | `insertLeaf`, `bstDelete`, `deleteTarget`, `Violates`, `fix`, `State`, `step`, `run`, `sizesFrom`, `bound` |
+| `Shape.lean` | plain insertion and deletion: sizes, splice certificates, depths, the imbalance potential `phi` |
+| `Fix.lean` | the scapegoat search: rotation certificate, depths, payment by `phi` |
+| `Analysis.lean` | dictionary steps, the invariant `Inv`, the per-step amortized inequality (in `ℚ`) |
+| `Bounds.lean` | depths and costs in real logarithms |
+| `Abstract.lean` | the statements |
+
+Choices made:
+
+- `α` is rational, so the algorithm runs (`decide +kernel` evaluates small
+  runs in the tests); the bounds cast it to `ℝ`.
+- The height test is log-free: a node at depth `d` in a subtree of size `s`
+  is too deep when `α^d · s < 1`. `fix` rebuilds the deepest such subtree on
+  the path, whose child on the path then holds more than `α s` keys; that is
+  what makes the imbalance potential pay for the rebuild.
+- The invariant `α^depth · N ≥ 1` survives a rebuild because a rebuilt subtree
+  of size `s` has height `⌊log₂ s⌋`, smaller than the violating depth; this
+  needs `α ≥ 1/2`. `fix_depth` is stated for any downward-closed depth
+  condition.
+- The cost bound is per operation in the key count before it, `bound α n`,
+  summed over `sizesFrom 0 ops`. Searches are charged through the dictionary
+  model; finding the scapegoat (subtree sizes) is not charged, as the model
+  has no counter for it.
+- Not packaged as a `Dictionary.Algorithm`: the count `N` lives in the state,
+  not in the tree.
+
+Regression examples: `RotationBSTTests/Scapegoat.lean` (small runs evaluated
+in the kernel, the first violating depth for `α = 2/3`, the theorems at `2/3`).

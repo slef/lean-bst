@@ -457,6 +457,30 @@ trees as a `Dictionary.Algorithm` with their height invariant and `O(m log n)`
 total cost, and the common "a perfectly balanced subtree needs
 `Ω((β - 1/2)s)` updates" lemma.
 
+**Scapegoat trees: formalized** (branch `formalize-scapegoat`, stacked on
+`formalize-random-depth`, 2026-11-10). Statements in
+`Classical/Scapegoat/Abstract.lean` (`RotationBST.Classical.Scapegoat.Results`),
+definitions in `Classical/Scapegoat/Definitions/Abstract.lean`. The parameter
+`α` is a rational with `1/2 < α < 1` (so `step` and `run` are executable); the
+state is the shape and `N`, the largest key count since the last full
+rebuild. Insertion adds a leaf; if its depth `d` has `α^d N < 1` it rebuilds
+(`rebuild`, entry 8) the deepest subtree on the path whose height exceeds
+`log_{1/α}` of its size. Deletion is plain (successor for two children) and
+rebuilds the whole tree when fewer than `αN` keys remain. Costs are the
+dictionary model's (entry 6).
+
+| Statement | Declaration (under `Scapegoat.Results`) |
+|---|---|
+| every operation is a dictionary step; runs are dictionary executions | `step_dictionary`, `run_execution` |
+| from empty, every depth `≤ log_{1/α} n + 1` | `reachable_depth` |
+| from empty, total cost `≤ ∑ bound α nᵢ`, `bound α n = (2/(2α−1) + 1)(log_{1/α} n + 2) + 1 + 2α/(1−α)` | `total_cost` |
+| hence `≤ m · bound α m` | `total_cost_le` |
+
+The analysis (`Classical/Scapegoat/Analysis.lean`) uses the potential
+`(2/(2α−1)) Σ (|size l − size r| − 1)⁺ + (2α/(1−α))(N − n)` and the invariant
+`n ≤ N`, `αN ≤ n`, `α^depth N ≥ 1`. Not done: BB[α], and a
+`Dictionary.Algorithm` packaging (the count `N` is not stored in the tree).
+
 Differences from the targets below: heights use `Classical.Static.height`
 (nodes on a longest path, the same as `Tango.height`, which `Classical` cannot
 import); the height bound needs only `0 < β < 1`; `rebuild` reaches
