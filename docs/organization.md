@@ -91,6 +91,7 @@ RotationBST/
       Optimal/      interval recurrence, Yao's lemma, Knuth's O(n²) algorithm
     WeightBalanced/ bounded balance and its height; rebuilding by rotations
     RankBalanced/   ranked trees; AVL, red-black and WAVL rules and their heights
+    Random/         expected depth in a random treap
                     (rank-balanced, weight-balanced, random trees: planned)
   Algorithms/       Part IV: adaptive algorithms, definitions then bounds
     MoveToRoot/
@@ -755,3 +756,15 @@ Choices made:
 
 Regression examples: `RotationBSTTests/RankBalanced.lean` (a red-black tree
 with a 0-child, a WAVL tree that is not AVL, a chain of 0-children).
+
+## Random search trees: expected depth
+
+ROADMAP entry 9(a) (branch `formalize-random-depth`, stacked on
+`formalize-rank-balanced`, 2026-11-10). `Classical/Random/Depth.lean` proves
+`expected_depth` (`H(x + 1) + H(n - x) - 2`) and `expected_depth_le` (`2 ln n`);
+`Classical/Random/Abstract.lean` states them. The proof writes the depth as the
+number of keys on the search path minus one, and applies
+`Treap.Random.common_ancestor_probability` with `x = y` and uniform weights.
+It only uses the random-treap development of `Structures/Treap/Random`, which
+is unchanged. Regression examples: `RotationBSTTests/RandomTrees.lean`
+(the values `5/6` and `1` for three keys).

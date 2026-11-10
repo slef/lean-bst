@@ -523,6 +523,19 @@ edge of `boundsmap.js`.
 
 ## 9. Random search trees
 
+**Status.** Step (a) formalized (branch `formalize-random-depth`, stacked on
+`formalize-rank-balanced`, 2026-11-10); steps (b) and (c) are open. The
+statement is the target (a) below with explicit casts:
+`RotationBST.Classical.Random.Results.expected_depth` in
+`Classical/Random/Abstract.lean`, with `average` meaning
+`Treap.Random.average` and `harmonic` Mathlib's (cast from `ℚ`). The proof is
+in `Classical/Random/Depth.lean`, not next to `Structures/Treap/Random/Common.lean`:
+it needs `LazyFinger.searchPath_length` from `Bounds/`, which `Structures/`
+may not import. A corollary `expected_depth_le` bounds every expected depth by
+`2 ln n`, using `H(k) ≤ 1 + ln k` proved there (Mathlib's
+`harmonic_le_one_add_log` needs the integration library, which is not built
+locally).
+
 **Source.** T. N. Hibbard, *Some combinatorial properties of certain trees
 with applications to searching and sorting*, JACM 9 (1962); R. Seidel and
 C. R. Aragon, *Randomized search trees*, Algorithmica 16 (1996); J. Vuillemin,

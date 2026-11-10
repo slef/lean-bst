@@ -69,6 +69,7 @@ is local to this repository; upstream abstract registration is separate work.
 | Classical | Optimal static trees: recurrence, Yao's lemma, Knuth's algorithm | [Optimal](RotationBST/Classical/Static/Optimal/Abstract.lean) |
 | Classical | Weight balance and its height; rebuilding by rotations | [Weight-balanced](RotationBST/Classical/WeightBalanced/Abstract.lean) |
 | Classical | AVL, red-black and WAVL rules and their heights | [Rank-balanced](RotationBST/Classical/RankBalanced/Abstract.lean) |
+| Classical | Expected depth in a random treap | [Random](RotationBST/Classical/Random/Abstract.lean) |
 | Algorithms | Move-to-root baseline | [Algorithm](RotationBST/Algorithms/MoveToRoot/Algorithm/Abstract.lean), [correctness](RotationBST/Algorithms/MoveToRoot/Abstract.lean) |
 | Algorithms | Splay: algorithm and results | [Algorithm](RotationBST/Algorithms/Splay/Algorithm/Abstract.lean), [overview](RotationBST/Algorithms/Splay/Abstract.lean) |
 | Algorithms | GreedyASS | [Algorithm](RotationBST/Algorithms/GreedyASS/Algorithm/Abstract.lean), [legality](RotationBST/Algorithms/GreedyASS/Abstract.lean), [finger bounds](RotationBST/Algorithms/GreedyASS/Performance/Abstract.lean) |
@@ -91,7 +92,7 @@ The source tree follows the textbook order rather than the source papers:
 |---|---|
 | `Models/` | The rotation model on shapes and its equivalent formulations: labelled BSTs, online algorithms and cost conventions, the pointer machine, the rooted-region model, arboral geometry, and the equivalences between them. |
 | `Bounds/` | Sequence bounds and their relations: working set, static optimality, static finger, dynamic finger, the logarithmic baseline, unified, the fixed-tree benchmark, Wilber's interleave lower bound, and cost normalization. |
-| `Classical/` | Classical search trees that do not adapt to the requests. So far the balanced and the optimal static trees, and the height bounds of weight- and rank-balanced trees. |
+| `Classical/` | Classical search trees that do not adapt to the requests. So far the balanced and the optimal static trees, the height bounds of weight- and rank-balanced trees, and the expected depth of random treaps. |
 | `Algorithms/` | One directory per algorithm: definition first, then its upper and lower bounds. Move-to-root, splay, GreedyASS, the causal geometric simulation, and Tango. |
 | `Structures/` | Supporting data structures: next-touch treaps and multiway finger/split trees. |
 | `Audit/` | The `#check_bst_abstract` command. |

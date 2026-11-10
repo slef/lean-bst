@@ -15,6 +15,7 @@ public import RotationBSTTests.OptimalStatic
 public import RotationBSTTests.Dictionary
 public import RotationBSTTests.WeightBalanced
 public import RotationBSTTests.RankBalanced
+public import RotationBSTTests.RandomTrees
 
 -- Lazy Finger and GreedyASS paper regressions.
 public import RotationBSTTests.ConditionalEntropy

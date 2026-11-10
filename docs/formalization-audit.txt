@@ -254,6 +254,19 @@ Validation of ROADMAP entry 7 (static half)
    audit and one added regression module (RankBalanced).
    scripts/check_imports.py: passed (1524 reachable library modules).
 
+18. Expected depth in a random treap (ROADMAP 9(a))
+   Evidence: Classical/Random/Abstract.lean.
+   For every family of treaps of the n keys indexed by priority orders, the
+   expectation of the depth of key x over a uniformly random order is
+   H(x + 1) + H(n - x) - 2, hence at most 2 ln n.
+   Not claimed: insertion without rebalancing builds the treap (9(b)),
+   treap updates, randomized BSTs or zip trees (9(c)), the height (S2).
+
+Validation of ROADMAP entry 9(a)
+   lake build --wfail: passed (9536 jobs), including the whole-library axiom
+   audit and one added regression module (RandomTrees).
+   scripts/check_imports.py: passed (1527 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.

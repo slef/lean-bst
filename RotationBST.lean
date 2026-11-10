@@ -50,6 +50,7 @@ public import RotationBST.Classical.Static.Abstract
 public import RotationBST.Classical.Static.Optimal.Abstract
 public import RotationBST.Classical.WeightBalanced.Abstract
 public import RotationBST.Classical.RankBalanced.Abstract
+public import RotationBST.Classical.Random.Abstract
 
 -- Part III: algorithms.
 public import RotationBST.Algorithms.MoveToRoot.Abstract
