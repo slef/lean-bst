@@ -60,9 +60,21 @@ theorem exists_competitive (n : Nat) :
             (14 * Real.logb 2 (Nat.log2 n + 1) + 6) * n :=
   Tango.exists_online_bound n
 
+/-- **Tango with linear startup.** The same statement with startup `44n`
+instead of `O(n log log n)`, at a larger coefficient. The algorithm runs the
+bottom-up policy (`Tango.BottomUp`), which pays for first preference settings
+from local credit, at most `42n` on the balanced reference; reaching the
+reference from another initial tree costs at most `2n` more. -/
+theorem exists_competitive_linear (n : Nat) :
+    ∃ A : Algorithm, ∀ {start finish : Tree} {xs : List Nat} {offline : Nat},
+      start.size = n → Execution start xs finish offline →
+        (A.totalCost start xs : ℝ) ≤
+          (70 * Real.logb 2 (Nat.log2 n + 1) + 20) * (offline + xs.length : Nat) + 44 * n :=
+  Tango.exists_online_linear_bound n
+
 end RotationBST.Tango.Algorithm.Results
 
-/-- info: abstract audit passed for `RotationBST.Tango.Algorithm.Results`: 6 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Tango.Algorithm.Results`: 7 root declarations -/
 #guard_msgs in
 #check_bst_abstract RotationBST.Tango.Algorithm.Results allowing [
   RotationBST.Models.Rotation.Abstract, RotationBST.Models.Online.Abstract,

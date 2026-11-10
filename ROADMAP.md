@@ -115,6 +115,14 @@ new section after it (an entry under `splay-trees` in `book/src/book.json`).
 
 ## 3. Tango as one online algorithm with linear startup
 
+**Status.** Formalized (branch `formalize-tango-linear`, 2026-11-09); the book
+update below is pending. The statement is exactly the target below:
+`RotationBST.Tango.Algorithm.Results.exists_competitive_linear` in
+`Algorithms/Tango/Algorithm/Abstract.lean`, proved in
+`Algorithms/Tango/Algorithm/Linear.lean` (as `Tango.exists_online_linear_bound`)
+by composing `BottomUp.balanced_policy` with `Policy.rotation_algorithm`.
+The algorithm is chosen before the start tree, the requests and the comparator.
+
 **Source.** Book chapter "Tango with linear startup" (`book/src/chapters/algorithms/tango-linear.md`). Its headline combines two library theorems by hand; no single theorem states the result.
 
 **Statement.** Compose `Tango.BottomUp.Results.balanced_policy` with `Tango.Algorithm.Rotation.Results.rotation_algorithm`. The first gives `run + m ≤ 42n + (70L + 20)(R + m)`. The second gives `totalCost ≤ m + run + 2n`. Together:

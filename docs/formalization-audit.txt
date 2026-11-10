@@ -311,6 +311,20 @@ Validation of ROADMAP entry 7, insertion
    audit and one added regression module (RankInsertion).
    scripts/check_imports.py: passed (1543 reachable library modules).
 
+22. Tango with linear startup as one online algorithm (ROADMAP 3)
+   Evidence: Algorithms/Tango/Algorithm/Abstract.lean: exists_competitive_linear.
+   For every n, one Algorithm, fixed before the start tree, the requests and
+   the comparator, has total cost <= (70 log2(floor(log2 n) + 1) + 20)(R + m)
+   + 44n for every offline execution of cost R from any tree on n keys. The
+   proof composes the bottom-up policy bound with the 2n-reset erasure.
+   Reconstruction of private marks from history is uncharged, as for
+   exists_competitive.
+
+Validation of ROADMAP entry 3
+   lake build --wfail: passed (9446 jobs), including the whole-library axiom
+   audit and one added regression module (TangoLinear).
+   scripts/check_imports.py: passed (1491 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.
