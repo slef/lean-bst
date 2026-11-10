@@ -39,9 +39,17 @@ theorem exists_expensive (t : Tree) (h : 0 < t.size) (m : Nat) :
     ∃ x < t.size, m * (Nat.log2 t.size + 1) ≤ StaticTree.cost t (List.replicate m x) :=
   Static.exists_expensive t h m
 
+/-- The balanced tree has height `⌊log₂ n⌋ + 1`… -/
+theorem balanced_height (n : Nat) (h : 0 < n) : height (balanced n) = Nat.log2 n + 1 :=
+  Static.balanced_height n h
+
+/-- …the minimum: every nonempty tree has height at least `⌊log₂ n⌋ + 1`. -/
+theorem log2_lt_height (t : Tree) (h : 0 < t.size) : Nat.log2 t.size + 1 ≤ height t :=
+  Static.log2_lt_height t h
+
 end RotationBST.Classical.Static.Results
 
-/-- info: abstract audit passed for `RotationBST.Classical.Static.Results`: 6 root declarations -/
+/-- info: abstract audit passed for `RotationBST.Classical.Static.Results`: 8 root declarations -/
 #guard_msgs in
 #check_bst_abstract RotationBST.Classical.Static.Results allowing [
   RotationBST.Models.Rotation.Abstract,

@@ -226,6 +226,20 @@ Validation of ROADMAP entry 6
    audit and one added regression module (Dictionary).
    scripts/check_imports.py: passed (1514 reachable library modules).
 
+16. Weight-balanced trees, static half (ROADMAP 8, partly)
+   Evidence: Classical/WeightBalanced/Abstract.lean, Classical/Static/Abstract.lean.
+   A tree in which every child's weight (size + 1) is at most beta times its
+   parent's has height <= log_{1/beta}(n + 1) for 0 < beta < 1; the balanced
+   tree is beta-balanced for beta >= 2/3 and has the minimum height
+   floor(log2 n) + 1. rebuild t is the balanced tree, reached from t by an
+   explicit sequence of at most 2n rotations.
+   Not claimed: BB[alpha] rebalancing, scapegoat trees, amortized bounds.
+
+Validation of ROADMAP entry 8 (static half)
+   lake build --wfail: passed (9510 jobs), including the whole-library axiom
+   audit and one added regression module (WeightBalanced).
+   scripts/check_imports.py: passed (1520 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.

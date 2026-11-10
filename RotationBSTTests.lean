@@ -13,6 +13,7 @@ public import RotationBSTTests.Arboral
 public import RotationBSTTests.FingerBaseline
 public import RotationBSTTests.OptimalStatic
 public import RotationBSTTests.Dictionary
+public import RotationBSTTests.WeightBalanced
 
 -- Lazy Finger and GreedyASS paper regressions.
 public import RotationBSTTests.ConditionalEntropy

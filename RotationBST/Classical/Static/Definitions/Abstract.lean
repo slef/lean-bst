@@ -16,4 +16,9 @@ def balanced : Nat → Tree
   | n + 1 => .node (balanced ((n + 1) / 2)) (balanced (n / 2))
 termination_by n => n
 
+/-- The number of nodes on a longest root-to-leaf path (`0` for the empty tree). -/
+def height : Tree → Nat
+  | .nil => 0
+  | .node l r => max (height l) (height r) + 1
+
 end RotationBST.Classical.Static

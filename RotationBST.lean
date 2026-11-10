@@ -48,6 +48,7 @@ public import RotationBST.Bounds.StaticTree.Trace.Abstract
 -- Classical search trees (Part III of the book).
 public import RotationBST.Classical.Static.Abstract
 public import RotationBST.Classical.Static.Optimal.Abstract
+public import RotationBST.Classical.WeightBalanced.Abstract
 
 -- Part III: algorithms.
 public import RotationBST.Algorithms.MoveToRoot.Abstract

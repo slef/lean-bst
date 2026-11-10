@@ -89,6 +89,7 @@ RotationBST/
   Classical/        Part III: classical, non-adaptive trees
     Static/         the balanced tree, its depth and cost; deep keys in every tree
       Optimal/      interval recurrence, Yao's lemma, Knuth's O(n²) algorithm
+    WeightBalanced/ bounded balance and its height; rebuilding by rotations
                     (rank-balanced, weight-balanced, random trees: planned)
   Algorithms/       Part IV: adaptive algorithms, definitions then bounds
     MoveToRoot/
@@ -701,3 +702,29 @@ Choices made:
 
 Regression examples: `RotationBSTTests/Dictionary.lean` (a leaf insertion with
 a data edit, a two-children deletion, static searches, the splay instance).
+
+## Weight-balanced trees: the static half
+
+ROADMAP entry 8, partly (branch `formalize-weight-balanced`, stacked on
+`formalize-dictionary`, 2026-11-10). Files: `Classical/WeightBalanced/`
+(`Definitions/Abstract.lean`: `weight`, `Balanced`, `vineCost`, `rebuild`;
+`Height.lean`; `Rebuild.lean`; `Abstract.lean`) and `Classical/Static/Height.lean`
+(`height` of the balanced tree, minimum height). `Classical.Static.height` was
+added to `Classical/Static/Definitions/Abstract.lean`.
+
+Choices made:
+
+- `Balanced β` bounds both children's weights (size + 1) by `β` times the
+  parent's. The height bound `(1/β)^height ≤ weight` needs only `β > 0`; the
+  logarithmic form needs `β < 1`.
+- `rebuild` is honest: its count is the length of an explicit rotation
+  sequence (`vineCost t` rotations to the right spine, `vineCost (balanced n)`
+  back), certified by `rebuild_rotations`. The way back reverses the spine
+  procedure (`Rotations.symm`) instead of Day–Stout–Warren compression, and
+  lands on `balanced n` exactly.
+- The balanced tree is `β`-balanced only for `β ≥ 2/3` (two keys force it),
+  so rebuilding restores bounded balance for those `β`.
+- The dynamic results (BB[α] rotations, scapegoat trees) need the dictionary
+  model of entry 6 and are not done.
+
+Regression examples: `RotationBSTTests/WeightBalanced.lean`.

@@ -418,6 +418,32 @@ headlines. Update `classical/part-classical.md` and `bounds/part-bounds.md`
 
 ## 8. Weight-balanced and scapegoat trees
 
+**Status.** Partly formalized (branch `formalize-weight-balanced`, stacked on
+`formalize-dictionary`, 2026-11-10): the static half. Statements in
+`Classical/WeightBalanced/Abstract.lean`
+(`RotationBST.Classical.WeightBalanced.Results`), definitions in
+`Classical/WeightBalanced/Definitions/Abstract.lean`. Still open: BB[α]
+rebalancing by single and double rotations with `O(m)` rotations, scapegoat
+trees as a `Dictionary.Algorithm` with their height invariant and `O(m log n)`
+total cost, and the common "a perfectly balanced subtree needs
+`Ω((β - 1/2)s)` updates" lemma.
+
+Differences from the targets below: heights use `Classical.Static.height`
+(nodes on a longest path, the same as `Tango.height`, which `Classical` cannot
+import); the height bound needs only `0 < β < 1`; `rebuild` reaches
+`Classical.Static.balanced` exactly (not just its height), by rotating to the
+right spine and then running the spine procedure of the balanced tree
+backwards, so the Day–Stout–Warren compression is not used; the height
+statement needs `0 < n`. Checked names:
+
+| Statement | Declaration |
+|---|---|
+| `height ≤ log_{1/β}(n + 1)` for `β`-balanced trees | `WeightBalanced.Results.height_le` |
+| the balanced tree is `β`-balanced for `β ≥ 2/3` | `WeightBalanced.Results.balanced_balanced` |
+| `rebuild t` is the balanced tree, height `⌊log₂ n⌋ + 1` | `WeightBalanced.Results.rebuild_tree`, `rebuild_height` |
+| it is reached by exactly `(rebuild t).2 ≤ 2n` rotations | `WeightBalanced.Results.rebuild_rotations`, `rebuild_cost` |
+| minimum height: `height t ≥ ⌊log₂ n⌋ + 1`; the balanced tree attains it | `Static.Results.log2_lt_height`, `balanced_height` |
+
 **Source.** J. Nievergelt and E. M. Reingold, *Binary search trees of bounded
 balance*, SIAM J. Comput. 2(1) (1973); N. Blum and K. Mehlhorn, *On the
 average number of rebalancing operations in weight-balanced trees*, TCS 11
