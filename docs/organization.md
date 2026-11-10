@@ -90,6 +90,7 @@ RotationBST/
     Static/         the balanced tree, its depth and cost; deep keys in every tree
       Optimal/      interval recurrence, Yao's lemma, Knuth's O(n²) algorithm
     WeightBalanced/ bounded balance and its height; rebuilding by rotations
+    RankBalanced/   ranked trees; AVL, red-black and WAVL rules and their heights
                     (rank-balanced, weight-balanced, random trees: planned)
   Algorithms/       Part IV: adaptive algorithms, definitions then bounds
     MoveToRoot/
@@ -728,3 +729,29 @@ Choices made:
   model of entry 6 and are not done.
 
 Regression examples: `RotationBSTTests/WeightBalanced.lean`.
+
+## Rank-balanced trees: the static half
+
+ROADMAP entry 7, partly (branch `formalize-rank-balanced`, stacked on
+`formalize-weight-balanced`, 2026-11-10). Files: `Classical/RankBalanced/`
+(`Definitions/Abstract.lean`: `RankedTree`, `rank`, `Rule`, `NoZeroChild`,
+`Rule.Local`, `Valid`; `Heights.lean`; `Abstract.lean`).
+
+Choices made:
+
+- One representation for the three rules, as in Haeupler, Sen and Tarjan:
+  `LabelledTree Int`, a missing child at rank `-1`, so the rank is the node
+  datum of the dictionary model (entry 6) and promotions are data edits.
+- Heights count nodes, the convention of `Classical.Static.height`, so the
+  bounds read `height ≤ log_φ(n + 1)` (AVL) and `≤ 2 log₂(n + 1)`
+  (red-black, WAVL).
+- The proofs are minimum-size inductions: `φ^height ≤ n + 1` for AVL (using
+  `φ² = φ + 1` from Mathlib's `Real.goldenRatio`; this imports
+  `Mathlib.NumberTheory.Real.GoldenRatio`, which had to be built once),
+  `2^(rank+1) ≤ n + 1` for red-black, `2^(rank+1) ≤ (n + 1)²` for WAVL; the
+  red-black height uses a joint induction (a 0-child's subtree is one level
+  shorter than its rank allows).
+- Insertion, deletion and their rotation and rank-change counts are not done.
+
+Regression examples: `RotationBSTTests/RankBalanced.lean` (a red-black tree
+with a 0-child, a WAVL tree that is not AVL, a chain of 0-children).

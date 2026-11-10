@@ -240,6 +240,20 @@ Validation of ROADMAP entry 8 (static half)
    audit and one added regression module (WeightBalanced).
    scripts/check_imports.py: passed (1520 reachable library modules).
 
+17. Rank-balanced trees, static half (ROADMAP 7, partly)
+   Evidence: Classical/RankBalanced/Abstract.lean.
+   Ranked trees (integer rank per node, -1 for a missing child) under three
+   rules. AVL: rank = height in edges and height (in nodes) <= log_phi(n + 1).
+   Red-black: height <= 2 log2(n + 1). WAVL: rank + 1 and height
+   <= 2 log2(n + 1). Every AVL tree is a WAVL tree.
+   Not claimed: insertion and deletion procedures, rotation counts, amortized
+   rank changes, the decimal form 1.4405 log2(n + 2) of the AVL bound.
+
+Validation of ROADMAP entry 7 (static half)
+   lake build --wfail: passed (9526 jobs), including the whole-library axiom
+   audit and one added regression module (RankBalanced).
+   scripts/check_imports.py: passed (1524 reachable library modules).
+
 Validation of the combined weighted-finger integration
    lake build --wfail: passed (9442 jobs), including the whole-library axiom
    audit and five added regression modules. No proof placeholders or new axioms.

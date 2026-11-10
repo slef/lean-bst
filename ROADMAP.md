@@ -370,6 +370,35 @@ the `ROT → DIC` edge, and give the edge `thms`. Update the models table in
 
 ## 7. Rank-balanced trees
 
+**Status.** Partly formalized (branch `formalize-rank-balanced`, stacked on
+`formalize-weight-balanced`, 2026-11-10): the static half. Statements in
+`Classical/RankBalanced/Abstract.lean`
+(`RotationBST.Classical.RankBalanced.Results`), definitions in
+`Classical/RankBalanced/Definitions/Abstract.lean`. Still open: insertion and
+deletion with bottom-up rebalancing as dictionary steps (entry 6 is done),
+their rotation counts, and the amortized rank-change bounds.
+
+The definitions are as below: `RankedTree := LabelledTree Int`, `rank`
+(`-1` for the empty tree), `Rule` (`avl`, `redBlack`, `wavl`), `Rule.Local`,
+`Valid`, plus `NoZeroChild` for the red-black rule. Every rank is required to
+be nonnegative; red-black uses "rank differences 0 or 1, no 0-child has a
+0-child", WAVL "rank differences 1 or 2, leaves have rank 0".
+
+Differences from the targets below: heights count nodes
+(`Classical.Static.height` of the shape), one more than edges. So the AVL
+bound is `height ≤ log_φ(n + 1)` with `φ = Real.goldenRatio`, rather than a
+decimal constant (in edges it is `log_φ(n + 1) − 1 < 1.4405 log₂(n + 2)`; the
+decimal form is not proved). The red-black bound is `2 log₂(n + 1)` in nodes,
+stronger than the target in edges. The WAVL bound is `rank + 1 ≤ 2 log₂(n + 1)`.
+`wavl_height_insertions` is not done (it needs the insertion procedure).
+
+| Statement | Declaration (under `RankBalanced.Results`) |
+|---|---|
+| AVL: rank = height in edges; `height ≤ log_φ(n + 1)` | `avl_height_rank`, `avl_height` |
+| red-black: `height ≤ 2 log₂(n + 1)` | `redBlack_height` |
+| WAVL: `rank + 1 ≤ 2 log₂(n + 1)`, same for height | `wavl_rank`, `wavl_height` |
+| every AVL tree is a WAVL tree | `avl_wavl` |
+
 **Source.** B. Haeupler, S. Sen and R. E. Tarjan, *Rank-balanced trees*, ACM
 TALG 11(4) (2015), for the framework and WAVL trees; G. M. Adelson-Velsky and
 E. M. Landis (1962) for AVL trees; R. Bayer (1972) and L. J. Guibas and
