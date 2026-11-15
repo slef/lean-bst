@@ -736,3 +736,70 @@ results: the bottom-up policy's bound `run + m ≤ 42n + F(R + m)`
 `2n` reset (`Policy.rotation_algorithm`). Regression examples:
 `RotationBSTTests/TangoLinear.lean`. The book chapter `algorithms/tango-linear.md`
 still composes the two by hand.
+
+## Real-world implementation model
+
+`Models/RealWorld/Abstract.lean` exposes a finite-control register-and-pointer
+machine, its CSLib LTS, and physical-trace and prefix-causality theorems.
+`Definitions/Abstract.lean` fixes the primitive instruction set, word-size
+policy, storage convention, and separate total-service and proportional-time
+obligations. The book introduces it in Models, after the pointer machine.
+The compiler below supplies concrete pointer-machine lowering. The paper-level
+transformation theorems remain separate work; no existing finite-word component
+is automatically certified in this model.
+
+
+### Concrete pointer-machine foundation
+
+`Models/RealWorld/PointerMachine/Definitions/Abstract.lean` defines bounded-word
+instances of the pinned CSLib Frontier pointer machine, heap/tree representation,
+exact-node boundary invariants, and incremental request semantics. `Proofs.lean`
+contains prefix determinism, navigation, and instruction-count proofs;
+`Rotation.lean` proves root right rotation preserves the complete boundary.
+`Abstract.lean` exposes the audited results. Regression examples live in
+`RotationBSTTests/PointerMachineBST.lean`.
+
+This introductory concrete layout has two child fields and no parent links.
+The parent-linked layer below supplies upward navigation, both rotation
+directions and non-root reconnection. The compiler then lowers complete semantic
+controllers; the paper-level implementation theorems remain open.
+
+
+### Parent-linked primitive simulation
+
+`Models/RealWorld/Linked/Definitions/Abstract.lean` extends the concrete machine
+with three link fields, a root register, and a complete representation at an
+arbitrary labelled cursor. `Navigation.lean` proves all four moves;
+`Execution.lean` supplies bounded upstream execution; `Heap.lean`,
+`Rotation.lean`, `Preservation.lean`, and `Refinement.lean` prove both rotations
+through arbitrary ancestor contexts. `Simulation.lean` assembles the six cases.
+The audited entry point is `Linked.Results.primitive` in `Abstract.lean`.
+Every primitive preserves the full representation and exact node count, with
+a bound of nineteen instructions including halt. The original two-child layer
+remains an introductory example rather than being silently strengthened.
+
+`RotationBSTTests/LinkedBST.lean` checks a non-vacuous full representation,
+all navigation opcodes, non-root left/right rotations with transferred
+subtrees, root register repair, and metadata preservation. The compiler layer
+below supplies complete controller compilation, including charged dispatch and
+online interaction.
+
+
+### Complete finite-controller compiler
+
+`Models/RealWorld/Compiler/Definitions/Abstract.lean` defines the single-program
+compiler, address-labelled source/target image, and concrete request protocol.
+`Relocation` and `Code` certify block placement; `Representation`, `Metadata`,
+`Scalar`, `Primitive`, `Branch`, `Boundaries`, and `Step` prove all instruction
+cases; `Online` composes ticks into requests and sequences. `Space` proves
+exact record-count preservation and transfers proportional-time constants.
+The audited results are in `Compiler/Abstract.lean`.
+
+Linked primitives now permit any fixed scalar-register count, allowing the
+compiler to use the source register file plus four private scalar registers.
+The pointer registers and link fields are unchanged. The compiled program has
+24 slots per source instruction plus four protocol slots. Successful requests
+cost at most 19 times source machine time plus three, including entry and halt.
+Theorems assume positive word width and an initial image with a nonempty tree;
+initial-heap construction and its cost remain separate. Regression tests are
+in `RotationBSTTests/CompiledBST.lean`.

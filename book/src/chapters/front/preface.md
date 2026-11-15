@@ -75,3 +75,5 @@ The book has five parts, and each opens with an introduction that surveys it.
 ::: note Sources
 The main sources are the splay tree paper [@sleator1985]; move-to-root [@allen1978]; Wilber's lower bounds [@wilber1989]; the greedy algorithm [@lucas1988; @munro2000]; Tango trees [@demaine2007]; the geometric view, GreedyASS and the online simulation [@demaine2009]; the comparison of BST models in Derryberry's thesis [@derryberry2009]; the lazy finger [@bose2016]; the weighted dynamic finger [@iacono2016]; the multi-finger simulation, ComboBST, tree buffers and snapshots [@demaine2013]; pop-tarts, heavy-path simulation and deamortization [@bose2012]; and the potential used in the scanning proof [@kakimura2026]. The [bibliography](bibliography.html) lists every work cited, and each part ends with bibliographic notes on who proved what, and when.
 :::
+
+[Real-world BST implementations](real-world.html) separates bounded-memory, charged computation from the abstract online models.

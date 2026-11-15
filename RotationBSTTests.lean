@@ -1,5 +1,10 @@
 module
 
+import RotationBSTTests.RealWorld
+import RotationBSTTests.PointerMachineBST
+import RotationBSTTests.LinkedBST
+import RotationBSTTests.CompiledBST
+
 import RotationBSTTests.TangoBottomUp
 import RotationBSTTests.UniformCombination
 import RotationBSTTests.CombinationCharges

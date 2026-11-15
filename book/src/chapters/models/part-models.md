@@ -44,3 +44,7 @@ The table lists every correspondence, with $m$ requests, $n$ keys, $R$ rotations
 | online geometric algorithm | online BST algorithm | $R \le 6018\,(\text{points} + n)$ | any initial tree | [[Geometric.Equivalence.Results.online_bst\|online_bst]] |
 
 Two consequences shape the rest of the book. Bounds can be stated in whichever model is most convenient and moved to the others at a constant cost: [Part II](part-bounds.html) states its sequence bounds for rotation-model algorithms, and Wilber's lower bound in [Chapter 11](wilber.html) is proved on point sets. And an algorithm can be designed in whichever model is most convenient: splaying ([Chapter 13](splay.html)) is a rotation algorithm, GreedyASS ([Chapter 16](greedy.html)) is a geometric one, and Tango ([Chapter 19](tango.html)) maintains a tree whose edges are marked by preferred paths.
+
+## Implementations with bounded workspace
+
+[Real-world BST implementations](real-world.html) adds finite control, fixed-width registers and node metadata, and charged scalar computation. It distinguishes a full-prefix online rule from a bounded-memory implementation of that rule. Its projection theorem recovers legal pointer traces; termination and proportional runtime remain algorithm-specific proof obligations.

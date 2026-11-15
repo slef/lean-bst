@@ -15,6 +15,10 @@ public import RotationBST.Models.Region.View.Abstract
 public import RotationBST.Models.Geometric.Abstract
 public import RotationBST.Models.Equivalence.Abstract
 public import RotationBST.Models.Dictionary.Abstract
+public import RotationBST.Models.RealWorld.Abstract
+public import RotationBST.Models.RealWorld.PointerMachine.Abstract
+public import RotationBST.Models.RealWorld.Linked.Abstract
+public import RotationBST.Models.RealWorld.Compiler.Abstract
 
 public import RotationBST.Models.Labelled.Search.Abstract
 public import RotationBST.Models.LinkedSearch.Abstract
