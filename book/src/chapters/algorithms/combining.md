@@ -372,7 +372,7 @@ These hold for **every** prepared policy `p`, not only for a chosen one: a prepa
 
 ## What is not formalized
 
-- **Real-world storage.** The paper's clauses that ComboBST is a real-world BST when $A_0$ and $A_1$ are, and that OneFinger-BST preserves this (Theorems 3 and 5), are not formalized. The library's model charges pointer operations and requests only; the policy uses classical choice and uncharged private planning.
+- **Real-world storage.** The paper's clauses that ComboBST is a real-world BST when $A_0$ and $A_1$ are, and that OneFinger-BST preserves this (Theorems 3 and 5), are not formalized. The library's model charges pointer operations and requests only; the policy uses classical choice and uncharged private planning. The machine model for these clauses is defined in [Chapter 13](real-world.html); ComboBST is not yet given in it.
 - **The $O(k)$ overhead.** The paper states an $O(k)$ overhead for $k$ algorithms. The library's scales grow by a factor of order $C_0(C_1 + d)$ per level, which is a constant for fixed $k$ but much larger than $O(k)$.
 - **Corollary 4.** The paper's application combines splay trees, multi-splay trees [@wang2006] and layered working-set trees [@bose2012layered]. None of these is provided as a well-behaved worker, so Corollary 4 is not formalized. The applications that are formalized are GreedyASS and Tango, in [Chapter 38](combined-finger.html).
 - **Arbitrary BSTs.** No theorem turns an arbitrary [[RotationBST.Algorithm]] into a well-behaved worker. The worker, its interpretation, correctness and charges are always supplied.

@@ -1,6 +1,6 @@
 # Models
 
-Part I fixes what a binary search tree execution is and what it costs. The literature uses several models for this, each convenient for some arguments, and the book uses all of them. This introduction lists them and shows how they relate. Every model is defined in its own chapter, and [Chapter 11](equivalence.html) proves the main correspondences.
+Part I fixes what a binary search tree execution is and what it costs. The literature uses several models for this, each convenient for some arguments, and the book uses all of them. This introduction lists them and shows how they relate. Every model is defined in its own chapter, and [Chapter 11](equivalence.html) proves the main correspondences. The last chapter, on [real-world implementations](real-world.html), charges what the BST models leave free: the time spent choosing the BST operations, and the memory used for it.
 
 ## The models
 
@@ -15,8 +15,9 @@ Part I fixes what a binary search tree execution is and what it costs. The liter
 | {{num:geometry}} | [Geometric view](geometry.html) | An arborally satisfied set of points (key, time) containing the requests | $\lvert E\rvert$: the number of points |
 | {{num:fingers}} | [Many fingers](fingers.html) | Several persistent fingers in one tree, each moving or rotating at its node | one per request, one per instruction |
 | {{num:linked-search}} | [Linked searches](linked-search.html) | Static searches in a store of many trees joined by links, with a count of memory words. Not a BST. | one per visited node and per followed link |
+| {{num:real-world}} | [Real-world machines](real-world.html) | A finite program with word registers and a fixed number of words per node, which moves and rotates one persistent finger and receives one request at a time | running time: one per instruction; BST cost: one per move or rotation |
 
-The rotation model is the library's basic one: "a legal BST algorithm" and "the offline optimum" in later theorems refer to it, unless a theorem says otherwise. The pointer machine is the standard model of the literature. Touched regions and the geometric view describe an execution by the keys it touches, which is what lower bounds and the geometric algorithms work with. The dictionary model of [Chapter 6](dictionary.html) adds updates, for the classical trees of [Part III](part-classical.html), and charges searches instead of forcing the requested key to the root. The last two models serve particular results. Many fingers describe a static tree searched with a lazy finger ([Chapter 13](lazy-finger.html)) and the multi-finger BSTs of the combination ([Chapter 23](combination.html)). Linked searches are the model of the multiple-tree structure ([Chapter 22](multiple-trees.html)), and are compared with nothing else.
+The rotation model is the library's basic one: "a legal BST algorithm" and "the offline optimum" in later theorems refer to it, unless a theorem says otherwise. The pointer machine is the standard model of the literature. Touched regions and the geometric view describe an execution by the keys it touches, which is what lower bounds and the geometric algorithms work with. The dictionary model of [Chapter 6](dictionary.html) adds updates, for the classical trees of [Part III](part-classical.html), and charges searches instead of forcing the requested key to the root. Two models serve particular results. Many fingers describe a static tree searched with a lazy finger ([Chapter 13](lazy-finger.html)) and the multi-finger BSTs of the combination ([Chapter 23](combination.html)). Linked searches are the model of the multiple-tree structure ([Chapter 22](multiple-trees.html)), and are compared with nothing else. Real-world machines move one persistent finger, like a one-finger BST, but with bounded state and charged computation, and they compile to the general pointer machine of @tarjan1979.
 
 ## How the models relate
 
@@ -24,7 +25,7 @@ An arrow in the figure means that an execution in one model gives an execution i
 
 @viz modelsmap {"roadmap": "https://github.com/slef/lean-bst/blob/main/ROADMAP.md"}
 
-The table lists every correspondence, with $m$ requests, $n$ keys, $R$ rotations, $K$ pointer cost (requests plus instructions) and $\lvert E\rvert$ points.
+The table lists every correspondence, with $m$ requests, $n$ keys, $R$ rotations, $K$ pointer cost (requests plus instructions), $\lvert E\rvert$ points and $T$ steps of a real-world machine.
 
 | From | To | Cost | Trees | Theorem |
 |---|---|---|---|---|
@@ -42,9 +43,7 @@ The table lists every correspondence, with $m$ requests, $n$ keys, $R$ rotations
 | point set | rotation execution | $m + R \le 2n + 99\,\lvert E\rvert$ | initial prescribed | [[Geometric.Equivalence.Results.ass_to_rotations\|ass_to_rotations]] |
 | point set | pointer execution | $K \le 64n + 3168\,\lvert E\rvert$ | initial prescribed | [[Geometric.Equivalence.Results.ass_to_pointers_from\|ass_to_pointers_from]] |
 | online geometric algorithm | online BST algorithm | $R \le 6018\,(\text{points} + n)$ | any initial tree | [[Geometric.Equivalence.Results.online_bst\|online_bst]] |
+| real-world machine run | single-cursor trace from the same finger | BST cost $\le T$ | same final tree | [[RotationBST.RealWorld.Results.physical\|physical]] |
+| real-world machine execution | compiled run on Tarjan's pointer machine | instructions $\le 19T + 3m$ | same final tree, as records; related initial state given, word width $\ge 1$ | [[RotationBST.RealWorld.Compiler.Results.execution\|execution]] |
 
 Two consequences shape the rest of the book. Bounds can be stated in whichever model is most convenient and moved to the others at a constant cost: [Part II](part-bounds.html) states its sequence bounds for rotation-model algorithms, and Wilber's lower bound in [Chapter 11](wilber.html) is proved on point sets. And an algorithm can be designed in whichever model is most convenient: splaying ([Chapter 13](splay.html)) is a rotation algorithm, GreedyASS ([Chapter 16](greedy.html)) is a geometric one, and Tango ([Chapter 19](tango.html)) maintains a tree whose edges are marked by preferred paths.
-
-## Implementations with bounded workspace
-
-[Real-world BST implementations](real-world.html) adds finite control, fixed-width registers and node metadata, and charged scalar computation. It distinguishes a full-prefix online rule from a bounded-memory implementation of that rule. Its projection theorem recovers legal pointer traces; termination and proportional runtime remain algorithm-specific proof obligations.

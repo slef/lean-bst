@@ -2001,6 +2001,20 @@
       "doi": "10.1007/BF01191208"
     },
     {
+      "key": "tarjan1979",
+      "type": "article",
+      "authors": [
+        "Robert E. Tarjan"
+      ],
+      "title": "A class of algorithms which require nonlinear time to maintain disjoint sets",
+      "venue": "Journal of Computer and System Sciences",
+      "volume": "18",
+      "number": "2",
+      "pages": "110–127",
+      "year": 1979,
+      "doi": "10.1016/0022-0000(79)90042-4"
+    },
+    {
       "key": "tarjan1983",
       "type": "article",
       "authors": [

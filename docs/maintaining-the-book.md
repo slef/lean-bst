@@ -154,6 +154,13 @@ for the whole book:
 - Order-dependent prose ("next", "previous", "the first three").
 - Duplicated or contradictory statements between chapters.
 - `ROADMAP.md` target statements: correct mathematics, names that exist.
+- Headlines keep every hypothesis of their theorems, including relational
+  ones (a simulation relation such as `Image` or `Realizes` between the
+  start states), not only the side conditions.
+- A figure arrow's theorem has the conclusion the figure's help text promises
+  (an execution serving the same requests, or only a trace).
+- A caveat that refers to "the box above" or "the roadmap" has a matching item
+  there.
 
 ### Review brief
 

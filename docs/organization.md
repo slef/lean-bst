@@ -743,7 +743,8 @@ still composes the two by hand.
 machine, its CSLib LTS, and physical-trace and prefix-causality theorems.
 `Definitions/Abstract.lean` fixes the primitive instruction set, word-size
 policy, storage convention, and separate total-service and proportional-time
-obligations. The book introduces it in Models, after the pointer machine.
+obligations. The book shows it in the last chapter of Models,
+`models/real-world.md`; its open parts are ROADMAP entry 10.
 The compiler below supplies concrete pointer-machine lowering. The paper-level
 transformation theorems remain separate work; no existing finite-word component
 is automatically certified in this model.

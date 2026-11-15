@@ -25,12 +25,12 @@
         { "slug": "online", "file": "models/online.md", "title": "Online algorithms and cost" },
         { "slug": "dictionary", "file": "models/dictionary.md", "title": "Insertions and deletions" },
         { "slug": "pointer", "file": "models/pointer.md", "title": "The pointer machine" },
-        { "slug": "real-world", "file": "models/real-world.md", "title": "Real-world BST implementations" },
         { "slug": "regions", "file": "models/regions.md", "title": "Touched regions" },
         { "slug": "geometry", "file": "models/geometry.md", "title": "The geometric view" },
         { "slug": "fingers", "file": "models/fingers.md", "title": "Many fingers" },
         { "slug": "linked-search", "file": "models/linked-search.md", "title": "Linked searches" },
-        { "slug": "equivalence", "file": "models/equivalence.md", "title": "How the models agree" }
+        { "slug": "equivalence", "file": "models/equivalence.md", "title": "How the models agree" },
+        { "slug": "real-world", "file": "models/real-world.md", "title": "Real-world implementations" }
       ],
       "notes": { "slug": "notes-models", "file": "models/notes.md", "title": "Bibliographic notes" }
     },

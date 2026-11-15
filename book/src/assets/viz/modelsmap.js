@@ -19,59 +19,69 @@ const s = (name, attrs = {}, parent) => {
   return e;
 };
 const L = 'RotationBST.';
-const W = 860, H = 540, BW = 168, BH = 50;
+const W = 860, H = 660, BW = 168, BH = 50;
 
 export const NODES = [
-  { id: 'MF', x: 100, y: 70, sym: 'Many fingers', name: 'K: instructions + requests', href: 'fingers.html',
+  { id: 'RW', x: 430, y: 70, sym: 'Real-world machines', name: 'T: steps; BST cost', href: 'real-world.html',
+    text: 'A finite program with word registers and a fixed number of words per node, which moves and rotates one persistent finger. Every instruction is a step of running time; moves and rotations are also BST cost.' },
+  { id: 'TPM', x: 760, y: 70, sym: "Tarjan's machine", name: 'general pointer machine', href: 'real-world.html#tarjan-s-pointer-machine',
+    text: 'The general pointer machine: registers and records with pointer and data fields, no address arithmetic, one unit per instruction. Not a BST model; real-world machines are compiled to it.' },
+  { id: 'MF', x: 100, y: 190, sym: 'Many fingers', name: 'K: instructions + requests', href: 'fingers.html',
     text: 'Several persistent fingers in one tree; each moves or rotates at its node, and a request is served when some finger stands on it.' },
-  { id: 'PTR', x: 430, y: 70, sym: 'Pointer machine', name: 'K: instructions + requests', href: 'pointer.html',
+  { id: 'PTR', x: 430, y: 190, sym: 'Pointer machine', name: 'K: instructions + requests', href: 'pointer.html',
     text: 'One cursor, starting at the root for every request, that moves along edges and rotates its node over its parent.' },
-  { id: 'LS', x: 760, y: 70, sym: 'Linked searches', name: 'not a BST', href: 'linked-search.html', alone: true,
+  { id: 'LS', x: 760, y: 190, sym: 'Linked searches', name: 'not a BST', href: 'linked-search.html', alone: true,
     text: 'Static searches in a store of many small trees joined by links, with an explicit count of memory words. Used only by the multiple-tree structure; it is not compared with the other models.' },
-  { id: 'ROT', x: 100, y: 230, sym: 'Rotations', name: 'm + R', href: 'accesses.html',
+  { id: 'ROT', x: 100, y: 350, sym: 'Rotations', name: 'm + R', href: 'accesses.html',
     text: 'Root accesses on shapes whose keys are the inorder ranks: each request rotates anywhere until the requested key is at the root. The basic model of the library.' },
-  { id: 'ASS', x: 760, y: 230, sym: 'Geometric view', name: '|E|: points', href: 'geometry.html',
+  { id: 'ASS', x: 760, y: 350, sym: 'Geometric view', name: '|E|: points', href: 'geometry.html',
     text: 'Arborally satisfied point sets containing the request points (key, time).' },
-  { id: 'LAB', x: 100, y: 350, sym: 'Labelled trees', name: 'm + R', href: 'keys.html',
+  { id: 'LAB', x: 100, y: 470, sym: 'Labelled trees', name: 'm + R', href: 'keys.html',
     text: 'The rotation model on trees that store arbitrary ordered keys.' },
-  { id: 'REG', x: 760, y: 350, sym: 'Touched regions', name: 'touched nodes', href: 'regions.html',
+  { id: 'REG', x: 760, y: 470, sym: 'Touched regions', name: 'touched nodes', href: 'regions.html',
     text: 'Each request touches a rooted subtree containing the requested key and rearranges it; the cost is the number of touched nodes.' },
-  { id: 'DIC', x: 430, y: 350, sym: 'Insertions, deletions', name: 'search paths + R', href: 'dictionary.html',
+  { id: 'DIC', x: 430, y: 470, sym: 'Insertions, deletions', name: 'search paths + R', href: 'dictionary.html',
     text: 'Dictionaries: accesses, insertions and deletions by rank, each charged its search path plus its rotations, with balance data in the nodes and data edits counted separately.' },
-  { id: 'ONP', x: 100, y: 490, sym: 'Online pointer', name: 'algorithms', href: 'pointer.html#running-an-online-algorithm-on-the-pointer-machine',
+  { id: 'ONP', x: 100, y: 610, sym: 'Online pointer', name: 'algorithms', href: 'pointer.html#running-an-online-algorithm-on-the-pointer-machine',
     text: 'Online algorithms on the pointer machine: each response depends only on the requests so far.' },
-  { id: 'ONR', x: 430, y: 490, sym: 'Online rotation', name: 'algorithms', href: 'online.html',
+  { id: 'ONR', x: 430, y: 610, sym: 'Online rotation', name: 'algorithms', href: 'online.html',
     text: 'Online algorithms in the rotation model, the Algorithm structure of Part III. A run is an execution of the rotation model.' },
-  { id: 'ONG', x: 760, y: 490, sym: 'Online geometric', name: 'algorithms', href: 'geometry.html#online-algorithms',
+  { id: 'ONG', x: 760, y: 610, sym: 'Online geometric', name: 'algorithms', href: 'geometry.html#online-algorithms',
     text: 'Rules that add one row of points per request, looking only at the rows before it.' },
 ];
 
 export const EDGES = [
-  { from: 'MF', to: 'PTR', off: -6, label: '1 finger: K ≤ 464·cost', lab: [265, 52, 'middle'], thms: ['LazyFinger.Dynamic.Results.same_tree'],
+  { from: 'RW', to: 'PTR', label: 'traces: BST cost ≤ T', lab: [440, 134, 'start'], thms: ['RealWorld.Results.physical'],
+    text: 'The moves and rotations of any run of a real-world machine form a trace of the single-cursor machine, from the tree and finger where the run starts, and their number is at most the running time. The finger persists between requests, so this is a trace, not a pointer execution that restarts at the root.' },
+  { from: 'RW', to: 'TPM', label: '≤ 19T + 3m', lab: [595, 60, 'middle'], thms: ['RealWorld.Compiler.Results.execution'],
+    text: 'Every real-world machine compiles to one program of Tarjan\'s pointer machine, on parent-linked records. From related initial states and a word width of at least one bit, a run serving m requests in T steps becomes a compiled run of at most 19T + 3m instructions responding to the same requests, ending in a state related to the same final state, with the same number of records. The relation needs a nonempty tree, and the initial records are given, not built.' },
+  { from: 'RW', to: 'MF', todo: true, label: 'implementations: 1-finger executions', lab: [235, 108, 'middle'],
+    text: 'An implementation should give a one-finger execution serving the same requests, at BST cost plus one per request, so that the bounds of the other models apply to it.' },
+  { from: 'MF', to: 'PTR', off: -6, label: '1 finger: K ≤ 464·cost', lab: [265, 172, 'middle'], thms: ['LazyFinger.Dynamic.Results.same_tree'],
     text: 'A static tree searched with a lazy finger is a one-finger execution, and from the same tree some pointer execution costs at most 464 times as much. For k fingers the library proves a factor 344 + 60(k + 1) in a proof file, outside the reading interface.' },
-  { from: 'PTR', to: 'MF', off: -6, label: 'traces are 1-finger traces', lab: [265, 106, 'middle'], thms: [], internal: true,
+  { from: 'PTR', to: 'MF', off: -6, label: 'traces are 1-finger traces', lab: [265, 226, 'middle'], thms: [], internal: true,
     text: 'Every pointer trace is a one-finger trace with the same instructions (proved in a proof file, outside the reading interface). Requests differ: a finger is never sent back to the root.' },
-  { from: 'ROT', to: 'PTR', off: -6, label: 'K + 32d ≤ 32R + 17m', lab: [250, 138, 'end'], thms: ['Pointer.Results.to_pointer_lazy', 'Pointer.Results.to_pointer'],
+  { from: 'ROT', to: 'PTR', off: -6, label: 'K + 32d ≤ 32R + 17m', lab: [250, 258, 'end'], thms: ['Pointer.Results.to_pointer_lazy', 'Pointer.Results.to_pointer'],
     text: 'A rotation execution becomes a pointer execution serving the same requests from the same tree, ending d rotations away from the same final tree. Exactly the same final tree is reachable at cost K ≤ m + 2nR.' },
-  { from: 'PTR', to: 'ROT', off: -6, label: 'm + R + q ≤ 3K', lab: [282, 172, 'start'], thms: ['Pointer.Results.to_rotations'],
+  { from: 'PTR', to: 'ROT', off: -6, label: 'm + R + q ≤ 3K', lab: [282, 292, 'start'], thms: ['Pointer.Results.to_rotations'],
     text: 'A pointer execution becomes a rotation execution serving the same requests from the same tree, ending q rotations away from its final tree.' },
-  { from: 'PTR', to: 'ASS', off: -6, label: '|E| ≤ 6K', lab: [610, 138, 'start'], thms: ['Geometric.Equivalence.Results.pointers_to_ass'],
+  { from: 'PTR', to: 'ASS', off: -6, label: '|E| ≤ 6K', lab: [610, 258, 'start'], thms: ['Geometric.Equivalence.Results.pointers_to_ass'],
     text: 'The touched points of a pointer execution, completed, form a geometric solution. The initial tree is forgotten.' },
-  { from: 'ASS', to: 'PTR', off: -6, label: 'K ≤ 64n + 3168|E|', lab: [578, 172, 'end'], thms: ['Geometric.Equivalence.Results.ass_to_pointers_from', 'Geometric.Equivalence.Results.ass_to_pointers'],
+  { from: 'ASS', to: 'PTR', off: -6, label: 'K ≤ 64n + 3168|E|', lab: [578, 292, 'end'], thms: ['Geometric.Equivalence.Results.ass_to_pointers_from', 'Geometric.Equivalence.Results.ass_to_pointers'],
     text: 'A geometric solution becomes a pointer execution from any prescribed initial tree. If the initial tree may be chosen, K ≤ 33|E|.' },
-  { from: 'ROT', to: 'ASS', off: -6, label: '|E| ≤ 2R + m', lab: [430, 214, 'middle'], thms: ['Geometric.Equivalence.Results.rotations_to_ass'],
+  { from: 'ROT', to: 'ASS', off: -6, label: '|E| ≤ 2R + m', lab: [430, 334, 'middle'], thms: ['Geometric.Equivalence.Results.rotations_to_ass'],
     text: 'The touched points of a rotation execution form a geometric solution. The initial tree is forgotten.' },
-  { from: 'ASS', to: 'ROT', off: -6, label: 'm + R ≤ 2n + 99|E|', lab: [430, 256, 'middle'], thms: ['Geometric.Equivalence.Results.ass_to_rotations'],
+  { from: 'ASS', to: 'ROT', off: -6, label: 'm + R ≤ 2n + 99|E|', lab: [430, 376, 'middle'], thms: ['Geometric.Equivalence.Results.ass_to_rotations'],
     text: 'A geometric solution becomes a rotation execution from every initial tree.' },
-  { from: 'LAB', to: 'ROT', both: true, label: 'equal', lab: [110, 294, 'start'], thms: ['Representation.execution_on_keys_iff'],
+  { from: 'LAB', to: 'ROT', both: true, label: 'equal', lab: [110, 414, 'start'], thms: ['Representation.execution_on_keys_iff'],
     text: 'Labelled executions and executions on shapes correspond exactly, with the same number of rotations.' },
-  { from: 'REG', to: 'ASS', both: true, label: 'equal', lab: [770, 294, 'start'], thms: ['Geometric.Equivalence.Results.ass_iff_region_execution'],
+  { from: 'REG', to: 'ASS', both: true, label: 'equal', lab: [770, 414, 'start'], thms: ['Geometric.Equivalence.Results.ass_iff_region_execution'],
     text: 'A point set is arborally satisfied exactly when it is the touch set of a region execution from a suitable initial tree, at the same cost.' },
-  { from: 'ROT', to: 'DIC', label: 'accesses: ≤ m + 2R', lab: [255, 350, 'middle'], thms: ['Dictionary.Results.of_execution'],
+  { from: 'ROT', to: 'DIC', label: 'accesses: ≤ m + 2R', lab: [255, 470, 'middle'], thms: ['Dictionary.Results.of_execution'],
     text: 'A rotation execution is a dictionary execution without insertions or deletions. Its search paths cost at most m + R in total, because each rotation raises the requested key by at most one level, so its main cost is at most m + 2R.' },
-  { from: 'ONR', to: 'ONP', label: 'K + 32d ≤ 32R + 17m', lab: [265, 480, 'middle'], thms: ['Pointer.Lazy.Online.Results.simulation'],
+  { from: 'ONR', to: 'ONP', label: 'K + 32d ≤ 32R + 17m', lab: [265, 600, 'middle'], thms: ['Pointer.Lazy.Online.Results.simulation'],
     text: 'Every online rotation algorithm runs online on the pointer machine, from any initial tree, with the same bound as offline.' },
-  { from: 'ONG', to: 'ONR', label: 'R ≤ 6018(points + n)', lab: [595, 480, 'middle'], thms: ['Geometric.Equivalence.Results.online_bst'],
+  { from: 'ONG', to: 'ONR', label: 'R ≤ 6018(points + n)', lab: [595, 600, 'middle'], thms: ['Geometric.Equivalence.Results.online_bst'],
     text: 'Every online geometric algorithm is simulated by an online rotation algorithm, from any initial tree.' },
 ];
 
@@ -97,7 +107,7 @@ export default function mount(root, cfg = {}) {
   const pending = ` <em>Not formalized yet</em>${roadmap ? `; see the <a href="${esc(roadmap)}">roadmap</a>` : ''}.`;
   const ui = frame(root, {
     title: 'How the models relate',
-    help: 'An arrow A → B means that an execution in model A gives one in model B serving the same requests, at the cost written on it: m requests, R rotations, K pointer instructions plus requests, |E| points, n keys. A double arrow is an exact correspondence. Dashed grey boxes and arrows are not formalized yet. Hover over a model or an arrow for details; click to open its chapter or theorem.',
+    help: 'An arrow A → B means that an execution in model A gives one in model B serving the same requests, at the cost written on it: m requests, R rotations, K pointer instructions plus requests, |E| points, n keys, T steps of a real-world machine. A double arrow is an exact correspondence. An arrow labelled with traces maps sequences of instructions, not request-serving executions. Dashed grey boxes and arrows are not formalized yet. Hover over a model or an arrow for details; click to open its chapter or theorem.',
   });
   const byId = Object.fromEntries(NODES.map((n) => [n.id, n]));
   const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, class: 'bounds-map', role: 'img', 'aria-label': 'How the models relate' }, ui.stage);
@@ -106,9 +116,9 @@ export default function mount(root, cfg = {}) {
     const m = s('marker', { id: `mm-${id}`, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' }, defs);
     s('path', { d: 'M0,0 L10,5 L0,10 z', class: cls }, m);
   }
-  s('line', { x1: 20, y1: 420, x2: W - 20, y2: 420, class: 'mm-band' }, svg);
-  s('text', { x: 24, y: 412, class: 'mm-band-label' }, svg).textContent = 'executions';
-  s('text', { x: 24, y: 438, class: 'mm-band-label' }, svg).textContent = 'online algorithms';
+  s('line', { x1: 20, y1: 540, x2: W - 20, y2: 540, class: 'mm-band' }, svg);
+  s('text', { x: 24, y: 532, class: 'mm-band-label' }, svg).textContent = 'executions';
+  s('text', { x: 24, y: 558, class: 'mm-band-label' }, svg).textContent = 'online algorithms';
 
   const caption = h('div', { class: 'bm-caption' });
   ui.state.append(caption);

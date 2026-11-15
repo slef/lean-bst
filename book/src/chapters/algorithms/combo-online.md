@@ -296,7 +296,7 @@ The theorems assume a [[Combo.Refinement.WorkerModel]] (a causal pointer interpr
 :::
 
 ::: caveat Compared with the paper
-- The paper's "real-world" clauses of Theorems 3 and 5, that Combo-BST uses only $O(\log n)$ bits per node and $O(1)$ registers when the sources do, are not formalized. The online state contains abstract certificates, and the replay worker keeps its pending opcode list as abstract state.
+- The paper's "real-world" clauses of Theorems 3 and 5, that Combo-BST uses only $O(\log n)$ bits per node and $O(1)$ registers when the sources do, are not formalized. The online state contains abstract certificates, and the replay worker keeps its pending opcode list as abstract state. The model in which these clauses would be stated is in [Chapter 13](real-world.html).
 - The sharper $O(k)$ overhead of the paper's balanced family is not claimed; see the family statements in [Chapter 33](combining.html).
 - The constants are explicit and large. They come from composing generic simulations, not from a tuned implementation.
 - Corollary 4, which combines specific known bounds, is not derived in full. [Chapter 38](combined-finger.html) uses this section's results for one combination, GreedyASS with Tango.

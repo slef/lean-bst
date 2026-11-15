@@ -1,218 +1,178 @@
-# Real-world BST implementations
+# Real-world implementations
 
-An online BST algorithm may use the entire request prefix when selecting its next operations. The interface in [Online algorithms](online.html) permits this explicitly: `Algorithm.step` receives the history. Only BST operations are charged. That mathematical model is useful for competitive analysis, but it does not bound the memory or computation used to select those operations.
+The models of this part count BST operations: moves, rotations and requests. Nothing else is charged. An online algorithm of [Chapter 5](online.html) receives the whole request history at every step, and may compute anything from it for free. That is the right model for competitive analysis, but it says nothing about the memory and the time that an implementation spends to choose its operations.
 
-Bose, Collette, Fagerberg and Langerman distinguish this from a real-world implementation in the opening model discussion of *De-amortizing Binary Search Trees* [-@bose2012]. Such an implementation uses a pointer machine, a constant number of words per node, constant global workspace, and time proportional to its BST operations. Theorem 7 asks that the transformation preserve these additional properties.
+@bose2012 observe that almost all BST implementations in the literature have three more properties: they work in the pointer machine model, they use no more space than the tree itself plus $O(1)$ words of balance information per node and $O(1)$ working variables, and they generate their BST operations in time proportional to the BST cost. @demaine2013 define a *real-world BST*, crediting @bose2012 for the term, by the space conditions alone: one that can be implemented with a constant number of registers of $O(\log n)$ bits and $O(\log n)$ bits of data at each node. Both papers prove transformations that preserve these properties: the deamortization (Theorem 7 of @bose2012, [Chapter 37](deamortization.html)) preserves all three, and ComboBST and the one-finger simulation of several fingers (Theorems 3 and 5 of @demaine2013, [Chapter 23](combination.html)) preserve the space conditions.
 
-## A finite-control word machine
+This chapter makes the notion precise. A *real-world machine* is a finite program with a fixed number of word registers, run on a tree whose nodes hold a fixed number of words, with one persistent finger. Every instruction costs one step of running time, and only moves and rotations count as BST operations. The second half of the chapter compiles every such program into a single program for the pointer machine of @tarjan1979, with a constant factor in running time.
 
-`RealWorld.Machine` specifies a fixed finite instruction table. Its parameters are the number of metadata words per node, scalar registers, and code locations. These are fixed independently of the tree size, input sequence, and word width. Constants in instructions are fixed natural literals interpreted modulo the word size. Instructions contain no arbitrary Lean callbacks.
+```headline real-world-trace
+title: A real-world machine runs online, its BST operations form a pointer trace, and they cost at most its running time
+theorems: RealWorld.Results.physical RealWorld.Results.bst_cost RealWorld.Results.causal
 
-`RealWorld.State` contains the labelled tree with its persistent finger, the scalar registers, the current request, a visited flag, and the program counter. Each node has an immutable key and a fixed vector of mutable words. Words are `BitVec width`; addition and subtraction wrap modulo $2^{\mathit{width}}$. A comparison is unsigned. `WordSize` requires enough bits to represent keys and addresses and an $O(\log(n+1))$ upper bound, uniformly in $n$.
+Fix a real-world machine $p$. If $p$ runs from state $s$ to state $t$ in $T$ steps, with $k$ of them moves or rotations, then those $k$ instructions form a trace of the single-cursor machine of [Chapter 7](pointer.html) from the tree and cursor of $s$ to those of $t$, with the node data forgotten, and $k \le T$. The machine receives one request at a time, and two executions of the same requests from the same state end in the same state with the same costs.
 
-The instruction set includes register constants, copies, arithmetic, conditional branches, reading the current request and current node's key, loading and storing metadata at the finger, and the six existing pointer moves and rotations. An explicit `mark` instruction succeeds only when the finger's stored key equals the current request. A response can finish only after that mark. There is no direct access to another node's metadata by an arbitrary integer address. The RAM-like arithmetic is on the fixed register file; tree access remains local to the finger.
+In Lean, machines are [[RotationBST.RealWorld.Machine]], their states [[RotationBST.RealWorld.State]], runs [[RotationBST.RealWorld.Run]], and traces [[RotationBST.Pointer.Trace]].
+```
 
-Every instruction costs one machine step. Only a pointer move or rotation also costs one BST operation. Invalid moves and failed checks have no successful successor; termination and successful service must be proved for an algorithm.
+```headline real-world-compiler
+title: Every real-world machine compiles to one program of Tarjan's pointer machine, with at most 19 instructions per step and 3 per request
+theorems: RealWorld.Linked.Results.primitive RealWorld.Compiler.Results.response RealWorld.Compiler.Results.execution RealWorld.Compiler.Results.storage RealWorld.Compiler.Results.code_size
 
-The semantic cursor uses a zipper to describe a linked tree and its finger. This is a mathematical representation, not a charged runtime stack. The storage convention is three links, a key and the metadata words per node, plus the fixed registers, root/finger/query words and a flag. Finite control is separate. The concrete representation and compiler below implement this semantic machine on a pointer machine. This does not assert that arbitrary Lean evaluation has the same runtime.
+Store the tree in records with three links (left, right, parent), the key and the node's data words. Every move and rotation of the finger is then a fixed program of at most 19 pointer-machine instructions, which keeps the whole representation and allocates nothing. A real-world machine with $l$ instructions compiles to one pointer-machine program of $24l + 4$ instructions. Start the compiled program from a state that stores the source state, a relation that requires a nonempty tree, and let the word width be at least one bit. If the machine serves $m$ requests in $T$ steps in total, the compiled program responds to the same requests in at most $19T + 3m$ instructions, ends in a state that stores the source's final state, and keeps the number of records.
 
-@decl RealWorld.Node RealWorld.Instruction RealWorld.Machine RealWorld.State RealWorld.eval RealWorld.tick
+In Lean, the pointer machine is `Cslib.PointerMachine` from CSLib Frontier, the representation is [[RotationBST.RealWorld.Linked.Realizes]], the relation between the two machines is [[RotationBST.RealWorld.Compiler.Image]], and the compiler is [[RotationBST.RealWorld.Compiler.compile]].
+```
 
-## Online input and resumable state
+## The machine
 
-`accept` supplies one new key only when the machine is at a response boundary. It resets the visited flag and starts at the fixed entry location. The machine has no input-history field and cannot read future requests. It may retain information about earlier requests only in the bounded registers and node metadata. Its complete state also describes everything needed to resume an interrupted computation.
+@decl RotationBST.RealWorld.Node RotationBST.RealWorld.Instruction RotationBST.RealWorld.Machine
 
-`Responds` describes one completed access. `Execution` chains completed accesses; its request list and execution witnesses are specification data, inaccessible to instructions. The uniqueness theorem says that a completed prefix determines a unique state and both costs. The append theorem composes prefixes with continuations. Together these give the retained-state formulation of online causality.
+A node holds an immutable key and `fields` mutable words. Words are `BitVec width`: addition and subtraction wrap around modulo $2^{\mathit{width}}$, and comparisons are unsigned. A machine is a table of `labels` instructions and an entry label. Each instruction names its successor labels, so the control is finite: the numbers of fields, registers and labels are fixed, independently of the tree, the requests and the word width. Constants in instructions are fixed natural numbers. No instruction contains a Lean function, so a machine cannot hide a computation in an instruction.
 
-@decl RealWorld.accept RealWorld.lts RealWorld.Run RealWorld.Responds RealWorld.Execution
+The instructions are of three kinds.
 
-## What must an implementation prove?
+- **Register instructions:** a constant, a copy, addition, subtraction, a branch on `a < b`, and reading the current request into a register.
+- **Instructions at the finger:** read the finger's key, and read or write one of its data words. No instruction reads another node.
+- **BST instructions:** one of the six moves and rotations of [[Multifinger.Opcode]] ([Chapter 10](fingers.html#command-streams)), applied at the finger.
 
-`RealWorld.Implementation` packages a uniform program, a logarithmic word-width family, initial states satisfying `Initial`, and the total-service and runtime certificates. Its constants are outside the quantification over tree sizes. Initialization runtime remains a separate obligation.
+Two more instructions close a request. `mark` succeeds only if the finger's key equals the request, and records that the request was visited. `finish` succeeds only after a `mark`, and ends the request.
 
-There are separate obligations:
+@decl RotationBST.RealWorld.State RotationBST.RealWorld.eval RotationBST.RealWorld.tick
 
-- Initialize a correctly ordered tree with the intended keys, charging setup separately.
-- Prove `Total`: every existing key can be served after every completed valid history.
-- Prove `EfficientFrom`: on states reachable from initialization, machine time per completed request is at most a fixed constant times its BST operations plus one. The request unit handles a key already under the finger.
-- Use fixed code, field and register counts, and a word-width family satisfying `WordSize`.
-- For a pointer-machine implementation, prove that the stored representation realizes these machine instructions and respects the same local-access discipline.
+A state holds the tree with its finger, as a labelled cursor ([[LabelledCursor.Config]], from [Chapter 33](replay.html#labelled-cursors)), the registers, the current request, the visited flag, and the label of the next instruction. When there is no next label, the machine is between two requests, at a *response boundary*. The cursor is a zipper, the path from the finger to the root. This is how the mathematics describes a linked tree with a pointer into it; it is not a stack that the machine stores, and the second half of the chapter stores the tree with parent links instead.
 
-The physical-trace theorem removes scalar and metadata instructions and yields a legal trace in the existing pointer model, with exactly the recorded BST cost. It does not identify stored keys with inorder ranks for an arbitrary malformed input: that requires the ordered-key initialization invariant.
+`eval` executes one instruction and returns the new state, together with the BST instruction it performed, if any. It fails on an illegal move or rotation ([[LabelledCursor.perform]]), on an access to an empty finger, on a `mark` at the wrong key, and on a `finish` before a `mark`. A failed step has no successor, so a machine that fails or loops never completes its request. `tick` runs the instruction at the current label.
 
-This is a model and a set of proof obligations, not a proof of Theorem 7. Applying this model to the pop-tart construction still requires a controller implementing this interface and a proof of proportional machine time.
+## Requests and runs
 
-@decl RealWorld.Initial RealWorld.Total RealWorld.EfficientFrom RealWorld.WordSize RealWorld.Implementation RealWorld.storageWords
+@decl RotationBST.RealWorld.accept RotationBST.RealWorld.Event RotationBST.RealWorld.lts
 
-## CSLib
+`accept` gives the machine its next request, and only at a response boundary. It stores the key, clears the visited flag and jumps to the entry label. The state has no field for past requests. A machine that wants to remember something about them must keep it in its registers or in the data words of the nodes. The machine is also a labelled transition system in the sense of CSLib, whose events are inputs and computation steps.
 
-The semantic model above uses CSLib's `Cslib.LTS`. A second layer now connects
-BST representations to the general Tarjan-style pointer machine from
-[CSLib Frontier PR #5420](https://github.com/cslib-community/cslib-frontier/pull/5420),
-pinned at commit `86efa56d47a44812fab049080fba87d7635db63b`. It uses that
-library's instructions, heaps and charged execution directly. The existing
-CSLib pin is retained; this adds a pinned Frontier dependency.
+@decl RotationBST.RealWorld.Run RotationBST.RealWorld.Responds RotationBST.RealWorld.Execution
 
-## Concrete pointer-machine representation
+`Run p s t time cost` says that `time` steps lead from `s` to `t`, and that `cost` of them are BST instructions. `Responds` is one request: accept it, run, and stop at a boundary. `Execution` serves a list of requests in order and adds up both costs. The list of requests is part of the statement, not of the state: no instruction can read it.
 
-`RealWorld.PointerMachine.words` supplies modular words, literal/add/subtract
-operations, and equality/order tests. Pointers occupy separate fields and
-registers and cannot be obtained by arithmetic. The current layout has three
-pointer registers, two scalar registers, two child links per record, one key,
-and a fixed number of metadata words. Addresses in the labelled specification
-tree are ghost labels, not scalar values exposed to the program.
+**Theorem (runs).** The BST instructions of a run form a [[Pointer.Trace]] between the cursors of its two states with the node data forgotten ([[LabelledCursor.Config.erase]]), with exactly `cost` instructions, and `cost ≤ time`. Two executions of the same requests from the same state reach the same state with the same costs, and executions compose.
 
-`Represents` relates an actual heap to a labelled tree. `Boundary` additionally
-requires distinct node addresses, an ordered key tree, valid pointers, the
-root under the cursor, and exact coverage of the allocated heap by the tree.
-Consequently, no separate work heap is hidden in this boundary invariant.
+@decl RotationBST.RealWorld.Results.physical RotationBST.RealWorld.Results.bst_cost RotationBST.RealWorld.Results.causal RotationBST.RealWorld.Results.append
 
-@decl RealWorld.PointerMachine.words RealWorld.PointerMachine.layout RealWorld.PointerMachine.Represents RealWorld.PointerMachine.Boundary
+Since a request enters only at a boundary, the machine cannot look ahead, and determinism makes the response to a prefix of the requests independent of what follows. This is the prefix property that [Chapter 37](deamortization.html#physical-programs-and-their-responses) takes as the definition of an online program, here for a machine with bounded state. The trace starts where the previous request left the finger, so it is a trace of one persistent finger, as in [Chapter 10](fingers.html), not a [[Pointer.Execution]], which restarts at the root.
 
-The concrete online protocol accepts one key in a designated register and
-restarts at a fixed entry label, preserving all other state. `Responds`
-requires a halted starting state, a charged execution to halt, and a witnessed
-visit to a record holding the requested key during that execution. `Execution`
-chains responses. The history and visit witnesses are specification objects,
-not extra runtime storage. Prefix determinism follows from the upstream
-machine's deterministic execution.
+## Real-world implementations
 
-@decl RealWorld.PointerMachine.Protocol RealWorld.PointerMachine.accept RealWorld.PointerMachine.Responds RealWorld.PointerMachine.Execution RealWorld.PointerMachine.Results.causal
+A machine is an implementation of a real-world BST if it works for every tree size $n$, with the same code, and meets the conditions of the papers.
 
-A child navigation is one pointer-load instruction. A root right rotation is
-five instructions: load the left child, load its right subtree, replace the
-old root's left link, replace the child's right link, and move the cursor to
-the new root. A standalone program additionally charges one instruction for
-halt. The rotation theorem preserves the complete boundary invariant and
-exact heap length, for arbitrary subtrees and metadata. Its structural change
-is exactly the existing down-left followed by rotate-left-child operations.
+@decl RotationBST.RealWorld.WordSize RotationBST.RealWorld.Initial RotationBST.RealWorld.Total RotationBST.RealWorld.EfficientFrom RotationBST.RealWorld.ProportionalTime
 
-@decl RealWorld.PointerMachine.down RealWorld.PointerMachine.rotateRight RealWorld.PointerMachine.Results.navigation_time RealWorld.PointerMachine.Results.navigation RealWorld.PointerMachine.Results.rotation_time RealWorld.PointerMachine.Results.rotation RealWorld.PointerMachine.Results.rotation_bst
+- `WordSize width C` says that words have enough bits to store the keys $0, \dots, n-1$, $n < 2^{\mathit{width}(n)}$, and at most $C(\lfloor\log_2(n+1)\rfloor + 1)$ bits. A word is therefore $O(\log n)$ bits, as in the definition of @demaine2013.
+- `Initial s n` says that `s` is at a boundary, with the finger at the root, and that the keys in inorder are $0, \dots, n-1$.
+- `Total p s n` says that after every completed execution from `s`, the machine completes a request for every key $x < n$. It is a separate obligation, because a finite program may fail or loop.
+- `EfficientFrom p s C` bounds the running time by the BST cost: every request served from a state reachable from `s` takes at most $C(k + 1)$ steps if it performs $k$ BST instructions. The $+1$ pays for a request whose key is already under the finger. `ProportionalTime` is the same bound for every state and every word width, not only the reachable ones.
 
-The two-child representation above remains a small introductory example.
-The following representation adds the parent links needed for all six
-primitives.
+@decl RotationBST.RealWorld.Implementation RotationBST.RealWorld.storageWords
 
-## Parent-linked trees and all six primitives
+An `Implementation` packages one machine, a word width for every $n$ with `WordSize`, an initial state for every $n$ with `Initial`, and the certificates `Total` and `EfficientFrom`. Its constants are chosen before $n$. Its numbers of data words per node and of registers are type parameters, also fixed before $n$. `storageWords f r n` records the storage convention: three links, the key and $f$ data words per node, the $r$ registers, and four more words for the root, the finger, the request and the flag. It is a definition only, and no theorem refers to it; the compiled program below uses more registers (seven pointer registers and $r + 4$ data registers), still a constant number. The space of the compiled program is controlled directly: its records are exactly the nodes of the tree, and no instruction changes their number (theorems below).
 
-`RealWorld.Linked.layout` has seven pointer registers: cursor, root, parent,
-grandparent, middle subtree, null, and a comparison temporary. It has a fixed scalar register file and three pointer fields per record (left, right, parent),
-plus the key and a fixed number of metadata words. These counts are independent
-of tree size and access history. The programs use only pointer instructions;
-they do not compute numeric addresses.
+The initial states are given, not computed. Building the initial tree, and the time this takes, is not part of the definition.
 
-`Realizes` relates an actual machine state to a labelled cursor anywhere in
-the BST. Its recursive focus and context predicates check both directions of
-every tree edge, including the null parent of the root. It also checks pointer
-validity, the root register, distinct addresses, ordered keys, and exact
-coverage of the heap by the tree. Labels retain every data field, so preserving
-the represented labels preserves metadata as well as keys. The context is a
-proof-only zipper; it is not a runtime stack.
+::: todo
+- **No algorithm is implemented yet.** No algorithm of the book, not even move-to-root or splaying, is given as an `Implementation`.
+- **From machines to algorithms.** An execution of an `Implementation` is not yet turned into an online algorithm of [Chapter 5](online.html) or a one-finger execution of [Chapter 10](fingers.html), so the bounds proved for those do not yet apply to it.
+- **Compiled implementations.** The compiler of the next sections moves single runs; it does not yet turn an `Implementation`, with `Total` and `EfficientFrom`, into a pointer-machine program that serves every request in proportional time.
+- **Initialization.** Building the initial tree on the pointer machine, and charging its time, and the empty tree.
+- **The real-world clauses of the papers.** That the deamortization preserves real-world implementations (Theorem 7 of @bose2012), and that ComboBST and the one-finger simulation do (Theorems 3 and 5 of @demaine2013).
 
-@decl RealWorld.Linked.layout RealWorld.Linked.node RealWorld.Linked.Represents RealWorld.Linked.Context RealWorld.Linked.Realizes
+Roadmap [entry 10](https://github.com/slef/lean-bst/blob/main/ROADMAP.md#10-real-world-implementations).
+:::
 
-The two downward moves load the corresponding child field. Both upward moves
-load the parent field; their abstract legality distinguishes the left and right
-cases. Each navigation executes one load followed by halt, for two charged
-instructions.
+## Tarjan's pointer machine
 
-Each rotation promotes the cursor above its parent while leaving the cursor
-on the promoted node. The program repairs the transferred middle subtree's
-parent link, both pivot nodes, and the grandparent's appropriate child link.
-When there is no grandparent it updates the root register instead. Stores
-through a null middle-subtree pointer have no effect, as specified by the
-upstream machine. Both directions use fixed code and terminate within nineteen
-charged instructions, including halt; this is a conservative uniform bound.
+The machine above reads and writes the tree through its finger, but it treats the tree as a mathematical object. The papers count time on a *pointer machine* [@tarjan1979]: a fixed number of registers and a growing pool of records, all with the same fields. Registers and fields hold either pointers or data. Memory is reached only by following a pointer held in a register, and no instruction computes on pointers, so there is no address arithmetic. Every instruction costs one unit. The library uses the formalization of this machine in [CSLib Frontier](https://github.com/cslib-community/cslib-frontier), `Cslib.PointerMachine`, which also allocates records; the programs of this chapter never do. Where Tarjan's machine stops on an undefined value, this formalization reads a default value instead.
 
-@decl RealWorld.Linked.move RealWorld.Linked.rotate RealWorld.Linked.program RealWorld.Linked.start
+@decl RotationBST.RealWorld.PointerMachine.WordOp RotationBST.RealWorld.PointerMachine.WordTest RotationBST.RealWorld.PointerMachine.words
 
-The primitive simulation theorem states that **every legal one-step operation
-of the existing labelled-cursor model has a concrete pointer-machine execution**
-within that bound. The resulting state realizes exactly the resulting cursor,
-and the heap has exactly the same number of records. The theorem covers every
-cursor depth, both grandparent child positions, root rotations, empty and
-nonempty middle subtrees, and arbitrary metadata.
+The data are the words of the first half, with constants, addition and subtraction, and the tests $=$ and $<$. There is no conversion from a word to a pointer.
 
-@decl RealWorld.Linked.Results.primitive
+### A first example: rotation at the root
 
-Regressions include a fully verified seven-node starting representation,
-non-root rotations in both directions with nonempty middle subtrees, root
-register repair, parent links, and metadata preservation.
+The simplest representation of a tree has two links per record and no parent links. It is enough to move down and to rotate at the root, and it shows what the general representation must check.
 
-## Compiling the complete controller
+@decl RotationBST.RealWorld.PointerMachine.layout RotationBST.RealWorld.PointerMachine.State RotationBST.RealWorld.PointerMachine.Record RotationBST.RealWorld.PointerMachine.Instruction RotationBST.RealWorld.PointerMachine.Tree
 
-`RealWorld.Compiler.compile` translates the entire finite `RealWorld.Machine`
-into **one pointer-machine program**. It supports every source instruction:
-constants, copies, addition and subtraction, comparisons, key and query reads,
-metadata loads and stores, all six BST primitives, visit marking and finish.
-Each source instruction occupies a block of twenty-four code slots. Internal
-branches in a BST primitive are relocated; its final halt becomes a charged
-jump to the next source instruction. There is no free per-operation restart
-or external instruction-selection oracle.
+The layout has three pointer registers (the cursor and two temporaries), two data registers, two links per record, the key and `extra` data words. A tree is labelled with pairs (address, key). The addresses are *ghost* labels: they relate the mathematical tree to the heap, and no program can read them.
 
-The target has seven pointer registers and $r+4$ scalar registers: the source
-registers plus current request, visited flag, key temporary and zero temporary.
-It retains the same tree records, with three links, the key and $f$ metadata
-words each. The program has exactly $24l+4$ slots for a source with $l$ labels,
-independently of the number of nodes and requests. Padding and failed checks
-lead to a nonhalting trap; the program has one successful halt.
+@decl RotationBST.RealWorld.PointerMachine.root RotationBST.RealWorld.PointerMachine.addresses RotationBST.RealWorld.PointerMachine.keys RotationBST.RealWorld.PointerMachine.Represents RotationBST.RealWorld.PointerMachine.Boundary
 
-@decl RealWorld.Compiler.Target RealWorld.Compiler.block RealWorld.Compiler.relocate RealWorld.Compiler.compile RealWorld.Compiler.Results.code_size
+`Represents heap t` says that every node of `t` is a record at its address, with the links to its children and its key. `Boundary s t` asks more: valid pointers, distinct addresses, keys in order, the cursor on the root, and a heap that consists of the tree's records and nothing else. So no extra memory hides next to the tree.
 
-Input is accepted only at that successful halt. The external input operation
-replaces the designated request register and enters the request-entry routine.
-Resetting the visited flag and jumping to the source entry are two charged
-instructions. Marking a visit reads the current node's key and compares it
-with the request. Finish checks the stored visited flag before reaching halt.
-Registers and tree storage persist between requests.
+@decl RotationBST.RealWorld.PointerMachine.accept RotationBST.RealWorld.PointerMachine.Protocol RotationBST.RealWorld.PointerMachine.Responds RotationBST.RealWorld.PointerMachine.Execution
 
-@decl RealWorld.Compiler.accept RealWorld.Compiler.Responds RealWorld.Compiler.Execution
+A protocol is a program with an entry label. `Responds` starts from a state stopped at a `halt` instruction. `accept` puts the key into data register $0$ and restarts at the entry, and the program runs to the next halt, which is counted. Somewhere along the way the cursor must visit a record holding the key. Executions chain responses.
 
-`Image` is the full source/target invariant. It combines the parent-linked
-representation with equality of user registers and request, encoding of the
-visited flag, and translation of the program counter. Addresses and execution
-histories occur only in the specification. The theorem assumes a represented
-nonempty tree and a positive word width; the latter distinguishes the stored
-zero and one used for the visited flag.
+@decl RotationBST.RealWorld.PointerMachine.down RotationBST.RealWorld.PointerMachine.rotateRight RotationBST.RealWorld.PointerMachine.effects
 
-@decl RealWorld.Compiler.decode RealWorld.Compiler.Image
+A move down is one load. A right rotation at the root is five instructions: load the left child, load its right subtree, relink the old root's left child, relink the child's right child, and move the cursor to the new root. `effects` evaluates a straight-line program; it only names the final state, and the theorems below prove that the machine reaches it.
 
-For a successful source request taking $T$ semantic machine steps, the same
-compiled program completes the request in at most $19T+3$ pointer-machine
-instructions. The three extra instructions account for request entry and
-final halt. For a sequence of $m$ requests with total source time $T$, the
-bound is $19T+3m$. The target endpoint represents the exact source endpoint,
-including its cursor and metadata. Concrete successful responses have unique
-endpoints and exact instruction counts.
+**Theorem (two-link representation).** Executions of a protocol are deterministic. A move down is one instruction, and a move to the left child reaches the represented left subtree. A root rotation is five instructions, keeps the boundary invariant and the number of records, and makes the same change as a move down-left followed by a rotation of the finger over its parent in [[LabelledCursor.perform]].
 
-@decl RealWorld.Compiler.Results.response RealWorld.Compiler.Results.execution RealWorld.Compiler.Results.deterministic
+@decl RotationBST.RealWorld.PointerMachine.Results.causal RotationBST.RealWorld.PointerMachine.Results.navigation_time RotationBST.RealWorld.PointerMachine.Results.navigation RotationBST.RealWorld.PointerMachine.Results.rotation_time RotationBST.RealWorld.PointerMachine.Results.rotation RotationBST.RealWorld.PointerMachine.Results.rotation_bst
 
-Consequently, a source certificate $T\le C(k+1)$, where $k$ is its BST work,
-transfers to target time at most $(19C+3)(k+1)$. The compiler does not establish
-that source certificate by itself. Separately, every compiled execution,
-including prefixes and trap loops, preserves the exact record count: compiled
-code contains no allocation instruction.
+### Parent links and all six instructions
 
-@decl RealWorld.Compiler.Results.proportional_time RealWorld.Compiler.Results.storage
+Moving up and rotating below the root need parent links.
 
-The regression controller serves two different keys using the same compiled
-program, exercises scalar arithmetic and metadata access, and returns to the
-root between requests. Additional cases check both relocated rotation
-directions and confirm that an unmarked finish or a mismatched mark cannot
-reach the successful halt in those examples. Its initial source/target image
-is proved explicitly; the examples are evaluated by Lean's kernel.
+@decl RotationBST.RealWorld.Linked.layout RotationBST.RealWorld.Linked.State RotationBST.RealWorld.Linked.Record RotationBST.RealWorld.Linked.Instruction RotationBST.RealWorld.Linked.Label RotationBST.RealWorld.Linked.Tree RotationBST.RealWorld.Linked.Cursor
 
-## Remaining implementation obligations
+The layout has seven pointer registers (the cursor, the root, the parent, the grandparent, the middle subtree, a null pointer and a temporary), `regs` data registers, and three links per record: left, right and parent. A label is an address together with all the data fields of the node, its key first. So a theorem that keeps the labels keeps the data too.
 
-The compiler gives a forward simulation of successful source executions from
-a supplied source/target image. It does not construct or charge an initial
-heap, handle an empty-tree image, or prove termination for arbitrary source
-controllers. Initialization, the source word-size discipline, total service,
-and source proportional-time certificates remain obligations of each
-algorithm. Intermediate field writes during a rotation need not represent a
-complete tree; the simulation invariant holds at source-instruction boundaries.
+@decl RotationBST.RealWorld.Linked.root RotationBST.RealWorld.Linked.parent RotationBST.RealWorld.Linked.node RotationBST.RealWorld.Linked.Represents RotationBST.RealWorld.Linked.Context RotationBST.RealWorld.Linked.keys RotationBST.RealWorld.Linked.addresses RotationBST.RealWorld.Linked.Realizes
 
-Theorem 7 and the ComboBST implementation-preservation clauses still require
-concrete finite controllers for their constructions and the corresponding
-algorithm-specific storage and runtime proofs. The compiler now supplies the
-machine-level connection for those controllers.
+`Represents heap p t` says that `t` is stored below the parent pointer `p`, with both directions of every edge. `Context` does the same for the path from the finger to the root: each ancestor, its other subtree, and its own parent. `Realizes s c` says that the machine state stores the cursor `c`, at any depth: valid pointers, the focus and the context represented, distinct addresses, ordered keys, a heap with exactly the tree's records, the cursor register on the finger, the root register on the root, and a nonempty focus.
+
+@decl RotationBST.RealWorld.Linked.move RotationBST.RealWorld.Linked.rotate RotationBST.RealWorld.Linked.program RotationBST.RealWorld.Linked.start RotationBST.RealWorld.Linked.run
+
+A move is one load and a halt; both moves up follow the parent link. A rotation promotes the finger over its parent and leaves the finger on it. It relinks the middle subtree, the two nodes and the grandparent's child on the correct side, or the root register if there is no grandparent. A store through the null pointer does nothing, so an empty middle subtree needs no special case. `program` gives the code of each of the six instructions, `start` sets the program counter to $0$, and `run` evaluates a program for a given number of steps.
+
+**Theorem (the six instructions).** If a state realizes a cursor $c$ and an instruction is legal at $c$, its program runs in at most $19$ instructions, halt included, to a state that realizes the cursor after the instruction, with the same number of records.
+
+@decl RotationBST.RealWorld.Linked.Results.primitive
+
+The bound $19$ is a uniform bound for all six programs; the moves take two instructions.
+
+## Compiling a machine
+
+The last step translates a whole real-world machine into one pointer-machine program. There is no outside dispatcher: the compiled program chooses its next block of code itself, and every jump is an instruction that costs one unit.
+
+@decl RotationBST.RealWorld.Compiler.Target RotationBST.RealWorld.Compiler.Opcode RotationBST.RealWorld.Compiler.userReg RotationBST.RealWorld.Compiler.queryReg RotationBST.RealWorld.Compiler.seenReg RotationBST.RealWorld.Compiler.tempReg RotationBST.RealWorld.Compiler.zeroReg RotationBST.RealWorld.Compiler.field
+
+The target is the parent-linked machine with $r + 4$ data registers: the $r$ registers of the source machine, then the request, the visited flag, a temporary for keys and a temporary for zero. The data field $i$ of a node is field $i + 1$ of its record, after the key.
+
+@decl RotationBST.RealWorld.Compiler.stride RotationBST.RealWorld.Compiler.address RotationBST.RealWorld.Compiler.boundary RotationBST.RealWorld.Compiler.trap RotationBST.RealWorld.Compiler.entry RotationBST.RealWorld.Compiler.relocate RotationBST.RealWorld.Compiler.block RotationBST.RealWorld.Compiler.compile
+
+Each source instruction gets a block of $24$ slots. Register and finger instructions become a few pointer-machine instructions and a jump. A BST instruction becomes its program from the previous section, relocated into the block, with its halt replaced by a jump to the block of the next label. After the blocks come four slots: the only `halt`, which is the response boundary, a trap that loops forever, and the two instructions that start a request. Unused slots, a failed `mark` and an early `finish` jump to the trap. The theorems below are about successful source runs only; they say nothing about the compiled program after an illegal move.
+
+@decl RotationBST.RealWorld.Compiler.accept RotationBST.RealWorld.Compiler.Responds RotationBST.RealWorld.Compiler.Execution
+
+A request is accepted only at the halt. It writes the key into the request register and enters the start code, which clears the visited flag and jumps to the source entry; both instructions are charged. Registers and records persist from one request to the next.
+
+@decl RotationBST.RealWorld.Compiler.decode RotationBST.RealWorld.Compiler.flag RotationBST.RealWorld.Compiler.location RotationBST.RealWorld.Compiler.Image
+
+`Image s t` relates a source state `s` to a target state `t`: some cursor with addresses is realized by `t` and decodes to the cursor of `s`, the registers and the request agree, the flag is stored as $0$ or $1$, and the program counter of `t` is the start of the block of the next source instruction, or the halt at a boundary.
+
+**Theorem (compilation).** Assume a word width of at least one bit, and a source state and a target state related by `Image`.
+
+1. If the source machine serves a request in $T$ steps, the compiled program responds to it in at most $19T + 3$ instructions, in a state related to the source's final state. The compiled response is only accept and run to the halt; that it visits the key follows from the source run, through the relation. For $m$ requests in $T$ steps in total, the bound is $19T + 3m$.
+2. If the source serves the request in at most $C(k + 1)$ steps, where $k$ is its BST cost, the compiled program takes at most $(19C + 3)(k + 1)$ instructions.
+3. No run of the compiled program changes the number of records.
+4. The program has exactly $24l + 4$ instructions for a source machine with $l$ labels.
+5. A request served by the compiled program ends in a unique state, with a unique instruction count.
+
+@decl RotationBST.RealWorld.Compiler.Results.response RotationBST.RealWorld.Compiler.Results.execution RotationBST.RealWorld.Compiler.Results.proportional_time RotationBST.RealWorld.Compiler.Results.storage RotationBST.RealWorld.Compiler.Results.code_size RotationBST.RealWorld.Compiler.Results.deterministic
+
+The $3$ per request pays for the two start instructions and the halt. The width must be positive so that the flag values $0$ and $1$ differ. The compiler moves a running time certificate from the source to the target; it does not produce one. During a rotation, the records may not represent a tree for a few instructions; the invariant holds again at the end of each source instruction.
+
+::: caveat Scope of the compiler
+The compiler simulates successful requests forward, from a given related pair of states with a nonempty tree. It does not build the initial records, handle the empty tree, or prove that a source machine terminates. Termination is the certificate `Total` of each implementation; the rest is listed in the box above.
+:::

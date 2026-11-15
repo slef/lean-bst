@@ -26,6 +26,10 @@ The geometric view of [Chapter 8](geometry.html) is due to @demaine2009, who sho
 
 Executions with several persistent fingers ([Chapter 9](fingers.html)) are simulated by a single cursor in @demaine2013. @chalermsook2018multi show that the offline optimum with $k$ fingers can be matched by a single root finger with an $O(\log k)$ factor overhead, which is tight, and give randomized online BSTs within a further $(\log k)^{O(1)}$ factor, using techniques from the $k$-server problem. The linked-search model of [Chapter 10](linked-search.html) is the model of the multiple-tree structure of @bose2016, Theorem 9; it is a pointer machine whose memory holds many trees, not a BST.
 
+## Real-world implementations
+
+The pointer machine is due to @tarjan1979, who used it for lower bounds on disjoint-set union. @bose2012 observe that almost all BST implementations work on a pointer machine with $O(1)$ words of balance information per node and $O(1)$ working variables, and generate their operations in time proportional to the BST cost, and they show that their deamortization preserves these properties for algorithms with suitable amortized bounds (their Theorem 7). @demaine2013 define *real-world BSTs*, crediting @bose2012, by the space conditions alone: $O(1)$ registers of $O(\log n)$ bits and $O(\log n)$ bits per node. They prove that ComboBST and the one-finger simulation of several fingers preserve this property. The machine of [Chapter 13](real-world.html) and its compiler are the library's own.
+
 ## How the models agree
 
 The equivalence of the rotation model, the pointer machine and the geometric view, up to constant factors, combines @demaine2009 and @derryberry2009. The constants proved in [Chapter 11](equivalence.html) are the library's own.

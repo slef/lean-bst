@@ -181,6 +181,74 @@ theorem expected_insert_rotations ... : average ... < 2
 "Other ways to sample". Update `classical/part-classical.md` and the
 "Deliberate non-claims" in `appendices/audit.md`.
 
+## 10. Real-world implementations
+
+**Status.** The model and the compiler are formalized under
+`RotationBST.RealWorld` (`Models/RealWorld/`), and shown in the book chapter
+"Real-world implementations" (`models/real-world.md`). No algorithm uses them
+yet.
+
+- (a) A first `RealWorld.Implementation`, for a simple algorithm: move-to-root
+  or splaying, searching from the finger at the root. This shows that the
+  contract can be met, with explicit constants.
+- (b) From machines to algorithms: an execution of an `Implementation` is a
+  one-finger `Multifinger.Execution` serving the same requests (the keys are
+  the inorder ranks, by `Initial`), at cost BST cost plus one per request; and,
+  if wanted, an online `Algorithm` of the rotation model through the pointer
+  simulations of Part I.
+- (c) Initialization: build the records of the initial tree on CSLib
+  Frontier's pointer machine with a charged program of `O(n)` instructions,
+  and handle the empty tree, so that the compiled program needs no given
+  initial image.
+- (d) Compiled implementations: the compiled program of an `Implementation`
+  serves every valid request after every compiled history (from `Total`), in
+  at most `(19C + 3)(k + 1)` instructions for a request of BST cost `k` (from
+  `EfficientFrom`), without being given the matching source runs.
+- (e) The real-world clauses of the papers: the deamortization preserves
+  real-world implementations (Theorem 7 of Bose, Collette, Fagerberg and
+  Langerman, *De-amortizing binary search trees*, ICALP 2012), and so do
+  ComboBST and the one-finger simulation (Theorems 3 and 5 of Demaine, Iacono,
+  Langerman and Özkan, *Combining binary search trees*, ICALP 2013).
+
+**Source.** The definitions are in the two papers above: Section 1 ("The BST
+model") of the first, Section 1.1 of the second. The pointer machine is
+R. E. Tarjan, *A class of algorithms which require nonlinear time to maintain
+disjoint sets*, JCSS 18(2) (1979), as formalized in CSLib Frontier.
+
+**Statement.** For (b), with `p` a machine, keys equal to ranks, and words
+wide enough that keys do not wrap around:
+
+```lean
+theorem RealWorld.Results.multifinger {p : Machine f r l} {s t : State w f r l}
+    {xs : List (BitVec w)} {time cost : Nat} (h : Execution p s xs t time cost)
+    (width : s.cursor.tree.inorder.length ≤ 2 ^ w)
+    (ranks : s.cursor.tree.inorder.map Node.key =
+      List.ofFn (fun i : Fin s.cursor.tree.inorder.length => BitVec.ofNat w i.val)) :
+    Multifinger.Execution (one s) (xs.map BitVec.toNat) (one t) (cost + xs.length)
+-- `one s` is the one-finger state of the cursor of `s` with the data forgotten.
+```
+
+For (a), a term `RealWorld.Implementation f r l` whose `machine` is
+move-to-root or splaying, with `timeConstant` explicit. For (d), theorems in
+`RealWorld.Compiler` with the hypotheses of `Compiler.Results.response` plus
+`Total` and `EfficientFrom`, concluding a `Compiler.Responds` with the bound.
+For (e), the
+deamortized program of `Algorithms/Deamortization/` given as a machine whose
+`Implementation` is built from one for the source algorithm.
+
+**Where.** (a) under `Algorithms/MoveToRoot/RealWorld/` or
+`Algorithms/Splay/RealWorld/`; (b), (c) and (d) in `Models/RealWorld/`; (e) next to
+the abstract constructions in `Algorithms/Deamortization/` and
+`Algorithms/Combination/`.
+
+**Book.** In `models/real-world.md`, replace the matching items of the box in
+"Real-world implementations" with `@decl`s, and, once (b) is proved,
+drop `todo: true` from the `RW → MF` arrow of `book/src/assets/viz/modelsmap.js`
+and give it `thms`. For (e),
+update the "What is not formalized" sections of `algorithms/deamortization.md`,
+`algorithms/combining.md` and `algorithms/combo-online.md`, and the audit
+appendix.
+
 ## Stretch goals
 
 Hard results that the book mentions. They are listed so that nothing is
